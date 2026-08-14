@@ -1,6 +1,6 @@
 import { LogIn } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
-import logo from "../../assets/images/Logo-2.png";
+import logo from "../../assets/images/Layout/Header/Logo-2.png";
 
 function Header() {
   const navLinks = [

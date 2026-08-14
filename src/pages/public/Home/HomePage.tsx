@@ -1,4 +1,3 @@
-import NavbarSection from "../../../components/Layout/Header";
 import HeroSection from "../../../components/Landing/HeroSection";
 import MashhurFood from "../../../components/Landing/PopularFood";
 import AboutSection from "../../../components/Landing/AboutSection";

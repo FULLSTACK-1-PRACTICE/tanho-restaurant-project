@@ -7,7 +7,7 @@ import {
   Heart,
 } from 'lucide-react'
 
-import footerImage from '../../assets/images/image.png'
+import footerImage from '../../assets/images/Layout/Footer/image.png'
 
 const gold = '#F5B942'
 const line = '#2a2210'

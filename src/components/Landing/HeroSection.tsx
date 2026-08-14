@@ -7,13 +7,12 @@ import {
   Utensils,
 } from "lucide-react";
 
-import heroImg from "../../assets/images/Hero-Section.png";
+import heroImg from "../../assets/images/Landing/Hero/Hero-Section.png";
 
 function HeroSection() {
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#070809] text-[#f1eee7]">
       
-      {/* BACKGROUND */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img
           src={heroImg}
@@ -21,24 +20,19 @@ function HeroSection() {
           className="h-full w-full object-cover object-center"
         />
 
-        {/* Chap taraf uchun qoramtir gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#070809]/95 via-[#070809]/70 to-[#070809]/10" />
 
-        {/* Yuqori qism - navbar uchun */}
         <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-[#070809]/90 via-[#070809]/45 to-transparent" />
 
-        {/* Pastki qism */}
         <div className="absolute inset-x-0 bottom-0 h-[320px] bg-gradient-to-t from-[#070809] via-[#070809]/75 to-transparent" />
       </div>
 
-      {/* CONTENT */}
       <div className="relative z-10 mx-auto max-w-[1250px] px-6">
         
         <div className="flex min-h-[720px] items-center pt-[120px] pb-[100px]">
           
           <div className="max-w-[580px]">
 
-            {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#dcae4d]/30 bg-[#151310]/70 px-3.5 py-1.5 backdrop-blur-md">
               <span className="h-1.5 w-1.5 rounded-full bg-[#dcae4d]" />
 
@@ -47,7 +41,6 @@ function HeroSection() {
               </p>
             </div>
 
-            {/* TITLE */}
             <h1 className="font-serif text-[46px] font-normal leading-[1.08] tracking-tight text-[#f7f5f0] sm:text-[58px] lg:text-[66px]">
               Ta’mda tanho,
               <br />
@@ -58,13 +51,11 @@ function HeroSection() {
               abadiy
             </h1>
 
-            {/* DESCRIPTION */}
             <p className="mt-6 max-w-[460px] text-[15px] font-light leading-relaxed text-[#c1c1bc]">
               TANHO — mualliflik taomlari, nafis va shinam atmosfera hamda
               unutilmas onlar uchun maxsus yaratilgan restoran.
             </p>
 
-            {/* BUTTONS */}
             <div className="mt-9 flex flex-wrap items-center gap-4">
 
               <button
@@ -95,7 +86,6 @@ function HeroSection() {
 
             </div>
 
-            {/* RATING */}
             <div className="mt-10 flex items-center gap-4 border-t border-white/10 pt-6">
 
               <div className="flex -space-x-1.5">
@@ -123,12 +113,10 @@ function HeroSection() {
           </div>
         </div>
 
-        {/* FEATURES */}
         <div className="relative z-20 pb-12">
 
           <div className="grid grid-cols-1 overflow-hidden rounded-xl border border-white/10 bg-[#0c0e10]/85 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:grid-cols-2 lg:grid-cols-4">
 
-            {/* 1 */}
             <div className="group cursor-pointer border-b border-white/5 p-6 transition-colors duration-300 hover:bg-white/[0.03] sm:border-r lg:border-b-0">
               <div className="flex items-center gap-4">
 
@@ -149,7 +137,6 @@ function HeroSection() {
               </div>
             </div>
 
-            {/* 2 */}
             <div className="group cursor-pointer border-b border-white/5 p-6 transition-colors duration-300 hover:bg-white/[0.03] sm:border-r lg:border-b-0">
               <div className="flex items-center gap-4">
 
@@ -170,7 +157,6 @@ function HeroSection() {
               </div>
             </div>
 
-            {/* 3 */}
             <div className="group cursor-pointer border-b border-white/5 p-6 transition-colors duration-300 hover:bg-white/[0.03] sm:border-r lg:border-b-0">
               <div className="flex items-center gap-4">
 
@@ -191,7 +177,6 @@ function HeroSection() {
               </div>
             </div>
 
-            {/* 4 */}
             <div className="group cursor-pointer p-6 transition-colors duration-300 hover:bg-white/[0.03]">
               <div className="flex items-center gap-4">
 

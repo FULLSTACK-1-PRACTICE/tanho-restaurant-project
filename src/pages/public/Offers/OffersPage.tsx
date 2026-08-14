@@ -17,8 +17,8 @@ import {
 
 import { motion } from "framer-motion";
 
-import heroImg from "../../../assets/images/Logo-2.png";
-import foodImg from "../../../assets/images/kereman-uchirmengMani-brat.jpeg";
+import heroImg from "../../../assets/images/Landing/Hero/Hero-Section.png";
+import foodImg from "../../../assets/images/Landing/Hero/Hero-Section.png";
 
 const suggestions = [
   {
@@ -458,8 +458,6 @@ function EventsPage() {
           </motion.div>
         </div>
       </section>
-
-      {/* BOTTOM CTA */}
 
       <section className="mx-auto max-w-[1200px] px-5 pb-10">
         <motion.div

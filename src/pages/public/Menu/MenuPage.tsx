@@ -166,7 +166,6 @@ const MenuPage = () => {
         </div>
       </section>
 
-      {/* Kategoriya menyusi */}
       <section className="relative z-10 mx-auto -mt-8 max-w-[1200px] px-5">
         <div className="grid grid-cols-2 gap-2 rounded-xl border border-white/10 bg-[#121619] p-2 backdrop-blur-md sm:grid-cols-4 lg:grid-cols-7">
           {categories.map((category, index) => {
@@ -195,7 +194,6 @@ const MenuPage = () => {
         </div>
       </section>
 
-      {/* Taomlar ro'yxati (Mutlaqo tiniq rasmlar) */}
       <section className="mx-auto max-w-[1200px] px-5 py-12">
         <div className="mb-7 flex items-center justify-between">
           <div>
@@ -270,7 +268,6 @@ const MenuPage = () => {
         </div>
       </section>
 
-      {/* Aksiyalar bloki */}
       <section className="mx-auto max-w-[1200px] px-5 pb-12">
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121619]">
           <div className="grid md:grid-cols-[280px_1fr]">

@@ -51,8 +51,7 @@ function SpecialSection() {
     <section className="w-full bg-[#050708] py-8">
       <div className="mx-auto max-w-[1200px] px-4 lg:px-0">
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.65fr_1fr]">
-
-          {/* MAXSUS TAKLIFLAR */}
+          
           <div>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="font-serif text-[25px] text-[#f1eee7]">
@@ -74,17 +73,14 @@ function SpecialSection() {
                   key={index}
                   className="group relative min-h-[235px] cursor-pointer overflow-hidden rounded-lg border border-[#25292b] bg-[#0a0d0f] transition-all duration-300 hover:-translate-y-1 hover:border-[#8d6928] hover:shadow-[0_12px_35px_rgba(0,0,0,0.45)]"
                 >
-                  {/* RASM */}
                   <img
                     src={offer.image}
                     alt={offer.title}
                     className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
                   />
 
-                  {/* OVERLAY */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050708] via-[#050708]/65 to-[#050708]/20" />
 
-                  {/* CONTENT */}
                   <div className="relative z-10 flex h-full min-h-[235px] flex-col justify-between p-3">
                     <div>
                       <p className="font-serif text-[14px] leading-5 text-[#f1eee7]">
@@ -113,7 +109,6 @@ function SpecialSection() {
             </div>
           </div>
 
-          {/* TADBIRLAR VA YANGILIKLAR */}
           <div>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="font-serif text-[25px] text-[#f1eee7]">
@@ -135,7 +130,6 @@ function SpecialSection() {
                   key={index}
                   className="group flex min-h-[78px] cursor-pointer items-center gap-3 border-b border-[#202427] px-2.5 py-2 transition duration-300 last:border-b-0 hover:bg-[#101416]"
                 >
-                  {/* IMAGE */}
                   <div className="h-[62px] w-[82px] shrink-0 overflow-hidden rounded-md">
                     <img
                       src={item.image}
@@ -144,7 +138,6 @@ function SpecialSection() {
                     />
                   </div>
 
-                  {/* TEXT */}
                   <div className="min-w-0 flex-1">
                     <p className="text-[8px] text-[#8f918e]">
                       {item.date}
@@ -159,7 +152,6 @@ function SpecialSection() {
                     </p>
                   </div>
 
-                  {/* ARROW */}
                   <ChevronRight
                     size={17}
                     strokeWidth={1.5}

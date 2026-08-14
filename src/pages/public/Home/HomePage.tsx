@@ -1,7 +1,7 @@
 import NavbarSection from "../../../components/Layout/Header";
 import HeroSection from "../../../components/Landing/HeroSection";
-import MashhurFood from "../../../components/Landing/MashhurFood";
-import AboutSection from "../../../components/Landing/AbautSection";
+import MashhurFood from "../../../components/Landing/PopularFood";
+import AboutSection from "../../../components/Landing/AboutSection";
 import SpecialSection from "../../../components/Landing/SpecialSection";
 import FooterSection from "../../../components/Layout/Footer";
 

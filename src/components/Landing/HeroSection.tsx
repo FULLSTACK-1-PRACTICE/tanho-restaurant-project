@@ -2,8 +2,8 @@ import {
   ArrowRight,
   CalendarDays,
   ChefHat,
-  Leaf,
-  Star,
+  Clock,
+  MapPin,
   Utensils,
 } from "lucide-react";
 
@@ -11,220 +11,160 @@ import heroImg from "../../assets/images/kereman-uchirmengMani-brat.jpeg";
 
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-[#050708] text-[#f1eee7]">
+    <section className="relative overflow-hidden bg-[#070809] text-[#f1eee7]">
 
-      {/* HERO IMAGE */}
-
-      <div className="absolute left-0 right-0 top-[72px] h-[610px] overflow-hidden">
-
+      <div className="absolute inset-x-0 top-[72px] h-[640px] overflow-hidden">
         <img
           src={heroImg}
           alt="Tanho Restaurant"
-          className="h-full w-full object-cover object-center"
+          className="h-full w-full scale-105 object-cover object-center transition-transform duration-1000 ease-out"
         />
-
-        {/* LEFT DARK GRADIENT */}
-
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050708]/95 via-[#050708]/70 to-[#050708]/10" />
-
-        {/* TOP BLUR */}
-
-        <div className="absolute left-0 right-0 top-0 h-[130px] bg-gradient-to-b from-[#050708]/90 via-[#050708]/45 to-transparent backdrop-blur-[2px]" />
-
-        {/* LEFT SOFT DARK AREA */}
-
-        <div className="absolute inset-y-0 left-0 w-[58%] bg-gradient-to-r from-[#050708]/35 via-[#050708]/20 to-transparent" />
-
-        {/* BOTTOM FADE */}
-
-        <div className="absolute bottom-0 left-0 right-0 h-[170px] bg-gradient-to-t from-[#050708] via-[#050708]/60 to-transparent" />
-
+        <div className="absolute inset-0 bg-gradient-to-r from-[#070809] via-[#070809]/80 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-[140px] bg-gradient-to-b from-[#070809] via-[#070809]/50 to-transparent backdrop-blur-[1px]" />
+        <div className="absolute inset-x-0 bottom-0 h-[220px] bg-gradient-to-t from-[#070809] via-[#070809]/80 to-transparent" />
       </div>
 
-      {/* CONTENT */}
+      <div className="relative z-10 mx-auto max-w-[1240px] px-6">
+        <div className="flex min-h-[680px] items-center pt-[92px] pb-[70px]">
+          <div className="max-w-[580px]">
 
-      <div className="relative z-10 mx-auto max-w-[1200px] px-5">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#dcae4d]/20 bg-[#dcae4d]/10 px-3.5 py-1.5 backdrop-blur-md">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#dcae4d]" />
+              <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#e3b859]">
+                Zamonaviy Muhit & Premium Gastronomiya
+              </p>
+            </div>
 
-        <div className="flex min-h-[650px] items-center pt-[72px] pb-[90px]">
-
-          <div className="max-w-[560px]">
-
-            <p className="mb-5 text-[11px] font-medium uppercase tracking-[3px] text-[#dcae4d]">
-              ZAMONAVIY MUHIT, NOZIK TA’M VA SIFAT
-            </p>
-
-            <h1 className="font-serif text-[48px] font-medium leading-[1.08] tracking-[-1px] text-[#f5f2eb] md:text-[64px]">
+            <h1 className="font-serif text-[46px] font-normal leading-[1.08] tracking-tight text-[#f7f5f0] sm:text-[58px] lg:text-[66px]">
               Ta’mda tanho,
               <br />
-
-              <span className="text-[#dcae4d]">
+              <span className="font-serif font-light italic text-[#dcae4d]">
                 xotirada
               </span>{" "}
               abadiy
             </h1>
 
-            <p className="mt-6 max-w-[430px] text-[14px] leading-6 text-[#b5b5b0]">
-              TANHO restorani — mazali taomlar,
-              yoqimli muhit va siz uchun eng yaxshi
-              xizmat.
+            <p className="mt-6 max-w-[460px] text-[15px] font-light leading-relaxed text-[#a8a8a2]">
+              TANHO — mualliflik taomlari, nafis va shinam atmosfera hamda unutilmas onlar uchun maxsus yaratilgan restoran.
             </p>
 
-            {/* BUTTONS */}
-
-            <div className="mt-8 flex flex-wrap gap-3">
-
+            <div className="mt-9 flex flex-wrap items-center gap-4">
               <button
                 type="button"
-                className="group flex cursor-pointer items-center gap-2 rounded-md bg-[#dcae4d] px-6 py-3 text-[12px] font-semibold text-[#090a0a] shadow-[0_8px_25px_rgba(220,174,77,0.12)] transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-[#edc15d] hover:shadow-[0_14px_35px_rgba(220,174,77,0.28)] active:translate-y-0"
+                className="group relative flex cursor-pointer items-center gap-2.5 overflow-hidden rounded-md bg-[#dcae4d] px-7 py-3.5 text-[12px] font-semibold tracking-wider text-[#08090a] shadow-[0_10px_30px_rgba(220,174,77,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#ebd074] hover:shadow-[0_15px_35px_rgba(220,174,77,0.35)] active:translate-y-0"
               >
-                MENYU
-
+                <span>MENYUNI KO‘RISH</span>
                 <ArrowRight
-                  size={16}
-                  strokeWidth={2}
+                  size={15}
+                  strokeWidth={2.2}
                   className="transition-transform duration-300 group-hover:translate-x-1"
                 />
               </button>
 
               <button
                 type="button"
-                className="group flex cursor-pointer items-center gap-2 rounded-md border border-[#735a27] bg-black/30 px-6 py-3 text-[12px] font-medium text-[#e1b85b] backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-[#090a0a] hover:shadow-[0_14px_35px_rgba(220,174,77,0.20)] active:translate-y-0"
+                className="group flex cursor-pointer items-center gap-2.5 rounded-md border border-white/15 bg-white/[0.03] px-7 py-3.5 text-[12px] font-medium tracking-wider text-[#f1eee7] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dcae4d]/60 hover:bg-white/[0.08] hover:text-[#dcae4d] active:translate-y-0"
               >
                 <CalendarDays
-                  size={16}
+                  size={15}
                   strokeWidth={1.8}
-                  className="transition-transform duration-300 group-hover:scale-110"
+                  className="text-[#dcae4d] transition-transform duration-300 group-hover:scale-110"
                 />
-
-                STOL BAND QILISH
+                <span>STOL BAND QILISH</span>
               </button>
+            </div>
 
+            <div className="mt-10 flex items-center gap-4 border-t border-white/10 pt-6">
+              <div className="flex -space-x-1.5">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#070809] bg-[#dcae4d]/20 text-[10px] font-bold text-[#dcae4d]">
+                  ★
+                </div>
+                <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#070809] bg-[#dcae4d]/20 text-[10px] font-bold text-[#dcae4d]">
+                  ★
+                </div>
+                <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#070809] bg-[#dcae4d]/20 text-[10px] font-bold text-[#dcae4d]">
+                  ★
+                </div>
+              </div>
+              <div className="text-[12px] text-[#90928e]">
+                <span className="font-semibold text-[#f1eee7]">4.9 / 5.0</span> — 1,200+ mamnun mehmonlarimiz bahosi
+              </div>
             </div>
 
           </div>
-
         </div>
 
-        {/* BOTTOM PANEL */}
-
-        <div className="relative z-20 -mt-[25px] pb-10">
-
-          <div className="grid grid-cols-1 overflow-hidden rounded-xl border border-white/[0.08] bg-[#0b0d0e]/95 shadow-[0_15px_50px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:grid-cols-2 lg:grid-cols-4">
-
-            {/* CARD 1 */}
-
-            <div className="group cursor-pointer border-b border-white/[0.07] px-5 py-5 transition-all duration-300 hover:-translate-y-1 hover:bg-[#151311] hover:shadow-[0_8px_25px_rgba(220,174,77,0.08)] sm:border-r lg:border-b-0">
-
+        <div className="relative z-20 pb-12">
+          <div className="grid grid-cols-1 overflow-hidden rounded-xl border border-white/10 bg-[#0c0e10]/80 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:grid-cols-2 lg:grid-cols-4">
+            
+            <div className="group cursor-pointer border-b border-white/5 p-6 transition-colors duration-300 hover:bg-white/[0.03] sm:border-r lg:border-b-0">
               <div className="flex items-center gap-4">
-
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#8c6a29] text-[#dcae4d] transition-all duration-300 group-hover:scale-110 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d]/10 group-hover:shadow-[0_0_20px_rgba(220,174,77,0.15)]">
-                  <ChefHat
-                    size={22}
-                    strokeWidth={1.6}
-                  />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d] transition-all duration-300 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d] group-hover:text-[#08090a]">
+                  <ChefHat size={22} strokeWidth={1.5} />
                 </div>
-
                 <div>
-                  <p className="text-[12px] font-medium text-[#eeeeea] transition-colors duration-300 group-hover:text-[#dcae4d]">
-                    Mazali taomlar
-                  </p>
-
-                  <p className="mt-1 text-[10px] text-[#777975]">
-                    Eng sifatli mahsulotlar
+                  <h4 className="text-[13px] font-medium text-[#f1eee7] transition-colors group-hover:text-[#dcae4d]">
+                    Mualliflik menyusi
+                  </h4>
+                  <p className="mt-1 text-[11px] font-light text-[#888a85]">
+                    Har bir ta’mda takrorlanmas san’at
                   </p>
                 </div>
-
               </div>
-
             </div>
 
-            {/* CARD 2 */}
-
-            <div className="group cursor-pointer border-b border-white/[0.07] px-5 py-5 transition-all duration-300 hover:-translate-y-1 hover:bg-[#151311] hover:shadow-[0_8px_25px_rgba(220,174,77,0.08)] sm:border-r lg:border-b-0">
-
+            <div className="group cursor-pointer border-b border-white/5 p-6 transition-colors duration-300 hover:bg-white/[0.03] sm:border-r lg:border-b-0">
               <div className="flex items-center gap-4">
-
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#8c6a29] text-[#dcae4d] transition-all duration-300 group-hover:scale-110 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d]/10 group-hover:shadow-[0_0_20px_rgba(220,174,77,0.15)]">
-                  <Utensils
-                    size={21}
-                    strokeWidth={1.6}
-                  />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d] transition-all duration-300 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d] group-hover:text-[#08090a]">
+                  <Utensils size={21} strokeWidth={1.5} />
                 </div>
-
                 <div>
-                  <p className="text-[12px] font-medium text-[#eeeeea] transition-colors duration-300 group-hover:text-[#dcae4d]">
-                    Tajribali oshpazlar
-                  </p>
-
-                  <p className="mt-1 text-[10px] text-[#777975]">
-                    Professional va mahorat
+                  <h4 className="text-[13px] font-medium text-[#f1eee7] transition-colors group-hover:text-[#dcae4d]">
+                    Sertifikatlangan sifat
+                  </h4>
+                  <p className="mt-1 text-[11px] font-light text-[#888a85]">
+                    Faqat saralangan va yangi ingredientlar
                   </p>
                 </div>
-
               </div>
-
             </div>
 
-            {/* CARD 3 */}
-
-            <div className="group cursor-pointer border-b border-white/[0.07] px-5 py-5 transition-all duration-300 hover:-translate-y-1 hover:bg-[#151311] hover:shadow-[0_8px_25px_rgba(220,174,77,0.08)] sm:border-r lg:border-b-0">
-
+            <div className="group cursor-pointer border-b border-white/5 p-6 transition-colors duration-300 hover:bg-white/[0.03] sm:border-r lg:border-b-0">
               <div className="flex items-center gap-4">
-
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#8c6a29] text-[#dcae4d] transition-all duration-300 group-hover:scale-110 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d]/10 group-hover:shadow-[0_0_20px_rgba(220,174,77,0.15)]">
-                  <Leaf
-                    size={21}
-                    strokeWidth={1.6}
-                  />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d] transition-all duration-300 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d] group-hover:text-[#08090a]">
+                  <Clock size={21} strokeWidth={1.5} />
                 </div>
-
                 <div>
-                  <p className="text-[12px] font-medium text-[#eeeeea] transition-colors duration-300 group-hover:text-[#dcae4d]">
-                    Yoqimli muhit
-                  </p>
-
-                  <p className="mt-1 text-[10px] text-[#777975]">
-                    Issiq va qulay atmosfera
+                  <h4 className="text-[13px] font-medium text-[#f1eee7] transition-colors group-hover:text-[#dcae4d]">
+                    Ish vaqti
+                  </h4>
+                  <p className="mt-1 text-[11px] font-light text-[#888a85]">
+                    Har kuni: 11:00 — 23:00
                   </p>
                 </div>
-
               </div>
-
             </div>
 
-            {/* CARD 4 */}
-
-            <div className="group cursor-pointer px-5 py-5 transition-all duration-300 hover:-translate-y-1 hover:bg-[#151311] hover:shadow-[0_8px_25px_rgba(220,174,77,0.08)]">
-
+            <div className="group cursor-pointer p-6 transition-colors duration-300 hover:bg-white/[0.03]">
               <div className="flex items-center gap-4">
-
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#8c6a29] text-[#dcae4d] transition-all duration-300 group-hover:scale-110 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d]/10 group-hover:shadow-[0_0_20px_rgba(220,174,77,0.15)]">
-                  <Star
-                    size={21}
-                    strokeWidth={1.6}
-                  />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d] transition-all duration-300 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d] group-hover:text-[#08090a]">
+                  <MapPin size={21} strokeWidth={1.5} />
                 </div>
-
                 <div>
-                  <p className="text-[12px] font-medium text-[#eeeeea] transition-colors duration-300 group-hover:text-[#dcae4d]">
-                    Tez va sifatli xizmat
-                  </p>
-
-                  <p className="mt-1 text-[10px] text-[#777975]">
-                    Siz uchun har doim
+                  <h4 className="text-[13px] font-medium text-[#f1eee7] transition-colors group-hover:text-[#dcae4d]">
+                    Qulay joylashuv
+                  </h4>
+                  <p className="mt-1 text-[11px] font-light text-[#888a85]">
+                    Shahar markazida, bepul avtoturargoh
                   </p>
                 </div>
-
               </div>
-
             </div>
 
           </div>
-
         </div>
 
       </div>
-
     </section>
   );
 }

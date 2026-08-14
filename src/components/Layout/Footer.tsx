@@ -1,496 +1,565 @@
+import React from 'react'
 import {
-  CalendarDays,
-  Clock3,
+  Clock,
   MapPin,
-  Navigation,
   Phone,
-  Send,
+  Mail,
+  Heart,
+  Utensils,
+  ChefHat,
+  Leaf,
   Star,
-  Users,
-} from "lucide-react";
+} from 'lucide-react'
 
-const reviews = [
-  {
-    name: "Dilnoza Karimova",
-    initials: "DK",
-    text: "Taomlar juda mazali, muhit esa a’lo darajada. Albatta, yana qaytaman.",
-  },
-  {
-    name: "Sardorbek M.",
-    initials: "SM",
-    text: "Xizmat a’lo darajada, oshpazlarga alohida rahmat! Taomlar juda mazali.",
-  },
-  {
-    name: "Aziza Saydullaeva",
-    initials: "AS",
-    text: "Eng sevimli restoranlarimdan biri. Hamma uchun tavsiya qilaman!",
-  },
-];
+import footerImage from '../../assets/images/image.png'
 
-function Footer() {
+
+const gold = '#F5B942'
+const line = '#2a2210'
+
+function Diamond({ className = '' }: { className?: string }) {
   return (
-    <footer className="bg-[#050708] text-[#f1eee7]">
-      <div className="mx-auto max-w-[1400px] px-5 py-10">
+    <svg viewBox="0 0 20 20" className={className} fill="none">
+      <rect
+        x="6"
+        y="6"
+        width="8"
+        height="8"
+        transform="rotate(45 10 10)"
+        stroke={gold}
+        strokeWidth="1.2"
+      />
+      <circle cx="10" cy="10" r="1.6" fill={gold} />
+    </svg>
+  )
+}
 
-        {/* STOL BAND QILISH + ALOQA */}
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.35fr_1fr]">
+function HeadingDivider() {
+  return (
+    <div className="mt-3 mb-7 flex items-center gap-2">
+      <span
+        className="h-px w-9"
+        style={{
+          background: `linear-gradient(to left, ${gold}, transparent)`,
+        }}
+      />
 
-          {/* STOL BAND QILISH */}
+      <Diamond className="h-3.5 w-3.5 shrink-0 animate-[diamondPulse_2s_ease-in-out_infinite]" />
+
+      <span
+        className="h-px w-9"
+        style={{
+          background: `linear-gradient(to right, ${gold}, transparent)`,
+        }}
+      />
+    </div>
+  )
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="group">
+      <h3
+        className="font-serif text-[16px] font-semibold leading-snug tracking-wide transition-all duration-300 group-hover:tracking-[0.12em]"
+        style={{ color: gold }}
+      >
+        {children}
+      </h3>
+
+      <HeadingDivider />
+    </div>
+  )
+}
+
+function LinkItem({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="group flex items-center gap-3">
+      <span
+        className="h-[6px] w-[6px] shrink-0 rounded-full transition-all duration-300 group-hover:scale-150"
+        style={{ backgroundColor: gold }}
+      />
+
+      <a
+        href="#"
+        className="relative text-[15px] text-neutral-200 transition-all duration-300 hover:translate-x-1 hover:text-[#F5B942]"
+      >
+        {children}
+
+        <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#F5B942] transition-all duration-300 group-hover:w-full" />
+      </a>
+    </li>
+  )
+}
+
+function InstagramGlyph({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke={gold}
+      strokeWidth="1.8"
+    >
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+      <circle cx="12" cy="12" r="4.2" />
+      <circle
+        cx="17.1"
+        cy="6.9"
+        r="1.15"
+        fill={gold}
+        stroke="none"
+      />
+    </svg>
+  )
+}
+
+function TelegramGlyph({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill={gold}
+      stroke="none"
+    >
+      <path d="M21.4 3.4 2.8 10.8c-1.1.45-1.1 1.08-.2 1.36l4.77 1.49 11.05-6.97c.52-.32 1-.14.6.21L9.9 15.1l-.35 4.86c.5 0 .72-.23.99-.5l2.38-2.31 4.94 3.65c.91.5 1.56.24 1.79-.84l3.24-15.29c.33-1.32-.5-1.92-1.49-1.27Z" />
+    </svg>
+  )
+}
+
+function FacebookGlyph({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill={gold}
+      stroke="none"
+    >
+      <path d="M14.8 8.6h1.9V5.3h-2.2c-2.4 0-3.9 1.5-3.9 4v1.8H8.4v3.3h2.2V21h3.4v-6.6h2.3l.4-3.3h-2.7V9.5c0-.6.2-.9.8-.9Z" />
+    </svg>
+  )
+}
+
+function BadgeGlyph({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke={gold}
+      strokeWidth="1.8"
+      strokeLinecap="round"
+    >
+      <circle cx="9" cy="7" r="2.6" />
+      <path d="M7 9.3 4.5 19l4.5-2 4.5 2-1.7-6.3" />
+      <path d="M13 9 19.5 3" />
+      <path d="M15.3 12.8 21 7" />
+    </svg>
+  )
+}
+
+export default function TanhoFooter() {
+  const menuLinks = [
+    'Bosh sahifa',
+    'Menyu',
+    'Biz haqimizda',
+    'Tadbirlar',
+    'Yangiliklar',
+    'Aloqa',
+  ]
+
+  const categoryLinks = [
+    'Salatlar',
+    'Issiq taomlar',
+    'Milliy taomlar',
+    'Shashliklar',
+    'Ichimliklar',
+    'Desertlar',
+  ]
+
+  const usefulLinks = [
+    'Stol band qilish',
+    'Maxsus takliflar',
+    'Korporativ xizmat',
+    'Yetkazib berish',
+    'Qoidalar',
+    'Maxfiylik siyosati',
+  ]
+
+  const features = [
+  {
+    icon: Utensils,
+    title: 'Mazali taomlar',
+    subtitle: 'Eng sifatli mahsulotlar',
+  },
+  {
+    icon: ChefHat,
+    title: 'Tajribali oshpazlar',
+    subtitle: 'Professional va mahoratli',
+  },
+  {
+    icon: Leaf,
+    title: 'Yoqimli muhit',
+    subtitle: 'Issiq va qulay atmosfera',
+  },
+  {
+    icon: Star,
+    title: 'Tez va sifatli xizmat',
+    subtitle: 'Siz uchun har doim vaqtda',
+  },
+]
+
+  const socialIcons = [
+    InstagramGlyph,
+    TelegramGlyph,
+    FacebookGlyph,
+    BadgeGlyph,
+  ]
+
+  const colDivider =
+    'lg:border-r lg:border-white/[0.06] lg:pr-8'
+
+  return (
+    <footer className="relative overflow-hidden bg-[#0a0a0b]">
+
+      {/* Background image */}
+      <img
+        src={footerImage}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-2 top-20 hidden h-[320px] w-auto object-contain opacity-90 transition-transform duration-[2000ms] hover:scale-105 md:block"
+      />
+
+      {/* Background glow */}
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[500px] -translate-x-1/2 rounded-full bg-[#F5B942]/[0.03] blur-[100px]" />
+
+      <div className="mx-auto max-w-[1200px] px-6 pt-16">
+
+        {/* Main footer */}
+        <div className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr_1fr_1.15fr] lg:gap-x-8">
+
+          {/* Brand */}
           <div
-            className="
-              relative overflow-hidden rounded-xl border border-[#25282a]
-              bg-[#0a0c0d] p-7
-              shadow-[0_15px_45px_rgba(0,0,0,0.35)]
-            "
+            className={`${colDivider} animate-[footerUp_700ms_ease-out_both]`}
           >
-            <div
-              className="
-                absolute inset-0
-                bg-[url('/images/restaurant.jpg')]
-                bg-cover bg-center
-                opacity-30
-              "
-            />
-
-            <div className="absolute inset-0 bg-gradient-to-r from-[#080a0b] via-[#080a0bcc] to-[#080a0b55]" />
-
-            <div className="relative z-10">
-              <h2 className="font-serif text-3xl text-white">
-                Stol band qilish
-              </h2>
-
-              <p className="mt-2 text-sm text-[#a9a9a9]">
-                Oldindan band qiling va eng yaxshi joyni tanlang.
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  className="
-                    flex cursor-pointer items-center gap-2 rounded-lg
-                    border border-[#292c2e] bg-[#111416]
-                    px-4 py-3 text-sm text-[#ddd]
-                    transition-all duration-300
-                    hover:-translate-y-1 hover:border-[#dcae45]
-                    hover:bg-[#151719]
-                    hover:shadow-[0_8px_25px_rgba(220,174,69,0.12)]
-                  "
-                >
-                  <CalendarDays size={17} className="text-[#dcae45]" />
-                  Sana tanlang
-                </button>
-
-                <button
-                  className="
-                    flex cursor-pointer items-center gap-2 rounded-lg
-                    border border-[#292c2e] bg-[#111416]
-                    px-4 py-3 text-sm text-[#ddd]
-                    transition-all duration-300
-                    hover:-translate-y-1 hover:border-[#dcae45]
-                    hover:bg-[#151719]
-                    hover:shadow-[0_8px_25px_rgba(220,174,69,0.12)]
-                  "
-                >
-                  <Clock3 size={17} className="text-[#dcae45]" />
-                  Vaqt tanlang
-                </button>
-
-                <button
-                  className="
-                    flex cursor-pointer items-center gap-2 rounded-lg
-                    border border-[#292c2e] bg-[#111416]
-                    px-4 py-3 text-sm text-[#ddd]
-                    transition-all duration-300
-                    hover:-translate-y-1 hover:border-[#dcae45]
-                    hover:bg-[#151719]
-                    hover:shadow-[0_8px_25px_rgba(220,174,69,0.12)]
-                  "
-                >
-                  <Users size={17} className="text-[#dcae45]" />
-                  Odamlar soni
-                </button>
-              </div>
-
-              <button
-                className="
-                  mt-5 cursor-pointer rounded-lg
-                  bg-[#e4b44f] px-7 py-3
-                  font-medium text-[#111]
-                  transition-all duration-300
-                  hover:-translate-y-1
-                  hover:bg-[#f0c261]
-                  hover:shadow-[0_10px_30px_rgba(228,180,79,0.25)]
-                "
-              >
-                Stol band qilish
-              </button>
-
-              <p className="mt-5 text-sm text-[#c7c7c7]">
-                Yoki qo‘ng‘iroq qiling:
-                <span className="ml-2 font-medium text-white">
-                  +998 91 123 45 67
-                </span>
-              </p>
-            </div>
-          </div>
-
-          {/* ALOQA */}
-          <div
-            className="
-              rounded-xl border border-[#25282a]
-              bg-[#0a0c0d] p-7
-              shadow-[0_15px_45px_rgba(0,0,0,0.35)]
-            "
-          >
-            <h2 className="font-serif text-3xl text-white">
-              Aloqa
-            </h2>
-
-            <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-[1fr_1.1fr]">
-
-              <div className="space-y-4">
-
-                <div className="flex items-center gap-3 text-sm">
-                  <Phone size={18} className="text-[#dcae45]" />
-                  <span>+998 91 123 45 67</span>
-                </div>
-
-                <div className="flex items-center gap-3 text-sm">
-                  <Send size={18} className="text-[#dcae45]" />
-                  <span>info@tanho.uz</span>
-                </div>
-
-                <div className="flex items-start gap-3 text-sm">
-                  <MapPin
-                    size={18}
-                    className="mt-0.5 shrink-0 text-[#dcae45]"
-                  />
-                  <span>
-                    Qarshi shahri,
-                    <br />
-                    Alisher Navoiy ko‘chasi 15
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-3 text-sm">
-                  <Clock3 size={18} className="text-[#dcae45]" />
-                  <span>Har kuni 10:00 — 23:00</span>
-                </div>
-
-                {/* SOCIAL */}
-                <div className="flex gap-3 pt-1">
-                  <button
-                    className="
-                      flex h-9 w-9 cursor-pointer items-center justify-center
-                      rounded-full border border-[#303235]
-                      text-sm font-semibold text-[#ddd]
-                      transition-all duration-300
-                      hover:-translate-y-1 hover:border-[#dcae45]
-                      hover:bg-[#dcae4515] hover:text-[#dcae45]
-                    "
-                  >
-                    ig
-                  </button>
-
-                  <button
-                    className="
-                      flex h-9 w-9 cursor-pointer items-center justify-center
-                      rounded-full border border-[#303235]
-                      text-sm font-semibold text-[#ddd]
-                      transition-all duration-300
-                      hover:-translate-y-1 hover:border-[#dcae45]
-                      hover:bg-[#dcae4515] hover:text-[#dcae45]
-                    "
-                  >
-                    <Send size={15} />
-                  </button>
-
-                  <button
-                    className="
-                      flex h-9 w-9 cursor-pointer items-center justify-center
-                      rounded-full border border-[#303235]
-                      text-sm font-semibold text-[#ddd]
-                      transition-all duration-300
-                      hover:-translate-y-1 hover:border-[#dcae45]
-                      hover:bg-[#dcae4515] hover:text-[#dcae45]
-                    "
-                  >
-                    f
-                  </button>
-                </div>
-              </div>
-
-              {/* LOCATION */}
-              <div
-                className="
-                  relative min-h-[190px] overflow-hidden rounded-lg
-                  border border-[#282b2d]
-                  bg-[#0d0f10]
-                "
-              >
-                <div
-                  className="
-                    absolute inset-0
-                    bg-[radial-gradient(circle_at_50%_50%,rgba(220,174,69,0.08),transparent_55%)]
-                  "
-                />
-
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div
-                    className="
-                      relative flex h-12 w-12 items-center justify-center
-                      rounded-full bg-[#e0af43]
-                      shadow-[0_0_35px_rgba(224,175,67,0.35)]
-                    "
-                  >
-                    <MapPin
-                      size={27}
-                      className="text-[#171717]"
-                      fill="currentColor"
-                    />
-                  </div>
-                </div>
-
-                <div className="absolute bottom-3 left-3 right-3">
-                  <button
-                    className="
-                      flex w-full cursor-pointer items-center justify-center
-                      gap-2 rounded-lg border border-[#393b3c]
-                      bg-[#090b0ccc] px-3 py-2
-                      text-xs text-[#ddd]
-                      backdrop-blur-sm
-                      transition-all duration-300
-                      hover:border-[#dcae45]
-                      hover:text-[#dcae45]
-                    "
-                  >
-                    <Navigation size={14} />
-                    Lokatsiyani ko‘rish
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        {/* MIJOZLAR */}
-        <section className="mt-7">
-          <div className="mb-5 flex items-center justify-between">
-            <h2 className="font-serif text-3xl text-white">
-              Mijozlarimiz nima dedi?
-            </h2>
-
-            <button
-              className="
-                cursor-pointer text-sm text-[#dcae45]
-                transition-colors duration-300
-                hover:text-[#f2c96c]
-              "
+            <h2
+              className="font-serif text-[36px] leading-none tracking-[0.03em] transition-all duration-500 hover:scale-105 hover:tracking-[0.08em]"
+              style={{ color: gold }}
             >
-              Barchasini ko‘rish →
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {reviews.map((review) => (
-              <div
-                key={review.name}
-                className="
-                  rounded-xl border border-[#242729]
-                  bg-[#090b0c] p-5
-                  transition-all duration-300
-                  hover:-translate-y-1
-                  hover:border-[#4b3b1d]
-                  hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)]
-                "
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="
-                      flex h-11 w-11 items-center justify-center
-                      rounded-full bg-[#17191a]
-                      text-sm font-medium text-[#dcae45]
-                    "
-                  >
-                    {review.initials}
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-medium text-white">
-                      {review.name}
-                    </h3>
-
-                    <div className="mt-1 flex gap-1">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <Star
-                          key={index}
-                          size={12}
-                          className="text-[#e3b34f]"
-                          fill="currentColor"
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <p className="mt-4 text-sm leading-6 text-[#a9a9a9]">
-                  {review.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-      </div>
-
-      {/* FOOTER LINKS */}
-      <div className="border-t border-[#202325]">
-        <div
-          className="
-            mx-auto grid max-w-[1400px]
-            grid-cols-1 gap-8 px-5 py-9
-            sm:grid-cols-2 lg:grid-cols-5
-          "
-        >
-          {/* LOGO */}
-          <div>
-            <h2 className="font-serif text-3xl tracking-wide text-[#dcae45]">
               TANHO
             </h2>
 
-            <p className="mt-1 text-[8px] tracking-[5px] text-[#dcae45]">
-              RESTAURANT
+            <p className="mt-2 text-[11px] tracking-[0.4em] text-neutral-400">
+              — RESTAURANT —
             </p>
 
-            <p className="mt-4 max-w-[250px] text-sm leading-6 text-[#888]">
-              Tanho restorani — mazali taomlar,
-              yoqimli muhit va siz uchun yaratilgan
-              ajoyib xizmat.
+            <p className="mt-6 max-w-[240px] text-[15px] leading-[1.85] text-neutral-300">
+              Tanho restorani — mazali taomlar, yoqimli muhit va siz uchun
+              eng yaxshi xizmat.
             </p>
-          </div>
 
-          {/* MENU */}
-          <div>
-            <h3 className="mb-4 text-sm font-medium text-[#dcae45]">
-              Menyu
-            </h3>
-
-            <div className="space-y-2 text-sm text-[#777]">
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Bosh sahifa
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Menyu
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Biz haqimizda
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Tadbirlar
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Yangiliklar
-              </p>
+            {/* Social */}
+            <div className="mt-6 flex items-center gap-3">
+              {socialIcons.map((Icon, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  className="group flex h-10 w-10 items-center justify-center rounded-full border transition-all duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-[#F5B942]/10 hover:shadow-[0_8px_25px_rgba(245,185,66,0.12)]"
+                  style={{ borderColor: line }}
+                >
+                  <Icon className="h-[18px] w-[18px] transition-transform duration-300 group-hover:scale-110" />
+                </a>
+              ))}
             </div>
+
+            {/* Booking */}
+            <button
+              className="group mt-7 flex items-center gap-3 rounded-lg border px-5 py-3.5 font-serif text-[14px] font-semibold tracking-wide transition-all duration-300 hover:-translate-y-1 hover:bg-[#F5B942]/10 hover:shadow-[0_10px_30px_rgba(245,185,66,0.1)] active:scale-95"
+              style={{
+                borderColor: gold,
+                color: gold,
+              }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="h-[18px] w-[18px] transition-transform duration-300 group-hover:rotate-6"
+                fill="none"
+                stroke={gold}
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="3" y="4.5" width="18" height="16" rx="2" />
+                <line x1="3" y1="9.5" x2="21" y2="9.5" />
+                <line x1="7.5" y1="2.5" x2="7.5" y2="6.5" />
+                <line x1="16.5" y1="2.5" x2="16.5" y2="6.5" />
+                <path d="M9.5 14.5 11 16l3.5-3.5" />
+              </svg>
+
+              <span>STOL BAND QILISH</span>
+            </button>
           </div>
 
-          {/* CATEGORIES */}
-          <div>
-            <h3 className="mb-4 text-sm font-medium text-[#dcae45]">
-              Menyu kategoriyalar
-            </h3>
+          {/* Menu */}
+          <div
+            className={`${colDivider} animate-[footerUp_700ms_100ms_ease-out_both]`}
+          >
+            <SectionHeading>MENYU</SectionHeading>
 
-            <div className="space-y-2 text-sm text-[#777]">
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Salatlar
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Issiq taomlar
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Milliy taomlar
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Shashliklar
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Ichimliklar
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Desertlar
-              </p>
-            </div>
+            <ul className="space-y-4">
+              {menuLinks.map(item => (
+                <LinkItem key={item}>{item}</LinkItem>
+              ))}
+            </ul>
           </div>
 
-          {/* LINKS */}
-          <div>
-            <h3 className="mb-4 text-sm font-medium text-[#dcae45]">
-              Foydali havolalar
+          {/* Categories */}
+          <div
+            className={`${colDivider} animate-[footerUp_700ms_200ms_ease-out_both]`}
+          >
+            <h3
+              className="font-serif text-[16px] font-semibold leading-snug tracking-wide"
+              style={{ color: gold }}
+            >
+              MENYU
+              <br />
+              KATEGORIYALARI
             </h3>
 
-            <div className="space-y-2 text-sm text-[#777]">
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Stol band qilish
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Maxsus takliflar
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Korporativ xizmat
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Yetkazib berish
-              </p>
-              <p className="cursor-pointer transition hover:text-[#dcae45]">
-                Qoidalar
-              </p>
-            </div>
+            <HeadingDivider />
+
+            <ul className="space-y-4">
+              {categoryLinks.map(item => (
+                <LinkItem key={item}>{item}</LinkItem>
+              ))}
+            </ul>
           </div>
 
-          {/* WORK TIME */}
-          <div>
-            <h3 className="mb-4 text-sm font-medium text-[#dcae45]">
-              Ish vaqti
+          {/* Useful links */}
+          <div
+            className={`${colDivider} animate-[footerUp_700ms_300ms_ease-out_both]`}
+          >
+            <h3
+              className="font-serif text-[16px] font-semibold leading-snug tracking-wide"
+              style={{ color: gold }}
+            >
+              FOYDALI
+              <br />
+              HAVOLALAR
             </h3>
 
-            <p className="text-sm text-[#777]">
-              Dushanba – Yakshanba
-            </p>
+            <HeadingDivider />
+
+            <ul className="space-y-4">
+              {usefulLinks.map(item => (
+                <LinkItem key={item}>{item}</LinkItem>
+              ))}
+            </ul>
+          </div>
+
+          {/* Working hours */}
+          <div className="animate-[footerUp_700ms_400ms_ease-out_both]">
+            <SectionHeading>ISH VAQTI</SectionHeading>
 
             <div
-              className="
-                mt-4 inline-flex cursor-default
-                rounded-lg border border-[#5a4721]
-                px-5 py-3 text-lg
-                text-[#e4b44f]
-              "
+              className="group flex items-center gap-3.5 rounded-xl border px-4 py-3.5 transition-all duration-300 hover:-translate-y-1 hover:border-[#F5B942]/30 hover:shadow-[0_10px_30px_rgba(245,185,66,0.06)]"
+              style={{
+                borderColor: line,
+                backgroundColor: '#111113',
+              }}
             >
-              10:00 — 23:00
+              <Clock
+                className="h-6 w-6 shrink-0 transition-transform duration-500 group-hover:rotate-12"
+                style={{ color: gold }}
+                strokeWidth={1.6}
+              />
+
+              <div>
+                <p
+                  className="font-serif text-[17px] font-semibold"
+                  style={{ color: gold }}
+                >
+                  10:00 – 23:00
+                </p>
+
+                <p className="text-[13.5px] text-neutral-400">
+                  Har kuni
+                </p>
+              </div>
             </div>
+
+            <ul className="mt-6 space-y-4">
+              <li className="group flex items-center gap-3">
+                <Clock
+                  className="h-[18px] w-[18px] shrink-0 transition-transform duration-300 group-hover:scale-110"
+                  style={{ color: gold }}
+                  strokeWidth={1.7}
+                />
+
+                <span className="text-[15px] text-neutral-200 transition-colors duration-300 group-hover:text-[#F5B942]">
+                  Dushanba – Yakshanba
+                </span>
+              </li>
+
+              <li className="group flex items-center gap-3">
+                <Phone
+                  className="h-[18px] w-[18px] shrink-0 transition-transform duration-300 group-hover:scale-110"
+                  style={{ color: gold }}
+                  strokeWidth={1.7}
+                />
+
+                <span className="text-[15px] text-neutral-200 transition-colors duration-300 group-hover:text-[#F5B942]">
+                  +998 91 123 45 67
+                </span>
+              </li>
+
+              <li className="group flex items-center gap-3">
+                <Mail
+                  className="h-[18px] w-[18px] shrink-0 transition-transform duration-300 group-hover:scale-110"
+                  style={{ color: gold }}
+                  strokeWidth={1.7}
+                />
+
+                <span className="text-[15px] text-neutral-200 transition-colors duration-300 group-hover:text-[#F5B942]">
+                  info@tanho.uz
+                </span>
+              </li>
+
+              <li className="group flex items-start gap-3">
+                <MapPin
+                  className="mt-0.5 h-[18px] w-[18px] shrink-0 transition-transform duration-300 group-hover:scale-110"
+                  style={{ color: gold }}
+                  strokeWidth={1.7}
+                />
+
+                <span className="text-[15px] leading-[1.5] text-neutral-200 transition-colors duration-300 group-hover:text-[#F5B942]">
+                  Qarshi shahri, Alisher Navoiy ko'chasi 15
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* COPYRIGHT */}
-        <div className="border-t border-[#202325]">
-          <div
-            className="
-              mx-auto flex max-w-[1400px]
-              flex-col gap-3 px-5 py-5
-              text-xs text-[#666]
-              sm:flex-row sm:items-center sm:justify-between
-            "
-          >
-            <span>
-              © 2024 Tanho Restaurant. Barcha huquqlar himoyalangan.
-            </span>
+        {/* Features */}
+        <div
+          className="mt-14 grid grid-cols-1 gap-x-6 gap-y-9 rounded-2xl border px-8 py-9 sm:grid-cols-2 lg:grid-cols-4 animate-[footerUp_800ms_500ms_ease-out_both]"
+          style={{ borderColor: line }}
+        >
+          {features.map(({ icon: Icon, title, subtitle }, i) => (
+  <div
+    key={i}
+    className="group flex items-center gap-4 transition-all duration-300 hover:-translate-y-1"
+  >
+    <div
+      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-hover:border-[#F5B942]/40 group-hover:bg-[#F5B942]/10"
+      style={{ borderColor: line }}
+    >
+      <Icon
+        className="h-6 w-6 transition-all duration-500 group-hover:rotate-6"
+        style={{ color: gold }}
+        strokeWidth={1.6}
+      />
+    </div>
 
-            <span>
-              Designed with ♡ for our guests
-            </span>
+    <div>
+      <p className="text-[16px] font-medium text-white transition-colors duration-300 group-hover:text-[#F5B942]">
+        {title}
+      </p>
+
+      <p className="mt-1 text-[13.5px] text-neutral-500">
+        {subtitle}
+      </p>
+    </div>
+  </div>
+))}
+        </div>
+
+        {/* Bottom */}
+        <div
+          className="mt-10 grid grid-cols-1 items-center gap-5 border-t py-7 sm:grid-cols-[1fr_auto_1fr]"
+          style={{ borderColor: '#1a1a1a' }}
+        >
+          <p className="text-center text-[13.5px] text-neutral-500 transition-colors duration-300 hover:text-neutral-300 sm:text-left">
+            © 2024 Tanho Restaurant. Barcha huquqlar himoyalangan.
+          </p>
+
+          <div>
+            <HeadingDivider />
           </div>
+
+          <p className="flex items-center justify-center gap-2 text-[13.5px] text-neutral-500 transition-colors duration-300 hover:text-neutral-300 sm:justify-end">
+            Mehmonlarimiz uchun
+
+            <Heart
+              className="h-[15px] w-[15px] animate-[heartBeat_2s_ease-in-out_infinite]"
+              style={{ color: gold }}
+              strokeWidth={1.8}
+            />
+
+            maxsus yaratilgan
+          </p>
         </div>
       </div>
-    </footer>
-  );
-}
 
-export default Footer;
+      {/* Animations */}
+      <style>{`
+        @keyframes footerUp {
+          from {
+            opacity: 0;
+            transform: translateY(25px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes diamondPulse {
+          0%,
+          100% {
+            opacity: 0.7;
+            transform: rotate(0deg) scale(1);
+          }
+
+          50% {
+            opacity: 1;
+            transform: rotate(45deg) scale(1.15);
+          }
+        }
+
+        @keyframes heartBeat {
+          0%,
+          100% {
+            transform: scale(1);
+          }
+
+          15% {
+            transform: scale(1.18);
+          }
+
+          30% {
+            transform: scale(1);
+          }
+
+          45% {
+            transform: scale(1.12);
+          }
+
+          60% {
+            transform: scale(1);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          *,
+          *::before,
+          *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+      `}</style>
+    </footer>
+  )
+}

@@ -3,7 +3,7 @@ import HeroSection from "../../../components/Landing/HeroSection";
 import MashhurFood from "../../../components/Landing/PopularFood";
 import AboutSection from "../../../components/Landing/AboutSection";
 import SpecialSection from "../../../components/Landing/SpecialSection";
-import FooterSection from "../../../components/Layout/Footer";
+import Stolband from "../../../components/Landing/Stolbandqilish"
 
 function Home() {
   return (
@@ -14,7 +14,7 @@ function Home() {
 <MashhurFood />
 <AboutSection />
 <SpecialSection />
-<FooterSection />
+<Stolband/> 
     </div>
   );
 }

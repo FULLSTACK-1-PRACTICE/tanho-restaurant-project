@@ -5,14 +5,9 @@ import {
   Phone,
   Mail,
   Heart,
-  Utensils,
-  ChefHat,
-  Leaf,
-  Star,
 } from 'lucide-react'
 
 import footerImage from '../../assets/images/image.png'
-
 
 const gold = '#F5B942'
 const line = '#2a2210'
@@ -185,29 +180,6 @@ export default function TanhoFooter() {
     'Maxfiylik siyosati',
   ]
 
-  const features = [
-  {
-    icon: Utensils,
-    title: 'Mazali taomlar',
-    subtitle: 'Eng sifatli mahsulotlar',
-  },
-  {
-    icon: ChefHat,
-    title: 'Tajribali oshpazlar',
-    subtitle: 'Professional va mahoratli',
-  },
-  {
-    icon: Leaf,
-    title: 'Yoqimli muhit',
-    subtitle: 'Issiq va qulay atmosfera',
-  },
-  {
-    icon: Star,
-    title: 'Tez va sifatli xizmat',
-    subtitle: 'Siz uchun har doim vaqtda',
-  },
-]
-
   const socialIcons = [
     InstagramGlyph,
     TelegramGlyph,
@@ -220,8 +192,6 @@ export default function TanhoFooter() {
 
   return (
     <footer className="relative overflow-hidden bg-[#0a0a0b]">
-
-      {/* Background image */}
       <img
         src={footerImage}
         alt=""
@@ -229,15 +199,10 @@ export default function TanhoFooter() {
         className="pointer-events-none absolute -right-2 top-20 hidden h-[320px] w-auto object-contain opacity-90 transition-transform duration-[2000ms] hover:scale-105 md:block"
       />
 
-      {/* Background glow */}
       <div className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[500px] -translate-x-1/2 rounded-full bg-[#F5B942]/[0.03] blur-[100px]" />
 
       <div className="mx-auto max-w-[1200px] px-6 pt-16">
-
-        {/* Main footer */}
         <div className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr_1fr_1.15fr] lg:gap-x-8">
-
-          {/* Brand */}
           <div
             className={`${colDivider} animate-[footerUp_700ms_ease-out_both]`}
           >
@@ -257,7 +222,6 @@ export default function TanhoFooter() {
               eng yaxshi xizmat.
             </p>
 
-            {/* Social */}
             <div className="mt-6 flex items-center gap-3">
               {socialIcons.map((Icon, i) => (
                 <a
@@ -271,7 +235,6 @@ export default function TanhoFooter() {
               ))}
             </div>
 
-            {/* Booking */}
             <button
               className="group mt-7 flex items-center gap-3 rounded-lg border px-5 py-3.5 font-serif text-[14px] font-semibold tracking-wide transition-all duration-300 hover:-translate-y-1 hover:bg-[#F5B942]/10 hover:shadow-[0_10px_30px_rgba(245,185,66,0.1)] active:scale-95"
               style={{
@@ -299,7 +262,6 @@ export default function TanhoFooter() {
             </button>
           </div>
 
-          {/* Menu */}
           <div
             className={`${colDivider} animate-[footerUp_700ms_100ms_ease-out_both]`}
           >
@@ -312,7 +274,6 @@ export default function TanhoFooter() {
             </ul>
           </div>
 
-          {/* Categories */}
           <div
             className={`${colDivider} animate-[footerUp_700ms_200ms_ease-out_both]`}
           >
@@ -334,7 +295,6 @@ export default function TanhoFooter() {
             </ul>
           </div>
 
-          {/* Useful links */}
           <div
             className={`${colDivider} animate-[footerUp_700ms_300ms_ease-out_both]`}
           >
@@ -356,7 +316,6 @@ export default function TanhoFooter() {
             </ul>
           </div>
 
-          {/* Working hours */}
           <div className="animate-[footerUp_700ms_400ms_ease-out_both]">
             <SectionHeading>ISH VAQTI</SectionHeading>
 
@@ -439,41 +398,6 @@ export default function TanhoFooter() {
           </div>
         </div>
 
-        {/* Features */}
-        <div
-          className="mt-14 grid grid-cols-1 gap-x-6 gap-y-9 rounded-2xl border px-8 py-9 sm:grid-cols-2 lg:grid-cols-4 animate-[footerUp_800ms_500ms_ease-out_both]"
-          style={{ borderColor: line }}
-        >
-          {features.map(({ icon: Icon, title, subtitle }, i) => (
-  <div
-    key={i}
-    className="group flex items-center gap-4 transition-all duration-300 hover:-translate-y-1"
-  >
-    <div
-      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-hover:border-[#F5B942]/40 group-hover:bg-[#F5B942]/10"
-      style={{ borderColor: line }}
-    >
-      <Icon
-        className="h-6 w-6 transition-all duration-500 group-hover:rotate-6"
-        style={{ color: gold }}
-        strokeWidth={1.6}
-      />
-    </div>
-
-    <div>
-      <p className="text-[16px] font-medium text-white transition-colors duration-300 group-hover:text-[#F5B942]">
-        {title}
-      </p>
-
-      <p className="mt-1 text-[13.5px] text-neutral-500">
-        {subtitle}
-      </p>
-    </div>
-  </div>
-))}
-        </div>
-
-        {/* Bottom */}
         <div
           className="mt-10 grid grid-cols-1 items-center gap-5 border-t py-7 sm:grid-cols-[1fr_auto_1fr]"
           style={{ borderColor: '#1a1a1a' }}
@@ -500,7 +424,6 @@ export default function TanhoFooter() {
         </div>
       </div>
 
-      {/* Animations */}
       <style>{`
         @keyframes footerUp {
           from {

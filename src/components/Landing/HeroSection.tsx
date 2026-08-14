@@ -12,7 +12,6 @@ import heroImg from "../../assets/images/kereman-uchirmengMani-brat.jpeg";
 function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-[#070809] text-[#f1eee7]">
-
       <div className="absolute inset-x-0 top-[72px] h-[640px] overflow-hidden">
         <img
           src={heroImg}
@@ -24,10 +23,9 @@ function HeroSection() {
         <div className="absolute inset-x-0 bottom-0 h-[220px] bg-gradient-to-t from-[#070809] via-[#070809]/80 to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1240px] px-6">
+      <div className="relative z-10 mx-auto max-w-[1250px] px-6">
         <div className="flex min-h-[680px] items-center pt-[92px] pb-[70px]">
           <div className="max-w-[580px]">
-
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#dcae4d]/20 bg-[#dcae4d]/10 px-3.5 py-1.5 backdrop-blur-md">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#dcae4d]" />
               <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#e3b859]">
@@ -90,13 +88,11 @@ function HeroSection() {
                 <span className="font-semibold text-[#f1eee7]">4.9 / 5.0</span> — 1,200+ mamnun mehmonlarimiz bahosi
               </div>
             </div>
-
           </div>
         </div>
 
         <div className="relative z-20 pb-12">
           <div className="grid grid-cols-1 overflow-hidden rounded-xl border border-white/10 bg-[#0c0e10]/80 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:grid-cols-2 lg:grid-cols-4">
-            
             <div className="group cursor-pointer border-b border-white/5 p-6 transition-colors duration-300 hover:bg-white/[0.03] sm:border-r lg:border-b-0">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d] transition-all duration-300 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d] group-hover:text-[#08090a]">
@@ -160,10 +156,8 @@ function HeroSection() {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
-
       </div>
     </section>
   );

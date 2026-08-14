@@ -6,7 +6,6 @@ import {
   Grid2X2,
   Heart,
   Percent,
-  Send,
   ShoppingCart,
   Star,
   UtensilsCrossed,
@@ -134,7 +133,6 @@ const MenuPage = () => {
 
   return (
     <div className="min-h-screen bg-[#050708] text-white">
-      {/* HERO */}
       <section className="relative min-h-[500px] overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1800&q=90"
@@ -144,7 +142,7 @@ const MenuPage = () => {
 
         <div className="absolute inset-0 bg-gradient-to-r from-[#050708] via-[#050708]/85 to-black/20" />
 
-        <div className="relative mx-auto flex min-h-[500px] max-w-[1200px] items-center px-6">
+        <div className="relative mx-auto flex min-h-[500px] max-w-[1240px] items-center px-6">
           <div className="max-w-[430px]">
             <p className="mb-4 text-sm uppercase tracking-[3px] text-[#d9a441]">
               TANHO RESTAURANT
@@ -168,8 +166,7 @@ const MenuPage = () => {
         </div>
       </section>
 
-      {/* CATEGORY */}
-      <section className="relative z-10 mx-auto -mt-8 max-w-[1200px] px-5">
+      <section className="relative z-10 mx-auto -mt-8 max-w-[1240px] px-5">
         <div className="grid grid-cols-2 gap-2 rounded-xl border border-[#292929] bg-[#0c0f10]/95 p-2 shadow-[0_15px_50px_rgba(0,0,0,0.45)] backdrop-blur-md sm:grid-cols-4 lg:grid-cols-7">
           {categories.map((category, index) => {
             const Icon = category.icon;
@@ -196,17 +193,14 @@ const MenuPage = () => {
         </div>
       </section>
 
-      {/* MENU */}
-      <section className="mx-auto max-w-[1200px] px-5 py-12">
+      <section className="mx-auto max-w-[1240px] px-5 py-12">
         <div className="mb-7 flex items-center justify-between">
           <div>
             <p className="mb-2 text-xs uppercase tracking-[3px] text-[#d9a441]">
               TANHO RESTAURANT
             </p>
 
-            <h2 className="font-serif text-3xl md:text-4xl">
-              Mazali taomlar
-            </h2>
+            <h2 className="font-serif text-3xl md:text-4xl">Mazali taomlar</h2>
           </div>
 
           <button className="group flex cursor-pointer items-center gap-2 text-sm text-[#d9a441] transition-all duration-300 hover:gap-4">
@@ -224,7 +218,6 @@ const MenuPage = () => {
               key={food.name}
               className="group cursor-pointer overflow-hidden rounded-xl border border-[#292929] bg-[#0c0f10] transition-all duration-300 hover:-translate-y-2 hover:border-[#9c711f] hover:shadow-[0_15px_35px_rgba(0,0,0,0.55)]"
             >
-              {/* IMAGE */}
               <div className="relative h-[190px] overflow-hidden">
                 <img
                   src={food.image}
@@ -239,7 +232,6 @@ const MenuPage = () => {
                 </button>
               </div>
 
-              {/* CONTENT */}
               <div className="p-4">
                 <h3 className="text-base font-semibold transition-colors duration-300 group-hover:text-[#e5ad45]">
                   {food.name}
@@ -268,8 +260,7 @@ const MenuPage = () => {
         </div>
       </section>
 
-      {/* SPECIAL OFFER */}
-      <section className="mx-auto max-w-[1200px] px-5 pb-12">
+      <section className="mx-auto max-w-[1240px] px-5 pb-12">
         <div className="overflow-hidden rounded-2xl border border-[#302718] bg-[#0d1112] shadow-[0_15px_40px_rgba(0,0,0,0.35)]">
           <div className="grid md:grid-cols-[280px_1fr]">
             <div className="relative h-[220px] overflow-hidden md:h-auto">
@@ -355,136 +346,10 @@ const MenuPage = () => {
           </div>
         </div>
       </section>
-
-      {/* FOOTER */}
-      <footer className="border-t border-[#222] bg-[#07090a]">
-        <div className="mx-auto max-w-[1200px] px-5 py-12">
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {/* LOGO */}
-            <div>
-              <h2 className="font-serif text-3xl tracking-widest text-[#d9a441]">
-                TANHO
-              </h2>
-
-              <p className="mt-1 text-[9px] tracking-[5px] text-[#d9a441]">
-                RESTAURANT
-              </p>
-
-              <p className="mt-5 max-w-[240px] text-xs leading-6 text-gray-400">
-                TANHO restorani — mazali taomlar, yoqimli muhit va siz uchun
-                eng yaxshi xizmat.
-              </p>
-
-              <div className="mt-5 flex gap-2">
-                <button className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#383838] text-xs text-[#d9a441] transition-all duration-300 hover:-translate-y-1 hover:border-[#d9a441] hover:bg-[#d9a441] hover:text-black">
-                  ig
-                </button>
-
-                <button className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#383838] text-xs text-[#d9a441] transition-all duration-300 hover:-translate-y-1 hover:border-[#d9a441] hover:bg-[#d9a441] hover:text-black">
-                  <Send size={15} />
-                </button>
-
-                <button className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#383838] text-xs text-[#d9a441] transition-all duration-300 hover:-translate-y-1 hover:border-[#d9a441] hover:bg-[#d9a441] hover:text-black">
-                  f
-                </button>
-              </div>
-            </div>
-
-            {/* MENU */}
-            <div>
-              <h3 className="mb-5 text-sm font-semibold text-[#d9a441]">
-                Menyu
-              </h3>
-
-              <div className="space-y-3 text-xs text-gray-400">
-                <p className="cursor-pointer transition-colors hover:text-[#d9a441]">
-                  Bosh sahifa
-                </p>
-                <p className="cursor-pointer transition-colors hover:text-[#d9a441]">
-                  Menyu
-                </p>
-                <p className="cursor-pointer transition-colors hover:text-[#d9a441]">
-                  Biz haqimizda
-                </p>
-                <p className="cursor-pointer transition-colors hover:text-[#d9a441]">
-                  Tadbirlar
-                </p>
-                <p className="cursor-pointer transition-colors hover:text-[#d9a441]">
-                  Yangiliklar
-                </p>
-              </div>
-            </div>
-
-            {/* CATEGORIES */}
-            <div>
-              <h3 className="mb-5 text-sm font-semibold text-[#d9a441]">
-                Menyu kategoriyalari
-              </h3>
-
-              <div className="space-y-3 text-xs text-gray-400">
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Salatlar
-                </p>
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Issiq taomlar
-                </p>
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Milliy taomlar
-                </p>
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Shashliklar
-                </p>
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Ichimliklar
-                </p>
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Desertlar
-                </p>
-              </div>
-            </div>
-
-            {/* USEFUL LINKS */}
-            <div>
-              <h3 className="mb-5 text-sm font-semibold text-[#d9a441]">
-                Foydali havolalar
-              </h3>
-
-              <div className="space-y-3 text-xs text-gray-400">
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Stol band qilish
-                </p>
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Maxsus takliflar
-                </p>
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Korporativ xizmat
-                </p>
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Yetkazib berish
-                </p>
-                <p className="cursor-pointer hover:text-[#d9a441]">
-                  Qoidalar
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-10 flex flex-col justify-between gap-4 border-t border-[#202020] pt-6 text-xs text-gray-500 md:flex-row">
-            <p>© 2024 Tanho Restaurant. Barcha huquqlar himoyalangan.</p>
-
-            <p className="flex items-center gap-1">
-              Designed with
-              <Heart size={13} className="text-[#d9a441]" />
-              for our guests
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
 
-/* Salat uchun kichkina icon */
 const SaladIcon = ({ size = 20 }: { size?: number }) => {
   return (
     <svg

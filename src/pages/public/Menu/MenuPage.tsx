@@ -132,7 +132,7 @@ const MenuPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#050708] text-white">
+    <div className="min-h-screen bg-[#0b0e10] text-white">
       <section className="relative min-h-[500px] overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1800&q=90"
@@ -140,9 +140,9 @@ const MenuPage = () => {
           className="absolute inset-0 h-full w-full object-cover"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050708] via-[#050708]/85 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0b0e10] via-[#0b0e10]/80 to-transparent" />
 
-        <div className="relative mx-auto flex min-h-[500px] max-w-[1240px] items-center px-6">
+        <div className="relative mx-auto flex min-h-[500px] max-w-[1200px] items-center px-6">
           <div className="max-w-[430px]">
             <p className="mb-4 text-sm uppercase tracking-[3px] text-[#d9a441]">
               TANHO RESTAURANT
@@ -166,18 +166,20 @@ const MenuPage = () => {
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto -mt-8 max-w-[1240px] px-5">
-        <div className="grid grid-cols-2 gap-2 rounded-xl border border-[#292929] bg-[#0c0f10]/95 p-2 shadow-[0_15px_50px_rgba(0,0,0,0.45)] backdrop-blur-md sm:grid-cols-4 lg:grid-cols-7">
+      {/* Kategoriya menyusi */}
+      <section className="relative z-10 mx-auto -mt-8 max-w-[1200px] px-5">
+        <div className="grid grid-cols-2 gap-2 rounded-xl border border-white/10 bg-[#121619] p-2 backdrop-blur-md sm:grid-cols-4 lg:grid-cols-7">
           {categories.map((category, index) => {
             const Icon = category.icon;
 
             return (
               <button
                 key={category.name}
+                type="button"
                 className={`group flex cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-4 text-xs transition-all duration-300 ${
                   index === 0
-                    ? "border border-[#8c651d] bg-[#111415] text-[#e5ad45] shadow-[0_0_18px_rgba(217,164,65,0.12)]"
-                    : "text-gray-300 hover:-translate-y-1 hover:bg-[#151718] hover:text-[#e5ad45]"
+                    ? "border border-[#8c651d]/50 bg-[#191e22] text-[#e5ad45]"
+                    : "text-gray-300 hover:-translate-y-0.5 hover:bg-[#191e22] hover:text-[#e5ad45]"
                 }`}
               >
                 <Icon
@@ -193,7 +195,8 @@ const MenuPage = () => {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1240px] px-5 py-12">
+      {/* Taomlar ro'yxati (Mutlaqo tiniq rasmlar) */}
+      <section className="mx-auto max-w-[1200px] px-5 py-12">
         <div className="mb-7 flex items-center justify-between">
           <div>
             <p className="mb-2 text-xs uppercase tracking-[3px] text-[#d9a441]">
@@ -203,7 +206,10 @@ const MenuPage = () => {
             <h2 className="font-serif text-3xl md:text-4xl">Mazali taomlar</h2>
           </div>
 
-          <button className="group flex cursor-pointer items-center gap-2 text-sm text-[#d9a441] transition-all duration-300 hover:gap-4">
+          <button
+            type="button"
+            className="group flex cursor-pointer items-center gap-2 text-sm text-[#d9a441] transition-all duration-300 hover:gap-3"
+          >
             Barchasini ko'rish
             <ChevronRight
               size={18}
@@ -216,23 +222,24 @@ const MenuPage = () => {
           {foods.map((food) => (
             <div
               key={food.name}
-              className="group cursor-pointer overflow-hidden rounded-xl border border-[#292929] bg-[#0c0f10] transition-all duration-300 hover:-translate-y-2 hover:border-[#9c711f] hover:shadow-[0_15px_35px_rgba(0,0,0,0.55)]"
+              className="group cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#121619] transition-all duration-300 hover:-translate-y-1 hover:border-[#d9a441]/60"
             >
-              <div className="relative h-[190px] overflow-hidden">
+              <div className="relative h-[190px] w-full overflow-hidden bg-[#121619] transform-gpu">
                 <img
                   src={food.image}
                   alt={food.name}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 transform-gpu"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
-
-                <button className="absolute right-3 top-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/50 text-[#e0ad49] backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:border-[#d9a441] hover:bg-[#d9a441] hover:text-black">
-                  <Heart size={17} />
+                <button
+                  type="button"
+                  className="absolute right-3 top-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/50 text-[#e0ad49] backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:bg-[#d9a441] hover:text-black"
+                >
+                  <Heart size={15} />
                 </button>
               </div>
 
-              <div className="p-4">
+              <div className="relative z-10 bg-[#121619] p-4">
                 <h3 className="text-base font-semibold transition-colors duration-300 group-hover:text-[#e5ad45]">
                   {food.name}
                 </h3>
@@ -247,10 +254,13 @@ const MenuPage = () => {
                   </span>
                 </div>
 
-                <button className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-lg border border-[#6d511e] px-3 py-2.5 text-xs text-[#e5ad45] transition-all duration-300 hover:bg-[#d9a441] hover:text-black">
+                <button
+                  type="button"
+                  className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-lg border border-[#8c651d]/40 px-3 py-2 text-xs text-[#e5ad45] transition-all duration-300 hover:bg-[#d9a441] hover:text-black"
+                >
                   <span>Buyurtma berish</span>
                   <ShoppingCart
-                    size={16}
+                    size={15}
                     className="transition-transform duration-300 group-hover:scale-110"
                   />
                 </button>
@@ -260,17 +270,16 @@ const MenuPage = () => {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1240px] px-5 pb-12">
-        <div className="overflow-hidden rounded-2xl border border-[#302718] bg-[#0d1112] shadow-[0_15px_40px_rgba(0,0,0,0.35)]">
+      {/* Aksiyalar bloki */}
+      <section className="mx-auto max-w-[1200px] px-5 pb-12">
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121619]">
           <div className="grid md:grid-cols-[280px_1fr]">
-            <div className="relative h-[220px] overflow-hidden md:h-auto">
+            <div className="relative h-[220px] overflow-hidden bg-[#121619] transform-gpu md:h-auto">
               <img
                 src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
                 alt="Maxsus taomlar"
-                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105 transform-gpu"
               />
-
-              <div className="absolute inset-0 bg-black/30" />
             </div>
 
             <div className="p-6 md:p-8">
@@ -291,9 +300,9 @@ const MenuPage = () => {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 <div className="group cursor-pointer">
                   <Gift
-                    size={30}
+                    size={28}
                     strokeWidth={1.3}
-                    className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-1"
+                    className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5"
                   />
 
                   <h3 className="mt-3 text-sm font-semibold">
@@ -307,9 +316,9 @@ const MenuPage = () => {
 
                 <div className="group cursor-pointer">
                   <Percent
-                    size={30}
+                    size={28}
                     strokeWidth={1.3}
-                    className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-1"
+                    className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5"
                   />
 
                   <h3 className="mt-3 text-sm font-semibold">
@@ -323,9 +332,9 @@ const MenuPage = () => {
 
                 <div className="group cursor-pointer">
                   <Star
-                    size={30}
+                    size={28}
                     strokeWidth={1.3}
-                    className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-1"
+                    className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5"
                   />
 
                   <h3 className="mt-3 text-sm font-semibold">
@@ -338,7 +347,10 @@ const MenuPage = () => {
                 </div>
               </div>
 
-              <button className="mt-7 flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-5 py-3 text-sm font-medium text-black transition-all duration-300 hover:-translate-y-1 hover:bg-[#edbd58] hover:shadow-[0_8px_25px_rgba(217,164,65,0.25)]">
+              <button
+                type="button"
+                className="mt-7 flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-5 py-2.5 text-sm font-medium text-black transition-all duration-300 hover:bg-[#edbd58]"
+              >
                 Aksiyalarni ko'rish
                 <ChevronRight size={17} />
               </button>

@@ -201,7 +201,7 @@ export default function TanhoFooter() {
 
       <div className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[500px] -translate-x-1/2 rounded-full bg-[#F5B942]/[0.03] blur-[100px]" />
 
-      <div className="mx-auto max-w-[1200px] px-6 pt-16">
+      <div className="mx-auto max-w-[1240px] px-6 pt-16">
         <div className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr_1fr_1.15fr] lg:gap-x-8">
           <div
             className={`${colDivider} animate-[footerUp_700ms_ease-out_both]`}

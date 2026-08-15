@@ -27,10 +27,22 @@ function KirishModal({
   isOpen,
   onClose,
 }: KirishModalProps) {
+  const navigate = useNavigate()
+
   const [tab, setTab] = useState<Tab>('kirish')
   const [showPass, setShowPass] = useState(false)
   const [showPass2, setShowPass2] = useState(false)
   const [remember, setRemember] = useState(false)
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const [registerName, setRegisterName] = useState('')
+  const [registerSurname, setRegisterSurname] = useState('')
+  const [registerEmail, setRegisterEmail] = useState('')
+  const [registerPhone, setRegisterPhone] = useState('')
+  const [registerPassword, setRegisterPassword] = useState('')
+  const [registerPassword2, setRegisterPassword2] = useState('')
 
   useEffect(() => {
     if (!isOpen) return
@@ -61,6 +73,111 @@ function KirishModal({
     setShowPass2(false)
   }
 
+  const handleLogin = (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault()
+
+    const cleanEmail = email.trim().toLowerCase()
+    const cleanPassword = password.trim()
+
+    /*
+      ADMIN
+      admin@gmail.com
+      12345
+    */
+    if (
+      cleanEmail === 'admin@gmail.com' &&
+      cleanPassword === '12345'
+    ) {
+      localStorage.setItem('role', 'admin')
+      localStorage.setItem('userEmail', cleanEmail)
+
+      navigate('/admin')
+      return
+    }
+
+    /*
+      USER
+      user@gmail.com
+      12345
+    */
+    if (
+      cleanEmail === 'user@gmail.com' &&
+      cleanPassword === '12345'
+    ) {
+      localStorage.setItem('role', 'user')
+      localStorage.setItem('userEmail', cleanEmail)
+
+      navigate('/user')
+      return
+    }
+
+    /*
+      CASHIER
+      cashsher@gmail.com
+      12345
+    */
+    if (
+      cleanEmail === 'cashsher@gmail.com' &&
+      cleanPassword === '12345'
+    ) {
+      localStorage.setItem('role', 'cashier')
+      localStorage.setItem('userEmail', cleanEmail)
+
+      navigate('/cashier')
+      return
+    }
+
+    /*
+      BOSS
+      bos@gmail.com
+      12345
+    */
+    if (
+      cleanEmail === 'bos@gmail.com' &&
+      cleanPassword === '12345'
+    ) {
+      localStorage.setItem('role', 'boss')
+      localStorage.setItem('userEmail', cleanEmail)
+
+      navigate('/boss')
+      return
+    }
+
+    alert("Email yoki parol noto'g'ri")
+  }
+
+  const handleRegister = (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault()
+
+    if (
+      !registerName ||
+      !registerSurname ||
+      !registerEmail ||
+      !registerPhone ||
+      !registerPassword ||
+      !registerPassword2
+    ) {
+      alert("Iltimos, barcha maydonlarni to'ldiring")
+      return
+    }
+
+    if (registerPassword !== registerPassword2) {
+      alert('Parollar bir xil emas')
+      return
+    }
+
+    alert("Ro'yxatdan o'tish muvaffaqiyatli!")
+
+    setEmail(registerEmail)
+    setPassword(registerPassword)
+
+    changeTab('kirish')
+  }
+
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/75 p-4 backdrop-blur-md animate-[fadeIn_250ms_ease-out]"
@@ -78,7 +195,7 @@ function KirishModal({
           type="button"
           aria-label="Yopish"
           onClick={onClose}
-          className="group absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full text-white/50 transition-all duration-300 hover:rotate-90 hover:bg-white/10 hover:text-white active:scale-90"
+          className="group absolute right-4 top-4 z-20 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-white/50 transition-all duration-300 hover:rotate-90 hover:bg-white/10 hover:text-white active:scale-90"
         >
           <X
             size={20}
@@ -119,19 +236,37 @@ function KirishModal({
           >
             {tab === 'kirish' ? (
               <LoginForm
+                email={email}
+                setEmail={setEmail}
+                password={password}
+                setPassword={setPassword}
                 remember={remember}
                 setRemember={setRemember}
                 showPass={showPass}
                 setShowPass={setShowPass}
                 onRegister={() => changeTab('royxatdan')}
+                onSubmit={handleLogin}
               />
             ) : (
               <RegisterForm
+                name={registerName}
+                setName={setRegisterName}
+                surname={registerSurname}
+                setSurname={setRegisterSurname}
+                email={registerEmail}
+                setEmail={setRegisterEmail}
+                phone={registerPhone}
+                setPhone={setRegisterPhone}
+                password={registerPassword}
+                setPassword={setRegisterPassword}
+                password2={registerPassword2}
+                setPassword2={setRegisterPassword2}
                 showPass={showPass}
                 showPass2={showPass2}
                 setShowPass={setShowPass}
                 setShowPass2={setShowPass2}
                 onLogin={() => changeTab('kirish')}
+                onSubmit={handleRegister}
               />
             )}
           </div>
@@ -228,7 +363,7 @@ function TabButton({
     <button
       type="button"
       onClick={onClick}
-      className={`relative flex-1 pb-3 text-sm font-medium transition-all duration-300 ${
+      className={`relative flex-1 cursor-pointer pb-3 text-sm font-medium transition-all duration-300 ${
         active
           ? 'text-amber-400'
           : 'text-white/50 hover:text-white/80'
@@ -246,33 +381,49 @@ function TabButton({
 }
 
 interface LoginFormProps {
+  email: string
+  setEmail: React.Dispatch<React.SetStateAction<string>>
+  password: string
+  setPassword: React.Dispatch<React.SetStateAction<string>>
   remember: boolean
   setRemember: React.Dispatch<React.SetStateAction<boolean>>
   showPass: boolean
   setShowPass: React.Dispatch<React.SetStateAction<boolean>>
   onRegister: () => void
+  onSubmit: (
+    event: React.FormEvent<HTMLFormElement>
+  ) => void
 }
 
 function LoginForm({
+  email,
+  setEmail,
+  password,
+  setPassword,
   remember,
   setRemember,
   showPass,
   setShowPass,
   onRegister,
+  onSubmit,
 }: LoginFormProps) {
   return (
     <form
       className="space-y-4"
-      onSubmit={(event) => event.preventDefault()}
+      onSubmit={onSubmit}
     >
       <Input
         type="email"
         placeholder="Email manzilingiz"
+        value={email}
+        onChange={setEmail}
       />
 
       <PasswordInput
         placeholder="Parolingiz"
         show={showPass}
+        value={password}
+        onChange={setPassword}
         onToggle={() =>
           setShowPass((value) => !value)
         }
@@ -304,7 +455,7 @@ function LoginForm({
 
         <button
           type="button"
-          className="text-amber-400 transition-all duration-200 hover:text-amber-300 hover:underline"
+          className="cursor-pointer text-amber-400 transition-all duration-200 hover:text-amber-300 hover:underline"
         >
           Parolni unutdingiz?
         </button>
@@ -324,7 +475,7 @@ function LoginForm({
         <button
           type="button"
           onClick={onRegister}
-          className="font-medium text-amber-400 transition-all duration-200 hover:text-amber-300 hover:underline"
+          className="cursor-pointer font-medium text-amber-400 transition-all duration-200 hover:text-amber-300 hover:underline"
         >
           Ro'yxatdan o'ting
         </button>
@@ -334,51 +485,89 @@ function LoginForm({
 }
 
 interface RegisterFormProps {
+  name: string
+  setName: React.Dispatch<React.SetStateAction<string>>
+  surname: string
+  setSurname: React.Dispatch<React.SetStateAction<string>>
+  email: string
+  setEmail: React.Dispatch<React.SetStateAction<string>>
+  phone: string
+  setPhone: React.Dispatch<React.SetStateAction<string>>
+  password: string
+  setPassword: React.Dispatch<React.SetStateAction<string>>
+  password2: string
+  setPassword2: React.Dispatch<React.SetStateAction<string>>
   showPass: boolean
   showPass2: boolean
   setShowPass: React.Dispatch<React.SetStateAction<boolean>>
   setShowPass2: React.Dispatch<React.SetStateAction<boolean>>
   onLogin: () => void
+  onSubmit: (
+    event: React.FormEvent<HTMLFormElement>
+  ) => void
 }
 
 function RegisterForm({
+  name,
+  setName,
+  surname,
+  setSurname,
+  email,
+  setEmail,
+  phone,
+  setPhone,
+  password,
+  setPassword,
+  password2,
+  setPassword2,
   showPass,
   showPass2,
   setShowPass,
   setShowPass2,
   onLogin,
+  onSubmit,
 }: RegisterFormProps) {
   return (
     <form
       className="space-y-4"
-      onSubmit={(event) => event.preventDefault()}
+      onSubmit={onSubmit}
     >
       <div className="grid grid-cols-2 gap-3">
         <Input
           type="text"
           placeholder="Ismingiz"
+          value={name}
+          onChange={setName}
         />
 
         <Input
           type="text"
           placeholder="Familiyangiz"
+          value={surname}
+          onChange={setSurname}
         />
       </div>
 
       <Input
         type="email"
         placeholder="Email manzilingiz"
+        value={email}
+        onChange={setEmail}
       />
 
       <Input
         type="tel"
         placeholder="Telefon raqamingiz"
+        value={phone}
+        onChange={setPhone}
       />
 
       <div className="grid grid-cols-2 gap-3">
         <PasswordInput
           placeholder="Parol yarating"
           show={showPass}
+          value={password}
+          onChange={setPassword}
           onToggle={() =>
             setShowPass((value) => !value)
           }
@@ -387,6 +576,8 @@ function RegisterForm({
         <PasswordInput
           placeholder="Parolni tasdiqlang"
           show={showPass2}
+          value={password2}
+          onChange={setPassword2}
           onToggle={() =>
             setShowPass2((value) => !value)
           }
@@ -407,7 +598,7 @@ function RegisterForm({
         <button
           type="button"
           onClick={onLogin}
-          className="font-medium text-amber-400 transition-all duration-200 hover:text-amber-300 hover:underline"
+          className="cursor-pointer font-medium text-amber-400 transition-all duration-200 hover:text-amber-300 hover:underline"
         >
           Kirish
         </button>
@@ -419,17 +610,25 @@ function RegisterForm({
 interface InputProps {
   type: string
   placeholder: string
+  value: string
+  onChange: React.Dispatch<React.SetStateAction<string>>
 }
 
 function Input({
   type,
   placeholder,
+  value,
+  onChange,
 }: InputProps) {
   return (
     <input
       type={type}
       placeholder={placeholder}
-      className={`${inputClass} transition-all duration-300 hover:border-white/25`}
+      value={value}
+      onChange={(event) =>
+        onChange(event.target.value)
+      }
+      className={`${inputClass} cursor-text transition-all duration-300 hover:border-white/25`}
     />
   )
 }
@@ -437,12 +636,16 @@ function Input({
 interface PasswordInputProps {
   placeholder: string
   show: boolean
+  value: string
+  onChange: React.Dispatch<React.SetStateAction<string>>
   onToggle: () => void
 }
 
 function PasswordInput({
   placeholder,
   show,
+  value,
+  onChange,
   onToggle,
 }: PasswordInputProps) {
   return (
@@ -450,6 +653,10 @@ function PasswordInput({
       <input
         type={show ? 'text' : 'password'}
         placeholder={placeholder}
+        value={value}
+        onChange={(event) =>
+          onChange(event.target.value)
+        }
         className={`${inputClass} pr-11`}
       />
 
@@ -459,9 +666,9 @@ function PasswordInput({
         aria-label={
           show
             ? 'Parolni yashirish'
-            : "Parolni ko'rsatish"
+            : 'Parolni ko‘rsatish'
         }
-        className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center justify-center rounded-md p-1 text-white/40 transition-all duration-200 hover:scale-110 hover:bg-white/5 hover:text-white active:scale-90"
+        className="absolute right-3 top-1/2 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-md p-1 text-white/40 transition-all duration-200 hover:scale-110 hover:bg-white/5 hover:text-white active:scale-90"
       >
         <span
           key={show ? 'eye-off' : 'eye'}
@@ -486,7 +693,7 @@ function SubmitButton({
   return (
     <button
       type="submit"
-      className="group relative mt-2 w-full overflow-hidden rounded-lg bg-amber-400 py-3 text-sm font-semibold text-neutral-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-[0_8px_25px_rgba(251,191,36,0.2)] active:translate-y-0 active:scale-[0.98]"
+      className="group relative mt-2 w-full cursor-pointer overflow-hidden rounded-lg bg-amber-400 py-3 text-sm font-semibold text-neutral-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-[0_8px_25px_rgba(251,191,36,0.2)] active:translate-y-0 active:scale-[0.98]"
     >
       <span className="relative z-10">
         {children}
@@ -516,7 +723,7 @@ function SocialButtons() {
     <div className="grid grid-cols-2 gap-3">
       <button
         type="button"
-        className="group flex items-center justify-center gap-2 rounded-lg border border-white/15 px-2 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] sm:text-sm"
+        className="group flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/15 px-2 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] sm:text-sm"
       >
         <GoogleIcon className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
 
@@ -527,7 +734,7 @@ function SocialButtons() {
 
       <button
         type="button"
-        className="group flex items-center justify-center gap-2 rounded-lg border border-white/15 px-2 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] sm:text-sm"
+        className="group flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/15 px-2 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] sm:text-sm"
       >
         <FacebookIcon className="transition-transform duration-300 group-hover:scale-110" />
 

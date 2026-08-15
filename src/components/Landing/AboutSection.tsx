@@ -1,12 +1,12 @@
 import { Award, ChefHat, Star, Users } from "lucide-react";
-
+import aboutimg from "../../assets/images/Landing/Hero/Hero-Section.png";
 function AboutSection() {
   return (
     <section className="w-full bg-[#050708] py-8">
       <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-5 px-4 lg:grid-cols-[1fr_1.25fr] lg:px-0">
         <div className="group relative h-[260px] overflow-hidden rounded-lg border border-[#24282b]">
           <img
-            src="/images/tanho-building.jpg"
+            src={aboutimg}
             alt="Tanho Restaurant"
             className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
           />
@@ -21,9 +21,9 @@ function AboutSection() {
             </h2>
 
             <p className="mt-2 max-w-[620px] text-[13px] leading-5 text-[#aaa9a5]">
-              Tanho restorani 2018-yilda Qarshi shahrida ochilgan.
-              Bizning maqsadimiz — mehmonlarimizga unutilmas ta’m va
-              maroqli muhit taqdim etish.
+              Tanho restorani 2018-yilda Qarshi shahrida ochilgan. Bizning
+              maqsadimiz — mehmonlarimizga unutilmas ta’m va maroqli muhit
+              taqdim etish.
             </p>
           </div>
 

@@ -5,7 +5,6 @@ const offers = [
     title: "Birinchi buyurtmangizga",
     discount: "10% CHEGIRMA!",
     button: "Buyurtma berish",
-    code: "PROMO CODE: TANHO10",
     image: "/images/offer-food.jpg",
   },
   {

@@ -5,7 +5,7 @@ import PublicLayout from "../components/Layout/PageTransition";
 import HomePage from "../pages/public/Home/HomePage";
 import MenuPage from "../pages/public/Menu/MenuPage";
 import AboutPage from "../pages/public/About/AboutPage";
-import EventsPage from "../pages/public/Offers/OffersPage";
+import EventsPage from "../pages/public/Blog/Blog";
 import NewsPage from "../pages/public/News/ NewsPage";
 import ContactPage from "../pages/public/Contact/ContactPage";
 import LoginPage from "../pages/public/Login/Login";
@@ -24,7 +24,7 @@ import StolBandQilish from "../layouts/UserLayout/Userpanel/StolBandQilish";
 import Takliflarim from "../layouts/UserLayout/Userpanel/Takliflarim";
 import TolovUslublarim from "../layouts/UserLayout/Userpanel/TulovUslublarim";
 
-import UserLayout from "../layouts/UserLayout/UserLayout"; 
+import UserLayout from "../layouts/UserLayout/UserLayout";
 
 const routes = createBrowserRouter([
   {
@@ -57,73 +57,68 @@ const routes = createBrowserRouter([
     ],
   },
 
-  // LOGIN
   {
     path: "/login",
     element: <LoginPage />,
   },
 
-  // ADMIN
   {
     path: "/admin",
     element: <AdminLayout />,
   },
 
-  // BOSS
   {
     path: "/boss",
     element: <BossLayout />,
   },
 
-  // CASHIER
   {
     path: "/cashier",
     element: <CashierLayout />,
   },
 
-  // USER
   {
-  path: "/user",
-  element: <UserLayout />,
-  children: [
-    {
-      index: true,
-      element: <BoshSahifa />,
-    },
-    {
-      path: "profil",
-      element: <Meningprofilim />,
-    },
-    {
-      path: "buyurtmalar",
-      element: <MeningBuyurtmalarim />,
-    },
-    {
-      path: "sevimlilar",
-      element: <Sevimlilarim />,
-    },
-    {
-      path: "stollar",
-      element: <StolBandQilish />,
-    },
-    {
-      path: "manzil",
-      element: <Manzilim />,
-    },
-    {
-      path: "tolovlar",
-      element: <TolovUslublarim />,
-    },
-    {
-      path: "takliflar",
-      element: <Takliflarim />,
-    },
-    {
-      path: "sozlamalar",
-      element: <Sozlamalar />,
-    },
-  ],
-},
+    path: "/user",
+    element: <UserLayout />,
+    children: [
+      {
+        index: true,
+        element: <BoshSahifa />,
+      },
+      {
+        path: "profil",
+        element: <Meningprofilim />,
+      },
+      {
+        path: "buyurtmalar",
+        element: <MeningBuyurtmalarim />,
+      },
+      {
+        path: "sevimlilar",
+        element: <Sevimlilarim />,
+      },
+      {
+        path: "stollar",
+        element: <StolBandQilish />,
+      },
+      {
+        path: "manzil",
+        element: <Manzilim />,
+      },
+      {
+        path: "tolovlar",
+        element: <TolovUslublarim />,
+      },
+      {
+        path: "takliflar",
+        element: <Takliflarim />,
+      },
+      {
+        path: "sozlamalar",
+        element: <Sozlamalar />,
+      },
+    ],
+  },
 ]);
 
 export default routes;

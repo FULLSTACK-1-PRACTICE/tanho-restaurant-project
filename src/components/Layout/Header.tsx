@@ -17,7 +17,7 @@ function Header() {
       path: "/about",
     },
     {
-      name: "Takliflar",
+      name: "Maqolalar",
       path: "/events",
     },
     {

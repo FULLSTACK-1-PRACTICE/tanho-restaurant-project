@@ -13,14 +13,12 @@ import {
   Sparkles
 } from 'lucide-react';
 
-// Kategoriya interfeysi
 interface Category {
   id: string;
   name: string;
   icon: React.ElementType;
 }
 
-// Maqola interfeysi
 interface BlogPost {
   id: number;
   title: string;
@@ -138,7 +136,7 @@ const Blog: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#0d0f12] text-gray-200 font-sans pb-20">
-      {/* Banner / Hero Section */}
+     
       <div 
         className="relative bg-cover bg-center py-24 px-4 text-center border-b border-amber-900/20"
         style={{
@@ -146,7 +144,7 @@ const Blog: React.FC = () => {
         }}
       >
         <div className="max-w-4xl mx-auto flex flex-col items-center">
-          {/* Oltinsimon milliy bezak / Naqsh belgisi */}
+        
           <div className="flex items-center justify-center gap-2 mb-3 text-amber-500">
             <span className="w-8 h-[1px] bg-amber-500/50"></span>
             <Sparkles className="w-5 h-5 text-amber-500" />
@@ -163,13 +161,10 @@ const Blog: React.FC = () => {
         </div>
       </div>
 
-      {/* Asosiy Kontent (Filterlar + Qidiruv + Maqolalar) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         
-        {/* Filtr paneli va Qidiruv qatori */}
         <div className="bg-[#14171d] border border-gray-800/80 rounded-xl p-3 md:p-4 mb-8 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
-          
-          {/* Kategoriyalar tugmalari */}
+         
           <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
             {categories.map((cat) => {
               const Icon = cat.icon;
@@ -191,7 +186,6 @@ const Blog: React.FC = () => {
             })}
           </div>
 
-          {/* Qidiruv inputi */}
           <div className="relative w-full md:w-72">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
@@ -204,7 +198,6 @@ const Blog: React.FC = () => {
           </div>
         </div>
 
-        {/* Maqolalar Grid ro'yxati */}
         {filteredPosts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredPosts.map((post) => (
@@ -213,22 +206,20 @@ const Blog: React.FC = () => {
                 className="group bg-[#14171d] border border-gray-800/80 rounded-xl overflow-hidden hover:border-gray-700 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-2xl"
               >
                 <div>
-                  {/* Rasm va Badge */}
+                
                   <div className="relative h-48 overflow-hidden">
                     <img
                       src={post.image}
                       alt={post.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    
-                    {/* Kategoriya Badge */}
+                 
                     <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-gray-700/60 rounded-md px-2.5 py-1 flex items-center gap-1.5 text-xs text-amber-400 font-medium">
                       <Utensils className="w-3 h-3" />
                       <span>{post.categoryLabel}</span>
                     </div>
                   </div>
 
-                  {/* Kontent */}
                   <div className="p-4">
                     <h3 className="text-base font-semibold text-white group-hover:text-amber-400 transition-colors line-clamp-2 mb-2 leading-snug">
                       {post.title}
@@ -239,7 +230,6 @@ const Blog: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Card Pastki Qismi (Sana va Vaqt) */}
                 <div className="p-4 pt-0 border-t border-gray-800/40 mt-auto flex items-center justify-between text-[11px] text-gray-400">
                   <div className="flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5 text-gray-500" />

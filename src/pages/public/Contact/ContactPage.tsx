@@ -10,6 +10,7 @@ import {
   MessageCircle,
   ChevronDown,
 } from 'lucide-react';
+import Button from '../../../ui/Button';
 
 function ContactPage() {
   return (
@@ -131,10 +132,12 @@ function ContactPage() {
               </div>
             </div>
 
-            <button className="mt-7 flex w-full cursor-pointer  items-center justify-center gap-3 rounded-md border border-[#8a6628] px-5 py-3 text-[13px] font-semibold text-[#dcae4d] transition duration-300 hover:bg-[#dcae4d] hover:text-black">
-              <CalendarDays size={17} />
-              STOL BAND QILISH
-            </button>
+            <div className="mt-7 w-full">
+              <Button className="w-full justify-center">
+                <CalendarDays size={17} />
+                <span>STOL BAND QILISH</span>
+              </Button>
+            </div>
           </div>
 
           <div className="border-b border-[#292929] p-8 lg:border-b-0 lg:border-r">
@@ -192,13 +195,10 @@ function ContactPage() {
                 className="h-[125px] w-full resize-none rounded-md border border-[#303030] bg-[#090909] px-4 py-4 text-[13px] text-white outline-none transition placeholder:text-neutral-500 focus:border-[#806027]"
               />
 
-              <button
-                type="submit"
-                className="flex h-12 w-full items-center cursor-pointer justify-center gap-3 rounded-md bg-[#e5ad48] text-[13px] font-semibold text-black transition duration-300 hover:bg-[#f2c261]"
-              >
+              <Button type="submit" className="w-full justify-center">
                 <Send size={17} />
-                XABARNI YUBORISH
-              </button>
+                <span>XABARNI YUBORISH</span>
+              </Button>
             </form>
           </div>
 

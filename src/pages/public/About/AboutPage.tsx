@@ -11,8 +11,10 @@ import {
   Award
 } from 'lucide-react';
 import Button from '../../../ui/Button';
+import { useRestaurant } from '../../../context/RestaurantContext';
 
 const AboutPage: React.FC = () => {
+  const { openReserveModal } = useRestaurant();
   return (
     <div className="min-h-screen bg-[#0b0d10] text-gray-200 font-sans pb-20">
       <div 
@@ -334,7 +336,7 @@ const AboutPage: React.FC = () => {
             <p className="text-sm text-gray-300 font-light mb-6">
               Tanho restoranida o'zingiz va yaqinlaringiz uchun unutilmas dam oling.
             </p>
-            <Button>
+            <Button onClick={openReserveModal}>
               <Calendar className="w-4 h-4" />
               <span>Stol band qilish</span>
             </Button>

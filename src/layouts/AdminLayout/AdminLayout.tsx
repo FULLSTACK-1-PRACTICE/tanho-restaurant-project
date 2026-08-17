@@ -30,7 +30,6 @@ import {
   Search,
   Bell,
   ChevronDown,
-  ChevronRight,
   Plus,
   Pencil,
   Trash2,
@@ -39,7 +38,10 @@ import {
   ShoppingBag,
   DollarSign,
   PackageSearch,
+  CheckCircle2,
+  Receipt,
 } from "lucide-react";
+import { calculateBillTotals, type Bill, type RestaurantTable } from "../../types/restaurant";
 
 /* ============================================================
    1) UMUMIY FIRESTORE CRUD HOOK (barcha bo'limlar shundan foydalanadi)
@@ -739,6 +741,239 @@ function MenuAdminSection() {
 }
 
 /* ============================================================
+   5.5) STOLLAR (Admin) — stollar ro'yxati + har bir band stol uchun
+   joriy shot (hisob) summasi va "To'landi / Shot yopildi" tugmasi.
+   Bu yerdagi "tables" kolleksiyasi butun sayt bo'ylab (foydalanuvchi
+   tomonida ham) bir xil manba sifatida ishlatiladi.
+   ============================================================ */
+type TableRow = RestaurantTable;
+
+function TablesAdminSection() {
+  const { items: tables, loading, add, update, remove } = useCrud<TableRow>("tables");
+  const [bills, setBills] = useState<Record<string, Bill>>({});
+  const [waiterFeePercent, setWaiterFeePercent] = useState(10);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState<{ number: string; seats: number }>({ number: "", seats: 2 });
+  const [saving, setSaving] = useState(false);
+
+  // Ochiq shotlarni (bills) real vaqtda kuzatish
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "bills"), (snap) => {
+      const map: Record<string, Bill> = {};
+      snap.docs.forEach((d) => {
+        const data = { id: d.id, ...d.data() } as Bill;
+        if (data.status === "ochiq") map[String(data.tableNumber)] = data;
+      });
+      setBills(map);
+    });
+    return () => unsub();
+  }, []);
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "settings", "general"), (snap) => {
+      const d = snap.data();
+      if (d && typeof d.waiterFeePercent === "number") setWaiterFeePercent(d.waiterFeePercent);
+    });
+    return () => unsub();
+  }, []);
+
+  const openAdd = () => {
+    setEditingId(null);
+    setForm({ number: "", seats: 2 });
+    setModalOpen(true);
+  };
+
+  const openEdit = (t: TableRow) => {
+    setEditingId(t.id);
+    setForm({ number: String(t.number), seats: t.seats ?? 2 });
+    setModalOpen(true);
+  };
+
+  const handleSave = async () => {
+    if (!form.number.trim()) return alert("Stol raqamini kiriting");
+    setSaving(true);
+    try {
+      if (editingId) {
+        await update(editingId, { number: form.number, seats: form.seats } as Partial<TableRow>);
+      } else {
+        await add({ number: form.number, seats: form.seats, status: "Bo'sh" } as Omit<TableRow, "id">);
+      }
+      setModalOpen(false);
+    } catch (e) {
+      alert("Xatolik: " + (e as Error).message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Stolni o'chirishni tasdiqlaysizmi?")) await remove(id);
+  };
+
+  // Shot yopildi, to'landi — stol yana bo'sh bo'ladi, boshqa mijoz band qilishi mumkin
+  const handleCloseBill = async (t: TableRow) => {
+    const bill = bills[String(t.number)];
+    if (!confirm(`${t.number}-stol: hisob yopilib, "to'landi" deb belgilansinmi?`)) return;
+    try {
+      if (bill) {
+        await updateDoc(doc(db, "bills", bill.id), {
+          status: "yopildi",
+          closedAt: Date.now(),
+          waiterFeePercent,
+        });
+      }
+      await update(t.id, { status: "Bo'sh", reservedAt: "", reservedDate: "", reservedBy: "" } as Partial<TableRow>);
+    } catch (e) {
+      alert("Xatolik: " + (e as Error).message);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-semibold">Stollar</h1>
+          <p className="text-sm text-gray-400">Jami: {tables.length}</p>
+        </div>
+        <button
+          onClick={openAdd}
+          className="flex items-center gap-2 rounded-lg bg-[#d9a441] px-4 py-2.5 text-sm font-medium text-black hover:bg-[#edbd58]"
+        >
+          <Plus size={16} /> Stol qo'shish
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="flex items-center justify-center gap-2 p-10 text-gray-400">
+          <Loader2 className="animate-spin" size={18} /> Yuklanmoqda...
+        </div>
+      ) : tables.length === 0 ? (
+        <div className="rounded-xl border border-white/10 bg-[#121619] p-10 text-center text-gray-400">
+          Stollar topilmadi
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {tables.map((t) => {
+            const bill = bills[String(t.number)];
+            const totals = bill ? calculateBillTotals(bill.items, waiterFeePercent) : null;
+            const isFree = t.status === "Bo'sh";
+            return (
+              <div
+                key={t.id}
+                className={`rounded-xl border p-5 ${
+                  isFree ? "border-white/10 bg-[#121619]" : "border-red-500/30 bg-red-500/[0.04]"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Table2 size={18} className={isFree ? "text-gray-400" : "text-red-400"} />
+                    <span className="text-base font-semibold">{t.number}-stol</span>
+                  </div>
+                  <span className={`rounded-full px-2.5 py-1 text-[11px] ${isFree ? "bg-green-500/15 text-green-400" : "bg-red-500/15 text-red-400"}`}>
+                    {t.status}
+                  </span>
+                </div>
+
+                <p className="mt-1 text-xs text-gray-400">{t.seats ?? 2} o'rin</p>
+
+                {!isFree && (t.reservedAt || t.reservedBy) && (
+                  <p className="mt-2 text-xs text-gray-400">
+                    Band: {t.reservedBy || "Mehmon"} {t.reservedAt ? `— ${t.reservedAt}` : ""}
+                  </p>
+                )}
+
+                {bill && totals && (
+                  <div className="mt-3 rounded-lg border border-white/10 bg-[#0d1114] p-3 text-xs">
+                    <div className="flex items-center gap-1.5 text-gray-400">
+                      <Receipt size={13} /> Joriy shot
+                    </div>
+                    <div className="mt-1 flex justify-between text-gray-300">
+                      <span>Taomlar</span>
+                      <span>{totals.itemsTotal.toLocaleString()} so'm</span>
+                    </div>
+                    <div className="flex justify-between text-gray-300">
+                      <span>Afitsiant ({waiterFeePercent}%)</span>
+                      <span>{totals.waiterFee.toLocaleString()} so'm</span>
+                    </div>
+                    <div className="mt-1 flex justify-between border-t border-white/10 pt-1 font-semibold text-[#e5ad45]">
+                      <span>Jami</span>
+                      <span>{totals.grandTotal.toLocaleString()} so'm</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-4 flex items-center gap-2">
+                  <button onClick={() => openEdit(t)} className="rounded-lg border border-white/10 p-2 text-gray-300 hover:bg-white/10">
+                    <Pencil size={14} />
+                  </button>
+                  <button onClick={() => handleDelete(t.id)} className="rounded-lg border border-white/10 p-2 text-red-400 hover:bg-red-500/10">
+                    <Trash2 size={14} />
+                  </button>
+                  {!isFree && (
+                    <button
+                      onClick={() => handleCloseBill(t)}
+                      className="ml-auto flex items-center gap-1.5 rounded-lg bg-[#d9a441] px-3 py-2 text-xs font-medium text-black hover:bg-[#edbd58]"
+                    >
+                      <CheckCircle2 size={14} />
+                      {bill ? "To'landi, shot yopildi" : "Bandlikni bekor qilish"}
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-sm rounded-xl border border-white/10 bg-[#121619] p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">{editingId ? "Stolni tahrirlash" : "Stol qo'shish"}</h2>
+              <button onClick={() => setModalOpen(false)} className="text-gray-400 hover:text-white">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <label className="mb-1 block text-xs text-gray-400">Stol raqami</label>
+                <input
+                  value={form.number}
+                  onChange={(e) => setForm((f) => ({ ...f, number: e.target.value }))}
+                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#d9a441]/50"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs text-gray-400">O'rindiqlar soni</label>
+                <input
+                  type="number"
+                  value={form.seats}
+                  onChange={(e) => setForm((f) => ({ ...f, seats: Number(e.target.value) }))}
+                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#d9a441]/50"
+                />
+              </div>
+            </div>
+            <div className="mt-5 flex justify-end gap-2">
+              <button onClick={() => setModalOpen(false)} className="rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-300 hover:bg-white/5">
+                Bekor qilish
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="flex items-center gap-2 rounded-lg bg-[#d9a441] px-4 py-2 text-sm font-medium text-black hover:bg-[#edbd58] disabled:opacity-60"
+              >
+                {saving && <Loader2 size={14} className="animate-spin" />} Saqlash
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ============================================================
    6) DASHBOARD (statik — keyin API bilan almashtiriladi)
    ============================================================ */
 function DashboardSection({ goTo }: { goTo: (s: SectionKey) => void }) {
@@ -891,6 +1126,7 @@ function SettingsSection() {
   const [restaurantName, setRestaurantName] = useState("TANHO Restaurant");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
+  const [waiterFeePercent, setWaiterFeePercent] = useState(10);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -903,6 +1139,7 @@ function SettingsSection() {
           setRestaurantName(d.restaurantName || "TANHO Restaurant");
           setAddress(d.address || "");
           setPhone(d.phone || "");
+          setWaiterFeePercent(typeof d.waiterFeePercent === "number" ? d.waiterFeePercent : 10);
         }
       } finally {
         setLoading(false);
@@ -913,7 +1150,7 @@ function SettingsSection() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await setDoc(doc(db, "settings", "general"), { restaurantName, address, phone });
+      await setDoc(doc(db, "settings", "general"), { restaurantName, address, phone, waiterFeePercent });
       alert("Sozlamalar saqlandi");
     } finally {
       setSaving(false);
@@ -939,6 +1176,20 @@ function SettingsSection() {
         <div>
           <label className="mb-1 block text-xs text-gray-400">Telefon</label>
           <input value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#d9a441]/50" />
+        </div>
+        <div>
+          <label className="mb-1 block text-xs text-gray-400">Afitsiant (xizmat) haqi — umumiy shotdan foiz (%)</label>
+          <input
+            type="number"
+            min={0}
+            max={100}
+            value={waiterFeePercent}
+            onChange={(e) => setWaiterFeePercent(Number(e.target.value))}
+            className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#d9a441]/50"
+          />
+          <p className="mt-1 text-[11px] text-gray-500">
+            Har bir mijozning shotiga shu foiz avtomatik qo'shiladi. O'zgartirilsa, barcha yangi hisoblarga darhol ta'sir qiladi.
+          </p>
         </div>
         <button onClick={handleSave} disabled={saving} className="rounded-lg bg-[#d9a441] px-4 py-2 text-sm font-medium text-black hover:bg-[#edbd58] disabled:opacity-60">
           {saving ? "Saqlanmoqda..." : "Saqlash"}
@@ -1006,18 +1257,7 @@ const AdminLayout = () => {
           />
         );
       case "stollar":
-        return (
-          <GenericCrudSection
-            title="Stollar"
-            collectionName="tables"
-            addLabel="Stol qo'shish"
-            fields={[
-              { key: "number", label: "Stol raqami" },
-              { key: "seats", label: "O'rindiqlar soni", type: "number" },
-              { key: "status", label: "Holat", type: "select", options: ["Bo'sh", "Band", "Rezerv qilingan"] },
-            ]}
-          />
-        );
+        return <TablesAdminSection />;
       case "mijozlar":
         return (
           <GenericCrudSection

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 import heroImg from "../../assets/images/Landing/Hero/Hero-Section.png";
+import TableBookingTrigger from "../TableBookingTrigger/TableBookingTrigger";
 
 function HeroSection() {
   return (
@@ -71,10 +72,7 @@ function HeroSection() {
                 />
               </button>
 
-              <button
-                type="button"
-                className="group flex cursor-pointer items-center gap-2.5 rounded-md border border-white/20 bg-black/20 px-7 py-3.5 text-[12px] font-medium tracking-wider text-[#f1eee7] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dcae4d]/60 hover:bg-white/[0.08] hover:text-[#dcae4d]"
-              >
+              <TableBookingTrigger className="group flex cursor-pointer items-center gap-2.5 rounded-md border border-white/20 bg-black/20 px-7 py-3.5 text-[12px] font-medium tracking-wider text-[#f1eee7] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dcae4d]/60 hover:bg-white/[0.08] hover:text-[#dcae4d]">
                 <CalendarDays
                   size={15}
                   strokeWidth={1.8}
@@ -82,7 +80,7 @@ function HeroSection() {
                 />
 
                 <span>STOL BAND QILISH</span>
-              </button>
+              </TableBookingTrigger>
 
             </div>
 

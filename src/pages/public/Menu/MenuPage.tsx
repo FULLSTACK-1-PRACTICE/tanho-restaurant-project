@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
+import { useRestaurant } from "../../../context/RestaurantContext";
+import TableSelectModal from "../../../components/TableSelectModal/TableSelectModal";
+import ShotWidget from "../../../components/ShotWidget/ShotWidget";
 import {
   Cake,
   ChevronRight,
@@ -40,6 +43,7 @@ const MenuPage = () => {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("Barchasi");
+  const { requestAddItem, activeTableNumber } = useRestaurant();
 
   useEffect(() => {
     const q = query(collection(db, "menu"), orderBy("createdAt", "desc"));
@@ -117,6 +121,11 @@ const MenuPage = () => {
             <p className="mb-2 text-xs uppercase tracking-[3px] text-[#d9a441]">TANHO RESTAURANT</p>
             <h2 className="font-serif text-3xl md:text-4xl">Mazali taomlar</h2>
           </div>
+          {activeTableNumber && (
+            <span className="rounded-full border border-[#d9a441]/40 bg-[#191e22] px-4 py-2 text-xs text-[#e5ad45]">
+              Sizning stolingiz: {activeTableNumber}
+            </span>
+          )}
         </div>
 
         {loading ? (
@@ -165,6 +174,7 @@ const MenuPage = () => {
 
                   <button
                     type="button"
+                    onClick={() => requestAddItem({ id: food.id!, name: food.name, price: food.price })}
                     className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-lg border border-[#8c651d]/40 px-3 py-2 text-xs text-[#e5ad45] transition-all duration-300 hover:bg-[#d9a441] hover:text-black"
                   >
                     <span>Buyurtma berish</span>
@@ -224,6 +234,9 @@ const MenuPage = () => {
           </div>
         </div>
       </section>
+
+      <TableSelectModal />
+      <ShotWidget />
     </div>
   );
 };

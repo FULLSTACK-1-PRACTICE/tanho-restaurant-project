@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 
 import footerImage from '../../assets/images/Layout/Footer/image.png'
+import TableBookingTrigger from '../TableBookingTrigger/TableBookingTrigger'
 
 const gold = '#F5B942'
 const line = '#2a2210'
@@ -235,7 +236,7 @@ export default function TanhoFooter() {
               ))}
             </div>
 
-            <button
+            <TableBookingTrigger
               className="group mt-7 flex items-center gap-3 rounded-lg border px-5 py-3.5 font-serif text-[14px] font-semibold tracking-wide transition-all duration-300 hover:-translate-y-1 hover:bg-[#F5B942]/10 hover:shadow-[0_10px_30px_rgba(245,185,66,0.1)] active:scale-95"
               style={{
                 borderColor: gold,
@@ -259,7 +260,7 @@ export default function TanhoFooter() {
               </svg>
 
               <span>STOL BAND QILISH</span>
-            </button>
+            </TableBookingTrigger>
           </div>
 
           <div

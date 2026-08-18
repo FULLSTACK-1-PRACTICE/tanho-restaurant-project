@@ -4,7 +4,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
-}
+  }
 
 const Button: React.FC<ButtonProps> = ({
   children,
@@ -20,11 +20,11 @@ const Button: React.FC<ButtonProps> = ({
 
   const variants = {
     primary:
-      'bg-amber-600 hover:bg-amber-500 text-black shadow-lg shadow-amber-600/20 active:bg-amber-700',
+      'bg-[#DCAE4D] hover:bg-[#c99b3d] text-black shadow-lg shadow-[#DCAE4D]/20 active:bg-[#b98d36]',
     secondary:
-      'bg-[#1a1d24] hover:bg-[#222630] text-amber-500 border border-amber-500/30',
+      'bg-[#1a1d24] hover:bg-[#222630] text-[#DCAE4D] border border-[#DCAE4D]/30',
     outline:
-      'border border-gray-700 hover:border-amber-500/50 text-gray-200 hover:text-amber-400 bg-transparent',
+      'border border-gray-700 hover:border-[#DCAE4D]/50 text-gray-200 hover:text-[#DCAE4D] bg-transparent',
     ghost:
       'bg-transparent text-gray-300 hover:bg-white/5 hover:text-white',
   };

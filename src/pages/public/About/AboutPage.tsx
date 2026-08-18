@@ -44,7 +44,7 @@ const AboutPage: React.FC = () => {
               </p>
             </div>
 
-            <Button className="mt-8">
+            <Button className="mt-8 bg-[#ECBD59]">
               <Utensils className="w-4 h-4" />
               <span>Menyu bilan tanishish</span>
             </Button>

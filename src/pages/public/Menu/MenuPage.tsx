@@ -63,7 +63,6 @@ const MenuPage = () => {
     return () => unsub();
   }, []);
 
-  // Faqat "Mavjud" taomlarni ko'rsatamiz, kategoriya bo'yicha filtrlaymiz
   const visibleItems = items
     .filter((it) => it.status === "Mavjud")
     .filter((it) => activeCategory === "Barchasi" || it.category === activeCategory);
@@ -78,7 +77,7 @@ const MenuPage = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0b0e10] via-[#0b0e10]/80 to-transparent" />
 
-        <div className="relative mx-auto flex min-h-[500px] max-w-[1200px] items-center px-6">
+        <div className="relative mx-auto flex min-h-[500px] max-w-[1240px] items-center px-6">
           <div className="max-w-[430px]">
             <p className="mb-4 text-sm uppercase tracking-[3px] text-[#d9a441]">TANHO RESTAURANT</p>
             <h1 className="font-serif text-5xl leading-tight md:text-6xl">Menyu</h1>
@@ -91,7 +90,7 @@ const MenuPage = () => {
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto -mt-8 max-w-[1200px] px-5">
+      <section className="relative z-10 mx-auto -mt-8 max-w-[1240px] px-5">
         <div className="grid grid-cols-2 gap-2 rounded-xl border border-white/10 bg-[#121619] p-2 backdrop-blur-md sm:grid-cols-4 lg:grid-cols-7">
           {categories.map((category) => {
             const Icon = category.icon;
@@ -115,7 +114,7 @@ const MenuPage = () => {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1200px] px-5 py-12">
+      <section className="mx-auto max-w-[1240px] px-5 py-12">
         <div className="mb-7 flex items-center justify-between">
           <div>
             <p className="mb-2 text-xs uppercase tracking-[3px] text-[#d9a441]">TANHO RESTAURANT</p>
@@ -187,7 +186,7 @@ const MenuPage = () => {
         )}
       </section>
 
-      <section className="mx-auto max-w-[1200px] px-5 pb-12">
+      <section className="mx-auto max-w-[1240px] px-5 pb-12">
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121619]">
           <div className="grid md:grid-cols-[280px_1fr]">
             <div className="relative h-[220px] overflow-hidden bg-[#121619] transform-gpu md:h-auto">

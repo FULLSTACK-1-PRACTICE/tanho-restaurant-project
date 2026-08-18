@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import { LogIn } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/images/Layout/Header/Logo-2.png";
 
 function Header() {
+  const [scrolled, setScrolled] = useState(false);
+
   const navLinks = [
     {
       name: "Bosh sahifa",
@@ -30,8 +33,26 @@ function Header() {
     },
   ];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="absolute left-0 top-0 z-50 w-full">
+    <header
+      className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${
+        scrolled
+          ? "border-b border-white/5 bg-[#070809]/85 shadow-[0_4px_30px_rgba(0,0,0,0.25)] backdrop-blur-md"
+          : "border-b border-transparent bg-transparent"
+      }`}
+    >
       <div className="mx-auto flex h-[76px] max-w-[1240px] items-center justify-between px-5">
         <Link
           to="/"

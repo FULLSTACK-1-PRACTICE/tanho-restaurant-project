@@ -9,6 +9,7 @@ import EventsPage from "../pages/public/Blog/Blog";
 import NewsPage from "../pages/public/News/ NewsPage";
 import ContactPage from "../pages/public/Contact/ContactPage";
 import LoginPage from "../pages/public/Login/Login";
+import ReservationPage from "../pages/public/Reservation/ReservationPage";
 
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
 import BossLayout from "../layouts/BossLayout/BossLayout";
@@ -41,6 +42,10 @@ const routes = createBrowserRouter([
       {
         path: "/about",
         element: <AboutPage />,
+      },
+      {
+        path: "/reservation",
+        element: <ReservationPage />,
       },
       {
         path: "/events",

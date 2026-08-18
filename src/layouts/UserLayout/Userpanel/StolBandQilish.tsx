@@ -1,6 +1,6 @@
 import { CalendarDays, Table2 } from "lucide-react";
 import { useRestaurant } from "../../../context/RestaurantContext";
-import TableBookingTrigger from "../../../components/TableBookingTrigger/TableBookingTrigger";
+
 
 const StolBandQilish = () => {
   const { tables, tablesLoading, openReserveModal } = useRestaurant();
@@ -15,10 +15,6 @@ const StolBandQilish = () => {
           </p>
         </div>
 
-        <TableBookingTrigger className="flex items-center gap-2 rounded-lg bg-[#d9a441] px-5 py-3 text-sm font-medium text-black transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#edbd58]">
-          <CalendarDays size={16} />
-          Stol band qilish
-        </TableBookingTrigger>
       </div>
 
       {tablesLoading ? (

@@ -1,9 +1,6 @@
-import { useEffect, useState } from "react";
-import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
-import { db } from "../../../lib/firebase";
+import { useState } from "react";
 import { useRestaurant } from "../../../context/RestaurantContext";
-import TableSelectModal from "../../../components/TableSelectModal/TableSelectModal";
-import ShotWidget from "../../../components/ShotWidget/ShotWidget";
+
 import {
   Cake,
   ChevronRight,
@@ -40,28 +37,65 @@ const categories = [
 ];
 
 const MenuPage = () => {
-  const [items, setItems] = useState<MenuItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [items] = useState<MenuItem[]>([
+    {
+      id: "menu-1",
+      name: "Osh",
+      category: "Osh",
+      price: 35000,
+      status: "Mavjud",
+      description: "An'anaviy o'zbek palovi.",
+      image: "",
+    },
+    {
+      id: "menu-2",
+      name: "Mol go'shtli Grill",
+      category: "Grill",
+      price: 65000,
+      status: "Mavjud",
+      description: "Yumshoq mol go'shti va maxsus garnir.",
+      image: "",
+    },
+    {
+      id: "menu-3",
+      name: "Sezar salati",
+      category: "Salatlar",
+      price: 40000,
+      status: "Mavjud",
+      description: "Yangi sabzavotlar va maxsus sous.",
+      image: "",
+    },
+    {
+      id: "menu-4",
+      name: "Qozon kabob",
+      category: "Milliy taomlar",
+      price: 70000,
+      status: "Mavjud",
+      description: "An'anaviy usulda tayyorlangan qozon kabob.",
+      image: "",
+    },
+    {
+      id: "menu-5",
+      name: "Choy",
+      category: "Ichimliklar",
+      price: 10000,
+      status: "Mavjud",
+      description: "Issiq qora choy.",
+      image: "",
+    },
+    {
+      id: "menu-6",
+      name: "Mevali desert",
+      category: "Desertlar",
+      price: 30000,
+      status: "Mavjud",
+      description: "Yengil va mazali mevali desert.",
+      image: "",
+    },
+  ]);
   const [activeCategory, setActiveCategory] = useState("Barchasi");
   const { requestAddItem, activeTableNumber } = useRestaurant();
-
-  useEffect(() => {
-    const q = query(collection(db, "menu"), orderBy("createdAt", "desc"));
-    const unsub = onSnapshot(
-      q,
-      (snap) => {
-        setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() })) as MenuItem[]);
-        setLoading(false);
-      },
-      () => {
-        onSnapshot(collection(db, "menu"), (snap) => {
-          setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() })) as MenuItem[]);
-          setLoading(false);
-        });
-      }
-    );
-    return () => unsub();
-  }, []);
+  const loading = false;
 
   const visibleItems = items
     .filter((it) => it.status === "Mavjud")
@@ -234,8 +268,7 @@ const MenuPage = () => {
         </div>
       </section>
 
-      <TableSelectModal />
-      <ShotWidget />
+        
     </div>
   );
 };

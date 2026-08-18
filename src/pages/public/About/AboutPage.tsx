@@ -1,34 +1,36 @@
 import React from 'react';
-import { 
-  Users, 
-  Utensils, 
-  Star, 
-  Leaf, 
-  ChefHat, 
-  Heart, 
+import { useNavigate } from 'react-router-dom';
+import {
+  Users,
+  Utensils,
+  Star,
+  Leaf,
+  ChefHat,
+  Heart,
   Calendar,
   Sparkles,
   Award
 } from 'lucide-react';
 import Button from '../../../ui/Button';
-import { useRestaurant } from '../../../context/RestaurantContext';
+import Container from '../../../ui/container/Container';
 
 const AboutPage: React.FC = () => {
-  const { openReserveModal } = useRestaurant();
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-[#0b0d10] text-gray-200 font-sans pb-20">
-      <div 
+      <div
         className="relative w-full bg-cover bg-center py-20 md:py-28 border-b border-amber-900/20"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(11, 13, 16, 0.95) 25%, rgba(11, 13, 16, 0.75) 60%, rgba(11, 13, 16, 0.85) 100%), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1920&auto=format&fit=crop')`,
         }}
       >
-        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 w-full">
+        <Container>
           <div className="max-w-xl">
             <h1 className="text-4xl md:text-5xl font-serif text-white mb-4 tracking-wide">
               Biz haqimizda
             </h1>
-            
+
             <div className="flex items-center gap-2 mb-6 text-amber-500">
               <span className="w-8 h-[1px] bg-amber-500/50"></span>
               <Sparkles className="w-4 h-4 text-amber-500" />
@@ -44,15 +46,18 @@ const AboutPage: React.FC = () => {
               </p>
             </div>
 
-            <Button className="mt-8 bg-[#ECBD59]">
+            <Button 
+              className="mt-8 bg-[#ECBD59]"
+              onClick={() => navigate('/menu')}
+            >
               <Utensils className="w-4 h-4" />
               <span>Menyu bilan tanishish</span>
             </Button>
           </div>
-        </div>
+        </Container>
       </div>
 
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 -mt-10 relative z-20">
+      <Container className="-mt-10 relative z-20">
         <div className="relative rounded-2xl bg-[#12151e]/80 backdrop-blur-xl border border-amber-500/20 py-5 px-6 md:py-6 md:px-8 shadow-[0_15px_40px_rgba(0,0,0,0.6)] overflow-hidden">
           <div className="absolute -top-20 -left-20 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -115,9 +120,9 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
 
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 mt-20">
+      <Container className="mt-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <div>
@@ -148,24 +153,36 @@ const AboutPage: React.FC = () => {
                 <div className="w-10 h-10 rounded-full border border-amber-500/30 bg-amber-500/5 flex items-center justify-center mb-2">
                   <Leaf className="w-5 h-5 text-amber-500" />
                 </div>
-                <h4 className="text-xs font-medium text-amber-400 mb-1">Sifatli mahsulotlar</h4>
-                <p className="text-[10px] text-gray-400 leading-tight">Faqat eng sifatli va tabiiy mahsulotlar</p>
+                <h4 className="text-xs font-medium text-amber-400 mb-1">
+                  Sifatli mahsulotlar
+                </h4>
+                <p className="text-[10px] text-gray-400 leading-tight">
+                  Faqat eng sifatli va tabiiy mahsulotlar
+                </p>
               </div>
 
               <div className="text-center flex flex-col items-center cursor-default">
                 <div className="w-10 h-10 rounded-full border border-amber-500/30 bg-amber-500/5 flex items-center justify-center mb-2">
                   <ChefHat className="w-5 h-5 text-amber-500" />
                 </div>
-                <h4 className="text-xs font-medium text-amber-400 mb-1">Tajribali oshpazlar</h4>
-                <p className="text-[10px] text-gray-400 leading-tight">O'z sohasining ustalari ishlaydi</p>
+                <h4 className="text-xs font-medium text-amber-400 mb-1">
+                  Tajribali oshpazlar
+                </h4>
+                <p className="text-[10px] text-gray-400 leading-tight">
+                  O'z sohasining ustalari ishlaydi
+                </p>
               </div>
 
               <div className="text-center flex flex-col items-center cursor-default">
                 <div className="w-10 h-10 rounded-full border border-amber-500/30 bg-amber-500/5 flex items-center justify-center mb-2">
                   <Heart className="w-5 h-5 text-amber-500" />
                 </div>
-                <h4 className="text-xs font-medium text-amber-400 mb-1">Samimiy xizmat</h4>
-                <p className="text-[10px] text-gray-400 leading-tight">Har bir mehmon biz uchun mehmon emas, do'st</p>
+                <h4 className="text-xs font-medium text-amber-400 mb-1">
+                  Samimiy xizmat
+                </h4>
+                <p className="text-[10px] text-gray-400 leading-tight">
+                  Har bir mehmon biz uchun mehmon emas, do'st
+                </p>
               </div>
             </div>
           </div>
@@ -178,9 +195,9 @@ const AboutPage: React.FC = () => {
             />
           </div>
         </div>
-      </div>
+      </Container>
 
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 mt-24">
+      <Container className="mt-24">
         <div className="mb-8">
           <h2 className="text-2xl md:text-3xl font-serif text-white mb-2">
             Maqsadimiz
@@ -202,7 +219,9 @@ const AboutPage: React.FC = () => {
               />
             </div>
             <div className="p-4">
-              <h3 className="text-sm font-semibold text-white mb-2">Eng yaxshi ta'm</h3>
+              <h3 className="text-sm font-semibold text-white mb-2">
+                Eng yaxshi ta'm
+              </h3>
               <p className="text-xs text-gray-400 leading-relaxed">
                 An'anaviy va zamonaviy retseptlarni uyg'unlashtirib, sizga eng yaxshi taomlarni taqdim etish.
               </p>
@@ -218,7 +237,9 @@ const AboutPage: React.FC = () => {
               />
             </div>
             <div className="p-4">
-              <h3 className="text-sm font-semibold text-white mb-2">Samimiy muhit</h3>
+              <h3 className="text-sm font-semibold text-white mb-2">
+                Samimiy muhit
+              </h3>
               <p className="text-xs text-gray-400 leading-relaxed">
                 Zamonaviy va qulay muhitda yaqinlaringiz bilan maroqli vaqt o'tkazishingiz uchun.
               </p>
@@ -234,7 +255,9 @@ const AboutPage: React.FC = () => {
               />
             </div>
             <div className="p-4">
-              <h3 className="text-sm font-semibold text-white mb-2">Sifatli xizmat</h3>
+              <h3 className="text-sm font-semibold text-white mb-2">
+                Sifatli xizmat
+              </h3>
               <p className="text-xs text-gray-400 leading-relaxed">
                 Har bir detalda sifat va e'tibor – bizning xizmat tamoyilimiz.
               </p>
@@ -250,16 +273,18 @@ const AboutPage: React.FC = () => {
               />
             </div>
             <div className="p-4">
-              <h3 className="text-sm font-semibold text-white mb-2">Baxtli mijozlar</h3>
+              <h3 className="text-sm font-semibold text-white mb-2">
+                Baxtli mijozlar
+              </h3>
               <p className="text-xs text-gray-400 leading-relaxed">
                 Mamnun mijozlar sonini oshirish va ularning ishonchini qozonish – bizning asosiy maqsadimiz.
               </p>
             </div>
           </div>
         </div>
-      </div>
+      </Container>
 
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 mt-24">
+      <Container className="mt-24">
         <div className="mb-8">
           <h2 className="text-2xl md:text-3xl font-serif text-white mb-2">
             Bizning jamoa
@@ -280,8 +305,12 @@ const AboutPage: React.FC = () => {
                 className="w-full h-full object-cover object-top"
               />
             </div>
-            <h3 className="text-base font-semibold text-white">Rustam Karimov</h3>
-            <p className="text-xs text-amber-500 mt-1 font-medium">Bosh oshpaz</p>
+            <h3 className="text-base font-semibold text-white">
+              Rustam Karimov
+            </h3>
+            <p className="text-xs text-amber-500 mt-1 font-medium">
+              Bosh oshpaz
+            </p>
           </div>
 
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden text-center p-4 shadow-lg">
@@ -292,8 +321,12 @@ const AboutPage: React.FC = () => {
                 className="w-full h-full object-cover object-top"
               />
             </div>
-            <h3 className="text-base font-semibold text-white">Sevinch Jo'rayeva</h3>
-            <p className="text-xs text-amber-500 mt-1 font-medium">Oshpaz</p>
+            <h3 className="text-base font-semibold text-white">
+              Sevinch Jo'rayeva
+            </h3>
+            <p className="text-xs text-amber-500 mt-1 font-medium">
+              Oshpaz
+            </p>
           </div>
 
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden text-center p-4 shadow-lg">
@@ -304,8 +337,12 @@ const AboutPage: React.FC = () => {
                 className="w-full h-full object-cover object-top"
               />
             </div>
-            <h3 className="text-base font-semibold text-white">Jasur Ahmedov</h3>
-            <p className="text-xs text-amber-500 mt-1 font-medium">Restoran menejeri</p>
+            <h3 className="text-base font-semibold text-white">
+              Jasur Ahmedov
+            </h3>
+            <p className="text-xs text-amber-500 mt-1 font-medium">
+              Restoran menejeri
+            </p>
           </div>
 
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden text-center p-4 shadow-lg">
@@ -316,14 +353,18 @@ const AboutPage: React.FC = () => {
                 className="w-full h-full object-cover object-top"
               />
             </div>
-            <h3 className="text-base font-semibold text-white">Malika Rahimova</h3>
-            <p className="text-xs text-amber-500 mt-1 font-medium">Administrator</p>
+            <h3 className="text-base font-semibold text-white">
+              Malika Rahimova
+            </h3>
+            <p className="text-xs text-amber-500 mt-1 font-medium">
+              Administrator
+            </p>
           </div>
         </div>
-      </div>
+      </Container>
 
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 mt-20">
-        <div 
+      <Container className="mt-20">
+        <div
           className="relative rounded-2xl overflow-hidden border border-gray-800 p-8 md:p-12 bg-cover bg-center flex flex-col items-start justify-center"
           style={{
             backgroundImage: `linear-gradient(to right, rgba(11, 13, 16, 0.95), rgba(11, 13, 16, 0.6)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop')`,
@@ -336,13 +377,13 @@ const AboutPage: React.FC = () => {
             <p className="text-sm text-gray-300 font-light mb-6">
               Tanho restoranida o'zingiz va yaqinlaringiz uchun unutilmas dam oling.
             </p>
-            <Button onClick={openReserveModal}>
+            <Button onClick={() => navigate('/reservation')}>
               <Calendar className="w-4 h-4" />
               <span>Stol band qilish</span>
             </Button>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

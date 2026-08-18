@@ -8,7 +8,6 @@ import {
   Star,
   Users,
 } from "lucide-react";
-import TableBookingTrigger from "../TableBookingTrigger/TableBookingTrigger";
 
 const reviews = [
   {
@@ -107,19 +106,7 @@ function Footer() {
                 </button>
               </div>
 
-              <TableBookingTrigger
-                className="
-                  mt-5 cursor-pointer rounded-lg
-                  bg-[#e4b44f] px-7 py-3
-                  font-medium text-[#111]
-                  transition-all duration-300
-                  hover:-translate-y-1
-                  hover:bg-[#f0c261]
-                  hover:shadow-[0_10px_30px_rgba(228,180,79,0.25)]
-                "
-              >
-                Stol band qilish
-              </TableBookingTrigger>
+             
 
               <p className="mt-5 text-sm text-[#c7c7c7]">
                 Yoki qo‘ng‘iroq qiling:

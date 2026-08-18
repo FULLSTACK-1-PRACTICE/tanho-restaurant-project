@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 
 import footerImage from '../../assets/images/Layout/Footer/image.png'
-import TableBookingTrigger from '../TableBookingTrigger/TableBookingTrigger'
+
 
 const gold = '#F5B942'
 const line = '#2a2210'
@@ -236,31 +236,7 @@ export default function TanhoFooter() {
               ))}
             </div>
 
-            <TableBookingTrigger
-              className="group mt-7 flex items-center gap-3 rounded-lg border px-5 py-3.5 font-serif text-[14px] font-semibold tracking-wide transition-all duration-300 hover:-translate-y-1 hover:bg-[#F5B942]/10 hover:shadow-[0_10px_30px_rgba(245,185,66,0.1)] active:scale-95"
-              style={{
-                borderColor: gold,
-                color: gold,
-              }}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-[18px] w-[18px] transition-transform duration-300 group-hover:rotate-6"
-                fill="none"
-                stroke={gold}
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="3" y="4.5" width="18" height="16" rx="2" />
-                <line x1="3" y1="9.5" x2="21" y2="9.5" />
-                <line x1="7.5" y1="2.5" x2="7.5" y2="6.5" />
-                <line x1="16.5" y1="2.5" x2="16.5" y2="6.5" />
-                <path d="M9.5 14.5 11 16l3.5-3.5" />
-              </svg>
-
-              <span>STOL BAND QILISH</span>
-            </TableBookingTrigger>
+           
           </div>
 
           <div

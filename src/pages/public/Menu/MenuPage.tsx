@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 import {
   Cake,
   ChevronRight,
@@ -40,7 +39,6 @@ const categories = [
 const MenuPage = () => {
   const navigate = useNavigate();
   const [items] = useState<MenuItem[]>([
-    // === 30 TA TAOM ===
     {
       id: "menu-1",
       name: "To'y Oshi",
@@ -311,8 +309,6 @@ const MenuPage = () => {
       description: "Vena vaflisi, Nutella va yangi banan/qulupnay.",
       image: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=600&q=80",
     },
-
-    // === 13 TA ICHIMLIKLAR ===
     {
       id: "drink-1",
       name: "Ko'k Choy (Chayxona)",
@@ -473,10 +469,10 @@ const MenuPage = () => {
                 key={category.name}
                 type="button"
                 onClick={() => setActiveCategory(category.name)}
-                className={`group flex cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-4 text-xs transition-all duration-300 ${
+                className={`group flex cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-4 text-xs transition-all duration-300 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none select-none ${
                   isActive
                     ? "border border-[#8c651d]/50 bg-[#191e22] text-[#e5ad45]"
-                    : "text-gray-300 hover:-translate-y-0.5 hover:bg-[#191e22] hover:text-[#e5ad45]"
+                    : "border border-transparent text-gray-300 hover:-translate-y-0.5 hover:bg-[#191e22] hover:text-[#e5ad45]"
                 }`}
               >
                 <Icon size={20} strokeWidth={1.5} className="text-[#d9a441] transition-transform duration-300 group-hover:scale-110" />
@@ -495,7 +491,6 @@ const MenuPage = () => {
               {activeCategory === "Barchasi" ? "Mazali taomlar" : activeCategory}
             </h2>
           </div>
-          
         </div>
 
         {loading ? (
@@ -513,12 +508,12 @@ const MenuPage = () => {
                 key={food.id}
                 className="group cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#121619] transition-all duration-300 hover:-translate-y-1 hover:border-[#d9a441]/60"
               >
-                <div className="relative h-[190px] w-full overflow-hidden bg-[#191e22] transform-gpu">
+                <div className="relative h-[190px] w-full overflow-hidden bg-[#191e22]">
                   {food.image ? (
                     <img
                       src={food.image}
                       alt={food.name}
-                      className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 transform-gpu"
+                      className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-gray-600">
@@ -528,7 +523,7 @@ const MenuPage = () => {
 
                   <button
                     type="button"
-                    className="absolute right-3 top-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/50 text-[#e0ad49] backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:bg-[#d9a441] hover:text-black"
+                    className="absolute right-3 top-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/50 text-[#e0ad49] backdrop-blur-sm transition-all duration-300 outline-none focus:outline-none hover:scale-105 hover:bg-[#d9a441] hover:text-black"
                   >
                     <Heart size={15} />
                   </button>
@@ -544,7 +539,7 @@ const MenuPage = () => {
 
                   <button
                     type="button"
-                    className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-lg border border-[#8c651d]/40 px-3 py-2 text-xs text-[#e5ad45] transition-all duration-300 hover:bg-[#d9a441] hover:text-black"
+                    className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-lg border border-[#8c651d]/40 px-3 py-2 text-xs text-[#e5ad45] transition-all duration-300 outline-none focus:outline-none hover:bg-[#d9a441] hover:text-black"
                   >
                     <span>Buyurtma berish</span>
                     <ShoppingCart size={15} className="transition-transform duration-300 group-hover:scale-110" />
@@ -559,11 +554,11 @@ const MenuPage = () => {
       <section className="mx-auto max-w-[1240px] px-5 pb-12">
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121619]">
           <div className="grid md:grid-cols-[280px_1fr]">
-            <div className="relative h-[220px] overflow-hidden bg-[#121619] transform-gpu md:h-auto">
+            <div className="relative h-[220px] overflow-hidden bg-[#121619] md:h-auto">
               <img
                 src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
                 alt="Maxsus taomlar"
-                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105 transform-gpu"
+                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
               />
             </div>
 
@@ -595,7 +590,7 @@ const MenuPage = () => {
               <button
                 type="button"
                 onClick={() => navigate("/reservation")}
-                className="mt-7 flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-5 py-2.5 text-sm font-medium text-black transition-all duration-300 hover:bg-[#edbd58]"
+                className="mt-7 flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-5 py-2.5 text-sm font-medium text-black transition-all duration-300 outline-none focus:outline-none hover:bg-[#edbd58]"
               >
                 Aksiyalarni ko'rish
                 <ChevronRight size={17} />

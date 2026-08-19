@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRestaurant } from "../../../context/RestaurantContext";
 
 import {
@@ -37,62 +38,400 @@ const categories = [
 ];
 
 const MenuPage = () => {
+  const navigate = useNavigate();
   const [items] = useState<MenuItem[]>([
+    // === 30 TA TAOM ===
     {
       id: "menu-1",
-      name: "Osh",
+      name: "To'y Oshi",
       category: "Osh",
-      price: 35000,
+      price: 38000,
       status: "Mavjud",
-      description: "An'anaviy o'zbek palovi.",
-      image: "",
+      description: "An'anaviy Toshkent to'y palovi, qazi va tuxum bilan.",
+      image: "https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=600&q=80",
     },
     {
       id: "menu-2",
+      name: "Samarqandcha Osh",
+      category: "Osh",
+      price: 36000,
+      status: "Mavjud",
+      description: "Qat-qat sabzi va mayin mol go'shti bilan Samarqandcha palov.",
+      image: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-3",
+      name: "Choyxona Oshi",
+      category: "Osh",
+      price: 35000,
+      status: "Mavjud",
+      description: "To'q qip-qizil guruch va qo'y go'shtli maxsus palov.",
+      image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-4",
+      name: "Farg'ona Oshi",
+      category: "Osh",
+      price: 37000,
+      status: "Mavjud",
+      description: "Devzira guruchidan tayyorlangan achchiqroq an'anaviy osh.",
+      image: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-5",
       name: "Mol go'shtli Grill",
       category: "Grill",
       price: 65000,
       status: "Mavjud",
       description: "Yumshoq mol go'shti va maxsus garnir.",
-      image: "",
+      image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80",
     },
     {
-      id: "menu-3",
+      id: "menu-6",
+      name: "Tovuq Grill",
+      category: "Grill",
+      price: 48000,
+      status: "Mavjud",
+      description: "Olovda pishirilgan butun tovuq grill va sabzavotlar.",
+      image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-7",
+      name: "Koreyka Grill",
+      category: "Grill",
+      price: 75000,
+      status: "Mavjud",
+      description: "Qo'y qoburg'alari ziravorlar bilan grillda pishirilgan.",
+      image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-8",
+      name: "Grill Assorti",
+      category: "Grill",
+      price: 120000,
+      status: "Mavjud",
+      description: "Mol, tovuq va kolbasa assorti grill to'plami.",
+      image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-9",
       name: "Sezar salati",
       category: "Salatlar",
       price: 40000,
       status: "Mavjud",
-      description: "Yangi sabzavotlar va maxsus sous.",
-      image: "",
+      description: "Tovuq go'shti, krutonlar va parmesan pishlog'i bilan.",
+      image: "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&w=600&q=80",
     },
     {
-      id: "menu-4",
+      id: "menu-10",
+      name: "Grecheskiy salat",
+      category: "Salatlar",
+      price: 35000,
+      status: "Mavjud",
+      description: "Yangi bodring, pomidor, oliviya va feta pishlog'i.",
+      image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-11",
+      name: "Achchiq-chuchuk",
+      category: "Salatlar",
+      price: 18000,
+      status: "Mavjud",
+      description: "Osh uchun mo'ljallangan yupqa to'g'ralgan pomidor va piyoz.",
+      image: "https://images.unsplash.com/photo-1592417817098-8f3d6eb12765?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-12",
+      name: "Tovuqli Warm salat",
+      category: "Salatlar",
+      price: 42000,
+      status: "Mavjud",
+      description: "Issiq tovuq bo'laklari va qovurilgan sabzavotlar salati.",
+      image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-13",
       name: "Qozon kabob",
       category: "Milliy taomlar",
       price: 70000,
       status: "Mavjud",
-      description: "An'anaviy usulda tayyorlangan qozon kabob.",
-      image: "",
+      description: "Qozonda qizartirib qovurilgan go'sht va kartoshka.",
+      image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80",
     },
     {
-      id: "menu-5",
-      name: "Choy",
-      category: "Ichimliklar",
-      price: 10000,
+      id: "menu-14",
+      name: "Lag'mon (Qovurma)",
+      category: "Milliy taomlar",
+      price: 38000,
       status: "Mavjud",
-      description: "Issiq qora choy.",
-      image: "",
+      description: "Qo'lda cho'zilgan xamir va qovurilgan go'sht-sabzavotlar.",
+      image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
     },
     {
-      id: "menu-6",
+      id: "menu-15",
+      name: "Chuchvara",
+      category: "Milliy taomlar",
+      price: 32000,
+      status: "Mavjud",
+      description: "Kichik manti shaklidagi sho'rva va qatiq bilan xamir taom.",
+      image: "https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-16",
+      name: "Manti (Go'shtli)",
+      category: "Milliy taomlar",
+      price: 35000,
+      status: "Mavjud",
+      description: "Bug'da pishirilgan qiymali va piyozli bug' dori.",
+      image: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-17",
+      name: "Somsa (Go'shtli)",
+      category: "Milliy taomlar",
+      price: 12000,
+      status: "Mavjud",
+      description: "Tandirda pishirilgan varaqi qiymali somsa.",
+      image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-18",
+      name: "Norin",
+      category: "Milliy taomlar",
+      price: 45000,
+      status: "Mavjud",
+      description: "Yupqa kesilgan xamir va ot go'shti (qazi) aralashmasi.",
+      image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-19",
+      name: "Kebab / Shashlik",
+      category: "Milliy taomlar",
+      price: 18000,
+      status: "Mavjud",
+      description: "Ko'mirda pishirilgan yumshoq mol go'shti shashlik.",
+      image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-20",
+      name: "Tovuq Shashlik",
+      category: "Milliy taomlar",
+      price: 16000,
+      status: "Mavjud",
+      description: "Marinovka qilingan tovuq go'shti shashlik.",
+      image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-21",
+      name: "Cheesecake San-Sebastian",
+      category: "Desertlar",
+      price: 35000,
+      status: "Mavjud",
+      description: "Issiq shokolad sousi bilan taqdim etiladigan chizkeyk.",
+      image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-22",
+      name: "Tiramisu",
+      category: "Desertlar",
+      price: 32000,
+      status: "Mavjud",
+      description: "Italiya uslubidagi kofe va maskarpone pishloqli desert.",
+      image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-23",
       name: "Mevali desert",
       category: "Desertlar",
       price: 30000,
       status: "Mavjud",
-      description: "Yengil va mazali mevali desert.",
-      image: "",
+      description: "Mavsumiy yangi mevalar to'plami va qaymoq.",
+      image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-24",
+      name: "Shokoladli Fondan",
+      category: "Desertlar",
+      price: 38000,
+      status: "Mavjud",
+      description: "Ichida suyuq shokolad va yonida muzqaymoq bilan.",
+      image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-25",
+      name: "Napoleon pirogi",
+      category: "Desertlar",
+      price: 28000,
+      status: "Mavjud",
+      description: "Mayin krem va varaqi xamirdan tayyorlangan klassik desert.",
+      image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-26",
+      name: "Medovik",
+      category: "Desertlar",
+      price: 27000,
+      status: "Mavjud",
+      description: "Tabiiy asal va xushbo'y krem bilan tayyorlangan tort.",
+      image: "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-27",
+      name: "Muzqaymoq Assorti",
+      category: "Desertlar",
+      price: 22000,
+      status: "Mavjud",
+      description: "Shokolad, vanil va qulupnayli muzqaymoq shariklari.",
+      image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-28",
+      name: "Brauni Muzqaymoq bilan",
+      category: "Desertlar",
+      price: 34000,
+      status: "Mavjud",
+      description: "To'q shokoladli brauni va vanilli muzqaymoq.",
+      image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-29",
+      name: "Pancake (Asal bilan)",
+      category: "Desertlar",
+      price: 26000,
+      status: "Mavjud",
+      description: "Yumshoq pankeyklar, asal va rezavor mevalar.",
+      image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "menu-30",
+      name: "Vafli va Mevalar",
+      category: "Desertlar",
+      price: 31000,
+      status: "Mavjud",
+      description: "Vena vaflisi, Nutella va yangi banan/qulupnay.",
+      image: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=600&q=80",
+    },
+
+    // === 13 TA ICHIMLIKLAR ===
+    {
+      id: "drink-1",
+      name: "Ko'k Choy (Chayxona)",
+      category: "Ichimliklar",
+      price: 8000,
+      status: "Mavjud",
+      description: "Xushbo'y va tetiklashtiruvchi an'anaviy ko'k choy.",
+      image: "https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-2",
+      name: "Qora Choy (Limonli)",
+      category: "Ichimliklar",
+      price: 10000,
+      status: "Mavjud",
+      description: "Issiq qora choy, yangi limon bo'laklari bilan.",
+      image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-3",
+      name: "Mavsumiy Mevali Choy",
+      category: "Ichimliklar",
+      price: 22000,
+      status: "Mavjud",
+      description: "Yalpiz, malina va sitrus mevalari qo'shilgan choy.",
+      image: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-4",
+      name: "Klassik Limonad",
+      category: "Ichimliklar",
+      price: 25000,
+      status: "Mavjud",
+      description: "Yangi siqilgan limon sharbati va muzli uy limonadi.",
+      image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-5",
+      name: "Mojito (Bezalkogolny)",
+      category: "Ichimliklar",
+      price: 28000,
+      status: "Mavjud",
+      description: "Yalpiz, laym, soda va muzdan tayyorlangan salqin ichimlik.",
+      image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-6",
+      name: "Yagodny Limonad",
+      category: "Ichimliklar",
+      price: 30000,
+      status: "Mavjud",
+      description: "Malina, qulupnay va klubnika ezmasidan limonad.",
+      image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-7",
+      name: "Espresso",
+      category: "Ichimliklar",
+      price: 15000,
+      status: "Mavjud",
+      description: "Quyuq va achchiq klassik italyancha kofe.",
+      image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-8",
+      name: "Cappuccino",
+      category: "Ichimliklar",
+      price: 22000,
+      status: "Mavjud",
+      description: "Mayin sut ko'pigi va espresso aralashmasi.",
+      image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-9",
+      name: "Latte Macchiato",
+      category: "Ichimliklar",
+      price: 24000,
+      status: "Mavjud",
+      description: "Ko'p miqdordagi sut va yengil espresso qatlami.",
+      image: "https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-10",
+      name: "Milkshake (Shokoladli)",
+      category: "Ichimliklar",
+      price: 26000,
+      status: "Mavjud",
+      description: "Sut va shokoladli muzqaymoqdan tayyorlangan kokteyl.",
+      image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-11",
+      name: "Tazhe Siqilgan Oportokal Sharbati",
+      category: "Ichimliklar",
+      price: 32000,
+      status: "Mavjud",
+      description: "100% tabiy yangi siqilgan apelsin sharbati (Fresh).",
+      image: "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-12",
+      name: "Coca-Cola / Fanta / Sprite",
+      category: "Ichimliklar",
+      price: 12000,
+      status: "Mavjud",
+      description: "0.5l idishdagi salqin gazlangan drink.",
+      image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80",
+    },
+    {
+      id: "drink-13",
+      name: "Mavsumiy Kompot",
+      category: "Ichimliklar",
+      price: 15000,
+      status: "Mavjud",
+      description: "Uy sharoitida gilos va olmadorlardan tayyorlangan kompot.",
+      image: "https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=600&q=80",
     },
   ]);
+
   const [activeCategory, setActiveCategory] = useState("Barchasi");
   const { requestAddItem, activeTableNumber } = useRestaurant();
   const loading = false;
@@ -152,7 +491,9 @@ const MenuPage = () => {
         <div className="mb-7 flex items-center justify-between">
           <div>
             <p className="mb-2 text-xs uppercase tracking-[3px] text-[#d9a441]">TANHO RESTAURANT</p>
-            <h2 className="font-serif text-3xl md:text-4xl">Mazali taomlar</h2>
+            <h2 className="font-serif text-3xl md:text-4xl">
+              {activeCategory === "Barchasi" ? "Mazali taomlar" : activeCategory}
+            </h2>
           </div>
           {activeTableNumber && (
             <span className="rounded-full border border-[#d9a441]/40 bg-[#191e22] px-4 py-2 text-xs text-[#e5ad45]">
@@ -258,6 +599,7 @@ const MenuPage = () => {
 
               <button
                 type="button"
+                onClick={() => navigate("/reservation")}
                 className="mt-7 flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-5 py-2.5 text-sm font-medium text-black transition-all duration-300 hover:bg-[#edbd58]"
               >
                 Aksiyalarni ko'rish
@@ -267,8 +609,6 @@ const MenuPage = () => {
           </div>
         </div>
       </section>
-
-        
     </div>
   );
 };

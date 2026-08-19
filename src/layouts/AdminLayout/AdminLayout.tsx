@@ -1,4 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { useNavigate, useNavigationType } from "react-router-dom";
 import {
   LayoutDashboard,
   UtensilsCrossed,
@@ -33,6 +34,12 @@ import {
   type Bill,
   type RestaurantTable,
 } from "../../types/restaurant";
+
+
+// Admin panelni ataylab tark etganimizni "eslab qolish" uchun bayroq.
+// Bu true bo'lsa va foydalanuvchi brauzerning orqaga/oldinga tugmasi orqali
+// qaytadan /admin manziliga kelib qolsa — panelni ko'rsatmay, login sahifasiga yuboramiz.
+const ADMIN_LEFT_FLAG = "tanho_admin_left";
 
 /* ============================================================
    1) UMUMIY CRUD HOOK
@@ -2346,23 +2353,60 @@ function SettingsSection() {
    10) ASOSIY ADMIN LAYOUT
    ============================================================ */
 const AdminLayout = () => {
-  const [sidebarOpen, setSidebarOpen] =
-    useState(true);
+  const navigate = useNavigate();
+  const navigationType = useNavigationType(); // "POP" | "PUSH" | "REPLACE"
 
-  const [active, setActive] =
-    useState<SectionKey>("dashboard");
+  // Agar bu tabda admin panel avval (logout yoki boshqa yo'l bilan) tark
+  // etilgan bo'lsa va hozirgi kelish aynan brauzer strelkasi (POP) orqali
+  // bo'lsa — demak foydalanuvchi orqaga/oldinga tugmasi bilan qaytmoqchi.
+  // Bunday holatda admin panelni ko'rsatmasdan darhol chetga yo'naltiramiz.
+  const [allowed] = useState(() => {
+    const alreadyLeft = sessionStorage.getItem(ADMIN_LEFT_FLAG) === "true";
+    if (navigationType === "POP" && alreadyLeft) return false;
+    sessionStorage.removeItem(ADMIN_LEFT_FLAG);
+    return true;
+  });
+
+  useEffect(() => {
+    if (!allowed) navigate("/", { replace: true });
+  }, [allowed, navigate]);
+
+  // Admin sahifasida turilgan vaqtda strelkalar (orqaga ham, oldinga ham)
+  // hech qaerga olib ketmasin — har bir popstate hodisasida joriy URL
+  // qayta "push" qilinadi, shuning uchun sahifa joyida qotib qoladi.
+  // Bu yerdan chiqishning yagona yo'li — "Chiqish" tugmasi (pastda).
+  useEffect(() => {
+    if (!allowed) return;
+
+    window.history.pushState(null, "", window.location.href);
+
+    const handlePopState = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [allowed]);
+
+  // Komponent har qanday sababdan (Chiqish tugmasi, boshqa URL orqali
+  // ketish va h.k.) DOM'dan olib tashlansa — "tark etildi" deb belgilaymiz.
+  // Shundan keyin bu yerga POP (strelka) orqali qaytishga urinish
+  // yuqoridagi tekshiruvda bloklanadi.
+  useEffect(() => {
+    if (!allowed) return;
+    return () => {
+      sessionStorage.setItem(ADMIN_LEFT_FLAG, "true");
+    };
+  }, [allowed]);
+
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [active, setActive] = useState<SectionKey>("dashboard");
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    if (
-      confirm(
-        "Tizimdan chiqishni tasdiqlaysizmi?"
-      )
-    ) {
-      localStorage.removeItem(
-        "admin_session"
-      );
-
-      window.location.href = "/login";
+    if (confirm("Tizimdan chiqishni tasdiqlaysizmi?")) {
+      localStorage.removeItem("admin_session");
+      navigate("/", { replace: true });
     }
   };
 
@@ -2559,15 +2603,19 @@ const AdminLayout = () => {
         return null;
     }
   };
+   if (!allowed) {
+    // Yo'naltirish amalga oshguncha hech narsa chizmaymiz
+    return null;
+  }
+
 
   return (
-    <div className="flex min-h-screen bg-[#0b0e10] text-white">
-      <aside
+    <div className="flex h-screen overflow-hidden bg-[#0b0e10] text-white">
+      <style>{scrollbarHideStyles}</style>
+            <aside
         className={`${
-          sidebarOpen
-            ? "w-64"
-            : "w-0 overflow-hidden"
-        } shrink-0 border-r border-white/10 bg-[#0d1114] transition-all duration-300`}
+          sidebarOpen ? "w-64" : "w-0"
+        } admin-sidebar-scroll h-screen shrink-0 overflow-y-auto overflow-x-hidden overscroll-contain border-r border-white/10 bg-[#0d1114] transition-all duration-300`}
       >
         <div className="flex flex-col gap-1 p-4">
           <div className="mb-6 flex flex-col items-center py-2">
@@ -2663,8 +2711,8 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      <div className="flex min-h-screen flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-white/10 bg-[#0d1114] px-6 py-3">
+      <div className="flex h-screen flex-1 flex-col overflow-hidden">
+        <header className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#0d1114] px-6 py-3">
           <div className="flex items-center gap-4">
             <button
               onClick={() =>
@@ -2704,35 +2752,87 @@ const AdminLayout = () => {
               </span>
             </button>
 
-            <button
-              onClick={() =>
-                setActive("profil")
-              }
-              className="flex cursor-pointer items-center gap-2"
-            >
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d9a441] text-sm font-semibold text-black">
-                A
-              </div>
-
-              <div className="hidden text-left text-sm sm:block">
-                <div className="font-medium">
-                  Admin
+            <div className="relative">
+              <button
+                onClick={() =>
+                  setProfileMenuOpen(
+                    (v) => !v
+                  )
+                }
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d9a441] text-sm font-semibold text-black">
+                  A
                 </div>
 
-                <div className="text-xs text-gray-400">
-                  Administrator
-                </div>
-              </div>
+                <div className="hidden text-left text-sm sm:block">
+                  <div className="font-medium">
+                    Admin
+                  </div>
 
-              <ChevronDown
-                size={16}
-                className="text-gray-400"
-              />
-            </button>
+                  <div className="text-xs text-gray-400">
+                    Administrator
+                  </div>
+                </div>
+
+                <ChevronDown
+                  size={16}
+                  className={`text-gray-400 transition-transform ${
+                    profileMenuOpen
+                      ? "rotate-180"
+                      : ""
+                  }`}
+                />
+              </button>
+
+              {profileMenuOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() =>
+                      setProfileMenuOpen(
+                        false
+                      )
+                    }
+                  />
+
+                  <div className="absolute right-0 top-[calc(100%+10px)] z-50 w-44 overflow-hidden rounded-lg border border-white/10 bg-[#121619] shadow-xl">
+                    <button
+                      onClick={() => {
+                        setActive(
+                          "profil"
+                        );
+                        setProfileMenuOpen(
+                          false
+                        );
+                      }}
+                      className="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                    >
+                      <UserCircle
+                        size={15}
+                      />
+                      Profil
+                    </button>
+
+                    <button
+                      onClick={
+                        handleLogout
+                      }
+                      className="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm text-red-400 hover:bg-red-500/10"
+                    >
+                      <LogOut
+                        size={15}
+                      />
+                      Chiqish
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto overscroll-contain p-6">
           {renderSection()}
         </main>
       </div>
@@ -2740,4 +2840,15 @@ const AdminLayout = () => {
   );
 };
 
+// Chrome/Safari/Edge (webkit) va Firefox/IE uchun scrollbarni
+// vizual ravishda yashiradi, lekin scroll funksiyasi ishlab turadi
+const scrollbarHideStyles = `
+  .admin-sidebar-scroll {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge legacy */
+  }
+  .admin-sidebar-scroll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, yangi Edge */
+  }
+`;
 export default AdminLayout;

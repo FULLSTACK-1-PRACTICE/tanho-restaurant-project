@@ -7,29 +7,20 @@ type Tab = 'kirish' | 'royxatdan'
 const inputClass =
   'w-full rounded-lg border border-white/15 bg-transparent px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-amber-400/70 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(251,191,36,0.08)]'
 
-export default function LoginPage() {
-  const navigate = useNavigate()
-
-  return (
-    <KirishModal
-      isOpen={true}
-      onClose={() => navigate('/')}
-    />
-  )
-}
-
-interface KirishModalProps {
+export interface AuthModalProps {
   isOpen: boolean
   onClose: () => void
+  initialTab?: Tab
 }
 
-function KirishModal({
+export default function AuthModal({
   isOpen,
   onClose,
-}: KirishModalProps) {
+  initialTab = 'kirish',
+}: AuthModalProps) {
   const navigate = useNavigate()
 
-  const [tab, setTab] = useState<Tab>('kirish')
+  const [tab, setTab] = useState<Tab>(initialTab)
   const [showPass, setShowPass] = useState(false)
   const [showPass2, setShowPass2] = useState(false)
   const [remember, setRemember] = useState(false)
@@ -48,7 +39,6 @@ function KirishModal({
     if (!isOpen) return
 
     const previousOverflow = document.body.style.overflow
-
     document.body.style.overflow = 'hidden'
 
     const handleEscape = (event: KeyboardEvent) => {
@@ -81,66 +71,46 @@ function KirishModal({
     const cleanEmail = email.trim().toLowerCase()
     const cleanPassword = password.trim()
 
-    /*
-      ADMIN
-      admin@gmail.com
-      12345
-    */
     if (
       cleanEmail === 'admin@gmail.com' &&
       cleanPassword === '12345'
     ) {
       localStorage.setItem('role', 'admin')
       localStorage.setItem('userEmail', cleanEmail)
-
+      onClose()
       navigate('/admin')
       return
     }
 
-    /*
-      USER
-      user@gmail.com
-      12345
-    */
     if (
       cleanEmail === 'user@gmail.com' &&
       cleanPassword === '12345'
     ) {
       localStorage.setItem('role', 'user')
       localStorage.setItem('userEmail', cleanEmail)
-
+      onClose()
       navigate('/user')
       return
     }
 
-    /*
-      CASHIER
-      cashsher@gmail.com
-      12345
-    */
     if (
       cleanEmail === 'cashsher@gmail.com' &&
       cleanPassword === '12345'
     ) {
       localStorage.setItem('role', 'cashier')
       localStorage.setItem('userEmail', cleanEmail)
-
+      onClose()
       navigate('/cashier')
       return
     }
 
-    /*
-      BOSS
-      bos@gmail.com
-      12345
-    */
     if (
       cleanEmail === 'bos@gmail.com' &&
       cleanPassword === '12345'
     ) {
       localStorage.setItem('role', 'boss')
       localStorage.setItem('userEmail', cleanEmail)
-
+      onClose()
       navigate('/boss')
       return
     }
@@ -188,7 +158,6 @@ function KirishModal({
         onClick={(event) => event.stopPropagation()}
       >
         <div className="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-amber-400/10 blur-3xl" />
-
         <div className="pointer-events-none absolute -bottom-24 -left-24 h-48 w-48 rounded-full bg-amber-400/5 blur-3xl" />
 
         <button
@@ -208,7 +177,6 @@ function KirishModal({
             <h2 className="text-lg font-semibold text-white">
               Kirish yoki ro'yxatdan o'tish
             </h2>
-
             <p className="mt-1 text-xs text-white/40">
               Hisobingizga kirish uchun ma'lumotlarni kiriting
             </p>
@@ -275,69 +243,54 @@ function KirishModal({
 
       <style>{`
         @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-
-          to {
-            opacity: 1;
-          }
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
-
         @keyframes modalIn {
           from {
             opacity: 0;
             transform: translateY(20px) scale(0.96);
           }
-
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
           }
         }
-
         @keyframes contentIn {
           from {
             opacity: 0;
             transform: translateY(8px);
           }
-
           to {
             opacity: 1;
             transform: translateY(0);
           }
         }
-
         @keyframes tabIn {
           from {
             opacity: 0;
             transform: scaleX(0);
           }
-
           to {
             opacity: 1;
             transform: scaleX(1);
           }
         }
-
         @keyframes checkIn {
           from {
             opacity: 0;
             transform: scale(0.5);
           }
-
           to {
             opacity: 1;
             transform: scale(1);
           }
         }
-
         @keyframes iconIn {
           from {
             opacity: 0;
             transform: scale(0.7);
           }
-
           to {
             opacity: 1;
             transform: scale(1);
@@ -471,7 +424,6 @@ function LoginForm({
 
       <p className="pt-1 text-center text-sm text-white/50">
         Hisobingiz yo'qmi?{' '}
-
         <button
           type="button"
           onClick={onRegister}
@@ -594,7 +546,6 @@ function RegisterForm({
 
       <p className="pt-1 text-center text-sm text-white/50">
         Hisobingiz bormi?{' '}
-
         <button
           type="button"
           onClick={onLogin}
@@ -698,7 +649,6 @@ function SubmitButton({
       <span className="relative z-10">
         {children}
       </span>
-
       <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-full" />
     </button>
   )
@@ -708,11 +658,9 @@ function Divider() {
   return (
     <div className="flex items-center gap-3 py-1">
       <div className="h-px flex-1 bg-white/10" />
-
       <span className="text-xs text-white/40">
         yoki
       </span>
-
       <div className="h-px flex-1 bg-white/10" />
     </div>
   )
@@ -726,10 +674,7 @@ function SocialButtons() {
         className="group flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/15 px-2 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] sm:text-sm"
       >
         <GoogleIcon className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
-
-        <span>
-          Google
-        </span>
+        <span>Google</span>
       </button>
 
       <button
@@ -737,10 +682,7 @@ function SocialButtons() {
         className="group flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/15 px-2 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] sm:text-sm"
       >
         <FacebookIcon className="transition-transform duration-300 group-hover:scale-110" />
-
-        <span>
-          Facebook
-        </span>
+        <span>Facebook</span>
       </button>
     </div>
   )
@@ -762,17 +704,14 @@ function GoogleIcon({
         fill="#FFC107"
         d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"
       />
-
       <path
         fill="#FF3D00"
         d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
       />
-
       <path
         fill="#4CAF50"
         d="M24 44c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.6c-2 1.4-4.6 2.3-7.7 2.3-5.3 0-9.7-3.4-11.3-8H5.7v6.2C9.1 39.7 16 44 24 44z"
       />
-
       <path
         fill="#1976D2"
         d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.6l6.6 5.6C41.4 36 44 30.5 44 24c0-1.3-.1-2.7-.4-3.5z"

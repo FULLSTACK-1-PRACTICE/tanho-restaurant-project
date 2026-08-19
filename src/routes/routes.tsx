@@ -1,4 +1,5 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router-dom";
+import { AuthModalProvider } from "../features/auth/context/AuthModalContext";
 
 import PublicLayout from "../components/Layout/PageTransition";
 
@@ -8,7 +9,7 @@ import AboutPage from "../pages/public/About/AboutPage";
 import EventsPage from "../pages/public/Blog/Blog";
 import NewsPage from "../pages/public/News/ NewsPage";
 import ContactPage from "../pages/public/Contact/ContactPage";
-import LoginPage from "../pages/public/Login/Login";
+import LoginPage from "../features/auth/components/AuthModal";
 import ReservationPage from "../pages/public/Reservation/ReservationPage";
 
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
@@ -29,98 +30,114 @@ import UserLayout from "../layouts/UserLayout/UserLayout";
 
 const routes = createBrowserRouter([
   {
-    element: <PublicLayout />,
+    element: (
+      <AuthModalProvider>
+        <Outlet />
+      </AuthModalProvider>
+    ),
     children: [
       {
-        path: "/",
-        element: <HomePage />,
+        element: <PublicLayout />,
+        children: [
+          {
+            path: "/",
+            element: <HomePage />,
+          },
+          {
+            path: "/menu",
+            element: <MenuPage />,
+          },
+          {
+            path: "/about",
+            element: <AboutPage />,
+          },
+          {
+            path: "/reservation",
+            element: <ReservationPage />,
+          },
+          {
+            path: "/events",
+            element: <EventsPage />,
+          },
+          {
+            path: "/news",
+            element: <NewsPage />,
+          },
+          {
+            path: "/contact",
+            element: <ContactPage />,
+          },
+        ],
       },
-      {
-        path: "/menu",
-        element: <MenuPage />,
-      },
-      {
-        path: "/about",
-        element: <AboutPage />,
-      },
-      {
-        path: "/reservation",
-        element: <ReservationPage />,
-      },
-      {
-        path: "/events",
-        element: <EventsPage />,
-      },
-      {
-        path: "/news",
-        element: <NewsPage />,
-      },
-      {
-        path: "/contact",
-        element: <ContactPage />,
-      },
-    ],
-  },
 
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
+      {
+        path: "/login",
+        element: (
+          <LoginPage
+            isOpen={true}
+            onClose={() => {
+              window.location.href = "/";
+            }}
+          />
+        ),
+      },
 
-  {
-    path: "/admin",
-    element: <AdminLayout />,
-  },
+      {
+        path: "/admin",
+        element: <AdminLayout />,
+      },
 
-  {
-    path: "/boss",
-    element: <BossLayout />,
-  },
+      {
+        path: "/boss",
+        element: <BossLayout />,
+      },
 
-  {
-    path: "/cashier",
-    element: <CashierLayout />,
-  },
+      {
+        path: "/cashier",
+        element: <CashierLayout />,
+      },
 
-  {
-    path: "/user",
-    element: <UserLayout />,
-    children: [
       {
-        index: true,
-        element: <BoshSahifa />,
-      },
-      {
-        path: "profil",
-        element: <Meningprofilim />,
-      },
-      {
-        path: "buyurtmalar",
-        element: <MeningBuyurtmalarim />,
-      },
-      {
-        path: "sevimlilar",
-        element: <Sevimlilarim />,
-      },
-      {
-        path: "stollar",
-        element: <StolBandQilish />,
-      },
-      {
-        path: "manzil",
-        element: <Manzilim />,
-      },
-      {
-        path: "tolovlar",
-        element: <TolovUslublarim />,
-      },
-      {
-        path: "takliflar",
-        element: <Takliflarim />,
-      },
-      {
-        path: "sozlamalar",
-        element: <Sozlamalar />,
+        path: "/user",
+        element: <UserLayout />,
+        children: [
+          {
+            index: true,
+            element: <BoshSahifa />,
+          },
+          {
+            path: "profil",
+            element: <Meningprofilim />,
+          },
+          {
+            path: "buyurtmalar",
+            element: <MeningBuyurtmalarim />,
+          },
+          {
+            path: "sevimlilar",
+            element: <Sevimlilarim />,
+          },
+          {
+            path: "stollar",
+            element: <StolBandQilish />,
+          },
+          {
+            path: "manzil",
+            element: <Manzilim />,
+          },
+          {
+            path: "tolovlar",
+            element: <TolovUslublarim />,
+          },
+          {
+            path: "takliflar",
+            element: <Takliflarim />,
+          },
+          {
+            path: "sozlamalar",
+            element: <Sozlamalar />,
+          },
+        ],
       },
     ],
   },

@@ -3,9 +3,11 @@ import { LogIn } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/images/Layout/Header/Logo-2.png";
 import Container from "../../ui/container/Container";
+import { useAuthModal } from "../../features/auth/hooks/useAuthModal";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const { openAuthModal } = useAuthModal();
 
   const navLinks = [
     { name: "Bosh sahifa", path: "/" },
@@ -79,8 +81,9 @@ function Header() {
             ))}
           </nav>
 
-          <Link
-            to="/login"
+          <button
+            type="button"
+            onClick={() => openAuthModal("kirish")}
             className="group flex cursor-pointer items-center gap-2 rounded-md border border-[#6d531f] px-5 py-2.5 text-[12px] font-medium text-[#dcae4d] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_6px_20px_rgba(220,174,77,0.18)]"
           >
             <LogIn
@@ -89,7 +92,7 @@ function Header() {
               className="transition-transform duration-300 group-hover:-translate-x-0.5"
             />
             <span>KIRISH</span>
-          </Link>
+          </button>
         </div>
       </Container>
     </header>

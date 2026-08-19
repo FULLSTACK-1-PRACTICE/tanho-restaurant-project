@@ -2,6 +2,7 @@ import {
   CalendarDays,
   Clock3,
   MapPin,
+  MessageSquarePlus,
   Navigation,
   Phone,
   Send,
@@ -105,8 +106,6 @@ function Footer() {
                   Odamlar soni
                 </button>
               </div>
-
-             
 
               <p className="mt-5 text-sm text-[#c7c7c7]">
                 Yoki qo‘ng‘iroq qiling:
@@ -313,6 +312,69 @@ function Footer() {
                 </p>
               </div>
             ))}
+          </div>
+
+          <div
+            className="
+              mt-6 rounded-xl border border-[#242729]
+              bg-[#090b0c] p-6 shadow-[0_15px_45px_rgba(0,0,0,0.35)]
+            "
+          >
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <h3 className="font-serif text-xl text-white">
+                  Siz ham o‘z izohingizni yozib qoldiring!
+                </h3>
+                <p className="mt-1 text-xs text-[#a9a9a9]">
+                  Tashrifingiz va taomlarimiz haqidagi fikringiz biz uchun muhim.
+                </p>
+              </div>
+
+              <form
+                onSubmit={(e) => e.preventDefault()}
+                className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center lg:max-w-2xl"
+              >
+                <input
+                  type="text"
+                  placeholder="Ismingiz"
+                  required
+                  className="
+                    w-full rounded-lg border border-[#282b2d] bg-[#111416]
+                    px-4 py-2.5 text-sm text-[#f1eee7] placeholder-[#6b7280]
+                    outline-none transition-all duration-300
+                    focus:border-[#dcae45] focus:bg-[#151719]
+                    sm:w-48
+                  "
+                />
+
+                <input
+                  type="text"
+                  placeholder="Izohingizni shu yerga yozing..."
+                  required
+                  className="
+                    w-full flex-1 rounded-lg border border-[#282b2d] bg-[#111416]
+                    px-4 py-2.5 text-sm text-[#f1eee7] placeholder-[#6b7280]
+                    outline-none transition-all duration-300
+                    focus:border-[#dcae45] focus:bg-[#151719]
+                  "
+                />
+
+                <button
+                  type="submit"
+                  className="
+                    flex cursor-pointer shrink-0 items-center justify-center gap-2
+                    rounded-lg border border-[#dcae45] bg-[#dcae45]
+                    px-5 py-2.5 text-sm font-medium text-[#050708]
+                    transition-all duration-300
+                    hover:-translate-y-0.5 hover:bg-[#f2c96c]
+                    hover:shadow-[0_8px_20px_rgba(220,174,69,0.2)]
+                  "
+                >
+                  <MessageSquarePlus size={16} />
+                  Yuborish
+                </button>
+              </form>
+            </div>
           </div>
         </section>
       </div>

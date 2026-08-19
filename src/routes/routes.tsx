@@ -9,24 +9,23 @@ import AboutPage from "../pages/public/About/AboutPage";
 import EventsPage from "../pages/public/Blog/Blog";
 import NewsPage from "../pages/public/News/ NewsPage";
 import ContactPage from "../pages/public/Contact/ContactPage";
-import LoginPage from "../features/auth/components/AuthModal";
 import ReservationPage from "../pages/public/Reservation/ReservationPage";
+
+import LoginPage from "../features/auth/components/AuthModal";
 
 import AdminLayout from "../layouts/AdminLayout/AdminLayout";
 import BossLayout from "../layouts/BossLayout/BossLayout";
 import CashierLayout from "../layouts/CashierLayout/CashierLayout";
 
+import UserLayout from "../layouts/UserLayout/UserLayout";
+
 import BoshSahifa from "../layouts/UserLayout/Userpanel/BoshSahifa";
-import Manzilim from "../layouts/UserLayout/Userpanel/Manzilim";
-import MeningBuyurtmalarim from "../layouts/UserLayout/Userpanel/MeningBuyurtmalarim";
 import Meningprofilim from "../layouts/UserLayout/Userpanel/Meningprofilim";
+import MeningBuyurtmalarim from "../layouts/UserLayout/Userpanel/MeningBuyurtmalarim";
 import Sevimlilarim from "../layouts/UserLayout/Userpanel/Sevimlilarim";
-import Sozlamalar from "../layouts/UserLayout/Userpanel/Sozlamalar";
 import StolBandQilish from "../layouts/UserLayout/Userpanel/StolBandQilish";
 import Takliflarim from "../layouts/UserLayout/Userpanel/Takliflarim";
-import TolovUslublarim from "../layouts/UserLayout/Userpanel/TulovUslublarim";
-
-import UserLayout from "../layouts/UserLayout/UserLayout";
+import Sozlamalar from "../layouts/UserLayout/Userpanel/Sozlamalar";
 
 const routes = createBrowserRouter([
   {
@@ -35,34 +34,46 @@ const routes = createBrowserRouter([
         <Outlet />
       </AuthModalProvider>
     ),
+
     children: [
+      // =========================
+      // PUBLIC PAGES
+      // =========================
+
       {
         element: <PublicLayout />,
+
         children: [
           {
             path: "/",
             element: <HomePage />,
           },
+
           {
             path: "/menu",
             element: <MenuPage />,
           },
+
           {
             path: "/about",
             element: <AboutPage />,
           },
+
           {
             path: "/reservation",
             element: <ReservationPage />,
           },
+
           {
             path: "/events",
             element: <EventsPage />,
           },
+
           {
             path: "/news",
             element: <NewsPage />,
           },
+
           {
             path: "/contact",
             element: <ContactPage />,
@@ -70,8 +81,13 @@ const routes = createBrowserRouter([
         ],
       },
 
+      // =========================
+      // LOGIN
+      // =========================
+
       {
         path: "/login",
+
         element: (
           <LoginPage
             isOpen={true}
@@ -82,57 +98,80 @@ const routes = createBrowserRouter([
         ),
       },
 
+      // =========================
+      // ADMIN
+      // =========================
+
       {
         path: "/admin",
         element: <AdminLayout />,
       },
+
+      // =========================
+      // BOSS
+      // =========================
 
       {
         path: "/boss",
         element: <BossLayout />,
       },
 
+      // =========================
+      // CASHIER
+      // =========================
+
       {
         path: "/cashier",
         element: <CashierLayout />,
       },
 
+      // =========================
+      // USER PANEL
+      // =========================
+
       {
         path: "/user",
+
         element: <UserLayout />,
+
         children: [
+          // /user
           {
             index: true,
             element: <BoshSahifa />,
           },
+
+          // /user/profil
           {
             path: "profil",
             element: <Meningprofilim />,
           },
+
+          // /user/buyurtmalar
           {
             path: "buyurtmalar",
             element: <MeningBuyurtmalarim />,
           },
+
+          // /user/sevimlilar
           {
             path: "sevimlilar",
             element: <Sevimlilarim />,
           },
+
+          // /user/stollar
           {
             path: "stollar",
             element: <StolBandQilish />,
           },
-          {
-            path: "manzil",
-            element: <Manzilim />,
-          },
-          {
-            path: "tolovlar",
-            element: <TolovUslublarim />,
-          },
+
+          // /user/takliflar
           {
             path: "takliflar",
             element: <Takliflarim />,
           },
+
+          // /user/sozlamalar
           {
             path: "sozlamalar",
             element: <Sozlamalar />,

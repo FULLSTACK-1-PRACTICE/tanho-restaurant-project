@@ -11,10 +11,10 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import Button from '../../../ui/Button';
-import { useRestaurant } from '../../../context/RestaurantContext';
+
 
 function ContactPage() {
-  const { openReserveModal } = useRestaurant();
+  
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#050505] text-white">
       <div className="absolute inset-0">
@@ -135,7 +135,7 @@ function ContactPage() {
             </div>
 
             <div className="mt-7 w-full">
-              <Button className="w-full justify-center" onClick={openReserveModal}>
+              <Button className="w-full justify-center">
                 <CalendarDays size={17} />
                 <span>STOL BAND QILISH</span>
               </Button>

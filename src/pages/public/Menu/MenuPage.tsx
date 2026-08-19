@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRestaurant } from "../../../context/RestaurantContext";
+
 
 import {
   Cake,
@@ -433,7 +433,7 @@ const MenuPage = () => {
   ]);
 
   const [activeCategory, setActiveCategory] = useState("Barchasi");
-  const { requestAddItem, activeTableNumber } = useRestaurant();
+  
   const loading = false;
 
   const visibleItems = items
@@ -495,11 +495,7 @@ const MenuPage = () => {
               {activeCategory === "Barchasi" ? "Mazali taomlar" : activeCategory}
             </h2>
           </div>
-          {activeTableNumber && (
-            <span className="rounded-full border border-[#d9a441]/40 bg-[#191e22] px-4 py-2 text-xs text-[#e5ad45]">
-              Sizning stolingiz: {activeTableNumber}
-            </span>
-          )}
+          
         </div>
 
         {loading ? (
@@ -548,7 +544,6 @@ const MenuPage = () => {
 
                   <button
                     type="button"
-                    onClick={() => requestAddItem({ id: food.id!, name: food.name, price: food.price })}
                     className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-lg border border-[#8c651d]/40 px-3 py-2 text-xs text-[#e5ad45] transition-all duration-300 hover:bg-[#d9a441] hover:text-black"
                   >
                     <span>Buyurtma berish</span>

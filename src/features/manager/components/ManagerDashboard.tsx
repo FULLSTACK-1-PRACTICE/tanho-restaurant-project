@@ -30,6 +30,9 @@ import logoImg from "../../../assets/images/Layout/Header/Logo-2.png";
 import { formatSum } from "../../../lib/utils";
 import { DashboardPage } from "./DashboardPage";
 import { StatCard } from "./StatCard";
+import { Sidebar } from "../../../components/common/SideBar";
+import { Navbar } from "../../../components/common/DashboardNavbar";
+
 
 const PAGE_TITLES: Record<string, string> = {
   "bosh-sahifa": "Dashboard",

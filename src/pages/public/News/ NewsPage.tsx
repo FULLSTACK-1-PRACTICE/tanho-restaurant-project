@@ -6,7 +6,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowUpRight,
-  Bookmark,
   Send,
   Sparkles,
   X,

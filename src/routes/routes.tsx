@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router-dom"
+import { createBrowserRouter, Navigate, Outlet } from "react-router-dom"
 import { AuthModalProvider } from "../features/auth/context/AuthModalContext"
 import { ProtectedRoute } from "./ProtectedRoute"
 
@@ -11,15 +11,15 @@ import EventsPage from "../pages/public/Blog/Blog"
 import ContactPage from "../pages/public/Contact/ContactPage"
 import ReservationPage from "../pages/public/Reservation/ReservationPage"
 
+import NewsPage from "../pages/public/News/ NewsPage"
+import NewsDetailsPage from "../pages/public/News/NewsDetailsPage"
+
 import LoginPage from "../features/auth/components/AuthModal"
 
 import AdminLayout from "../layouts/AdminLayout/AdminLayout"
 import CashierLayout from "../layouts/CashierLayout/CashierLayout"
 import UserLayout from "../layouts/UserLayout/UserLayout"
 
-// 🔴 DIQQAT: O'ZGARISH SHU YERDA!
-// Faylingiz nomi "ManagerDashboard.tsx" bo'lsa-da, uning ichidagi asosiy funksiya nomi ManagerLayout edi.
-// Shuning uchun uni ManagerLayout nomi bilan import qilamiz.
 import ManagerLayout from "../features/manager/components/ManagerDashboard"
 
 import BoshSahifa from "../layouts/UserLayout/Userpanel/BoshSahifa"
@@ -47,6 +47,8 @@ const routes = createBrowserRouter([
           { path: "/reservation", element: <ReservationPage /> },
           { path: "/events", element: <EventsPage /> },
           { path: "/contact", element: <ContactPage /> },
+          { path: "/news", element: <NewsPage /> },
+          { path: "/news/:id", element: <NewsDetailsPage /> },
         ],
       },
 
@@ -67,13 +69,12 @@ const routes = createBrowserRouter([
         children: [{ path: "/admin", element: <AdminLayout /> }],
       },
 
-      // 🔴 DIQQAT: O'ZGARISH SHU YERDA!
       {
         element: <ProtectedRoute allowedRoles={["manager"]} />,
         children: [
           {
             path: "/manager",
-            element: <ManagerLayout />, // ManagerDashboard o'rniga ManagerLayout ulandi
+            element: <ManagerLayout />,
           },
         ],
       },
@@ -100,6 +101,11 @@ const routes = createBrowserRouter([
             ],
           },
         ],
+      },
+
+      {
+        path: "*",
+        element: <Navigate to="/" replace />,
       },
     ],
   },

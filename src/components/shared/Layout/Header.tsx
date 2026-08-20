@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { LogIn } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
-import logo from "../../assets/images/Layout/Header/Logo-2.png";
+import logo from "../../../assets/images/Layout/Header/Logo-2.png";
 import Container from "../../ui/container/Container";
-import { useAuthModal } from "../../features/auth/hooks/useAuthModal";
+import { useAuthModal } from "../../../features/auth/hooks/useAuthModal";
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);

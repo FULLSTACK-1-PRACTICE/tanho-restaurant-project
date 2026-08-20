@@ -1,8 +1,8 @@
-import HeroSection from "../../../components/Landing/HeroSection";
-import MashhurFood from "../../../components/Landing/PopularFood";
-import AboutSection from "../../../components/Landing/AboutSection";
-import SpecialSection from "../../../components/Landing/SpecialSection";
-import Stolband from "../../../components/Landing/BookaTable";
+import HeroSection from "../../../features/Landing/HeroSection";
+import MashhurFood from "../../../features/Landing/PopularFood";
+import AboutSection from "../../../features/Landing/AboutSection";
+import SpecialSection from "../../../features/Landing/SpecialSection";
+import Stolband from "../../../features/Landing/BookaTable";
 
 function Home() {
   return (

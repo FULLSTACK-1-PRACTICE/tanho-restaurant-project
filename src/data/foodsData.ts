@@ -1,0 +1,45 @@
+export const IMAGE_STYLES = [
+	{ id: 'amber', label: 'Amber', from: '#f59e0b', to: '#b45309' },
+	{ id: 'rose', label: 'Rose', from: '#fb7185', to: '#9f1239' },
+	{ id: 'emerald', label: 'Emerald', from: '#34d399', to: '#065f46' },
+	{ id: 'sky', label: 'Sky', from: '#38bdf8', to: '#0369a1' },
+	{ id: 'violet', label: 'Violet', from: '#a78bfa', to: '#5b21b6' },
+	{ id: 'orange', label: 'Orange', from: '#fb923c', to: '#9a3412' },
+]
+
+export const DEFAULT_CATEGORIES = [
+	{ id: 1, name: 'Issiq taomlar', icon: 'amber' },
+	{ id: 2, name: 'Salatlar', icon: 'emerald' },
+	{ id: 3, name: 'Fast Food', icon: 'orange' },
+	{ id: 4, name: 'Ichimliklar', icon: 'sky' },
+	{ id: 5, name: 'Desertlar', icon: 'rose' },
+	{ id: 6, name: 'Shorvalar', icon: 'violet' },
+	{ id: 7, name: 'Qo‘shimchalar', icon: 'amber' },
+]
+
+export const DEFAULT_FOODS = [
+	{ id: 1, name: 'TANHO Plov', category: 'Issiq taomlar', price: 35000, status: 'Mavjud', image: 'amber' },
+	{ id: 2, name: 'Beef Steak', category: 'Issiq taomlar', price: 120000, status: 'Mavjud', image: 'orange' },
+	{ id: 3, name: 'Lag‘mon', category: 'Issiq taomlar', price: 45000, status: 'Mavjud', image: 'amber' },
+	{ id: 4, name: 'Caesar Salad', category: 'Salatlar', price: 55000, status: 'Mavjud', image: 'emerald' },
+	{ id: 5, name: 'Tovuq BBQ', category: 'Issiq taomlar', price: 65000, status: 'Mavjud emas', image: 'orange' },
+	{ id: 6, name: 'Borsch', category: 'Shorvalar', price: 28000, status: 'Mavjud', image: 'violet' },
+	{ id: 7, name: 'Coca-Cola 0.5L', category: 'Ichimliklar', price: 12000, status: 'Mavjud', image: 'sky' },
+	{ id: 8, name: 'Tiramisu', category: 'Desertlar', price: 32000, status: 'Mavjud emas', image: 'rose' },
+	{ id: 9, name: 'Mastava', category: 'Issiq taomlar', price: 30000, status: 'Mavjud', image: 'amber' },
+	{ id: 10, name: 'Manti', category: 'Issiq taomlar', price: 40000, status: 'Mavjud', image: 'orange' },
+	{ id: 11, name: 'Shashlik', category: 'Issiq taomlar', price: 55000, status: 'Mavjud emas', image: 'amber' },
+	{ id: 12, name: 'Olivye salad', category: 'Salatlar', price: 30000, status: 'Mavjud', image: 'emerald' },
+	{ id: 13, name: 'Vitamin salad', category: 'Salatlar', price: 25000, status: 'Mavjud', image: 'emerald' },
+	{ id: 14, name: 'Achichuq', category: 'Salatlar', price: 18000, status: 'Mavjud', image: 'emerald' },
+	{ id: 15, name: 'Cheeseburger', category: 'Fast Food', price: 38000, status: 'Mavjud', image: 'orange' },
+	{ id: 16, name: 'Hot-dog', category: 'Fast Food', price: 22000, status: 'Mavjud', image: 'orange' },
+	{ id: 17, name: 'Doner', category: 'Fast Food', price: 28000, status: 'Mavjud', image: 'orange' },
+	{ id: 18, name: 'Pizza Margarita', category: 'Fast Food', price: 65000, status: 'Mavjud', image: 'orange' },
+	{ id: 19, name: 'Krilya BBQ', category: 'Fast Food', price: 42000, status: 'Mavjud emas', image: 'orange' },
+	{ id: 20, name: 'Fanta 0.5L', category: 'Ichimliklar', price: 12000, status: 'Mavjud', image: 'sky' },
+	{ id: 21, name: 'Choy (choynak)', category: 'Ichimliklar', price: 8000, status: 'Mavjud', image: 'sky' },
+	{ id: 22, name: 'Napoleon tort', category: 'Desertlar', price: 35000, status: 'Mavjud', image: 'rose' },
+	{ id: 23, name: 'Mampar', category: 'Shorvalar', price: 27000, status: 'Mavjud', image: 'violet' },
+	{ id: 24, name: 'Non', category: 'Qo‘shimchalar', price: 5000, status: 'Mavjud', image: 'amber' },
+]

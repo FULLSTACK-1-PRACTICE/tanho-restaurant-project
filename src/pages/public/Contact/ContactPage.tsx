@@ -10,7 +10,7 @@ import {
   MessageCircle,
   ChevronDown,
 } from 'lucide-react';
-import Button from '../../../ui/Button';
+import Button from '../../../components/ui/Button';
 
 
 function ContactPage() {

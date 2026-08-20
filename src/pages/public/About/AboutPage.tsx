@@ -11,8 +11,8 @@ import {
   Sparkles,
   Award
 } from 'lucide-react';
-import Button from '../../../ui/Button';
-import Container from '../../../ui/container/Container';
+import Button from '../../../components/ui/Button';
+import Container from '../../../components/ui/container/Container';
 
 const AboutPage: React.FC = () => {
   const navigate = useNavigate();

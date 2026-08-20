@@ -105,13 +105,13 @@ export default function AuthModal({
     }
 
     if (
-      cleanEmail === 'bos@gmail.com' &&
+      cleanEmail === 'manager@gmail.com' &&
       cleanPassword === '12345'
     ) {
-      localStorage.setItem('role', 'boss')
+      localStorage.setItem('role', 'manager')
       localStorage.setItem('userEmail', cleanEmail)
       onClose()
-      navigate('/boss')
+      navigate('/manager')
       return
     }
 

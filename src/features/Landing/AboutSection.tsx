@@ -1,5 +1,5 @@
 import { Award, ChefHat, Star, Users } from "lucide-react";
-import aboutimg from "../../assets/images/Landing/Hero/Hero-Section.png";
+import aboutimg from "@/assets/images/Landing/Hero/Hero-Section.png"
 function AboutSection() {
   return (
     <section className="w-full bg-[#050708] py-8">

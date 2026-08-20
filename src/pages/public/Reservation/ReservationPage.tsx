@@ -15,8 +15,8 @@ import {
   MessageCircle, 
   CalendarCheck 
 } from 'lucide-react';
-import Container from '../../../ui/container/Container';
-import Button from '../../../ui/Button';
+import Container from '../../../components/ui/container/Container';
+import Button from '../../../components/ui/Button';
 
 const ReservationPage: React.FC = () => {
   const [formData, setFormData] = useState({

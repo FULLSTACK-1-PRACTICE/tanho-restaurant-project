@@ -7,7 +7,7 @@ import {
   Utensils,
 } from "lucide-react";
 
-import heroImg from "../../assets/images/Landing/Hero/Hero-Section.png";
+import heroImg from "@/assets/images/Landing/Hero/Hero-Section.png";
 
 function HeroSection() {
   return (

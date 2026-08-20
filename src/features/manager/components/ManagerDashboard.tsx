@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Crown,
   ChevronDown,
@@ -11,13 +12,21 @@ import {
   Menu,
   Plus,
   Upload,
-  Package,
-  CircleDollarSign,
+  LayoutDashboard,
+  UtensilsCrossed,
+  Utensils,
+  ListTree,
+  PlusCircle,
+  ShoppingCart,
+  CalendarCheck,
   Users,
+  BarChart3,
   Trash2,
   Edit,
+  Download,
+  Send,
 } from "lucide-react";
-import logoImg from "../../../assets/logo.svg";
+import logoImg from "../../../assets/images/Layout/Header/Logo-2.png";
 import { formatSum } from "../../../lib/utils";
 import { DashboardPage } from "./DashboardPage";
 import { StatCard } from "./StatCard";
@@ -36,27 +45,29 @@ const PAGE_TITLES: Record<string, string> = {
 };
 
 const SIDEBAR_SECTIONS = [
-  { key: "bosh-sahifa", label: "Bosh sahifa", icon: Package },
+  { key: "bosh-sahifa", label: "Bosh sahifa", icon: LayoutDashboard },
   {
     key: "menyu",
     label: "Menyu",
-    icon: Package,
+    icon: UtensilsCrossed,
     children: [
-      { key: "taomlar", label: "Taomlar", icon: Package },
-      { key: "kategoriyalar", label: "Kategoriyalar", icon: Package },
-      { key: "qoshimchalar", label: "Qo‘shimchalar", icon: Package },
+      { key: "taomlar", label: "Taomlar", icon: Utensils },
+      { key: "kategoriyalar", label: "Kategoriyalar", icon: ListTree },
+      { key: "qoshimchalar", label: "Qo‘shimchalar", icon: PlusCircle },
     ],
   },
-  { key: "buyurtmalar", label: "Buyurtmalar", icon: Package },
-  { key: "bron", label: "Bron qilish", icon: Package },
+  { key: "buyurtmalar", label: "Buyurtmalar", icon: ShoppingCart },
+  { key: "bron", label: "Bron qilish", icon: CalendarCheck },
   { key: "xodimlar", label: "Xodimlar", icon: Users },
-  { key: "hisobotlar", label: "Hisobotlar", icon: CircleDollarSign },
+  { key: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
 ];
 
 const inputClass =
   "w-full px-3.5 py-2.5 bg-[#1a1a1e] border border-white/10 rounded-xl text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 transition-colors";
 
-export function ManagerLayout() {
+export default function ManagerLayout() {
+  const navigate = useNavigate();
+
   const [activePage, setActivePage] = useState("bosh-sahifa");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -103,6 +114,15 @@ export function ManagerLayout() {
 
   const notifRef = useRef<HTMLDivElement>(null);
   const adminRef = useRef<HTMLDivElement>(null);
+
+  const handleLogout = () => {
+    setAdminOpen(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("user");
+    sessionStorage.clear();
+    navigate("/", { replace: true });
+  };
 
   const handleSidebarClick = (key: string) => {
     setActivePage(key);
@@ -160,6 +180,7 @@ export function ManagerLayout() {
           onClick={() => setMobileSidebarOpen(false)}
         />
       )}
+
       <aside
         className={`fixed lg:static z-40 h-full ${
           sidebarOpen ? "w-[260px]" : "w-[76px]"
@@ -267,7 +288,7 @@ export function ManagerLayout() {
                 setSidebarOpen((value) => !value);
                 setMobileSidebarOpen((value) => !value);
               }}
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-colors shrink-0"
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-colors shrink-0 cursor-pointer"
             >
               <Menu size={20} />
             </button>
@@ -320,7 +341,7 @@ export function ManagerLayout() {
                     setNotifCount(0);
                   }
                 }}
-                className="relative w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                className="relative w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
               >
                 <Bell size={19} />
 
@@ -372,7 +393,7 @@ export function ManagerLayout() {
                   setAdminOpen((value) => !value);
                   setNotifOpen(false);
                 }}
-                className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
+                className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
               >
                 <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-700 flex items-center justify-center text-black font-bold text-sm shrink-0">
                   A
@@ -398,7 +419,7 @@ export function ManagerLayout() {
                       setAdminOpen(false);
                       setActivePage("profil");
                     }}
-                    className="w-full flex items-center gap-2.5 text-left px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                    className="w-full flex items-center gap-2.5 text-left px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors cursor-pointer"
                   >
                     <User size={15} />
                     Profil
@@ -409,7 +430,7 @@ export function ManagerLayout() {
                       setAdminOpen(false);
                       setActivePage("sozlamalar");
                     }}
-                    className="w-full flex items-center gap-2.5 text-left px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                    className="w-full flex items-center gap-2.5 text-left px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors cursor-pointer"
                   >
                     <Settings size={15} />
                     Sozlamalar
@@ -418,10 +439,8 @@ export function ManagerLayout() {
                   <div className="h-px bg-white/10 my-1" />
 
                   <button
-                    onClick={() => {
-                      setAdminOpen(false);
-                    }}
-                    className="w-full flex items-center gap-2.5 text-left px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-2.5 text-left px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
                   >
                     <LogOut size={15} />
                     Chiqish
@@ -432,64 +451,82 @@ export function ManagerLayout() {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-[#0a0a0b]">
           {activePage === "bosh-sahifa" ? (
-            <DashboardPage
-              foods={foods}
-              orders={[]}
-              onViewAllOrders={() => handleSidebarClick("buyurtmalar")}
-            />
+            <div className="space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-4 bg-[#111113] border border-white/5 p-4 rounded-2xl">
+                <div>
+                  <h2 className="text-base font-semibold text-white">Xush kelibsiz, Menejer!</h2>
+                  <p className="text-xs text-gray-400">Bugungi restoran faoliyati va ko'rsatkichlarni nazorat qiling.</p>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <button className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-200 text-xs font-medium transition-colors cursor-pointer border border-white/5">
+                    <Download size={14} className="text-amber-400" />
+                    Hisobotni yuklab olish
+                  </button>
+                  <button className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-xs font-medium transition-colors cursor-pointer border border-amber-500/20">
+                    <Send size={14} />
+                    Oshxonaga xabar
+                  </button>
+                </div>
+              </div>
+
+              <DashboardPage
+                orders={[]}
+                onViewAllOrders={() => handleSidebarClick("buyurtmalar")}
+              />
+            </div>
           ) : isMenuPage ? (
             <div className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                 <StatCard
-                  icon={Package}
+                  icon={Utensils}
                   iconBg="bg-amber-500/15"
                   iconColor="text-amber-400"
                   label="Jami taomlar"
-                  value={totalCount}
+                  value={String(totalCount)}
                   sub="+2 bu hafta"
                   subColor="text-emerald-400"
                 />
 
                 <StatCard
-                  icon={CircleDollarSign}
+                  icon={ShoppingCart}
                   iconBg="bg-emerald-500/15"
                   iconColor="text-emerald-400"
                   label="Mavjud taomlar"
-                  value={availableCount}
+                  value={String(availableCount)}
                   sub={`${availablePercent}%`}
                   subColor="text-emerald-400"
                 />
 
                 <StatCard
-                  icon={CircleDollarSign}
+                  icon={ShoppingCart}
                   iconBg="bg-red-500/15"
                   iconColor="text-red-400"
                   label="Mavjud emas"
-                  value={unavailableCount}
+                  value={String(unavailableCount)}
                   sub={`${unavailablePercent}%`}
                   subColor="text-red-400"
                 />
 
                 <StatCard
-                  icon={Users}
+                  icon={ListTree}
                   iconBg="bg-sky-500/15"
                   iconColor="text-sky-400"
                   label="Kategoriyalar"
-                  value={categories.length}
+                  value={String(categories.length)}
                   sub="Barchasi faol"
                   subColor="text-gray-400"
                 />
               </div>
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
-                <button className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black text-sm font-semibold transition-colors">
+                <button className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black text-sm font-semibold transition-colors cursor-pointer">
                   <Plus size={17} />
                   Taom qo‘shish
                 </button>
 
-                <button className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#141416] border border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-200 text-sm font-semibold transition-colors">
+                <button className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#141416] border border-white/10 hover:border-white/20 hover:bg-white/5 text-gray-200 text-sm font-semibold transition-colors cursor-pointer">
                   <Upload size={16} />
                   Import qilish
                 </button>
@@ -500,7 +537,7 @@ export function ManagerLayout() {
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-semibold text-white">Kategoriyalar</h3>
 
-                    <button className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-400 hover:bg-amber-500/25 flex items-center justify-center">
+                    <button className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-400 hover:bg-amber-500/25 flex items-center justify-center cursor-pointer">
                       <Plus size={15} />
                     </button>
                   </div>
@@ -508,7 +545,7 @@ export function ManagerLayout() {
                   <div className="space-y-1">
                     <button
                       onClick={() => setSelectedCategory("Barchasi")}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm ${
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm cursor-pointer ${
                         selectedCategory === "Barchasi"
                           ? "bg-amber-500/15 text-amber-400 font-medium"
                           : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
@@ -528,7 +565,7 @@ export function ManagerLayout() {
                         <button
                           key={category.id}
                           onClick={() => setSelectedCategory(category.name)}
-                          className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm ${
+                          className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm cursor-pointer ${
                             active
                               ? "bg-amber-500/15 text-amber-400 font-medium"
                               : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
@@ -543,7 +580,7 @@ export function ManagerLayout() {
                     })}
                   </div>
 
-                  <button className="w-full mt-4 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border border-amber-500/30 text-amber-400 text-sm font-medium hover:bg-amber-500/10">
+                  <button className="w-full mt-4 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border border-amber-500/30 text-amber-400 text-sm font-medium hover:bg-amber-500/10 cursor-pointer">
                     <Settings size={15} />
                     Kategoriyalarni boshqarish
                   </button>
@@ -601,76 +638,65 @@ export function ManagerLayout() {
                               Kategoriya
                             </th>
                             <th className="px-4 py-3 font-medium">Narxi</th>
-                            <th className="px-4 py-3 font-medium">Holat</th>
-                            <th className="px-4 py-3 font-medium">Rasm</th>
+                            <th className="px-4 py-3 font-medium">Holati</th>
                             <th className="px-4 py-3 font-medium text-right">
                               Amallar
                             </th>
                           </tr>
                         </thead>
-
-                        <tbody>
-                          {filteredFoods.length === 0 ? (
-                            <tr>
-                              <td
-                                colSpan={7}
-                                className="px-4 py-14 text-center text-gray-500"
-                              >
-                                Hech qanday taom topilmadi
+                        <tbody className="divide-y divide-white/5">
+                          {filteredFoods.map((food, index) => (
+                            <tr
+                              key={food.id}
+                              className="hover:bg-white/[0.02] transition-colors"
+                            >
+                              <td className="px-4 py-3 text-gray-500">
+                                {index + 1}
                               </td>
-                            </tr>
-                          ) : (
-                            filteredFoods.map((food) => (
-                              <tr
-                                key={food.id}
-                                className="border-b border-white/5 last:border-0 hover:bg-white/[0.03]"
-                              >
-                                <td className="px-4 py-3 text-gray-500">
-                                  #{String(food.id).padStart(3, "0")}
-                                </td>
-
-                                <td className="px-4 py-3 font-medium text-gray-100">
-                                  {food.name}
-                                </td>
-
-                                <td className="px-4 py-3 text-gray-400">
-                                  {food.category}
-                                </td>
-
-                                <td className="px-4 py-3 text-gray-200 font-medium">
-                                  {formatSum(food.price)}
-                                </td>
-
-                                <td className="px-4 py-3">
-                                  <span
-                                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
-                                      food.status === "Mavjud"
-                                        ? "bg-emerald-500/10 text-emerald-400"
-                                        : "bg-red-500/10 text-red-400"
-                                    }`}
-                                  >
-                                    {food.status}
-                                  </span>
-                                </td>
-
-                                <td className="px-4 py-3 text-gray-400 text-xs">
-                                  {food.image}
-                                </td>
-
-                                <td className="px-4 py-3 text-right space-x-2">
-                                  <button className="p-1.5 text-gray-400 hover:text-amber-400 hover:bg-white/5 rounded-lg transition-colors">
-                                    <Edit size={16} />
+                              <td className="px-4 py-3 font-medium text-white">
+                                {food.name}
+                              </td>
+                              <td className="px-4 py-3 text-gray-400">
+                                {food.category}
+                              </td>
+                              <td className="px-4 py-3 text-amber-400 font-medium">
+                                {formatSum ? formatSum(food.price) : food.price}
+                              </td>
+                              <td className="px-4 py-3">
+                                <span
+                                  className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                                    food.status === "Mavjud"
+                                      ? "bg-emerald-500/10 text-emerald-400"
+                                      : "bg-red-500/10 text-red-400"
+                                  }`}
+                                >
+                                  {food.status}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                  <button className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 flex items-center justify-center transition-colors cursor-pointer">
+                                    <Edit size={14} />
                                   </button>
-
                                   <button
                                     onClick={() => handleDeleteFood(food.id)}
-                                    className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors"
+                                    className="w-8 h-8 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 flex items-center justify-center transition-colors cursor-pointer"
                                   >
-                                    <Trash2 size={16} />
+                                    <Trash2 size={14} />
                                   </button>
-                                </td>
-                              </tr>
-                            ))
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                          {filteredFoods.length === 0 && (
+                            <tr>
+                              <td
+                                colSpan={6}
+                                className="px-4 py-8 text-center text-gray-500"
+                              >
+                                Taomlar topilmadi
+                              </td>
+                            </tr>
                           )}
                         </tbody>
                       </table>
@@ -680,8 +706,10 @@ export function ManagerLayout() {
               </div>
             </div>
           ) : (
-            <div className="text-gray-400 flex items-center justify-center h-full">
-              Ushbu bo‘lim hozirda ishlab chiqilmoqda...
+            <div className="flex flex-col items-center justify-center h-64 text-gray-400 space-y-2">
+              <UtensilsCrossed size={36} className="text-amber-400/50" />
+              <p className="text-base font-medium text-white">{headerTitle} sahifasi</p>
+              <p className="text-xs text-gray-500">Ushbu bo'lim tez orada to'liq ishga tushiriladi.</p>
             </div>
           )}
         </main>

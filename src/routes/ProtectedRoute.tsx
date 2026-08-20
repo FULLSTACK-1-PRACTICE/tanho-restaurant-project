@@ -1,12 +1,19 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-export function ProtectedRoute() {
-  // LocalStorage'da token yoki role bor-yo'qligini tekshiramiz
-  const token = localStorage.getItem("token") || localStorage.getItem("role");
+interface ProtectedRouteProps {
+  allowedRoles?: string[];
+}
 
-  // Agar token/role bo'lmasa, majburan login sahifasiga yuboramiz va brauzer tarixini tozalaymiz (replace)
+export function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
+  const token = localStorage.getItem("token") || localStorage.getItem("role");
+  const currentRole = localStorage.getItem("role") || "";
+
   if (!token) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(currentRole)) {
+    return <Navigate to="/" replace />;
   }
 
   return <Outlet />;

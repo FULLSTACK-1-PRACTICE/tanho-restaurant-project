@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
+import oshimg from "../../../assets/images/Menu/Cards/osh.png";
+import lagmonimg from "../../../assets/images/Menu/Cards/suyuk lag'mon.png";
+
 import {
   Cake,
   ChevronRight,
@@ -46,7 +50,7 @@ const MenuPage = () => {
       price: 38000,
       status: "Mavjud",
       description: "An'anaviy Toshkent to'y palovi, qazi va tuxum bilan.",
-      image: "https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=600&q=80",
+      image: oshimg,
     },
     {
       id: "menu-2",
@@ -163,7 +167,7 @@ const MenuPage = () => {
       price: 38000,
       status: "Mavjud",
       description: "Qo'lda cho'zilgan xamir va qovurilgan go'sht-sabzavotlar.",
-      image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+      image: lagmonimg,
     },
     {
       id: "menu-15",

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Check, Eye, EyeOff, X } from 'lucide-react'
 
@@ -35,8 +36,24 @@ export default function AuthModal({
   const [registerPassword, setRegisterPassword] = useState('')
   const [registerPassword2, setRegisterPassword2] = useState('')
 
+  const resetForm = () => {
+    setEmail('')
+    setPassword('')
+    setRegisterName('')
+    setRegisterSurname('')
+    setRegisterEmail('')
+    setRegisterPhone('')
+    setRegisterPassword('')
+    setRegisterPassword2('')
+    setShowPass(false)
+    setShowPass2(false)
+  }
+
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) {
+      queueMicrotask(() => resetForm())
+      return
+    }
 
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -63,54 +80,40 @@ export default function AuthModal({
     setShowPass2(false)
   }
 
-  const handleLogin = (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     const cleanEmail = email.trim().toLowerCase()
     const cleanPassword = password.trim()
 
-    if (
-      cleanEmail === 'admin@gmail.com' &&
-      cleanPassword === '12345'
-    ) {
-      localStorage.setItem('role', 'admin')
+    const setAuth = (role: string) => {
+      localStorage.setItem('token', 'fake-jwt-token')
+      localStorage.setItem('role', role)
       localStorage.setItem('userEmail', cleanEmail)
+      resetForm()
       onClose()
+    }
+
+    if (cleanEmail === 'admin@gmail.com' && cleanPassword === '12345') {
+      setAuth('admin')
       navigate('/admin')
       return
     }
 
-    if (
-      cleanEmail === 'user@gmail.com' &&
-      cleanPassword === '12345'
-    ) {
-      localStorage.setItem('role', 'user')
-      localStorage.setItem('userEmail', cleanEmail)
-      onClose()
+    if (cleanEmail === 'user@gmail.com' && cleanPassword === '12345') {
+      setAuth('user')
       navigate('/user')
       return
     }
 
-    if (
-      cleanEmail === 'cashsher@gmail.com' &&
-      cleanPassword === '12345'
-    ) {
-      localStorage.setItem('role', 'cashier')
-      localStorage.setItem('userEmail', cleanEmail)
-      onClose()
+    if (cleanEmail === 'cashsher@gmail.com' && cleanPassword === '12345') {
+      setAuth('cashier')
       navigate('/cashier')
       return
     }
 
-    if (
-      cleanEmail === 'manager@gmail.com' &&
-      cleanPassword === '12345'
-    ) {
-      localStorage.setItem('role', 'manager')
-      localStorage.setItem('userEmail', cleanEmail)
-      onClose()
+    if (cleanEmail === 'manager@gmail.com' && cleanPassword === '12345') {
+      setAuth('manager')
       navigate('/manager')
       return
     }
@@ -118,9 +121,7 @@ export default function AuthModal({
     alert("Email yoki parol noto'g'ri")
   }
 
-  const handleRegister = (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleRegister = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (
@@ -166,10 +167,7 @@ export default function AuthModal({
           onClick={onClose}
           className="group absolute right-4 top-4 z-20 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-white/50 transition-all duration-300 hover:rotate-90 hover:bg-white/10 hover:text-white active:scale-90"
         >
-          <X
-            size={20}
-            className="transition-transform duration-300"
-          />
+          <X size={20} className="transition-transform duration-300" />
         </button>
 
         <div className="relative z-10">
@@ -198,10 +196,7 @@ export default function AuthModal({
             </TabButton>
           </div>
 
-          <div
-            key={tab}
-            className="animate-[contentIn_300ms_ease-out]"
-          >
+          <div key={tab} className="animate-[contentIn_300ms_ease-out]">
             {tab === 'kirish' ? (
               <LoginForm
                 email={email}
@@ -304,22 +299,16 @@ export default function AuthModal({
 interface TabButtonProps {
   active: boolean
   onClick: () => void
-  children: React.ReactNode
+  children: ReactNode
 }
 
-function TabButton({
-  active,
-  onClick,
-  children,
-}: TabButtonProps) {
+function TabButton({ active, onClick, children }: TabButtonProps) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={`relative flex-1 cursor-pointer pb-3 text-sm font-medium transition-all duration-300 ${
-        active
-          ? 'text-amber-400'
-          : 'text-white/50 hover:text-white/80'
+        active ? 'text-amber-400' : 'text-white/50 hover:text-white/80'
       }`}
     >
       <span className="inline-block transition-transform duration-300 active:scale-95">
@@ -335,17 +324,15 @@ function TabButton({
 
 interface LoginFormProps {
   email: string
-  setEmail: React.Dispatch<React.SetStateAction<string>>
+  setEmail: Dispatch<SetStateAction<string>>
   password: string
-  setPassword: React.Dispatch<React.SetStateAction<string>>
+  setPassword: Dispatch<SetStateAction<string>>
   remember: boolean
-  setRemember: React.Dispatch<React.SetStateAction<boolean>>
+  setRemember: Dispatch<SetStateAction<boolean>>
   showPass: boolean
-  setShowPass: React.Dispatch<React.SetStateAction<boolean>>
+  setShowPass: Dispatch<SetStateAction<boolean>>
   onRegister: () => void
-  onSubmit: (
-    event: React.FormEvent<HTMLFormElement>
-  ) => void
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void
 }
 
 function LoginForm({
@@ -361,15 +348,13 @@ function LoginForm({
   onSubmit,
 }: LoginFormProps) {
   return (
-    <form
-      className="space-y-4"
-      onSubmit={onSubmit}
-    >
+    <form className="space-y-4" onSubmit={onSubmit} autoComplete="off">
       <Input
         type="email"
         placeholder="Email manzilingiz"
         value={email}
         onChange={setEmail}
+        autoComplete="new-password"
       />
 
       <PasswordInput
@@ -377,9 +362,8 @@ function LoginForm({
         show={showPass}
         value={password}
         onChange={setPassword}
-        onToggle={() =>
-          setShowPass((value) => !value)
-        }
+        onToggle={() => setShowPass((value) => !value)}
+        autoComplete="new-password"
       />
 
       <div className="flex items-center justify-between pt-1 text-sm">
@@ -388,9 +372,7 @@ function LoginForm({
             <input
               type="checkbox"
               checked={remember}
-              onChange={(event) =>
-                setRemember(event.target.checked)
-              }
+              onChange={(event) => setRemember(event.target.checked)}
               className="h-4 w-4 cursor-pointer appearance-none rounded border border-white/30 bg-transparent transition-all duration-200 checked:border-amber-400 checked:bg-amber-400"
             />
 
@@ -414,9 +396,7 @@ function LoginForm({
         </button>
       </div>
 
-      <SubmitButton>
-        Kirish
-      </SubmitButton>
+      <SubmitButton>Kirish</SubmitButton>
 
       <Divider />
 
@@ -438,25 +418,23 @@ function LoginForm({
 
 interface RegisterFormProps {
   name: string
-  setName: React.Dispatch<React.SetStateAction<string>>
+  setName: Dispatch<SetStateAction<string>>
   surname: string
-  setSurname: React.Dispatch<React.SetStateAction<string>>
+  setSurname: Dispatch<SetStateAction<string>>
   email: string
-  setEmail: React.Dispatch<React.SetStateAction<string>>
+  setEmail: Dispatch<SetStateAction<string>>
   phone: string
-  setPhone: React.Dispatch<React.SetStateAction<string>>
+  setPhone: Dispatch<SetStateAction<string>>
   password: string
-  setPassword: React.Dispatch<React.SetStateAction<string>>
+  setPassword: Dispatch<SetStateAction<string>>
   password2: string
-  setPassword2: React.Dispatch<React.SetStateAction<string>>
+  setPassword2: Dispatch<SetStateAction<string>>
   showPass: boolean
   showPass2: boolean
-  setShowPass: React.Dispatch<React.SetStateAction<boolean>>
-  setShowPass2: React.Dispatch<React.SetStateAction<boolean>>
+  setShowPass: Dispatch<SetStateAction<boolean>>
+  setShowPass2: Dispatch<SetStateAction<boolean>>
   onLogin: () => void
-  onSubmit: (
-    event: React.FormEvent<HTMLFormElement>
-  ) => void
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void
 }
 
 function RegisterForm({
@@ -480,10 +458,7 @@ function RegisterForm({
   onSubmit,
 }: RegisterFormProps) {
   return (
-    <form
-      className="space-y-4"
-      onSubmit={onSubmit}
-    >
+    <form className="space-y-4" onSubmit={onSubmit} autoComplete="off">
       <div className="grid grid-cols-2 gap-3">
         <Input
           type="text"
@@ -505,6 +480,7 @@ function RegisterForm({
         placeholder="Email manzilingiz"
         value={email}
         onChange={setEmail}
+        autoComplete="new-password"
       />
 
       <Input
@@ -520,9 +496,8 @@ function RegisterForm({
           show={showPass}
           value={password}
           onChange={setPassword}
-          onToggle={() =>
-            setShowPass((value) => !value)
-          }
+          onToggle={() => setShowPass((value) => !value)}
+          autoComplete="new-password"
         />
 
         <PasswordInput
@@ -530,15 +505,12 @@ function RegisterForm({
           show={showPass2}
           value={password2}
           onChange={setPassword2}
-          onToggle={() =>
-            setShowPass2((value) => !value)
-          }
+          onToggle={() => setShowPass2((value) => !value)}
+          autoComplete="new-password"
         />
       </div>
 
-      <SubmitButton>
-        Ro'yxatdan o'tish
-      </SubmitButton>
+      <SubmitButton>Ro'yxatdan o'tish</SubmitButton>
 
       <Divider />
 
@@ -562,7 +534,8 @@ interface InputProps {
   type: string
   placeholder: string
   value: string
-  onChange: React.Dispatch<React.SetStateAction<string>>
+  onChange: Dispatch<SetStateAction<string>>
+  autoComplete?: string
 }
 
 function Input({
@@ -570,15 +543,15 @@ function Input({
   placeholder,
   value,
   onChange,
+  autoComplete = 'off',
 }: InputProps) {
   return (
     <input
       type={type}
       placeholder={placeholder}
       value={value}
-      onChange={(event) =>
-        onChange(event.target.value)
-      }
+      autoComplete={autoComplete}
+      onChange={(event) => onChange(event.target.value)}
       className={`${inputClass} cursor-text transition-all duration-300 hover:border-white/25`}
     />
   )
@@ -588,8 +561,9 @@ interface PasswordInputProps {
   placeholder: string
   show: boolean
   value: string
-  onChange: React.Dispatch<React.SetStateAction<string>>
+  onChange: Dispatch<SetStateAction<string>>
   onToggle: () => void
+  autoComplete?: string
 }
 
 function PasswordInput({
@@ -598,6 +572,7 @@ function PasswordInput({
   value,
   onChange,
   onToggle,
+  autoComplete = 'off',
 }: PasswordInputProps) {
   return (
     <div className="relative">
@@ -605,50 +580,35 @@ function PasswordInput({
         type={show ? 'text' : 'password'}
         placeholder={placeholder}
         value={value}
-        onChange={(event) =>
-          onChange(event.target.value)
-        }
+        autoComplete={autoComplete}
+        onChange={(event) => onChange(event.target.value)}
         className={`${inputClass} pr-11`}
       />
 
       <button
         type="button"
         onClick={onToggle}
-        aria-label={
-          show
-            ? 'Parolni yashirish'
-            : 'Parolni ko‘rsatish'
-        }
+        aria-label={show ? 'Parolni yashirish' : 'Parolni ko‘rsatish'}
         className="absolute right-3 top-1/2 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-md p-1 text-white/40 transition-all duration-200 hover:scale-110 hover:bg-white/5 hover:text-white active:scale-90"
       >
         <span
           key={show ? 'eye-off' : 'eye'}
           className="animate-[iconIn_200ms_ease-out]"
         >
-          {show ? (
-            <EyeOff size={18} />
-          ) : (
-            <Eye size={18} />
-          )}
+          {show ? <EyeOff size={18} /> : <Eye size={18} />}
         </span>
       </button>
     </div>
   )
 }
 
-function SubmitButton({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+function SubmitButton({ children }: { children: ReactNode }) {
   return (
     <button
       type="submit"
       className="group relative mt-2 w-full cursor-pointer overflow-hidden rounded-lg bg-amber-400 py-3 text-sm font-semibold text-neutral-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-[0_8px_25px_rgba(251,191,36,0.2)] active:translate-y-0 active:scale-[0.98]"
     >
-      <span className="relative z-10">
-        {children}
-      </span>
+      <span className="relative z-10">{children}</span>
       <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-full" />
     </button>
   )
@@ -658,9 +618,7 @@ function Divider() {
   return (
     <div className="flex items-center gap-3 py-1">
       <div className="h-px flex-1 bg-white/10" />
-      <span className="text-xs text-white/40">
-        yoki
-      </span>
+      <span className="text-xs text-white/40">yoki</span>
       <div className="h-px flex-1 bg-white/10" />
     </div>
   )
@@ -688,18 +646,9 @@ function SocialButtons() {
   )
 }
 
-function GoogleIcon({
-  className = '',
-}: {
-  className?: string
-}) {
+function GoogleIcon({ className = '' }: { className?: string }) {
   return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 48 48"
-      className={className}
-    >
+    <svg width="16" height="16" viewBox="0 0 48 48" className={className}>
       <path
         fill="#FFC107"
         d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"
@@ -720,11 +669,7 @@ function GoogleIcon({
   )
 }
 
-function FacebookIcon({
-  className = '',
-}: {
-  className?: string
-}) {
+function FacebookIcon({ className = '' }: { className?: string }) {
   return (
     <svg
       width="16"

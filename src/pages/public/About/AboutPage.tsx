@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 import Container from '../../../components/ui/container/Container';
+import aboutImg from "../../../assets/images/Landing/About/Tanho-Img.png";
 
 const AboutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -189,7 +190,7 @@ const AboutPage: React.FC = () => {
 
           <div className="relative rounded-2xl overflow-hidden border border-gray-800/80 shadow-2xl">
             <img
-              src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=1200&auto=format&fit=crop"
+              src={aboutImg}
               alt="TANHO Restaurant Interior"
               className="w-full h-[400px] object-cover"
             />

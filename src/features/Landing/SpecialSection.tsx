@@ -1,106 +1,125 @@
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, Flame, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const offers = [
   {
+    type: "promo",
     title: "Birinchi buyurtmangizga",
     discount: "10% CHEGIRMA!",
+    description: "Maxsus promo-kod orqali birinchi buyurtmada chegirmani qo'lga kiriting.",
     button: "Buyurtma berish",
-    image: "/images/offer-food.jpg",
+    image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop",
+    link: "/menu",
   },
   {
+    type: "dish",
+    badge: "KUN TAOMI",
+    title: "Tanho Premium Set",
+    discount: "185,000 UZS",
+    description: "Chef tavsiyasi: Saralangan go'sht va maxsus sous bilan tayyorlangan.",
+    button: "Tafsilotlar",
+    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop",
+    link: "/menu",
+  },
+  {
+    type: "promo",
     title: "Tug‘ilgan kuningizda",
     discount: "20% CHEGIRMA!",
-    button: "Batafsil",
-    image: "/images/offer-cake.jpg",
-  },
-  {
-    title: "Korporativ tadbirlar",
-    discount: "uchun maxsus takliflar!",
-    button: "Batafsil",
-    image: "/images/offer-event.jpg",
+    description: "Tug'ilgan kun egalari va yaqinlari uchun maxsus bayramona chegirma.",
+    button: "Stol band qilish",
+    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop",
+    link: "/reservation",
   },
 ];
 
 const news = [
   {
-    date: "01.05.2024",
+    id: "1",
+    date: "01.05.2026",
     title: "Yangi yozgi menyu taqdim etildi!",
-    description:
-      "Yoz fasli uchun maxsus yangilangan taomlar bilan tanishing.",
-    image: "/images/news-1.jpg",
+    description: "Yoz fasli uchun maxsus yangilangan salqin ichimliklar va taomlar.",
+    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=300&auto=format&fit=crop",
   },
   {
-    date: "18.04.2024",
-    title: "Ramazon hayiti munosabati bilan maxsus menyu",
-    description:
-      "Bayramingiz muborak bo‘lsin! Maxsus taomlar bilan sizni kutamiz.",
-    image: "/images/news-2.jpg",
+    id: "2",
+    date: "18.04.2026",
+    title: "Jonli musiqa va kechki dastur",
+    description: "Har juma va shanba kunlari nufuzli sozandalar ijrosida jonli ijro.",
+    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=300&auto=format&fit=crop",
   },
   {
-    date: "10.04.2024",
-    title: "Birga jonli musiqa kechalari",
-    description:
-      "Har juma va shanba kunlari yoqimli musiqa va ajoyib atmosfera.",
-    image: "/images/news-3.jpg",
+    id: "3",
+    date: "10.04.2026",
+    title: "Korporativ bayramlar uchun maxsus menyu",
+    description: "Jamoangiz bilan unutilmas kecha o'tkazish uchun shinam va nafis zallar.",
+    image: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=300&auto=format&fit=crop",
   },
 ];
 
 function SpecialSection() {
-  return (
-    <section className="w-full bg-[#050708] py-8">
-      <div className="mx-auto max-w-[1200px] px-4 lg:px-0">
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.65fr_1fr]">
-          
-          <div>
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="font-serif text-[25px] text-[#f1eee7]">
-                Maxsus takliflar
-              </h2>
+  const navigate = useNavigate();
 
-              <button className="group flex cursor-pointer items-center gap-1 text-[11px] text-[#dcae43] transition hover:text-[#f2c866]">
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=crop";
+  };
+
+  return (
+    <section className="w-full bg-[#050708] py-12 overflow-hidden">
+      <div className="mx-auto max-w-[1250px] px-4 lg:px-6">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.7fr_1fr] items-stretch">
+          
+          {/* Chap qism: Maxsus takliflar (flex-col va h-full orqali to'liq tenglashtirildi) */}
+          <div className="flex flex-col justify-between">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Sparkles size={18} className="text-[#dcae43]" />
+                <h2 className="font-serif text-[20px] md:text-[24px] text-[#f1eee7]">
+                  Maxsus takliflar & Hit taomlar
+                </h2>
+              </div>
+              <button
+                onClick={() => navigate("/menu")}
+                className="group flex cursor-pointer items-center gap-1 text-[12px] font-medium text-[#dcae43] transition hover:text-[#f2c866]"
+              >
                 Barchasini ko‘rish
-                <ArrowRight
-                  size={14}
-                  className="transition-transform duration-300 group-hover:translate-x-1"
-                />
+                <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
               </button>
             </div>
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 h-full">
               {offers.map((offer, index) => (
                 <div
                   key={index}
-                  className="group relative min-h-[235px] cursor-pointer overflow-hidden rounded-lg border border-[#25292b] bg-[#0a0d0f] transition-all duration-300 hover:-translate-y-1 hover:border-[#8d6928] hover:shadow-[0_12px_35px_rgba(0,0,0,0.45)]"
+                  onClick={() => navigate(offer.link)}
+                  className="group relative w-full flex flex-col justify-between overflow-hidden rounded-xl border border-[#25292b] bg-[#0a0d0f] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-[#8d6928] hover:shadow-[0_12px_35px_rgba(0,0,0,0.55)] h-full"
                 >
                   <img
                     src={offer.image}
                     alt={offer.title}
+                    onError={handleImageError}
                     className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050708] via-[#050708]/80 to-[#050708]/40" />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#050708] via-[#050708]/65 to-[#050708]/20" />
-
-                  <div className="relative z-10 flex h-full min-h-[235px] flex-col justify-between p-3">
+                  <div className="relative z-10 flex h-full flex-col justify-between">
                     <div>
-                      <p className="font-serif text-[14px] leading-5 text-[#f1eee7]">
-                        {offer.title}
-                      </p>
-
-                      <p className="mt-0.5 font-serif text-[17px] leading-5 text-[#f1eee7]">
-                        {offer.discount}
-                      </p>
+                      {offer.type === "dish" ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#dcae43] px-2 py-0.5 text-[9px] font-bold text-[#050708]">
+                          <Flame size={10} />
+                          {offer.badge}
+                        </span>
+                      ) : (
+                        <span className="text-[10px] uppercase tracking-wider text-[#dcae43]">AKSIYA</span>
+                      )}
+                      <p className="mt-2 font-serif text-[15px] font-medium leading-snug text-[#f1eee7]">{offer.title}</p>
+                      <p className="mt-1 font-serif text-[18px] font-bold text-[#dcae43]">{offer.discount}</p>
+                      <p className="mt-1.5 text-[10px] leading-tight text-[#b9b9b5] line-clamp-2">{offer.description}</p>
                     </div>
 
-                    <div>
-                      <button className="cursor-pointer rounded-md border border-[#dcae43] bg-[#dcae43] px-3 py-2 text-[10px] font-medium text-[#111] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#efc15e] hover:shadow-[0_5px_18px_rgba(220,174,67,0.25)]">
+                    <div className="mt-4">
+                      <button className="w-full cursor-pointer rounded-lg border border-[#dcae43] bg-[#dcae43] py-2 text-[11px] font-semibold text-[#08090a] transition-all duration-300 hover:bg-[#efc15e]">
                         {offer.button}
                       </button>
-
-                      {offer.code && (
-                        <p className="mt-3 max-w-[100px] text-[8px] leading-3 text-[#b9b9b5]">
-                          {offer.code}
-                        </p>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -108,54 +127,42 @@ function SpecialSection() {
             </div>
           </div>
 
-          <div>
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="font-serif text-[25px] text-[#f1eee7]">
-                Tadbirlar va yangiliklar
-              </h2>
-
-              <button className="group flex cursor-pointer items-center gap-1 whitespace-nowrap text-[11px] text-[#dcae43] transition hover:text-[#f2c866]">
+          {/* O'ng qism: Yangiliklar */}
+          <div className="flex flex-col justify-between">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-serif text-[20px] md:text-[24px] text-[#f1eee7]">Tadbirlar va yangiliklar</h2>
+              <button
+                onClick={() => navigate("/news")}
+                className="group flex cursor-pointer items-center gap-1 whitespace-nowrap text-[12px] font-medium text-[#dcae43] transition hover:text-[#f2c866]"
+              >
                 Barchasini ko‘rish
-                <ArrowRight
-                  size={14}
-                  className="transition-transform duration-300 group-hover:translate-x-1"
-                />
+                <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
               </button>
             </div>
 
-            <div className="overflow-hidden rounded-lg border border-[#25292b] bg-[#090c0e]">
-              {news.map((item, index) => (
+            <div className="overflow-hidden rounded-xl border border-[#25292b] bg-[#090c0e] flex flex-col justify-between h-full">
+              {news.map((item) => (
                 <div
-                  key={index}
-                  className="group flex min-h-[78px] cursor-pointer items-center gap-3 border-b border-[#202427] px-2.5 py-2 transition duration-300 last:border-b-0 hover:bg-[#101416]"
+                  key={item.id}
+                  onClick={() => navigate(`/news/${item.id}`)}
+                  className="group flex flex-1 cursor-pointer items-center gap-3.5 border-b border-[#202427] p-3 transition duration-300 last:border-b-0 hover:bg-[#121619]"
                 >
-                  <div className="h-[62px] w-[82px] shrink-0 overflow-hidden rounded-md">
+                  <div className="h-[72px] w-[85px] shrink-0 overflow-hidden rounded-lg bg-[#1a1d1f]">
                     <img
                       src={item.image}
                       alt={item.title}
+                      onError={handleImageError}
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
                     />
                   </div>
-
                   <div className="min-w-0 flex-1">
-                    <p className="text-[8px] text-[#8f918e]">
-                      {item.date}
-                    </p>
-
-                    <h3 className="mt-1 truncate text-[11px] font-medium text-[#eeeae2] transition group-hover:text-[#e2b34c]">
+                    <p className="text-[9px] font-medium text-[#8f918e]">{item.date}</p>
+                    <h3 className="mt-0.5 truncate text-[12px] font-medium text-[#eeeae2] transition group-hover:text-[#e2b34c]">
                       {item.title}
                     </h3>
-
-                    <p className="mt-1 line-clamp-2 text-[8px] leading-3 text-[#898b88]">
-                      {item.description}
-                    </p>
+                    <p className="mt-1 line-clamp-2 text-[10px] leading-relaxed text-[#898b88]">{item.description}</p>
                   </div>
-
-                  <ChevronRight
-                    size={17}
-                    strokeWidth={1.5}
-                    className="shrink-0 text-[#b98628] transition duration-300 group-hover:translate-x-1 group-hover:text-[#e2b34c]"
-                  />
+                  <ChevronRight size={18} strokeWidth={1.5} className="shrink-0 text-[#8f918e] transition duration-300 group-hover:translate-x-1 group-hover:text-[#e2b34c]" />
                 </div>
               ))}
             </div>

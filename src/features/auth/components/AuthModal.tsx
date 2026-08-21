@@ -2,11 +2,26 @@ import { useEffect, useState } from 'react'
 import type { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Check, Eye, EyeOff, X } from 'lucide-react'
+import { toast } from 'sonner'
 
 type Tab = 'kirish' | 'royxatdan'
 
 const inputClass =
   'w-full rounded-lg border border-white/15 bg-transparent px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-amber-400/70 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(251,191,36,0.08)]'
+
+const toastStyle = {
+  style: {
+    width: '360px',
+    minHeight: '64px',
+    background: '#1f1f23',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    color: '#fff',
+  },
+  duration: 3000,
+}
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const phoneRegex = /^\+?[0-9]{9,13}$/
 
 export interface AuthModalProps {
   isOpen: boolean
@@ -56,7 +71,18 @@ export default function AuthModal({
     }
 
     const previousOverflow = document.body.style.overflow
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    
     document.body.style.overflow = 'hidden'
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`
+      const fixedElements = document.querySelectorAll('header, nav, .fixed, [class*="fixed"]')
+      fixedElements.forEach((el) => {
+        const htmlEl = el as HTMLElement
+        const currentPad = window.getComputedStyle(htmlEl).paddingRight
+        htmlEl.style.paddingRight = `${parseFloat(currentPad || '0') + scrollbarWidth}px`
+      })
+    }
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -68,6 +94,12 @@ export default function AuthModal({
 
     return () => {
       document.body.style.overflow = previousOverflow
+      document.body.style.paddingRight = ''
+      const fixedElements = document.querySelectorAll('header, nav, .fixed, [class*="fixed"]')
+      fixedElements.forEach((el) => {
+        const htmlEl = el as HTMLElement
+        htmlEl.style.paddingRight = ''
+      })
       window.removeEventListener('keydown', handleEscape)
     }
   }, [isOpen, onClose])
@@ -86,39 +118,64 @@ export default function AuthModal({
     const cleanEmail = email.trim().toLowerCase()
     const cleanPassword = password.trim()
 
-    const setAuth = (role: string) => {
+    if (!cleanEmail && !cleanPassword) {
+      toast.error("Iltimos, email va parolni kiriting", toastStyle)
+      return
+    }
+
+    if (!cleanEmail) {
+      toast.error("Iltimos, emailni kiriting", toastStyle)
+      return
+    }
+
+    if (!cleanPassword) {
+      toast.error("Iltimos, parolni kiriting", toastStyle)
+      return
+    }
+
+    if (!emailRegex.test(cleanEmail)) {
+      toast.error("Iltimos, yaroqli email manzilini kiriting", toastStyle)
+      return
+    }
+
+    const executeLogin = (role: string, redirectPath: string, roleName: string) => {
       localStorage.setItem('token', 'fake-jwt-token')
       localStorage.setItem('role', role)
       localStorage.setItem('userEmail', cleanEmail)
-      resetForm()
-      onClose()
+
+      toast.success('Tizimga muvaffaqiyatli kirdingiz!', {
+        ...toastStyle,
+        description: `Xush kelibsiz, ${roleName}!`,
+      })
+
+      setTimeout(() => {
+        resetForm()
+        onClose()
+        navigate(redirectPath)
+      }, 500)
     }
 
     if (cleanEmail === 'admin@gmail.com' && cleanPassword === '12345') {
-      setAuth('admin')
-      navigate('/admin')
+      executeLogin('admin', '/admin', 'Admin')
       return
     }
 
     if (cleanEmail === 'user@gmail.com' && cleanPassword === '12345') {
-      setAuth('user')
-      navigate('/user')
+      executeLogin('user', '/user', 'Foydalanuvchi')
       return
     }
 
     if (cleanEmail === 'cashsher@gmail.com' && cleanPassword === '12345') {
-      setAuth('cashier')
-      navigate('/cashier')
+      executeLogin('cashier', '/cashier', 'Kassir')
       return
     }
 
     if (cleanEmail === 'manager@gmail.com' && cleanPassword === '12345') {
-      setAuth('manager')
-      navigate('/manager')
+      executeLogin('manager', '/manager', 'Menejer')
       return
     }
 
-    alert("Email yoki parol noto'g'ri")
+    toast.error("Email yoki parol noto'g'ri", toastStyle)
   }
 
   const handleRegister = (event: FormEvent<HTMLFormElement>) => {
@@ -132,16 +189,29 @@ export default function AuthModal({
       !registerPassword ||
       !registerPassword2
     ) {
-      alert("Iltimos, barcha maydonlarni to'ldiring")
+      toast.error("Iltimos, barcha maydonlarni to'ldiring", toastStyle)
+      return
+    }
+
+    if (!emailRegex.test(registerEmail.trim())) {
+      toast.error("Yaroqli email formatini kiriting", toastStyle)
+      return
+    }
+
+    if (!phoneRegex.test(registerPhone.trim())) {
+      toast.error("Yaroqli telefon raqamini kiriting (masalan: +998901234567)", toastStyle)
       return
     }
 
     if (registerPassword !== registerPassword2) {
-      alert('Parollar bir xil emas')
+      toast.error('Parollar bir xil emas', toastStyle)
       return
     }
 
-    alert("Ro'yxatdan o'tish muvaffaqiyatli!")
+    toast.success("Ro'yxatdan o'tish muvaffaqiyatli!", {
+      ...toastStyle,
+      description: 'Endi tizimga kirishingiz mumkin.',
+    })
 
     setEmail(registerEmail)
     setPassword(registerPassword)
@@ -350,7 +420,7 @@ function LoginForm({
   return (
     <form className="space-y-4" onSubmit={onSubmit} autoComplete="off">
       <Input
-        type="email"
+        type="text"
         placeholder="Email manzilingiz"
         value={email}
         onChange={setEmail}
@@ -400,7 +470,7 @@ function LoginForm({
 
       <Divider />
 
-      <SocialButtons />
+      <SocialButton />
 
       <p className="pt-1 text-center text-sm text-white/50">
         Hisobingiz yo'qmi?{' '}
@@ -476,7 +546,7 @@ function RegisterForm({
       </div>
 
       <Input
-        type="email"
+        type="text"
         placeholder="Email manzilingiz"
         value={email}
         onChange={setEmail}
@@ -485,7 +555,7 @@ function RegisterForm({
 
       <Input
         type="tel"
-        placeholder="Telefon raqamingiz"
+        placeholder="Telefon raqamingiz (+998...)"
         value={phone}
         onChange={setPhone}
       />
@@ -514,7 +584,7 @@ function RegisterForm({
 
       <Divider />
 
-      <SocialButtons />
+      <SocialButton />
 
       <p className="pt-1 text-center text-sm text-white/50">
         Hisobingiz bormi?{' '}
@@ -624,25 +694,15 @@ function Divider() {
   )
 }
 
-function SocialButtons() {
+function SocialButton() {
   return (
-    <div className="grid grid-cols-2 gap-3">
-      <button
-        type="button"
-        className="group flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/15 px-2 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] sm:text-sm"
-      >
-        <GoogleIcon className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
-        <span>Google</span>
-      </button>
-
-      <button
-        type="button"
-        className="group flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/15 px-2 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] sm:text-sm"
-      >
-        <FacebookIcon className="transition-transform duration-300 group-hover:scale-110" />
-        <span>Facebook</span>
-      </button>
-    </div>
+    <button
+      type="button"
+      className="group flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/15 px-4 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] sm:text-sm"
+    >
+      <GoogleIcon className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
+      <span>Google</span>
+    </button>
   )
 }
 
@@ -665,20 +725,6 @@ function GoogleIcon({ className = '' }: { className?: string }) {
         fill="#1976D2"
         d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.6l6.6 5.6C41.4 36 44 30.5 44 24c0-1.3-.1-2.7-.4-3.5z"
       />
-    </svg>
-  )
-}
-
-function FacebookIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="#1877F2"
-      className={className}
-    >
-      <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879v-6.988h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.63.771-1.63 1.562V12h2.773l-.443 2.891h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
     </svg>
   )
 }

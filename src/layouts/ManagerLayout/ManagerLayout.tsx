@@ -26,7 +26,6 @@ export default function ManagerLayout() {
 
   return (
     <div className="flex h-screen bg-[#0a0a0b] text-gray-200 overflow-hidden relative">
-      {/* Toast Xabarnoma */}
       {showLogoutToast && (
         <div className="fixed top-5 right-5 z-[100] flex items-center gap-3 px-4 py-3 bg-[#161619] border border-amber-500/30 rounded-2xl shadow-2xl animate-bounce">
           <CheckCircle2 className="text-amber-400" size={18} />
@@ -36,7 +35,6 @@ export default function ManagerLayout() {
         </div>
       )}
 
-      {/* Yon menyu (Sidebar) */}
       <Sidebar
         sidebarOpen={sidebarOpen}
         mobileSidebarOpen={mobileSidebarOpen}
@@ -52,7 +50,6 @@ export default function ManagerLayout() {
       />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Yuqori panel (Navbar) */}
         <Navbar
           onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
           headerTitle={
@@ -76,7 +73,6 @@ export default function ManagerLayout() {
           }}
         />
 
-        {/* Ichki sahifalar yuklanadigan asosiy maydon */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-[#0a0a0b]">
           <Outlet context={{ headerSearch }} />
         </main>

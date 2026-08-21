@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Search, Bell, ChevronDown, LogOut, Settings, User } from "lucide-react";
+import { Search, Bell, ChevronDown, LogOut, Settings } from "lucide-react";
 
-// 1. NavbarProps interfeysiga optional user obyektini qo'shamiz
 interface NavbarProps {
   onToggleSidebar?: () => void;
   headerTitle: string;
@@ -24,7 +23,6 @@ export function Navbar({
   setHeaderSearch,
   onLogout,
   onNavigate,
-  // 2. Default qiymat sifatida "Manager" / "Menejer" berib qo'yamiz
   user = {
     name: "Manager",
     role: "Menejer",
@@ -32,12 +30,10 @@ export function Navbar({
 }: NavbarProps) {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-  // Ismning birinchi harfini Avatar uchun olish
   const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "M";
 
   return (
     <header className="h-16 bg-[#111113] border-b border-white/5 px-4 md:px-6 flex items-center justify-between gap-4 shrink-0">
-      {/* Chap tomondagi sarlavha va breadcrumb */}
       <div className="flex items-center gap-3">
         {onToggleSidebar && (
           <button
@@ -75,7 +71,6 @@ export function Navbar({
         </div>
       </div>
 
-      {/* O'ng tomondagi qidiruv, bildirishnoma va profil */}
       <div className="flex items-center gap-3 md:gap-4">
         {setHeaderSearch && (
           <div className="relative hidden sm:block w-48 md:w-64">
@@ -93,13 +88,11 @@ export function Navbar({
           </div>
         )}
 
-        {/* Bildirishnoma tugmasi */}
         <button className="relative p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer">
           <Bell size={18} />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500"></span>
         </button>
 
-        {/* User Profil menyusi */}
         <div className="relative">
           <button
             onClick={() => setProfileDropdownOpen((prev) => !prev)}
@@ -121,7 +114,6 @@ export function Navbar({
             <ChevronDown size={14} className="text-gray-400" />
           </button>
 
-          {/* Profil Dropdown Menyusi */}
           {profileDropdownOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-[#161619] border border-white/10 rounded-2xl shadow-xl py-1.5 z-50">
               {onNavigate && (

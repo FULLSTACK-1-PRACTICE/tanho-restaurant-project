@@ -21,6 +21,7 @@ import CashierLayout from "../layouts/CashierLayout/CashierLayout"
 import UserLayout from "../layouts/UserLayout/UserLayout"
 
 import ManagerLayout from "../features/manager/components/ManagerDashboard"
+import CashierPage from "../features/cashier/components/CashierPage"
 
 import BoshSahifa from "../layouts/UserLayout/Userpanel/BoshSahifa"
 import Meningprofilim from "../layouts/UserLayout/Userpanel/Meningprofilim"
@@ -81,7 +82,15 @@ const routes = createBrowserRouter([
 
       {
         element: <ProtectedRoute allowedRoles={["cashier"]} />,
-        children: [{ path: "/cashier", element: <CashierLayout /> }],
+        children: [
+          {
+            path: "/cashier",
+            element: <CashierLayout />,
+            children: [
+              { index: true, element: <CashierPage /> },
+            ],
+          },
+        ],
       },
 
       {

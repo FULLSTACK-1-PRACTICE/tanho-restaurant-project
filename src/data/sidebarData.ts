@@ -37,3 +37,15 @@ export const managerSections = [
   { key: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
   { key: "eslatmalar", label: "Eslatmalar", icon: BellRing, badge: 2 },
 ];
+
+export const cashierSidebarItems = [
+  { title: "Bosh sahifa", path: "/cashier", icon: "Home" },
+  { title: "Yangi buyurtma", path: "/cashier/new-order", icon: "PlusCircle" },
+  { title: "Buyurtmalar", path: "/cashier/orders", icon: "ClipboardList" },
+  { title: "To'lovlar", path: "/cashier/payments", icon: "CreditCard" },
+  { title: "Stol holati", path: "/cashier/tables", icon: "Grid" },
+  { title: "Menyu", path: "/cashier/menu", icon: "Utensils" },
+  { title: "Cheklar", path: "/cashier/checks", icon: "Receipt" },
+  { title: "Hisobotlar", path: "/cashier/reports", icon: "BarChart2" },
+  { title: "Sozlamalar", path: "/cashier/settings", icon: "Settings" },
+];

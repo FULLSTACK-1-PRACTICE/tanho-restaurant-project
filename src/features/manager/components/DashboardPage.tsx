@@ -1,4 +1,3 @@
-import React from "react";
 import { DollarSign, Utensils, CheckCircle2, Clock, ArrowRight } from "lucide-react";
 import { StatCard } from "./StatCard";
 import { formatSum } from "../../../lib/utils";

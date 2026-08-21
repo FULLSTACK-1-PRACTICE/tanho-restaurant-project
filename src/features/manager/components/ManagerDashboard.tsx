@@ -20,21 +20,21 @@ import SettingsPage from "./SettingsPage";
 const inputClass = "w-full px-3.5 py-2.5 bg-[#1a1a1e] border border-white/10 rounded-xl text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 transition-colors [&>option]:bg-[#161619] [&>option]:text-white";
 
 const managerSections: SidebarItem[] = [
-  { key: "bosh-sahifa", label: "Bosh sahifa", icon: LayoutDashboard },
-  { key: "menyu", label: "Menyu", icon: Utensils, children: [
-      { key: "taomlar", label: "Taomlar", icon: ChefHat },
-      { key: "kategoriyalar", label: "Kategoriyalar", icon: Tags },
-      { key: "qoshimchalar", label: "Qo‘shimchalar", icon: PlusCircle },
+  { key: "bosh-sahifa", path: "bosh-sahifa", label: "Bosh sahifa", icon: LayoutDashboard },
+  { key: "menyu", path: "menyu", label: "Menyu", icon: Utensils, children: [
+      { key: "taomlar", path: "taomlar", label: "Taomlar", icon: ChefHat },
+      { key: "kategoriyalar", path: "kategoriyalar", label: "Kategoriyalar", icon: Tags },
+      { key: "qoshimchalar", path: "qoshimchalar", label: "Qo‘shimchalar", icon: PlusCircle },
   ]},
-  { key: "buyurtmalar", label: "Buyurtmalar", icon: ClipboardList, badge: 5 },
-  { key: "rezervatsiyalar", label: "Rezervatsiyalar", icon: CalendarCheck },
-  { key: "stollar", label: "Stollar", icon: Grid },
-  { key: "mijozlar", label: "Mijozlar", icon: Users },
-  { key: "yangiliklar", label: "Yangiliklar", icon: Newspaper },
-  { key: "maqolalar", label: "Maqolalar", icon: FileText },
-  { key: "xodimlar", label: "Xodimlar", icon: UserSquare2 },
-  { key: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
-  { key: "eslatmalar", label: "Eslatmalar", icon: BellRing, badge: 2 },
+  { key: "buyurtmalar", path: "buyurtmalar", label: "Buyurtmalar", icon: ClipboardList, badge: 5 },
+  { key: "rezervatsiyalar", path: "rezervatsiyalar", label: "Rezervatsiyalar", icon: CalendarCheck },
+  { key: "stollar", path: "stollar", label: "Stollar", icon: Grid },
+  { key: "mijozlar", path: "mijozlar", label: "Mijozlar", icon: Users },
+  { key: "yangiliklar", path: "yangiliklar", label: "Yangiliklar", icon: Newspaper },
+  { key: "maqolalar", path: "maqolalar", label: "Maqolalar", icon: FileText },
+  { key: "xodimlar", path: "xodimlar", label: "Xodimlar", icon: UserSquare2 },
+  { key: "hisobotlar", path: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
+  { key: "eslatmalar", path: "eslatmalar", label: "Eslatmalar", icon: BellRing, badge: 2 },
 ];
 
 export default function ManagerLayout() {
@@ -160,7 +160,7 @@ export default function ManagerLayout() {
         onSelectPage={(page) => setActivePage(page)}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
-        sections={managerSections}
+        items={managerSections}
       />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">

@@ -1,23 +1,20 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useNavigationType } from "react-router-dom";
 import {
   LayoutDashboard,
-  UtensilsCrossed,
+  Utensils,
+  ChefHat,
+  Tags,
+  PlusCircle,
   ClipboardList,
   CalendarCheck,
-  Table2,
+  Grid,
   Users,
   Newspaper,
   FileText,
-  UserCog,
+  UserSquare2,
   BarChart3,
-  UserCircle,
-  Settings as SettingsIcon,
-  LogOut,
-  Menu as MenuIcon,
-  Search,
-  Bell,
-  ChevronDown,
+  BellRing,
   Plus,
   Pencil,
   Trash2,
@@ -28,12 +25,15 @@ import {
   PackageSearch,
   CheckCircle2,
   Receipt,
+  Table2,
 } from "lucide-react";
 import {
   calculateBillTotals,
   type Bill,
   type RestaurantTable,
 } from "../../types/restaurant";
+import { DashboardNavbar } from "../../components/common/DashboardNavbar";
+import { SideBar, type SidebarItem } from "../../components/common/SideBar";
 
 
 // Admin panelni ataylab tark etganimizni "eslab qolish" uchun bayroq.
@@ -299,8 +299,12 @@ function fileToBase64(
    2) NAVIGATSIYA RO'YXATI
    ============================================================ */
 type SectionKey =
+  | "bosh-sahifa"
   | "dashboard"
   | "menyu"
+  | "taomlar"
+  | "kategoriyalar"
+  | "qoshimchalar"
   | "buyurtmalar"
   | "rezervatsiyalar"
   | "stollar"
@@ -309,88 +313,32 @@ type SectionKey =
   | "maqolalar"
   | "xodimlar"
   | "hisobotlar"
+  | "eslatmalar"
   | "profil"
   | "sozlamalar";
 
-const mainNav: {
-  key: SectionKey;
-  label: string;
-  icon: any;
-}[] = [
-  {
-    key: "dashboard",
-    label: "Bosh sahifa",
-    icon: LayoutDashboard,
-  },
+const adminSidebarItems: SidebarItem[] = [
+  { key: "bosh-sahifa", path: "dashboard", label: "Bosh sahifa", icon: LayoutDashboard },
   {
     key: "menyu",
+    path: "menyu",
     label: "Menyu",
-    icon: UtensilsCrossed,
+    icon: Utensils,
+    children: [
+      { key: "taomlar", path: "taomlar", label: "Taomlar", icon: ChefHat },
+      { key: "kategoriyalar", path: "kategoriyalar", label: "Kategoriyalar", icon: Tags },
+      { key: "qoshimchalar", path: "qoshimchalar", label: "Qo‘shimchalar", icon: PlusCircle },
+    ],
   },
-  {
-    key: "buyurtmalar",
-    label: "Buyurtmalar",
-    icon: ClipboardList,
-  },
-  {
-    key: "rezervatsiyalar",
-    label: "Rezervatsiyalar",
-    icon: CalendarCheck,
-  },
-  {
-    key: "stollar",
-    label: "Stollar",
-    icon: Table2,
-  },
-  {
-    key: "mijozlar",
-    label: "Mijozlar",
-    icon: Users,
-  },
-];
-
-const manageNav: {
-  key: SectionKey;
-  label: string;
-  icon: any;
-}[] = [
-  {
-    key: "yangiliklar",
-    label: "Yangiliklar",
-    icon: Newspaper,
-  },
-  {
-    key: "maqolalar",
-    label: "Maqolalar",
-    icon: FileText,
-  },
-  {
-    key: "xodimlar",
-    label: "Xodimlar",
-    icon: UserCog,
-  },
-  {
-    key: "hisobotlar",
-    label: "Hisobotlar",
-    icon: BarChart3,
-  },
-];
-
-const settingsNav: {
-  key: SectionKey;
-  label: string;
-  icon: any;
-}[] = [
-  {
-    key: "profil",
-    label: "Profil",
-    icon: UserCircle,
-  },
-  {
-    key: "sozlamalar",
-    label: "Sozlamalar",
-    icon: SettingsIcon,
-  },
+  { key: "buyurtmalar", path: "buyurtmalar", label: "Buyurtmalar", icon: ClipboardList, badge: 5 },
+  { key: "rezervatsiyalar", path: "rezervatsiyalar", label: "Rezervatsiyalar", icon: CalendarCheck },
+  { key: "stollar", path: "stollar", label: "Stollar", icon: Grid },
+  { key: "mijozlar", path: "mijozlar", label: "Mijozlar", icon: Users },
+  { key: "yangiliklar", path: "yangiliklar", label: "Yangiliklar", icon: Newspaper },
+  { key: "maqolalar", path: "maqolalar", label: "Maqolalar", icon: FileText },
+  { key: "xodimlar", path: "xodimlar", label: "Xodimlar", icon: UserSquare2 },
+  { key: "hisobotlar", path: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
+  { key: "eslatmalar", path: "eslatmalar", label: "Eslatmalar", icon: BellRing, badge: 2 },
 ];
 
 /* ============================================================
@@ -1621,9 +1569,6 @@ function TablesAdminSection() {
   const handleCloseBill = async (
     table: TableRow
   ) => {
-    const bill =
-      bills[String(table.number)];
-
     if (
       !confirm(
         `${table.number}-stol: hisob yopilib, "to'landi" deb belgilansinmi?`
@@ -2288,7 +2233,6 @@ function SettingsSection() {
           <label className="mb-1 block text-xs text-gray-400">
             Manzil
           </label>
-
           <input
             value={address}
             onChange={(e) =>
@@ -2401,7 +2345,6 @@ const AdminLayout = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [active, setActive] = useState<SectionKey>("dashboard");
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     if (confirm("Tizimdan chiqishni tasdiqlaysizmi?")) {
@@ -2410,18 +2353,10 @@ const AdminLayout = () => {
     }
   };
 
-  const navItemClass = (
-    key: SectionKey
-  ) =>
-    `flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-all duration-200 ${
-      active === key
-        ? "bg-[#d9a441] font-medium text-black"
-        : "text-gray-300 hover:bg-[#191e22] hover:text-[#e5ad45]"
-    }`;
-
   const renderSection = () => {
     switch (active) {
       case "dashboard":
+      case "bosh-sahifa":
         return (
           <DashboardSection
             goTo={setActive}
@@ -2429,6 +2364,9 @@ const AdminLayout = () => {
         );
 
       case "menyu":
+      case "taomlar":
+      case "kategoriyalar":
+      case "qoshimchalar":
         return <MenuAdminSection />;
 
       case "buyurtmalar":
@@ -2591,6 +2529,7 @@ const AdminLayout = () => {
         );
 
       case "hisobotlar":
+      case "eslatmalar":
         return <ReportsSection />;
 
       case "profil":
@@ -2611,226 +2550,27 @@ const AdminLayout = () => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#0b0e10] text-white">
-      <style>{scrollbarHideStyles}</style>
-            <aside
-        className={`${
-          sidebarOpen ? "w-64" : "w-0"
-        } admin-sidebar-scroll h-screen shrink-0 overflow-y-auto overflow-x-hidden overscroll-contain border-r border-white/10 bg-[#0d1114] transition-all duration-300`}
-      >
-        <div className="flex flex-col gap-1 p-4">
-          <div className="mb-6 flex flex-col items-center py-2">
-            <span className="font-serif text-xl tracking-wide text-[#d9a441]">
-              TANHO
-            </span>
-
-            <span className="text-[10px] uppercase tracking-[3px] text-gray-400">
-              Restaurant
-            </span>
-          </div>
-
-          <div className="mb-2 px-1 text-[11px] uppercase tracking-widest text-gray-500">
-            Asosiy
-          </div>
-
-          {mainNav.map((item) => (
-            <button
-              key={item.key}
-              onClick={() =>
-                setActive(item.key)
-              }
-              className={navItemClass(
-                item.key
-              )}
-            >
-              <item.icon
-                size={18}
-                strokeWidth={1.7}
-              />
-
-              <span>{item.label}</span>
-            </button>
-          ))}
-
-          <div className="mb-2 mt-5 px-1 text-[11px] uppercase tracking-widest text-gray-500">
-            Boshqaruv
-          </div>
-
-          {manageNav.map((item) => (
-            <button
-              key={item.key}
-              onClick={() =>
-                setActive(item.key)
-              }
-              className={navItemClass(
-                item.key
-              )}
-            >
-              <item.icon
-                size={18}
-                strokeWidth={1.7}
-              />
-
-              <span>{item.label}</span>
-            </button>
-          ))}
-
-          <div className="mb-2 mt-5 px-1 text-[11px] uppercase tracking-widest text-gray-500">
-            Sozlamalar
-          </div>
-
-          {settingsNav.map((item) => (
-            <button
-              key={item.key}
-              onClick={() =>
-                setActive(item.key)
-              }
-              className={navItemClass(
-                item.key
-              )}
-            >
-              <item.icon
-                size={18}
-                strokeWidth={1.7}
-              />
-
-              <span>{item.label}</span>
-            </button>
-          ))}
-
-          <button
-            onClick={handleLogout}
-            className="mt-2 flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-gray-300 transition-all duration-200 hover:bg-red-500/10 hover:text-red-400"
-          >
-            <LogOut
-              size={18}
-              strokeWidth={1.7}
-            />
-
-            <span>Chiqish</span>
-          </button>
-        </div>
-      </aside>
+      <SideBar
+        items={adminSidebarItems}
+        isOpen={sidebarOpen}
+        activePath={active}
+        onItemClick={(path) => setActive(path as SectionKey)}
+        onLogout={handleLogout}
+      />
 
       <div className="flex h-screen flex-1 flex-col overflow-hidden">
-        <header className="flex shrink-0 items-center justify-between border-b border-white/10 bg-[#0d1114] px-6 py-3">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() =>
-                setSidebarOpen(
-                  (value) => !value
-                )
-              }
-              className="cursor-pointer rounded-lg p-2 text-gray-300 hover:bg-[#191e22]"
-            >
-              <MenuIcon size={20} />
-            </button>
-
-            <h1 className="text-lg font-semibold">
-              Admin Dashboard
-            </h1>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="relative hidden md:block">
-              <Search
-                size={16}
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-              />
-
-              <input
-                type="text"
-                placeholder="Qidirish..."
-                className="w-64 rounded-lg border border-white/10 bg-[#121619] py-2 pl-9 pr-3 text-sm outline-none focus:border-[#d9a441]/50"
-              />
-            </div>
-
-            <button className="relative cursor-pointer rounded-lg p-2 text-gray-300 hover:bg-[#191e22]">
-              <Bell size={20} />
-
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px]">
-                0
-              </span>
-            </button>
-
-            <div className="relative">
-              <button
-                onClick={() =>
-                  setProfileMenuOpen(
-                    (v) => !v
-                  )
-                }
-                className="flex cursor-pointer items-center gap-2"
-              >
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d9a441] text-sm font-semibold text-black">
-                  A
-                </div>
-
-                <div className="hidden text-left text-sm sm:block">
-                  <div className="font-medium">
-                    Admin
-                  </div>
-
-                  <div className="text-xs text-gray-400">
-                    Administrator
-                  </div>
-                </div>
-
-                <ChevronDown
-                  size={16}
-                  className={`text-gray-400 transition-transform ${
-                    profileMenuOpen
-                      ? "rotate-180"
-                      : ""
-                  }`}
-                />
-              </button>
-
-              {profileMenuOpen && (
-                <>
-                  <div
-                    className="fixed inset-0 z-40"
-                    onClick={() =>
-                      setProfileMenuOpen(
-                        false
-                      )
-                    }
-                  />
-
-                  <div className="absolute right-0 top-[calc(100%+10px)] z-50 w-44 overflow-hidden rounded-lg border border-white/10 bg-[#121619] shadow-xl">
-                    <button
-                      onClick={() => {
-                        setActive(
-                          "profil"
-                        );
-                        setProfileMenuOpen(
-                          false
-                        );
-                      }}
-                      className="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm text-gray-300 hover:bg-white/5 hover:text-white"
-                    >
-                      <UserCircle
-                        size={15}
-                      />
-                      Profil
-                    </button>
-
-                    <button
-                      onClick={
-                        handleLogout
-                      }
-                      className="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm text-red-400 hover:bg-red-500/10"
-                    >
-                      <LogOut
-                        size={15}
-                      />
-                      Chiqish
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </header>
+        <DashboardNavbar
+          title="Admin Dashboard"
+          onToggleSidebar={() => setSidebarOpen((value) => !value)}
+          onLogout={handleLogout}
+          onProfileClick={() => setActive("profil")}
+          onSettingsClick={() => setActive("sozlamalar")}
+          onNavigate={(page) => setActive(page as SectionKey)}
+          user={{
+            name: "Admin",
+            role: "Administrator",
+          }}
+        />
 
         <main className="flex-1 overflow-y-auto overscroll-contain p-6">
           {renderSection()}
@@ -2840,15 +2580,4 @@ const AdminLayout = () => {
   );
 };
 
-// Chrome/Safari/Edge (webkit) va Firefox/IE uchun scrollbarni
-// vizual ravishda yashiradi, lekin scroll funksiyasi ishlab turadi
-const scrollbarHideStyles = `
-  .admin-sidebar-scroll {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge legacy */
-  }
-  .admin-sidebar-scroll::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, yangi Edge */
-  }
-`;
 export default AdminLayout;

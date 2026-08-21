@@ -14,28 +14,30 @@ import {
   BarChart3,
   BellRing,
 } from "lucide-react";
+import type { SidebarItem } from "../components/common/SideBar";
 
-export const managerSections = [
-  { key: "bosh-sahifa", label: "Bosh sahifa", icon: LayoutDashboard },
+export const managerSections: SidebarItem[] = [
+  { key: "bosh-sahifa", path: "bosh-sahifa", label: "Bosh sahifa", icon: LayoutDashboard },
   {
     key: "menyu",
+    path: "menyu",
     label: "Menyu",
     icon: Utensils,
     children: [
-      { key: "taomlar", label: "Taomlar", icon: ChefHat },
-      { key: "kategoriyalar", label: "Kategoriyalar", icon: Tags },
-      { key: "qoshimchalar", label: "Qo‘shimchalar", icon: PlusCircle },
+      { key: "taomlar", path: "taomlar", label: "Taomlar", icon: ChefHat },
+      { key: "kategoriyalar", path: "kategoriyalar", label: "Kategoriyalar", icon: Tags },
+      { key: "qoshimchalar", path: "qoshimchalar", label: "Qo‘shimchalar", icon: PlusCircle },
     ],
   },
-  { key: "buyurtmalar", label: "Buyurtmalar", icon: ClipboardList, badge: 5 },
-  { key: "rezervatsiyalar", label: "Rezervatsiyalar", icon: CalendarCheck },
-  { key: "stollar", label: "Stollar", icon: Grid },
-  { key: "mijozlar", label: "Mijozlar", icon: Users },
-  { key: "yangiliklar", label: "Yangiliklar", icon: Newspaper },
-  { key: "maqolalar", label: "Maqolalar", icon: FileText },
-  { key: "xodimlar", label: "Xodimlar", icon: UserSquare2 },
-  { key: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
-  { key: "eslatmalar", label: "Eslatmalar", icon: BellRing, badge: 2 },
+  { key: "buyurtmalar", path: "buyurtmalar", label: "Buyurtmalar", icon: ClipboardList, badge: 5 },
+  { key: "rezervatsiyalar", path: "rezervatsiyalar", label: "Rezervatsiyalar", icon: CalendarCheck },
+  { key: "stollar", path: "stollar", label: "Stollar", icon: Grid },
+  { key: "mijozlar", path: "mijozlar", label: "Mijozlar", icon: Users },
+  { key: "yangiliklar", path: "yangiliklar", label: "Yangiliklar", icon: Newspaper },
+  { key: "maqolalar", path: "maqolalar", label: "Maqolalar", icon: FileText },
+  { key: "xodimlar", path: "xodimlar", label: "Xodimlar", icon: UserSquare2 },
+  { key: "hisobotlar", path: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
+  { key: "eslatmalar", path: "eslatmalar", label: "Eslatmalar", icon: BellRing, badge: 2 },
 ];
 
 export const cashierSidebarItems = [

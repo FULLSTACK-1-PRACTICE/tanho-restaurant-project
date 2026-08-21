@@ -1,41 +1,58 @@
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import React, { useState } from "react";
+import type { ReactNode, ComponentType } from "react";
+import { ChevronDown, LogOut } from "lucide-react";
 import logoImg from "../../assets/images/Layout/Header/Logo-2.png";
-import type { LucideIcon } from "lucide-react";
 
 export interface SidebarSubItem {
-  key: string;
   label: string;
-  icon?: LucideIcon;
+  path?: string;
+  key?: string;
+  icon?: ReactNode | ComponentType<any>;
+  badge?: number | string;
 }
 
 export interface SidebarItem {
-  key: string;
   label: string;
-  icon: LucideIcon;
+  path?: string;
+  key?: string;
+  icon: ReactNode | ComponentType<any>;
   badge?: number | string;
+  section?: string;
   children?: SidebarSubItem[];
 }
 
-interface SidebarProps {
-  sidebarOpen: boolean;
-  mobileSidebarOpen: boolean;
-  setMobileSidebarOpen: (val: boolean) => void;
-  activePage: string;
-  onSelectPage: (key: string) => void;
-  sections: SidebarItem[];
+export interface SidebarProps {
+  items: SidebarItem[];
+  isOpen?: boolean;
+  sidebarOpen?: boolean;
+  activePath?: string;
+  activePage?: string;
+  onItemClick?: (path: string) => void;
+  onSelectPage?: (key: string) => void;
+  onLogout?: () => void;
+  mobileSidebarOpen?: boolean;
+  setMobileSidebarOpen?: (val: boolean) => void;
+  brandName?: string;
+  brandSubtitle?: string;
   menuOpen?: boolean;
   setMenuOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function Sidebar({
+export function SideBar({
+  items = [],
+  isOpen,
   sidebarOpen,
-  mobileSidebarOpen,
-  setMobileSidebarOpen,
+  activePath,
   activePage,
+  onItemClick,
   onSelectPage,
-  sections,
+  onLogout,
+  mobileSidebarOpen = false,
+  setMobileSidebarOpen,
 }: SidebarProps) {
+  const isSidebarOpen = isOpen ?? sidebarOpen ?? true;
+  const currentActive = activePath ?? activePage ?? "";
+
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({
     menyu: true,
   });
@@ -44,20 +61,56 @@ export function Sidebar({
     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
+  const handleSelect = (targetPath: string) => {
+    if (onItemClick) {
+      onItemClick(targetPath);
+    } else if (onSelectPage) {
+      onSelectPage(targetPath);
+    }
+    if (setMobileSidebarOpen) {
+      setMobileSidebarOpen(false);
+    }
+  };
+
+  const renderIcon = (icon: any) => {
+    if (!icon) return null;
+    if (React.isValidElement(icon)) {
+      return icon;
+    }
+    if (
+      typeof icon === "function" ||
+      (typeof icon === "object" && icon !== null && "$$typeof" in icon)
+    ) {
+      const IconComp = icon as React.ComponentType<{
+        size?: number;
+        className?: string;
+        strokeWidth?: number;
+      }>;
+      return <IconComp size={19} strokeWidth={1.75} />;
+    }
+    return <>{icon}</>;
+  };
+
   return (
     <>
-      {mobileSidebarOpen && (
+      <style>{scrollbarHideStyles}</style>
+
+      {/* Mobile Backdrop */}
+      {mobileSidebarOpen && setMobileSidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm lg:hidden transition-opacity duration-300"
           onClick={() => setMobileSidebarOpen(false)}
         />
       )}
 
+      {/* Main Sidebar Aside */}
       <aside
         className={`fixed lg:static z-50 h-full ${
-          sidebarOpen ? "w-[280px]" : "w-[82px]"
+          isSidebarOpen ? "w-[280px]" : "w-0 lg:w-[82px]"
         } shrink-0 bg-[#09090b]/95 backdrop-blur-xl border-r border-white/10 flex flex-col transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.5)] ${
-          mobileSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          mobileSidebarOpen
+            ? "translate-x-0"
+            : "-translate-x-full lg:translate-x-0"
         }`}
       >
         {/* LOGO HEADER */}
@@ -69,31 +122,54 @@ export function Sidebar({
               src={logoImg}
               alt="Tanho Restaurant Logo"
               className={`${
-                sidebarOpen ? "h-[70px] w-auto max-w-[220px]" : "h-8 w-auto"
+                isSidebarOpen ? "h-[70px] w-auto max-w-[220px]" : "h-8 w-auto"
               } object-contain filter drop-shadow-[0_2px_8px_rgba(251,191,36,0.3)] transition-all duration-300 scale-110`}
             />
           </div>
         </div>
 
         {/* NAVIGATION */}
-        <nav className="flex-1 overflow-y-auto px-3.5 py-4 space-y-1.5 scrollbar-thin scrollbar-thumb-white/10">
-          {sections.map((item: SidebarItem) => {
-            const Icon = item.icon;
+        <nav className="flex-1 overflow-y-auto px-3.5 py-4 space-y-1.5 admin-sidebar-scroll">
+          {items.map((item, index) => {
+            const itemKey = item.path || item.key || `item-${index}`;
             const hasChildren = Boolean(item.children && item.children.length > 0);
             const isChildActive = hasChildren
-              ? item.children?.some((child) => child.key === activePage)
+              ? item.children?.some(
+                  (child) =>
+                    (child.path && child.path === currentActive) ||
+                    (child.key && child.key === currentActive)
+                )
               : false;
-            const isActive = activePage === item.key || isChildActive;
-            const isOpen = Boolean(openMenus[item.key]);
+            const isActive =
+              currentActive === item.path ||
+              currentActive === item.key ||
+              isChildActive;
+            const isOpen = Boolean(openMenus[itemKey] || openMenus[item.key || ""]);
+
+            // Section headers
+            const prevItem = index > 0 ? items[index - 1] : null;
+            const showSectionHeader =
+              item.section && item.section !== prevItem?.section;
 
             return (
-              <div key={item.key} className="space-y-1">
+              <div key={itemKey} className="space-y-1">
+                {showSectionHeader && isSidebarOpen && (
+                  <div
+                    className={`px-3 text-[10px] uppercase tracking-widest text-gray-500 font-medium ${
+                      index > 0 ? "mt-4 mb-2" : "mb-2"
+                    }`}
+                  >
+                    {item.section}
+                  </div>
+                )}
+
                 <button
+                  type="button"
                   onClick={() => {
                     if (hasChildren) {
-                      toggleMenu(item.key);
+                      toggleMenu(item.key || itemKey);
                     } else {
-                      onSelectPage(item.key);
+                      handleSelect(item.path || item.key || "");
                     }
                   }}
                   className={`w-full cursor-pointer flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold transition-all duration-200 group relative ${
@@ -106,15 +182,15 @@ export function Sidebar({
                     <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-gradient-to-b from-amber-300 to-amber-500 shadow-[0_0_10px_#f59e0b]" />
                   )}
 
-                  <Icon
-                    size={20}
-                    strokeWidth={1.75}
+                  <div
                     className={`shrink-0 transition-transform duration-200 group-hover:scale-110 ${
                       isActive ? "text-amber-400" : "text-gray-400"
                     }`}
-                  />
+                  >
+                    {renderIcon(item.icon)}
+                  </div>
 
-                  {sidebarOpen && (
+                  {isSidebarOpen && (
                     <>
                       <span className="flex-1 text-left truncate tracking-wide text-xs font-semibold">
                         {item.label}
@@ -139,16 +215,22 @@ export function Sidebar({
                 </button>
 
                 {/* Submenu List */}
-                {hasChildren && sidebarOpen && isOpen && (
+                {hasChildren && isSidebarOpen && isOpen && (
                   <div className="ml-5 pl-3 border-l border-white/10 space-y-1 py-1">
-                    {item.children?.map((child) => {
-                      const ChildIcon = child.icon;
-                      const isSubActive = activePage === child.key;
+                    {item.children?.map((child, childIdx) => {
+                      const childKey =
+                        child.path || child.key || `sub-${childIdx}`;
+                      const isSubActive =
+                        currentActive === child.path ||
+                        currentActive === child.key;
 
                       return (
                         <button
-                          key={child.key}
-                          onClick={() => onSelectPage(child.key)}
+                          key={childKey}
+                          type="button"
+                          onClick={() =>
+                            handleSelect(child.path || child.key || "")
+                          }
                           className={`w-full cursor-pointer flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
                             isSubActive
                               ? "text-amber-400 bg-amber-500/15 font-semibold"
@@ -156,11 +238,18 @@ export function Sidebar({
                           }`}
                         >
                           <div className="flex items-center gap-2 min-w-0">
-                            {ChildIcon && (
-                              <ChildIcon size={14} className="shrink-0 text-gray-400" />
+                            {child.icon && (
+                              <div className="shrink-0 text-gray-400">
+                                {renderIcon(child.icon)}
+                              </div>
                             )}
                             <span className="truncate">{child.label}</span>
                           </div>
+                          {child.badge !== undefined && (
+                            <span className="px-1.5 py-0.5 text-[9px] rounded-full bg-white/10 text-gray-300">
+                              {child.badge}
+                            </span>
+                          )}
                         </button>
                       );
                     })}
@@ -170,7 +259,34 @@ export function Sidebar({
             );
           })}
         </nav>
+
+        {/* LOGOUT BUTTON */}
+        {onLogout && (
+          <div className="p-3 border-t border-white/[0.08] mt-auto">
+            <button
+              type="button"
+              onClick={onLogout}
+              className="w-full cursor-pointer flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
+            >
+              <LogOut size={18} className="shrink-0" />
+              {isSidebarOpen && <span>Chiqish</span>}
+            </button>
+          </div>
+        )}
       </aside>
     </>
   );
 }
+
+const scrollbarHideStyles = `
+  .admin-sidebar-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .admin-sidebar-scroll::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export { SideBar as Sidebar };
+export default SideBar;

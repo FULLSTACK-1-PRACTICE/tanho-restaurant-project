@@ -1,63 +1,121 @@
-import React, { useState } from "react";
-import { Search, Bell, ChevronDown, LogOut, Settings } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import type { ReactNode } from "react";
+import { Search, Bell, ChevronDown, LogOut, UserCircle, Settings, Menu } from "lucide-react";
 
-interface NavbarProps {
-  onToggleSidebar?: () => void;
-  headerTitle: string;
-  breadcrumb?: string[];
-  headerSearch?: string;
-  setHeaderSearch?: (val: string) => void;
-  onLogout?: () => void;
-  onNavigate?: (page: string) => void;
-  user?: {
-    name?: string;
-    role?: string;
-  };
+export interface DashboardUser {
+  name?: string;
+  role?: string;
+  avatar?: string;
 }
 
-export function Navbar({
-  onToggleSidebar,
+export interface DashboardNavbarProps {
+  title?: string;
+  headerTitle?: string;
+  breadcrumb?: string[];
+  searchValue?: string;
+  headerSearch?: string;
+  onSearchChange?: (value: string) => void;
+  setHeaderSearch?: (value: string) => void;
+  onToggleSidebar?: () => void;
+  onLogout?: () => void;
+  onProfileClick?: () => void;
+  onSettingsClick?: () => void;
+  onNavigate?: (page: string) => void;
+  user?: DashboardUser;
+  notificationCount?: number;
+  actions?: ReactNode;
+}
+
+export function DashboardNavbar({
+  title,
   headerTitle,
   breadcrumb = [],
+  searchValue,
   headerSearch = "",
+  onSearchChange,
   setHeaderSearch,
+  onToggleSidebar,
   onLogout,
+  onProfileClick,
+  onSettingsClick,
   onNavigate,
   user = {
-    name: "Manager",
-    role: "Menejer",
+    name: "Admin",
+    role: "Administrator",
   },
-}: NavbarProps) {
+  notificationCount = 0,
+  actions,
+}: DashboardNavbarProps) {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "M";
+  const displayTitle = title ?? headerTitle ?? "Admin Dashboard";
+  const currentSearchValue = searchValue ?? headerSearch;
+  const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "A";
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (onSearchChange) {
+      onSearchChange(value);
+    } else if (setHeaderSearch) {
+      setHeaderSearch(value);
+    }
+  };
+
+  const handleProfileClick = () => {
+    setProfileDropdownOpen(false);
+    if (onProfileClick) {
+      onProfileClick();
+    } else if (onNavigate) {
+      onNavigate("profil");
+    }
+  };
+
+  const handleSettingsClick = () => {
+    setProfileDropdownOpen(false);
+    if (onSettingsClick) {
+      onSettingsClick();
+    } else if (onNavigate) {
+      onNavigate("sozlamalar");
+    }
+  };
 
   return (
-    <header className="h-16 bg-[#111113] border-b border-white/5 px-4 md:px-6 flex items-center justify-between gap-4 shrink-0">
-      <div className="flex items-center gap-3">
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-[#0d1114] px-4 md:px-6">
+      {/* Left: Hamburger & Title / Breadcrumbs */}
+      <div className="flex items-center gap-3 md:gap-4">
         {onToggleSidebar && (
           <button
+            type="button"
             onClick={onToggleSidebar}
-            className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+            className="cursor-pointer rounded-lg p-2 text-gray-300 transition-colors hover:bg-[#191e22] hover:text-white"
+            aria-label="Toggle Sidebar"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
+            <Menu size={20} />
           </button>
         )}
 
         <div>
-          <h1 className="text-base font-semibold text-white">{headerTitle}</h1>
+          <h1 className="text-base font-semibold text-white md:text-lg">
+            {displayTitle}
+          </h1>
+
           {breadcrumb.length > 0 && (
             <div className="flex items-center gap-1.5 text-xs text-gray-400">
               {breadcrumb.map((item, index) => (
@@ -71,71 +129,96 @@ export function Navbar({
         </div>
       </div>
 
+      {/* Right: Search, Notifications, Actions, User Profile */}
       <div className="flex items-center gap-3 md:gap-4">
-        {setHeaderSearch && (
-          <div className="relative hidden sm:block w-48 md:w-64">
+        {(onSearchChange || setHeaderSearch) && (
+          <div className="relative hidden md:block w-48 lg:w-64">
             <Search
-              size={15}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={16}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
             />
             <input
               type="text"
-              value={headerSearch}
-              onChange={(e) => setHeaderSearch(e.target.value)}
+              value={currentSearchValue}
+              onChange={handleSearchChange}
               placeholder="Qidirish..."
-              className="w-full pl-9 pr-3 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 transition-colors"
+              className="w-full rounded-lg border border-white/10 bg-[#121619] py-2 pl-9 pr-3 text-sm text-white placeholder:text-gray-500 outline-none transition-colors focus:border-[#d9a441]/50"
             />
           </div>
         )}
 
-        <button className="relative p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer">
-          <Bell size={18} />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500"></span>
+        {actions}
+
+        <button
+          type="button"
+          className="relative cursor-pointer rounded-lg p-2 text-gray-300 transition-colors hover:bg-[#191e22] hover:text-white"
+          aria-label="Notifications"
+        >
+          <Bell size={20} />
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-medium text-white">
+            {notificationCount}
+          </span>
         </button>
 
-        <div className="relative">
+        {/* User Profile Dropdown */}
+        <div ref={dropdownRef} className="relative">
           <button
+            type="button"
             onClick={() => setProfileDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-white/5 transition-colors cursor-pointer"
+            className="flex cursor-pointer items-center gap-2 rounded-lg p-1.5 transition-colors hover:bg-[#191e22]"
           >
-            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center text-black font-bold text-sm shadow-md">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d9a441] text-sm font-semibold text-black shadow-sm">
               {userInitial}
             </div>
 
-            <div className="text-left hidden md:block">
-              <p className="text-xs font-semibold text-white leading-tight">
+            <div className="hidden text-left text-sm sm:block">
+              <div className="font-medium text-white leading-tight">
                 {user.name}
-              </p>
-              <p className="text-[10px] text-gray-400 leading-tight mt-0.5">
+              </div>
+              <div className="text-xs text-gray-400 leading-tight">
                 {user.role}
-              </p>
+              </div>
             </div>
 
-            <ChevronDown size={14} className="text-gray-400" />
+            <ChevronDown
+              size={16}
+              className={`text-gray-400 transition-transform duration-200 ${
+                profileDropdownOpen ? "rotate-180" : ""
+              }`}
+            />
           </button>
 
           {profileDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-[#161619] border border-white/10 rounded-2xl shadow-xl py-1.5 z-50">
-              {onNavigate && (
-                <button
-                  onClick={() => {
-                    onNavigate("sozlamalar");
-                    setProfileDropdownOpen(false);
-                  }}
-                  className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs text-gray-300 hover:bg-white/5 hover:text-white transition-colors cursor-pointer"
-                >
-                  <Settings size={14} />
-                  Sozlamalar
-                </button>
-              )}
+            <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-48 overflow-hidden rounded-xl border border-white/10 bg-[#121619] shadow-xl py-1">
+              <button
+                type="button"
+                onClick={handleProfileClick}
+                className="flex w-full cursor-pointer items-center gap-2.5 px-4 py-2.5 text-left text-sm text-gray-300 transition-colors hover:bg-white/5 hover:text-white"
+              >
+                <UserCircle size={16} />
+                <span>Profil</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSettingsClick}
+                className="flex w-full cursor-pointer items-center gap-2.5 px-4 py-2.5 text-left text-sm text-gray-300 transition-colors hover:bg-white/5 hover:text-white"
+              >
+                <Settings size={16} />
+                <span>Sozlamalar</span>
+              </button>
 
               {onLogout && (
                 <button
-                  onClick={onLogout}
-                  className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                  type="button"
+                  onClick={() => {
+                    setProfileDropdownOpen(false);
+                    onLogout();
+                  }}
+                  className="flex w-full cursor-pointer items-center gap-2.5 px-4 py-2.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10"
                 >
-                  <LogOut size={14} />
-                  Chiqish
+                  <LogOut size={16} />
+                  <span>Chiqish</span>
                 </button>
               )}
             </div>
@@ -145,3 +228,6 @@ export function Navbar({
     </header>
   );
 }
+
+export { DashboardNavbar as Navbar };
+export default DashboardNavbar;

@@ -3,6 +3,7 @@ import MashhurFood from "../../../features/Landing/PopularFood";
 import AboutSection from "../../../features/Landing/AboutSection";
 import SpecialSection from "../../../features/Landing/SpecialSection";
 import Stolband from "../../../features/Landing/BookaTable";
+import UserComments from "../../../features/Landing/UserComments";
 
 function Home() {
   return (
@@ -12,6 +13,7 @@ function Home() {
       <AboutSection />
       <SpecialSection />
       <Stolband />
+      <UserComments />
     </div>
   );
 }

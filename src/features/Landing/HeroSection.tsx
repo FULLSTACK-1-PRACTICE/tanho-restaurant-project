@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import heroImg from "@/assets/images/Landing/Hero/Hero-Section-2.png";
+import Container from "../../components/ui/container/Container";
 
 function HeroSection() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function HeroSection() {
         <div className="absolute inset-x-0 bottom-0 h-[320px] bg-gradient-to-t from-[#070809] via-[#070809]/75 to-transparent" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1250px] px-6">
+      <Container className="relative z-10 mx-auto max-w-[1250px] px-6">
         <div className="flex min-h-[720px] items-center pt-[120px] pb-[100px]">
           <div className="max-w-[580px]">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#dcae4d]/30 bg-[#151310]/70 px-3.5 py-1.5 backdrop-blur-md">
@@ -104,13 +105,13 @@ function HeroSection() {
 
         <div className="relative z-20 pb-12">
           <div className="grid grid-cols-1 overflow-hidden rounded-xl border border-white/10 bg-[#0c0e10]/85 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:grid-cols-2 lg:grid-cols-4">
-            <div className="group cursor-pointer border-b border-white/5 p-6 transition-colors duration-300 hover:bg-white/[0.03] sm:border-r lg:border-b-0">
+            <div className="border-b border-white/5 p-6 transition-colors duration-300 sm:border-r lg:border-b-0">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d] transition-all duration-300 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d] group-hover:text-[#08090a]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d]">
                   <ChefHat size={22} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h4 className="text-[13px] font-medium text-[#f1eee7] group-hover:text-[#dcae4d]">
+                  <h4 className="text-[13px] font-medium text-[#f1eee7]">
                     Mualliflik menyusi
                   </h4>
                   <p className="mt-1 text-[11px] font-light text-[#888a85]">
@@ -120,13 +121,13 @@ function HeroSection() {
               </div>
             </div>
 
-            <div className="group cursor-pointer border-b border-white/5 p-6 transition-colors duration-300 hover:bg-white/[0.03] sm:border-r lg:border-b-0">
+            <div className="border-b border-white/5 p-6 transition-colors duration-300 sm:border-r lg:border-b-0">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d] transition-all duration-300 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d] group-hover:text-[#08090a]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d]">
                   <Utensils size={21} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h4 className="text-[13px] font-medium text-[#f1eee7] group-hover:text-[#dcae4d]">
+                  <h4 className="text-[13px] font-medium text-[#f1eee7]">
                     Sertifikatlangan sifat
                   </h4>
                   <p className="mt-1 text-[11px] font-light text-[#888a85]">
@@ -136,13 +137,13 @@ function HeroSection() {
               </div>
             </div>
 
-            <div className="group cursor-pointer border-b border-white/5 p-6 transition-colors duration-300 hover:bg-white/[0.03] sm:border-r lg:border-b-0">
+            <div className="border-b border-white/5 p-6 transition-colors duration-300 sm:border-r lg:border-b-0">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d] transition-all duration-300 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d] group-hover:text-[#08090a]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d]">
                   <Clock size={21} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h4 className="text-[13px] font-medium text-[#f1eee7] group-hover:text-[#dcae4d]">
+                  <h4 className="text-[13px] font-medium text-[#f1eee7]">
                     Ish vaqti
                   </h4>
                   <p className="mt-1 text-[11px] font-light text-[#888a85]">
@@ -152,13 +153,13 @@ function HeroSection() {
               </div>
             </div>
 
-            <div className="group cursor-pointer p-6 transition-colors duration-300 hover:bg-white/[0.03]">
+            <div className="p-6 transition-colors duration-300">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d] transition-all duration-300 group-hover:border-[#dcae4d] group-hover:bg-[#dcae4d] group-hover:text-[#08090a]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d]">
                   <MapPin size={21} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h4 className="text-[13px] font-medium text-[#f1eee7] group-hover:text-[#dcae4d]">
+                  <h4 className="text-[13px] font-medium text-[#f1eee7]">
                     Qulay joylashuv
                   </h4>
                   <p className="mt-1 text-[11px] font-light text-[#888a85]">
@@ -169,7 +170,7 @@ function HeroSection() {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -11,9 +11,6 @@ import {
   X,
 } from "lucide-react";
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 
 type CategoryKey = "barchasi" | "maxsus" | "tadbir" | "yangilik" | "elon";
 
@@ -31,11 +28,6 @@ interface CategoryOption {
   key: CategoryKey;
   label: string;
 }
-
-// ---------------------------------------------------------------------------
-// Static data — bularni keyinchalik backenddan kelayotgan array bilan
-// almashtirasiz (masalan: useEffect + fetch("/api/news"))
-// ---------------------------------------------------------------------------
 
 const CATEGORIES: CategoryOption[] = [
   { key: "barchasi", label: "Barchasi" },
@@ -160,10 +152,6 @@ type SortOption = (typeof SORT_OPTIONS)[number];
 
 const PAGE_SIZE = 10;
 
-// ---------------------------------------------------------------------------
-// Modal
-// ---------------------------------------------------------------------------
-
 interface NewsModalProps {
   item: NewsItem;
   onClose: () => void;
@@ -242,9 +230,6 @@ const NewsModal = ({ item, onClose }: NewsModalProps) => {
   );
 };
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 const NewsPage = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryKey>("barchasi");
   const [query, setQuery] = useState("");
@@ -294,9 +279,7 @@ const NewsPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#020305]">  
-      {/* ------------------------------------------------------------- */}
-      {/* Hero */}
-      {/* ------------------------------------------------------------- */}
+   
       <section className="relative overflow-hidden border-b max-w-[1200px] m-auto  border-white/5">
         <div className="absolute inset-0 ">
           <img
@@ -324,12 +307,8 @@ const NewsPage = () => {
         </div>
       </section>
 
-      {/* ------------------------------------------------------------- */}
-      {/* Filters */}
-      {/* ------------------------------------------------------------- */}
       <section className="mx-auto max-w-[1200px] px-5 pt-10">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          {/* Search */}
           <div className="relative w-full lg:max-w-[280px]">
             <Search
               size={16}
@@ -344,7 +323,7 @@ const NewsPage = () => {
             />
           </div>
 
-          {/* Category pills */}
+          
           <div className="flex flex-wrap items-center gap-2">
             {CATEGORIES.map((cat) => {
               const isActive = cat.key === activeCategory;
@@ -364,7 +343,6 @@ const NewsPage = () => {
             })}
           </div>
 
-          {/* Sort */}
           <div className="relative shrink-0">
             <button
               onClick={() => setSortOpen((v) => !v)}
@@ -404,9 +382,6 @@ const NewsPage = () => {
         </div>
       </section>
 
-      {/* ------------------------------------------------------------- */}
-      {/* News grid */}
-      {/* ------------------------------------------------------------- */}
       <section className="mx-auto max-w-[1200px] px-5 py-10">
         {paginated.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-white/10 bg-[#0b0d10] py-24 text-center">
@@ -440,12 +415,6 @@ const NewsPage = () => {
                     {item.badge}
                   </span>
 
-                  {/* <button
-                    aria-label="Saqlash"
-                    className="absolute right-3 top-3 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-black/40 text-white/70 backdrop-blur-sm transition-colors hover:bg-black/60 hover:text-[#dcae4d]"
-                  >
-                    <Bookmark size={13} strokeWidth={1.8} />
-                  </button> */}
                 </div>
 
                 <div className="flex flex-1 flex-col gap-2 p-4">
@@ -479,7 +448,6 @@ const NewsPage = () => {
           </div>
         )}
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-10 flex items-center justify-center gap-2">
             <button
@@ -515,9 +483,7 @@ const NewsPage = () => {
         )}
       </section>
 
-      {/* ------------------------------------------------------------- */}
-      {/* Newsletter */}
-      {/* ------------------------------------------------------------- */}
+      
       <section className="mx-auto max-w-[1200px] px-5 pb-16">
         <div className="grid grid-cols-1 overflow-hidden rounded-lg border border-white/8 bg-[#0b0d10] lg:grid-cols-2">
           <div className="flex flex-col justify-center gap-4 p-8 sm:p-10">
@@ -560,9 +526,6 @@ const NewsPage = () => {
         </div>
       </section>
 
-      {/* ------------------------------------------------------------- */}
-      {/* News detail modal */}
-      {/* ------------------------------------------------------------- */}
       {selectedNews && (
         <NewsModal item={selectedNews} onClose={() => setSelectedNews(null)} />
       )}

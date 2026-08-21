@@ -1,31 +1,10 @@
 import { useState } from "react";
 import { Star, Send, AlertCircle } from "lucide-react";
 import Container from "../../components/ui/container/Container";
+import { initialReviews } from "../../data/landingData";
 
 function ReviewsSection() {
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      name: "Azizbek Rahimov",
-      rating: 5,
-      date: "20 avgust, 2026",
-      comment: "Restoran muhiti va taomlar shunchaki ajoyib!",
-    },
-    {
-      id: 2,
-      name: "Malika Karimova",
-      rating: 5,
-      date: "18 avgust, 2026",
-      comment: "Oila davrasida dam olish uchun eng ideal maskan.",
-    },
-    {
-      id: 3,
-      name: "Jasurbek Umarov",
-      rating: 5,
-      date: "17 avgust, 2026",
-      comment: "Xizmat ko'rsatish darajasi yuqori va tezkor.",
-    },
-  ]);
+  const [reviews, setReviews] = useState(initialReviews);
 
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
@@ -75,7 +54,7 @@ function ReviewsSection() {
     <section className="py-12 bg-[#070809] relative overflow-hidden border-t border-white/5">
       <Container>
         <div className="flex items-center justify-between mb-7">
-          <h2 className="text-2xl md:text-3xl font-semibold text-white" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+          <h2 className="font-serif text-[25px] text-[#f1eee7]">
             Mehmonlarimiz Sharhlari
           </h2>
           <span className="text-neutral-400 text-[13px] hidden sm:block">

@@ -1,3 +1,5 @@
+import menuHeadImg from "../assets/images/Menu/HeadLogo/MenuHead.png";
+
 export interface FoodItem {
   name: string;
   description: string;
@@ -70,9 +72,9 @@ export const offers: OfferItem[] = [
     type: "promo",
     title: "Birinchi buyurtmangizga",
     discount: "10% CHEGIRMA!",
-    description: "Maxsus promo-kod orqali birinchi buyurtmada chegirmani qo'lga kiriting.",
+    description: "Bosh menu va maxsus promo-kod orqali birinchi buyurtmada chegirmani qo'lga kiriting.",
     button: "Buyurtma berish",
-    image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop",
+    image: menuHeadImg,
     link: "/menu",
   },
   {

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 import oshimg from "../../../assets/images/Menu/Cards/osh.png";
 import lagmonimg from "../../../assets/images/Menu/Cards/suyuk lag'mon.png";
 
@@ -441,30 +440,31 @@ const MenuPage = () => {
     .filter((it) => activeCategory === "Barchasi" || it.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#0b0e10] text-white">
-      <section className="relative min-h-[500px] overflow-hidden">
+    <div className="min-h-screen bg-[#0b0e10] text-white overflow-x-hidden">
+      <section className="relative min-h-[450px] sm:min-h-[500px] overflow-hidden flex items-center">
         <img
           src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1800&q=90"
           alt="Tanho restaurant"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0b0e10] via-[#0b0e10]/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-[#0b0e10] via-[#0b0e10]/80 to-transparent" />
 
-        <div className="relative mx-auto flex min-h-[500px] max-w-[1240px] items-center px-6">
+        <div className="relative mx-auto w-full max-w-[1240px] px-4 sm:px-6 py-16">
           <div className="max-w-[430px]">
-            <p className="mb-4 text-sm uppercase tracking-[3px] text-[#d9a441]">TANHO RESTAURANT</p>
-            <h1 className="font-serif text-5xl leading-tight md:text-6xl">Menyu</h1>
-            <p className="mt-4 text-lg text-[#d9a441]">Eng mazali taomlar, siz uchun tayyor!</p>
-            <p className="mt-5 max-w-[370px] text-sm leading-7 text-gray-300">
+            <p className="mb-3 text-xs sm:text-sm uppercase tracking-[3px] text-[#d9a441]">TANHO RESTAURANT</p>
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl leading-tight">Menyu</h1>
+            <p className="mt-3 text-base sm:text-lg text-[#d9a441]">Eng mazali taomlar, siz uchun tayyor!</p>
+            <p className="mt-4 max-w-[370px] text-xs sm:text-sm leading-6 sm:leading-7 text-gray-300">
               TANHO restoranida sizga eng sifatli va mazali taomlarni taqdim etamiz.
             </p>
-            <div className="mt-7 h-[1px] w-28 bg-[#d9a441]" />
+            <div className="mt-6 h-[1px] w-24 sm:w-28 bg-[#d9a441]" />
           </div>
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto -mt-8 max-w-[1240px] px-5">
-        <div className="grid grid-cols-2 gap-2 rounded-xl border border-white/10 bg-[#121619] p-2 backdrop-blur-md sm:grid-cols-4 lg:grid-cols-7">
+      {/* Kategoriya tugmalari moslashtirildi */}
+      <section className="relative z-10 mx-auto max-w-[1240px] px-4 sm:px-6 -mt-6 sm:-mt-8">
+        <div className="flex gap-2 overflow-x-auto pb-2 sm:grid sm:grid-cols-4 lg:grid-cols-7 rounded-xl border border-white/10 bg-[#121619] p-2 backdrop-blur-md [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {categories.map((category) => {
             const Icon = category.icon;
             const isActive = activeCategory === category.name;
@@ -473,25 +473,25 @@ const MenuPage = () => {
                 key={category.name}
                 type="button"
                 onClick={() => setActiveCategory(category.name)}
-                className={`group flex cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-4 text-xs transition-all duration-300 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none select-none ${
+                className={`group flex shrink-0 sm:shrink cursor-pointer items-center justify-center gap-1.5 sm:gap-2 rounded-lg px-3 sm:px-2.5 py-3 sm:py-3.5 text-[11px] sm:text-xs transition-all duration-300 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none select-none ${
                   isActive
                     ? "border border-[#8c651d]/50 bg-[#191e22] text-[#e5ad45]"
                     : "border border-transparent text-gray-300 hover:-translate-y-0.5 hover:bg-[#191e22] hover:text-[#e5ad45]"
                 }`}
               >
-                <Icon size={20} strokeWidth={1.5} className="text-[#d9a441] transition-transform duration-300 group-hover:scale-110" />
-                <span>{category.name}</span>
+                <Icon size={16} strokeWidth={1.5} className="text-[#d9a441] transition-transform duration-300 group-hover:scale-110 shrink-0" />
+                <span className="whitespace-nowrap">{category.name}</span>
               </button>
             );
           })}
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1240px] px-5 py-12">
-        <div className="mb-7 flex items-center justify-between">
+      <section className="mx-auto max-w-[1240px] px-4 sm:px-6 py-10 sm:py-12">
+        <div className="mb-6 sm:mb-7 flex items-center justify-between">
           <div>
-            <p className="mb-2 text-xs uppercase tracking-[3px] text-[#d9a441]">TANHO RESTAURANT</p>
-            <h2 className="font-serif text-3xl md:text-4xl">
+            <p className="mb-1 sm:mb-2 text-xs uppercase tracking-[3px] text-[#d9a441]">TANHO RESTAURANT</p>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl">
               {activeCategory === "Barchasi" ? "Mazali taomlar" : activeCategory}
             </h2>
           </div>
@@ -502,51 +502,57 @@ const MenuPage = () => {
             <Loader2 className="animate-spin" size={22} /> Yuklanmoqda...
           </div>
         ) : visibleItems.length === 0 ? (
-          <div className="rounded-xl border border-white/10 bg-[#121619] py-20 text-center text-gray-400">
+          <div className="rounded-xl border border-white/10 bg-[#121619] py-20 text-center text-gray-400 text-sm">
             Hozircha bu bo'limda taom yo'q
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          /* Mobil va planshetlarda 2 tadan, keng ekranlarda 3-4 tadan chiqishi uchun grid to'g'irlandi */
+          <div className="grid grid-cols-2 gap-3 sm:gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {visibleItems.map((food) => (
               <div
                 key={food.id}
-                className="group cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#121619] transition-all duration-300 hover:-translate-y-1 hover:border-[#d9a441]/60"
+                className="group cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-[#121619] transition-all duration-300 hover:-translate-y-1 hover:border-[#d9a441]/60 flex flex-col justify-between"
               >
-                <div className="relative h-[190px] w-full overflow-hidden bg-[#191e22]">
-                  {food.image ? (
-                    <img
-                      src={food.image}
-                      alt={food.name}
-                      className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-gray-600">
-                      <UtensilsCrossed size={32} />
-                    </div>
-                  )}
+                <div>
+                  <div className="relative h-[130px] sm:h-[180px] md:h-[190px] w-full overflow-hidden bg-[#191e22]">
+                    {food.image ? (
+                      <img
+                        src={food.image}
+                        alt={food.name}
+                        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-gray-600">
+                        <UtensilsCrossed size={32} />
+                      </div>
+                    )}
 
-                  <button
-                    type="button"
-                    className="absolute right-3 top-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/50 text-[#e0ad49] backdrop-blur-sm transition-all duration-300 outline-none focus:outline-none hover:scale-105 hover:bg-[#d9a441] hover:text-black"
-                  >
-                    <Heart size={15} />
-                  </button>
-                </div>
-
-                <div className="relative z-10 bg-[#121619] p-4">
-                  <h3 className="text-base font-semibold transition-colors duration-300 group-hover:text-[#e5ad45]">{food.name}</h3>
-                  <p className="mt-2 min-h-[42px] text-xs leading-5 text-gray-400">{food.description || food.category}</p>
-
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-sm font-medium text-[#e5ad45]">{food.price.toLocaleString()} so'm</span>
+                    <button
+                      type="button"
+                      aria-label="Sevimlilarga qo'shish"
+                      className="absolute right-2.5 top-2.5 sm:right-3 sm:top-3 flex h-7 w-7 sm:h-8 sm:w-8 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/50 text-[#e0ad49] backdrop-blur-sm transition-all duration-300 outline-none focus:outline-none hover:scale-105 hover:bg-[#d9a441] hover:text-black"
+                    >
+                      <Heart size={14} />
+                    </button>
                   </div>
 
+                  <div className="relative z-10 bg-[#121619] p-3 sm:p-4">
+                    <h3 className="text-xs sm:text-base font-semibold transition-colors duration-300 group-hover:text-[#e5ad45] truncate">{food.name}</h3>
+                    <p className="mt-1.5 sm:mt-2 min-h-[32px] sm:min-h-[42px] text-[11px] sm:text-xs leading-4 sm:leading-5 text-gray-400 line-clamp-2">{food.description || food.category}</p>
+
+                    <div className="mt-3 sm:mt-4 flex items-center justify-between">
+                      <span className="text-xs sm:text-sm font-medium text-[#e5ad45]">{food.price.toLocaleString()} so'm</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-3 sm:p-4 pt-0">
                   <button
                     type="button"
-                    className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-lg border border-[#8c651d]/40 px-3 py-2 text-xs text-[#e5ad45] transition-all duration-300 outline-none focus:outline-none hover:bg-[#d9a441] hover:text-black"
+                    className="flex w-full cursor-pointer items-center justify-between rounded-lg border border-[#8c651d]/40 px-2.5 sm:px-3 py-2 sm:py-2.5 text-[11px] sm:text-xs text-[#e5ad45] transition-all duration-300 outline-none focus:outline-none hover:bg-[#d9a441] hover:text-black"
                   >
-                    <span>Buyurtma berish</span>
-                    <ShoppingCart size={15} className="transition-transform duration-300 group-hover:scale-110" />
+                    <span className="truncate">Buyurtma berish</span>
+                    <ShoppingCart size={14} className="transition-transform duration-300 group-hover:scale-110 shrink-0 ml-1" />
                   </button>
                 </div>
               </div>
@@ -555,10 +561,10 @@ const MenuPage = () => {
         )}
       </section>
 
-      <section className="mx-auto max-w-[1240px] px-5 pb-12">
+      <section className="mx-auto max-w-[1240px] px-4 sm:px-6 pb-12">
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121619]">
           <div className="grid md:grid-cols-[280px_1fr]">
-            <div className="relative h-[220px] overflow-hidden bg-[#121619] md:h-auto">
+            <div className="relative h-[200px] sm:h-[220px] overflow-hidden bg-[#121619] md:h-auto">
               <img
                 src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
                 alt="Maxsus taomlar"
@@ -566,35 +572,35 @@ const MenuPage = () => {
               />
             </div>
 
-            <div className="p-6 md:p-8">
-              <div className="mb-7">
+            <div className="p-5 sm:p-6 md:p-8">
+              <div className="mb-6 sm:mb-7">
                 <p className="text-xs uppercase tracking-[2px] text-[#d9a441]">MAXSUS TAKLIF</p>
                 <h2 className="mt-2 font-serif text-2xl md:text-3xl">Maxsus taomlar va aksiyalar</h2>
-                <p className="mt-2 text-sm text-gray-400">Doimiy mijozlarimiz uchun eng yaxshi takliflar!</p>
+                <p className="mt-2 text-xs sm:text-sm text-gray-400">Doimiy mijozlarimiz uchun eng yaxshi takliflar!</p>
               </div>
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 <div className="group cursor-pointer">
-                  <Gift size={28} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
-                  <h3 className="mt-3 text-sm font-semibold">Doimiy aksiyalar</h3>
-                  <p className="mt-2 text-xs leading-5 text-gray-400">Har hafta yangi takliflar va chegirmalar.</p>
+                  <Gift size={26} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
+                  <h3 className="mt-2.5 sm:mt-3 text-sm font-semibold">Doimiy aksiyalar</h3>
+                  <p className="mt-1.5 sm:mt-2 text-xs leading-5 text-gray-400">Har hafta yangi takliflar va chegirmalar.</p>
                 </div>
                 <div className="group cursor-pointer">
-                  <Percent size={28} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
-                  <h3 className="mt-3 text-sm font-semibold">Sodiqlik dasturi</h3>
-                  <p className="mt-2 text-xs leading-5 text-gray-400">Bonuslar to'plang va chegirmalar oling.</p>
+                  <Percent size={26} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
+                  <h3 className="mt-2.5 sm:mt-3 text-sm font-semibold">Sodiqlik dasturi</h3>
+                  <p className="mt-1.5 sm:mt-2 text-xs leading-5 text-gray-400">Bonuslar to'plang va chegirmalar oling.</p>
                 </div>
                 <div className="group cursor-pointer">
-                  <Star size={28} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
-                  <h3 className="mt-3 text-sm font-semibold">Maxsus tadbirlar</h3>
-                  <p className="mt-2 text-xs leading-5 text-gray-400">Bayramlar va tadbirlar uchun maxsus menyu.</p>
+                  <Star size={26} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
+                  <h3 className="mt-2.5 sm:mt-3 text-sm font-semibold">Maxsus tadbirlar</h3>
+                  <p className="mt-1.5 sm:mt-2 text-xs leading-5 text-gray-400">Bayramlar va tadbirlar uchun maxsus menyu.</p>
                 </div>
               </div>
 
               <button
                 type="button"
                 onClick={() => navigate("/reservation")}
-                className="mt-7 flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-5 py-2.5 text-sm font-medium text-black transition-all duration-300 outline-none focus:outline-none hover:bg-[#edbd58]"
+                className="mt-6 sm:mt-7 flex w-full sm:w-auto cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#d9a441] px-5 py-3 sm:py-2.5 text-sm font-medium text-black transition-all duration-300 outline-none focus:outline-none hover:bg-[#edbd58]"
               >
                 Aksiyalarni ko'rish
                 <ChevronRight size={17} />

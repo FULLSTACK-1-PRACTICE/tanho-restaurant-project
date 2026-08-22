@@ -118,7 +118,7 @@ function Header() {
               <button
                 type="button"
                 onClick={() => openAuthModal("kirish")}
-                className="hidden lg:flex group relative cursor-pointer items-center gap-2 rounded-lg border border-[#dcae4d]/40 bg-transparent px-5 py-2 text-[13px] font-semibold tracking-wider text-[#dcae4d] hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_0_20px_rgba(220,174,77,0.3)] active:scale-[0.98] transition-all duration-300"
+                className="hidden lg:flex group relative cursor-pointer items-center gap-2.5 rounded-xl border border-[#dcae4d]/40 bg-transparent px-6 py-2.5 text-[13px] font-semibold tracking-wider text-[#dcae4d] hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_0_20px_rgba(220,174,77,0.3)] active:scale-[0.98] transition-all duration-300"
               >
                 <LogIn
                   size={16}

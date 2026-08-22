@@ -29,16 +29,16 @@ function HeroSection() {
       </div>
 
       <Container className="relative z-10 mx-auto max-w-[1250px] px-6">
-        <div className="flex min-h-[720px] items-center pt-[120px] pb-[100px]">
+        <div className="flex min-h-[720px] items-center pt-[100px] pb-[80px] sm:pt-[120px] sm:pb-[100px]">
           <div className="max-w-[580px]">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#dcae4d]/30 bg-[#151310]/70 px-3.5 py-1.5 backdrop-blur-md">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#dcae4d]" />
-              <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#e3b859]">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#dcae4d]/30 bg-[#151310]/70 px-3.5 py-1.5 backdrop-blur-md sm:mb-6">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#dcae4d]" />
+              <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#e3b859] sm:text-[11px] sm:tracking-[0.22em]">
                 Zamonaviy Muhit & Premium Gastronomiya
               </p>
             </div>
 
-            <h1 className="font-serif text-[46px] font-normal leading-[1.08] tracking-tight text-[#f7f5f0] sm:text-[58px] lg:text-[66px]">
+            <h1 className="font-serif text-[42px] font-normal leading-[1.08] tracking-tight text-[#f7f5f0] sm:text-[58px] lg:text-[66px]">
               Ta’mda tanho,
               <br />
               <span className="font-serif font-light italic text-[#dcae4d]">
@@ -47,15 +47,16 @@ function HeroSection() {
               abadiy
             </h1>
 
-            <p className="mt-6 max-w-[460px] text-[15px] font-light leading-relaxed text-[#c1c1bc]">
+            <p className="mt-5 max-w-[460px] text-[14px] font-light leading-relaxed text-[#c1c1bc] sm:mt-6 sm:text-[15px]">
               TANHO — mualliflik taomlari, nafis va shinam atmosfera hamda
               unutilmas onlar uchun maxsus yaratilgan restoran.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-4">
+            {/* TUGMALAR QISMI - Mobil uchun to'liq kenglik, kompyuter uchun avto */}
+            <div className="mt-8 flex flex-col gap-3.5 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
               <button
                 type="button"
-                className="group flex cursor-pointer items-center gap-2.5 rounded-md bg-[#dcae4d] px-7 py-3.5 text-[12px] font-semibold tracking-wider text-[#08090a] shadow-[0_10px_30px_rgba(220,174,77,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#ebd074] hover:shadow-[0_15px_35px_rgba(220,174,77,0.35)]"
+                className="group flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-md bg-[#dcae4d] px-7 py-4 text-[12px] font-semibold tracking-wider text-[#08090a] shadow-[0_10px_30px_rgba(220,174,77,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#ebd074] hover:shadow-[0_15px_35px_rgba(220,174,77,0.35)] sm:w-auto sm:py-3.5"
                 onClick={() => navigate("/menu")}
               >
                 <span>MENYUNI KO‘RISH</span>
@@ -68,7 +69,7 @@ function HeroSection() {
 
               <button
                 type="button"
-                className="group flex cursor-pointer items-center gap-2.5 rounded-md border border-white/20 bg-black/20 px-7 py-3.5 text-[12px] font-medium tracking-wider text-[#f1eee7] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dcae4d]/60 hover:bg-white/[0.08] hover:text-[#dcae4d]"
+                className="group flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-md border border-white/20 bg-black/20 px-7 py-4 text-[12px] font-medium tracking-wider text-[#f1eee7] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dcae4d]/60 hover:bg-white/[0.08] hover:text-[#dcae4d] sm:w-auto sm:py-3.5"
                 onClick={() => navigate("/reservation")}
               >
                 <CalendarDays
@@ -82,15 +83,11 @@ function HeroSection() {
 
             <div className="mt-10 flex items-center gap-4 border-t border-white/10 pt-6">
               <div className="flex -space-x-1.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#070809] bg-[#dcae4d]/20 text-[10px] font-bold text-[#dcae4d]">
-                  ★
-                </div>
-                <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#070809] bg-[#dcae4d]/20 text-[10px] font-bold text-[#dcae4d]">
-                  ★
-                </div>
-                <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#070809] bg-[#dcae4d]/20 text-[10px] font-bold text-[#dcae4d]">
-                  ★
-                </div>
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="flex h-7 w-7 items-center justify-center rounded-full border border-[#070809] bg-[#dcae4d]/20 text-[10px] font-bold text-[#dcae4d]">
+                    ★
+                  </div>
+                ))}
               </div>
 
               <div className="text-[12px] text-[#a8a8a2]">

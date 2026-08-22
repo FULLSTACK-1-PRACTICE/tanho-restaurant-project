@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import yangiliklar from "../../../assets/images/Layout/Header/yangiliklar.png";
+import Container from "../../../components/ui/container/Container";
 import {
   Search,
   ChevronDown,
@@ -9,8 +10,9 @@ import {
   Send,
   Sparkles,
   X,
+  CheckCircle2,
+  BellRing,
 } from "lucide-react";
-
 
 type CategoryKey = "barchasi" | "maxsus" | "tadbir" | "yangilik" | "elon";
 
@@ -49,101 +51,61 @@ const NEWS: NewsItem[] = [
     id: 1,
     category: "maxsus",
     badge: "MAXSUS TAKLIF",
-    date: "01.05.2024",
-    title: "Yangi yozgi menyu taqdim etildi!",
+    date: "15.08.2026",
+    title: "Qarshi shahrida yozgi ochiq ayvon ochildi!",
     description:
-      "Yoz fasli uchun maxsus tayyorlangan yengil va mazali taomlar bilan tanishing. Yangi menyuda tabiiy sabzavotlar, dengiz mahsulotlari va yengil souslar asosida tayyorlangan taomlar o'z o'rnini topdi. Har bir taom mehmonlarimizning yozgi kayfiyatini his qilishlari uchun maxsus tanlab olingan.",
-    image: "https://picsum.photos/seed/tanho-salad/900/650",
+      "Tanho restoranining Qarshidagi filialida yozgi mavsum uchun maxsus yashil ayvon o'z ishini boshladi. Issiq kunlarda salqin muhitda mazali milliy taomlarimizdan bahramand bo'lishingiz mumkin. Oilangiz va yaqinlaringiz uchun maxsus shift ventilyatsiyasi va favvorali hudud tashkil etildi.",
+    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 2,
     category: "tadbir",
     badge: "TADBIR",
-    date: "28.04.2024",
-    title: "Ramazon hayiti munosabati bilan maxsus menyu",
+    date: "10.08.2026",
+    title: "Qashqadaryocha Tandir go'shti kechasi",
     description:
-      "Bayraminigiz muborak bo'lsin! Maxsus taomlar bilan sizni kutib olamiz. Hayit kunlari uchun tayyorlangan an'anaviy va zamonaviy taomlar, shirinliklar hamda ichimliklar oilaviy davralarga mos ravishda tanlab chiqilgan.",
-    image: "https://picsum.photos/seed/tanho-dinner/900/650",
+      "Har shanba oqshomida Qarshi Tanho restoranida maxsus Qashqadaryocha tandir go'shti taqdimoti o'tkaziladi. Mohir oshpazlarimiz tomonidan maxsus maxalliy ziravorlarda tayyorlangan tandir taomlari va jonli milliy cholg'u kuylari sizni kutmoqda.",
+    image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 3,
-    category: "tadbir",
-    badge: "TADBIR",
-    date: "20.04.2024",
-    title: "Jonli musiqa kechalarimiz davom etadi!",
+    category: "yangilik",
+    badge: "YANGILIK",
+    date: "02.08.2026",
+    title: "Oilaviy to'ylar va marosimlar uchun yangi zal",
     description:
-      "Har juma va shanba kunlari jonli musiqa va ajoyib atmosfera. Professional musiqachilar tomonidan ijro etiladigan jonli kontsertlar restoranimizning maxsus sahnasida kechqurun soat 20:00 dan boshlanadi.",
-    image: "https://picsum.photos/seed/tanho-music/900/650",
+      "Restoranimizda kichik oilaviy tadbirlar, sunnat to'ylari va 50 kishigacha bo'lgan ziyofatlar uchun zamonaviy ko'rinishda jihozlangan alohida VIP zal foydalanishga topshirildi. Buyurtmalar hozirdan qabul qilinmoqda.",
+    image: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 4,
-    category: "yangilik",
-    badge: "YANGILIK",
-    date: "15.04.2024",
-    title: "Yangi «TANHO Steak» taomi endi menyuda",
+    category: "maxsus",
+    badge: "MAXSUS TAKLIF",
+    date: "25.07.2026",
+    title: "Milliy palov va qatiq aksiyasi",
     description:
-      "Maxsus sous va ziravorlar bilan tayyorlangan shefning yangi imzoli taomi. Faqat eng sifatli mol go'shtidan tayyorlangan ushbu steak, maxsus tayyorlangan qorong'i sous va yangi sabzavotlar bilan serviruyetsya qilinadi.",
-    image: "https://picsum.photos/seed/tanho-steak/900/650",
+      "Qarshi shahrining barcha aholisi va mehmonlari uchun har kuni tushlik vaqtida maxsus Tanho oshi va mahalliy qatiq to'plamiga maxsus chegirmalar joriy etildi. Sifat va an'anaviy ta'm o'zgarmas qoladi.",
+    image: "https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 5,
     category: "elon",
     badge: "E'LON",
-    date: "10.04.2024",
-    title: "Ish vaqti uzaytirildi!",
+    date: "15.07.2026",
+    title: "Yetkazib berish (Delivery) xizmati ishga tushdi",
     description:
-      "Sizlarning iltimosingizga binoan endilikda har kuni 10:00 dan 24:00 gacha xizmatdamiz. Endi kech tushgan mehmonlarimiz ham TANHO'ning mazali taomlari va o'ziga xos atmosferasidan bahramand bo'lishlari mumkin.",
-    image: "https://picsum.photos/seed/tanho-facade/900/650",
+      "Endi Qarshi shahri bo'ylab uydan chiqmagan holda Tanho restoranining sevimli taomlariga buyurtma berishingiz mumkin. Issiq holatda tezkor yetkazib berish xizmati har kuni soat 10:00 dan 23:00 gacha amal qiladi.",
+    image: "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 6,
-    category: "maxsus",
-    badge: "MAXSUS TAKLIF",
-    date: "05.04.2024",
-    title: "Desertlarimizga 20% chegirma!",
-    description:
-      "Shirinliklarga bo'lgan muhabbatimizni siz bilan baham ko'ramiz. 5-7 aprel kunlari barcha desert turlariga 20% chegirma amal qiladi. Aksiya faqat restoran ichida iste'mol qilinganda amal qiladi.",
-    image: "https://picsum.photos/seed/tanho-cake/900/650",
-  },
-  {
-    id: 7,
-    category: "yangilik",
-    badge: "YANGILIK",
-    date: "01.04.2024",
-    title: "Yangi ichimliklar menyusi",
-    description:
-      "Tabiiy mevalardan tayyorlangan sovuq va issiq ichimliklar endi menyuda. Fasldagi mevalardan siqilgan sharbatlar, mokteyllar va issiq choy turlari yangi menyuda o'z joyini egalladi.",
-    image: "https://picsum.photos/seed/tanho-drinks/900/650",
-  },
-  {
-    id: 8,
     category: "tadbir",
     badge: "TADBIR",
-    date: "28.03.2024",
-    title: "Korporativ tadbirlar uchun maxsus taklif",
+    date: "01.07.2026",
+    title: "Bolajonlar uchun shirinliklar master-klassi",
     description:
-      "Katta guruhlar uchun alohida shartlar va menyu. Kompaniyangiz uchun tadbir tashkil qilmoqchi bo'lsangiz, bizning tadbirlar bo'limi sizga individual yondashuv bilan menyu va zal tayyorlab beradi.",
-    image: "https://picsum.photos/seed/tanho-event/900/650",
-  },
-  {
-    id: 9,
-    category: "yangilik",
-    badge: "YANGILIK",
-    date: "25.03.2024",
-    title: "Non mahsulotlari yangilandi",
-    description:
-      "Endi non va somsa mahsulotlarimiz yanada mazali va xushbo'y bo'ldi. Har kuni ertalab yangilanadigan xamir mahsulotlari o'zining tabiiy tarkibi va yangiligi bilan mehmonlarimizni xursand qiladi.",
-    image: "https://picsum.photos/seed/tanho-bread/900/650",
-  },
-  {
-    id: 10,
-    category: "elon",
-    badge: "E'LON",
-    date: "10.04.2024",
-    title: "Ramazon oyi uchun ish jadvali",
-    description:
-      "Ro'za tutuvchi mehmonlarimiz uchun iftor va saharlik menyularimiz haqida ma'lumot. Ramazon oyi davomida maxsus iftorlik dasturxonlari va saharlik uchun buyurtmalar qabul qilinadi.",
-    image: "https://picsum.photos/seed/tanho-lantern/900/650",
+      "Dam olish kunida farzandlaringiz uchun unutilmas bayram tuhfa eting! Restoranimizda kichkintoylar uchun shirinliklar tayyorlash va ularni bezatish bo'yicha qiziqarli master-klass bo'lib o'tadi.",
+    image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=80",
   },
 ];
 
@@ -178,12 +140,13 @@ const NewsModal = ({ item, onClose }: NewsModalProps) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative flex max-h-[90vh] w-full max-w-[720px] flex-col overflow-hidden rounded-lg border border-white/10 bg-[#0b0d10] shadow-2xl"
+        className="relative flex max-h-[90vh] w-full max-w-[720px] flex-col overflow-hidden rounded-lg border border-white/10 bg-[#0b0d10] shadow-2xl animate-in fade-in zoom-in-95 duration-200"
       >
         <button
+          type="button"
           onClick={onClose}
           aria-label="Yopish"
-          className="absolute right-4 top-4 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70 hover:text-[#dcae4d]"
+          className="absolute right-4 top-4 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70 hover:text-[#dcae4d] outline-none"
         >
           <X size={17} strokeWidth={1.8} />
         </button>
@@ -218,8 +181,9 @@ const NewsModal = ({ item, onClose }: NewsModalProps) => {
             </p>
 
             <button
+              type="button"
               onClick={onClose}
-              className="mt-4 flex w-fit cursor-pointer items-center gap-2 rounded-md border border-[#dcae4d]/40 px-5 py-2.5 text-[12.5px] font-medium text-[#dcae4d] transition-all duration-300 hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black"
+              className="mt-4 flex w-fit cursor-pointer items-center gap-2 rounded-md border border-[#dcae4d]/40 px-5 py-2.5 text-[12.5px] font-medium text-[#dcae4d] transition-all duration-300 hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black outline-none"
             >
               <span>Yopish</span>
             </button>
@@ -238,11 +202,13 @@ const NewsPage = () => {
   const [page, setPage] = useState(1);
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   
+  const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
   const parseDate = (d: string) => {
     const [day, month, year] = d.split(".").map(Number);
     return new Date(year, month - 1, day).getTime();
   };
-  
   
   const filtered = useMemo(() => {
     let list = NEWS.filter((item) => {
@@ -277,253 +243,304 @@ const NewsPage = () => {
     setPage(1);
   };
 
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim()) {
+      setIsSubscribed(true);
+      setEmail("");
+    }
+  };
+
   return (
-    <div className="min-h-screen w-full bg-[#020305]">  
-   
-      <section className="relative overflow-hidden border-b max-w-[1200px] m-auto  border-white/5">
-        <div className="absolute inset-0 ">
+    <div className="min-h-screen w-full bg-[#020305] overflow-x-hidden">  
+      {/* Header Banner Section */}
+      <section className="relative overflow-hidden border-b border-white/5">
+        <div className="absolute inset-0">
           <img
             src={yangiliklar}
             alt="Yangiliklar"
             className="h-full w-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#020305] via-[#020305]/85 to-[#020305]/20" />
+          <div className="absolute inset-0 bg-[#020305]/80 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#020305] via-[#020305]/90 to-transparent" />
         </div>
 
-        <div className="relative mx-auto flex max-w-[1200px] flex-col gap-4 px-5 py-20">
-          <h1 className="font-serif text-[42px] leading-tight text-white sm:text-[52px]">
-            Yangiliklar
-          </h1>
-          <p className="max-w-[520px] text-[15px] leading-relaxed text-white/60">
-            TANHO restoranidagi eng so'nggi yangiliklar, maxsus takliflar va
-            tadbirlar bilan tanishing.
-          </p>
+        <Container>
+          <div className="relative flex flex-col gap-4 py-16 sm:py-24 z-10">
+            <h1 className="font-serif text-[36px] sm:text-[42px] md:text-[52px] leading-tight text-white">
+              Yangiliklar
+            </h1>
+            <p className="max-w-[520px] text-[14px] sm:text-[15px] leading-relaxed text-white/70">
+              Qarshi shahridagi TANHO restoranining eng so'nggi yangiliklari, maxsus takliflari va tadbirlari bilan tanishing.
+            </p>
 
-          <div className="mt-3 flex items-center gap-3 text-[#dcae4d]">
-            <span className="h-px w-10 bg-[#dcae4d]/50" />
-            <Sparkles size={14} strokeWidth={1.5} />
-            <span className="h-px w-10 bg-[#dcae4d]/50" />
+            <div className="mt-3 flex items-center gap-3 text-[#dcae4d]">
+              <span className="h-px w-10 bg-[#dcae4d]/50" />
+              <Sparkles size={14} strokeWidth={1.5} />
+              <span className="h-px w-10 bg-[#dcae4d]/50" />
+            </div>
           </div>
-        </div>
+        </Container>
       </section>
 
-      <section className="mx-auto max-w-[1200px] px-5 pt-10">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="relative w-full lg:max-w-[280px]">
-            <Search
-              size={16}
-              strokeWidth={1.8}
-              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
-            />
-            <input
-              value={query}
-              onChange={(e) => handleQueryChange(e.target.value)}
-              placeholder="Yangiliklar ichidan qidiring..."
-              className="h-11 w-full rounded-md border border-white/10 bg-[#0b0d10] pl-10 pr-4 text-[13px] text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#dcae4d]/50"
-            />
-          </div>
+      {/* Filters & Search Section */}
+      <section className="pt-8 sm:pt-10">
+        <Container>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="relative w-full lg:max-w-[280px]">
+              <Search
+                size={16}
+                strokeWidth={1.8}
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
+              />
+              <input
+                value={query}
+                onChange={(e) => handleQueryChange(e.target.value)}
+                placeholder="Yangiliklar ichidan qidiring..."
+                className="h-11 w-full rounded-md border border-white/10 bg-[#0b0d10] pl-10 pr-4 text-[13px] text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#dcae4d]/50"
+              />
+            </div>
 
-          
-          <div className="flex flex-wrap items-center gap-2">
-            {CATEGORIES.map((cat) => {
-              const isActive = cat.key === activeCategory;
-              return (
+            <div className="w-full overflow-x-auto overflow-y-hidden rounded-md border border-white/10 bg-[#0b0d10] p-1.5 lg:border-none lg:bg-transparent lg:p-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex items-center gap-2 flex-nowrap min-w-max lg:flex-wrap lg:min-w-full">
+                {CATEGORIES.map((cat) => {
+                  const isActive = cat.key === activeCategory;
+                  return (
+                    <button
+                      key={cat.key}
+                      type="button"
+                      onClick={() => handleCategoryChange(cat.key)}
+                      className={`h-9 shrink-0 cursor-pointer rounded-md px-4 text-[12.5px] font-medium transition-all duration-300 outline-none focus:outline-none focus:ring-0 select-none ${
+                        isActive
+                          ? "bg-[#dcae4d] text-black border-transparent"
+                          : "border border-white/10 lg:border-white/10 bg-transparent text-white/70 hover:border-[#dcae4d]/40 hover:text-[#dcae4d]"
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="relative shrink-0">
+              <button
+                type="button"
+                onClick={() => setSortOpen((v) => !v)}
+                className="flex h-11 w-full min-w-[160px] cursor-pointer items-center justify-between gap-3 rounded-md border border-white/10 bg-[#0b0d10] px-4 text-[13px] text-white/80 transition-colors hover:border-white/20 outline-none focus:outline-none"
+              >
+                <span>{sort}</span>
+                <ChevronDown
+                  size={14}
+                  strokeWidth={1.8}
+                  className={`text-white/40 transition-transform duration-300 ${
+                    sortOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {sortOpen && (
+                <div className="absolute right-0 top-[calc(100%+6px)] z-20 w-full min-w-[160px] overflow-hidden rounded-md border border-white/10 bg-[#0b0d10] shadow-xl">
+                  {SORT_OPTIONS.map((opt) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => {
+                        setSort(opt);
+                        setSortOpen(false);
+                      }}
+                      className={`block w-full cursor-pointer px-4 py-2.5 text-left text-[13px] transition-colors outline-none ${
+                        opt === sort
+                          ? "text-[#dcae4d]"
+                          : "text-white/70 hover:bg-white/5 hover:text-white"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Cards Grid Section */}
+      <section className="py-8 sm:py-10">
+        <Container>
+          {paginated.length === 0 ? (
+            <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-white/10 bg-[#0b0d10] py-24 text-center">
+              <p className="text-[15px] text-white/60">
+                Hech qanday yangilik topilmadi.
+              </p>
+              <p className="text-[13px] text-white/30">
+                Boshqa kalit so'z yoki bo'lim bilan qayta urinib ko'ring.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+              {paginated.map((item) => (
+                <article
+                  key={item.id}
+                  onClick={() => setSelectedNews(item)}
+                  className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-white/8 bg-[#0b0d10] transition-all duration-300 hover:-translate-y-1 hover:border-[#dcae4d]/30"
+                >
+                  <div className="relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+
+                    <span
+                      className={`absolute left-3 top-3 rounded px-2.5 py-1 text-[10px] font-semibold tracking-wide ${
+                        BADGE_STYLES[item.category]
+                      }`}
+                    >
+                      {item.badge}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-1 flex-col gap-2 p-4">
+                    <span className="text-[11px] text-white/35">{item.date}</span>
+
+                    <h3 className="text-[14.5px] font-semibold leading-snug text-white">
+                      {item.title}
+                    </h3>
+
+                    <p className="line-clamp-2 text-[12.5px] leading-relaxed text-white/45">
+                      {item.description}
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedNews(item);
+                      }}
+                      className="group/btn mt-auto flex w-full cursor-pointer items-center justify-between pt-3 text-[12.5px] font-medium text-[#dcae4d] outline-none"
+                    >
+                      <span>Batafsil o'qish</span>
+                      <ArrowUpRight
+                        size={15}
+                        strokeWidth={2}
+                        className="transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
+                      />
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+
+          {totalPages > 1 && (
+            <div className="mt-10 flex items-center justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white/50 transition-colors hover:border-[#dcae4d]/40 hover:text-[#dcae4d] disabled:cursor-not-allowed disabled:opacity-30 outline-none"
+              >
+                <ChevronLeft size={16} strokeWidth={1.8} />
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
                 <button
-                  key={cat.key}
-                  onClick={() => handleCategoryChange(cat.key)}
-                  className={`h-9 cursor-pointer rounded-md px-4 text-[12.5px] font-medium transition-all duration-300 ${
-                    isActive
+                  key={n}
+                  type="button"
+                  onClick={() => setPage(n)}
+                  className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-md text-[13px] font-medium transition-colors outline-none ${
+                    n === page
                       ? "bg-[#dcae4d] text-black"
-                      : "border border-white/10 bg-transparent text-white/70 hover:border-[#dcae4d]/40 hover:text-[#dcae4d]"
+                      : "border border-white/10 text-white/60 hover:border-[#dcae4d]/40 hover:text-[#dcae4d]"
                   }`}
                 >
-                  {cat.label}
+                  {n}
                 </button>
-              );
-            })}
-          </div>
+              ))}
 
-          <div className="relative shrink-0">
-            <button
-              onClick={() => setSortOpen((v) => !v)}
-              className="flex h-11 w-full min-w-[160px] cursor-pointer items-center justify-between gap-3 rounded-md border border-white/10 bg-[#0b0d10] px-4 text-[13px] text-white/80 transition-colors hover:border-white/20"
-            >
-              <span>{sort}</span>
-              <ChevronDown
-                size={14}
-                strokeWidth={1.8}
-                className={`text-white/40 transition-transform duration-300 ${
-                  sortOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {sortOpen && (
-              <div className="absolute right-0 top-[calc(100%+6px)] z-20 w-full min-w-[160px] overflow-hidden rounded-md border border-white/10 bg-[#0b0d10] shadow-xl">
-                {SORT_OPTIONS.map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => {
-                      setSort(opt);
-                      setSortOpen(false);
-                    }}
-                    className={`block w-full cursor-pointer px-4 py-2.5 text-left text-[13px] transition-colors ${
-                      opt === sort
-                        ? "text-[#dcae4d]"
-                        : "text-white/70 hover:bg-white/5 hover:text-white"
-                    }`}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white/50 transition-colors hover:border-[#dcae4d]/40 hover:text-[#dcae4d] disabled:cursor-not-allowed disabled:opacity-30 outline-none"
+              >
+                <ChevronRight size={16} strokeWidth={1.8} />
+              </button>
+            </div>
+          )}
+        </Container>
       </section>
 
-      <section className="mx-auto max-w-[1200px] px-5 py-10">
-        {paginated.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-white/10 bg-[#0b0d10] py-24 text-center">
-            <p className="text-[15px] text-white/60">
-              Hech qanday yangilik topilmadi.
-            </p>
-            <p className="text-[13px] text-white/30">
-              Boshqa kalit so'z yoki bo'lim bilan qayta urinib ko'ring.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {paginated.map((item) => (
-              <article
-                key={item.id}
-                onClick={() => setSelectedNews(item)}
-                className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-white/8 bg-[#0b0d10] transition-all duration-300 hover:-translate-y-1 hover:border-[#dcae4d]/30"
-              >
-                <div className="relative aspect-[4/3] w-full overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+      {/* Subscription Section */}
+      <section className="pb-16">
+        <Container>
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b0d10] via-[#0b0d10] to-[#12161d] shadow-2xl">
+            <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#dcae4d]/10 blur-3xl pointer-events-none" />
+            <div className="absolute -left-24 -bottom-24 h-72 w-72 rounded-full bg-[#dcae4d]/5 blur-3xl pointer-events-none" />
 
-                  <span
-                    className={`absolute left-3 top-3 rounded px-2.5 py-1 text-[10px] font-semibold tracking-wide ${
-                      BADGE_STYLES[item.category]
-                    }`}
-                  >
-                    {item.badge}
-                  </span>
-
+            <div className="grid grid-cols-1 lg:grid-cols-12 items-center relative z-10">
+              <div className="flex flex-col justify-center gap-5 p-6 sm:p-10 lg:col-span-7">
+                <div className="flex items-center gap-2.5 w-fit rounded-full border border-[#dcae4d]/30 bg-[#dcae4d]/10 px-3.5 py-1 text-[11.5px] font-medium text-[#dcae4d]">
+                  <BellRing size={13} className="animate-bounce" />
+                  <span>Eksklyuziv Yangiliklar</span>
                 </div>
 
-                <div className="flex flex-1 flex-col gap-2 p-4">
-                  <span className="text-[11px] text-white/35">{item.date}</span>
-
-                  <h3 className="text-[14.5px] font-semibold leading-snug text-white">
-                    {item.title}
+                <div className="space-y-2">
+                  <h3 className="font-serif text-[26px] sm:text-[32px] leading-tight text-white tracking-wide">
+                    Maxsus takliflar va yangi taomlardan birinchi bo'lib xabardor bo'ling!
                   </h3>
-
-                  <p className="line-clamp-2 text-[12.5px] leading-relaxed text-white/45">
-                    {item.description}
+                  <p className="max-w-[500px] text-[13.5px] sm:text-[14.5px] leading-relaxed text-white/60">
+                    Email manzilingizni qoldiring va Qarshi shahridagi TANHO restorani aksiyalari, chegirmalari hamda bayramona dasturlari haqida tezkor xabarlar oling.
                   </p>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedNews(item);
-                    }}
-                    className="group/btn mt-auto flex cursor-pointer items-center gap-1.5 pt-3 text-[12.5px] font-medium text-[#dcae4d]"
-                  >
-                    <span>Batafsil o'qish</span>
-                    <ArrowUpRight
-                      size={14}
-                      strokeWidth={2}
-                      className="transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
-                    />
-                  </button>
                 </div>
-              </article>
-            ))}
+
+                {isSubscribed ? (
+                  <div className="flex items-center gap-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 max-w-[460px] animate-in fade-in duration-300">
+                    <CheckCircle2 size={22} className="text-emerald-400 shrink-0" />
+                    <div>
+                      <h4 className="text-[13.5px] font-semibold text-emerald-300">Muvaffaqiyatli obuna bo'ldingiz!</h4>
+                      <p className="text-[12px] text-emerald-400/80 mt-0.5">Endi barcha yangiliklar elektron pochtangizga borib turadi.</p>
+                    </div>
+                  </div>
+                ) : (
+                  <form
+                    onSubmit={handleSubscribe}
+                    className="flex flex-col sm:flex-row w-full max-w-[460px] items-stretch sm:items-center gap-3 mt-1"
+                  >
+                    <div className="relative flex-1">
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Email manzilingizni kiriting..."
+                        className="h-12 w-full rounded-xl border border-white/10 bg-[#020305]/80 px-4 text-[13.5px] text-white placeholder:text-white/35 outline-none transition-all focus:border-[#dcae4d] focus:ring-2 focus:ring-[#dcae4d]/20 shadow-inner"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="flex h-12 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#dcae4d] px-6 text-[13px] font-semibold text-black transition-all duration-300 hover:bg-[#f3c766] hover:shadow-lg hover:shadow-[#dcae4d]/20 active:scale-95 outline-none"
+                    >
+                      <span>Obuna bo'lish</span>
+                      <Send size={15} strokeWidth={2} />
+                    </button>
+                  </form>
+                )}
+              </div>
+
+              <div className="relative hidden min-h-[380px] lg:flex lg:col-span-5 h-full w-full overflow-hidden rounded-r-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=80"
+                  alt="Restaurant Atmosphere"
+                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d10] via-transparent to-transparent opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0b0d10] via-transparent to-transparent" />
+              </div>
+            </div>
           </div>
-        )}
-
-        {totalPages > 1 && (
-          <div className="mt-10 flex items-center justify-center gap-2">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white/50 transition-colors hover:border-[#dcae4d]/40 hover:text-[#dcae4d] disabled:cursor-not-allowed disabled:opacity-30"
-            >
-              <ChevronLeft size={16} strokeWidth={1.8} />
-            </button>
-
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <button
-                key={n}
-                onClick={() => setPage(n)}
-                className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-md text-[13px] font-medium transition-colors ${
-                  n === page
-                    ? "bg-[#dcae4d] text-black"
-                    : "border border-white/10 text-white/60 hover:border-[#dcae4d]/40 hover:text-[#dcae4d]"
-                }`}
-              >
-                {n}
-              </button>
-            ))}
-
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white/50 transition-colors hover:border-[#dcae4d]/40 hover:text-[#dcae4d] disabled:cursor-not-allowed disabled:opacity-30"
-            >
-              <ChevronRight size={16} strokeWidth={1.8} />
-            </button>
-          </div>
-        )}
-      </section>
-
-      
-      <section className="mx-auto max-w-[1200px] px-5 pb-16">
-        <div className="grid grid-cols-1 overflow-hidden rounded-lg border border-white/8 bg-[#0b0d10] lg:grid-cols-2">
-          <div className="flex flex-col justify-center gap-4 p-8 sm:p-10">
-            <h3 className="font-serif text-[26px] text-white">
-              Yangiliklardan xabardor bo'ling!
-            </h3>
-            <p className="max-w-[420px] text-[13.5px] leading-relaxed text-white/45">
-              Yangi taomlar, maxsus takliflar va tadbirlar haqida
-              birinchilardan bo'lib bilib oling.
-            </p>
-
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="mt-2 flex w-full max-w-[420px] items-center gap-3"
-            >
-              <input
-                type="email"
-                required
-                placeholder="Email manzilingizni kiriting"
-                className="h-11 flex-1 rounded-md border border-white/10 bg-[#020305] px-4 text-[13px] text-white placeholder:text-white/30 outline-none transition-colors focus:border-[#dcae4d]/50"
-              />
-              <button
-                type="submit"
-                className="flex h-11 shrink-0 cursor-pointer items-center gap-2 rounded-md bg-[#dcae4d] px-5 text-[12.5px] font-semibold text-black transition-colors duration-300 hover:bg-[#f3c766]"
-              >
-                <span>Obuna bo'lish</span>
-                <Send size={14} strokeWidth={2} />
-              </button>
-            </form>
-          </div>
-
-          <div className="relative hidden min-h-[220px] lg:block">
-            <img
-              src="https://barvikhagroup.ru/storage/uploads/c34e5e40-5783-476a-b14e-963fdfe37682.webp"
-              alt=""
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#0b0d10]/80" />
-          </div>
-        </div>
+        </Container>
       </section>
 
       {selectedNews && (

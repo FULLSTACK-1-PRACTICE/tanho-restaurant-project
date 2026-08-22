@@ -44,34 +44,34 @@ const ReservationPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050708] text-white font-sans pb-16">
+    <div className="min-h-screen bg-[#050708] text-white font-sans pb-12 sm:pb-16 overflow-x-hidden">
       
       <div 
-        className="relative w-full border-b border-[#1A1A1E] bg-cover bg-center pt-24 pb-16 md:pt-32 md:pb-20"
+        className="relative w-full border-b border-[#1A1A1E] bg-cover bg-center pt-20 pb-12 sm:pt-24 sm:pb-16 md:pt-32 md:pb-20"
         style={{
-          backgroundImage: `linear-gradient(to right, rgba(5, 7, 8, 0.85) 15%, rgba(5, 7, 8, 0.65) 55%, rgba(5, 7, 8, 0.85) 90%), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1920&auto=format&fit=crop')`,
+          backgroundImage: `linear-gradient(to right, rgba(5, 7, 8, 0.9) 15%, rgba(5, 7, 8, 0.7) 55%, rgba(5, 7, 8, 0.9) 90%), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1920&auto=format&fit=crop')`,
         }}
       >
         <Container>
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-4">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pt-4">
             <div>
-              <h1 className="text-3xl md:text-5xl font-serif text-white tracking-wide mb-3">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl font-serif text-white tracking-wide mb-2 sm:mb-3">
                 Stol band qilish
               </h1>
-              <p className="text-sm text-neutral-400">
+              <p className="text-xs sm:text-sm text-neutral-400">
                 Bosh sahifa <span className="mx-1.5 text-[#e5c567]">›</span> <span className="text-[#e5c567]">Stol band qilish</span>
               </p>
             </div>
 
-            <div className="bg-[#0A0A0B]/95 border border-[#1E1E24] rounded-2xl p-4 md:p-5 flex items-center gap-4 max-w-md shadow-2xl backdrop-blur-md">
-              <div className="w-12 h-12 rounded-xl bg-[#e5c567]/10 border border-[#e5c567]/30 flex items-center justify-center shrink-0">
-                <CalendarCheck className="w-6 h-6 text-[#e5c567]" />
+            <div className="bg-[#0A0A0B]/95 border border-[#1E1E24] rounded-2xl p-4 sm:p-5 flex items-center gap-3 sm:gap-4 w-full lg:max-w-md shadow-2xl backdrop-blur-md">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#e5c567]/10 border border-[#e5c567]/30 flex items-center justify-center shrink-0">
+                <CalendarCheck className="w-5 h-5 sm:w-6 sm:h-6 text-[#e5c567]" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-white leading-snug">
+                <h3 className="text-xs sm:text-sm font-semibold text-white leading-snug">
                   Oldindan band qiling, va biz sizni kutamiz!
                 </h3>
-                <p className="text-xs text-neutral-400 mt-1">
+                <p className="text-[11px] sm:text-xs text-neutral-400 mt-0.5 sm:mt-1">
                   Eng yaxshi xizmat va qulay stol Siz uchun tayyor.
                 </p>
               </div>
@@ -80,12 +80,12 @@ const ReservationPage: React.FC = () => {
         </Container>
       </div>
 
-      <Container className="mt-8">
-        <div className="bg-[#0A0A0B] border border-[#1E1E24] rounded-2xl p-6 md:p-8 shadow-2xl">
+      <Container className="mt-6 sm:mt-8">
+        <div className="bg-[#0A0A0B] border border-[#1E1E24] rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             <div className="lg:col-span-6 flex flex-col justify-between">
-              <h2 className="text-lg font-semibold text-white mb-6">
+              <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6">
                 Rezervatsiya ma'lumotlari
               </h2>
 
@@ -160,7 +160,7 @@ const ReservationPage: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="bg-[#141417] border border-[#23232A] rounded-xl p-3 relative cursor-pointer" onClick={() => setOpenDropdown(openDropdown === 'guests' ? null : 'guests')}>
+                  <div className="bg-[#141417] border border-[#23232A] rounded-xl p-3 relative cursor-pointer select-none" onClick={() => setOpenDropdown(openDropdown === 'guests' ? null : 'guests')}>
                     <label className="block text-[11px] text-neutral-400 font-medium mb-1">
                       Kishi soni
                     </label>
@@ -191,7 +191,7 @@ const ReservationPage: React.FC = () => {
                     )}
                   </div>
 
-                  <div className="bg-[#141417] border border-[#23232A] rounded-xl p-3 relative cursor-pointer" onClick={() => setOpenDropdown(openDropdown === 'tableType' ? null : 'tableType')}>
+                  <div className="bg-[#141417] border border-[#23232A] rounded-xl p-3 relative cursor-pointer select-none" onClick={() => setOpenDropdown(openDropdown === 'tableType' ? null : 'tableType')}>
                     <label className="block text-[11px] text-neutral-400 font-medium mb-1">
                       Stol turi (ixtiyoriy)
                     </label>
@@ -238,7 +238,7 @@ const ReservationPage: React.FC = () => {
 
                 <Button 
                   type="submit" 
-                  className="w-full bg-[#e5c567] hover:bg-[#d4b456] text-[#050708] font-semibold py-3.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#e5c567]/10 mt-2 transition"
+                  className="w-full bg-[#e5c567] hover:bg-[#d4b456] text-[#050708] font-semibold py-3.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#e5c567]/10 mt-2 transition cursor-pointer"
                 >
                   <CalendarIcon className="w-4 h-4 text-[#050708]" />
                   <span>Stolni band qilish</span>
@@ -251,84 +251,84 @@ const ReservationPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="lg:col-span-6 grid grid-cols-2 gap-3 sm:gap-4 mt-6 lg:mt-0" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
               
-              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-5 text-center flex flex-col items-center justify-between min-h-[190px] hover:border-[#e5c567]/40 transition">
-                <div className="w-12 h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
-                  <Clock className="w-5 h-5 text-[#e5c567]" />
+              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-3 sm:p-5 text-center flex flex-col items-center justify-between min-h-[170px] sm:min-h-[190px] hover:border-[#e5c567]/40 transition">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-[#e5c567]" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-white mb-1">Oson va tez</h4>
-                  <p className="text-[10px] text-neutral-400 leading-relaxed">
+                  <h4 className="text-[11px] sm:text-xs font-semibold text-white mb-1">Oson va tez</h4>
+                  <p className="text-[9px] sm:text-[10px] text-neutral-400 leading-relaxed">
                     Bir necha qadamda stol band qilishingiz mumkin.
                   </p>
                 </div>
-                <span className="text-[11px] font-bold text-[#e5c567] mt-3">01</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#e5c567] mt-2 sm:mt-3">01</span>
               </div>
 
-              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-5 text-center flex flex-col items-center justify-between min-h-[190px] hover:border-[#e5c567]/40 transition">
-                <div className="w-12 h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
-                  <Bell className="w-5 h-5 text-[#e5c567]" />
+              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-3 sm:p-5 text-center flex flex-col items-center justify-between min-h-[170px] sm:min-h-[190px] hover:border-[#e5c567]/40 transition">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
+                  <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-[#e5c567]" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-white mb-1">Tasdiqlash</h4>
-                  <p className="text-[10px] text-neutral-400 leading-relaxed">
+                  <h4 className="text-[11px] sm:text-xs font-semibold text-white mb-1">Tasdiqlash</h4>
+                  <p className="text-[9px] sm:text-[10px] text-neutral-400 leading-relaxed">
                     Rezervatsiyangiz tez orada tasdiqlaymiz.
                   </p>
                 </div>
-                <span className="text-[11px] font-bold text-[#e5c567] mt-3">02</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#e5c567] mt-2 sm:mt-3">02</span>
               </div>
 
-              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-5 text-center flex flex-col items-center justify-between min-h-[190px] hover:border-[#e5c567]/40 transition">
-                <div className="w-12 h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
-                  <Armchair className="w-5 h-5 text-[#e5c567]" />
+              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-3 sm:p-5 text-center flex flex-col items-center justify-between min-h-[170px] sm:min-h-[190px] hover:border-[#e5c567]/40 transition">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
+                  <Armchair className="w-4 h-4 sm:w-5 sm:h-5 text-[#e5c567]" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-white mb-1">Eng yaxshi joylar</h4>
-                  <p className="text-[10px] text-neutral-400 leading-relaxed">
+                  <h4 className="text-[11px] sm:text-xs font-semibold text-white mb-1">Eng yaxshi joylar</h4>
+                  <p className="text-[9px] sm:text-[10px] text-neutral-400 leading-relaxed">
                     Siz uchun eng qulay stolni tanlaymiz.
                   </p>
                 </div>
-                <span className="text-[11px] font-bold text-[#e5c567] mt-3">03</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#e5c567] mt-2 sm:mt-3">03</span>
               </div>
 
-              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-5 text-center flex flex-col items-center justify-between min-h-[190px] hover:border-[#e5c567]/40 transition">
-                <div className="w-12 h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
-                  <UtensilsCrossed className="w-5 h-5 text-[#e5c567]" />
+              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-3 sm:p-5 text-center flex flex-col items-center justify-between min-h-[170px] sm:min-h-[190px] hover:border-[#e5c567]/40 transition">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
+                  <UtensilsCrossed className="w-4 h-4 sm:w-5 sm:h-5 text-[#e5c567]" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-white mb-1">A'lo xizmat</h4>
-                  <p className="text-[10px] text-neutral-400 leading-relaxed">
+                  <h4 className="text-[11px] sm:text-xs font-semibold text-white mb-1">A'lo xizmat</h4>
+                  <p className="text-[9px] sm:text-[10px] text-neutral-400 leading-relaxed">
                     Professional jamoamiz sizni kutib olishga tayyor.
                   </p>
                 </div>
-                <span className="text-[11px] font-bold text-[#e5c567] mt-3">04</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#e5c567] mt-2 sm:mt-3">04</span>
               </div>
 
-              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-5 text-center flex flex-col items-center justify-between min-h-[190px] hover:border-[#e5c567]/40 transition">
-                <div className="w-12 h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
-                  <Music className="w-[#e5c567] h-5" />
+              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-3 sm:p-5 text-center flex flex-col items-center justify-between min-h-[170px] sm:min-h-[190px] hover:border-[#e5c567]/40 transition">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
+                  <Music className="w-4 h-4 sm:w-5 sm:h-5 text-[#e5c567]" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-white mb-1">Yoqimli muhit</h4>
-                  <p className="text-[10px] text-neutral-400 leading-relaxed">
+                  <h4 className="text-[11px] sm:text-xs font-semibold text-white mb-1">Yoqimli muhit</h4>
+                  <p className="text-[9px] sm:text-[10px] text-neutral-400 leading-relaxed">
                     Zamonaviy muhit va yoqimli musiqa siz uchun.
                   </p>
                 </div>
-                <span className="text-[11px] font-bold text-[#e5c567] mt-3">05</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#e5c567] mt-2 sm:mt-3">05</span>
               </div>
 
-              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-5 text-center flex flex-col items-center justify-between min-h-[190px] hover:border-[#e5c567]/40 transition">
-                <div className="w-12 h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
-                  <Heart className="w-5 h-5 text-[#e5c567]" />
+              <div className="bg-[#141417]/90 border border-[#23232A] rounded-xl p-3 sm:p-5 text-center flex flex-col items-center justify-between min-h-[170px] sm:min-h-[190px] hover:border-[#e5c567]/40 transition">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center mb-2">
+                  <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-[#e5c567]" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold text-white mb-1">Maxsus tadbirlar</h4>
-                  <p className="text-[10px] text-neutral-400 leading-relaxed">
+                  <h4 className="text-[11px] sm:text-xs font-semibold text-white mb-1">Maxsus tadbirlar</h4>
+                  <p className="text-[9px] sm:text-[10px] text-neutral-400 leading-relaxed">
                     Tug'ilgan kun, yubiley va boshqa tadbirlar uchun.
                   </p>
                 </div>
-                <span className="text-[11px] font-bold text-[#e5c567] mt-3">06</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#e5c567] mt-2 sm:mt-3">06</span>
               </div>
 
             </div>
@@ -340,7 +340,7 @@ const ReservationPage: React.FC = () => {
       <Container className="mt-6">
         <div className="bg-[#0A0A0B] border border-[#1E1E24] rounded-2xl p-4 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center shadow-xl">
           
-          <div className="md:col-span-5 h-28 rounded-xl overflow-hidden border border-[#23232A]">
+          <div className="md:col-span-5 h-36 sm:h-28 rounded-xl overflow-hidden border border-[#23232A]">
             <img 
               src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop" 
               alt="Restaurant ambiance" 
@@ -357,7 +357,7 @@ const ReservationPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="md:col-span-4 flex flex-col sm:flex-row items-start sm:items-center justify-end gap-6">
+          <div className="md:col-span-4 flex flex-col sm:flex-row items-start sm:items-center justify-start md:justify-end gap-5">
             <a href="tel:+998901234567" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center shrink-0 group-hover:bg-[#e5c567]/20 transition">
                 <Phone className="w-4 h-4 text-[#e5c567]" />

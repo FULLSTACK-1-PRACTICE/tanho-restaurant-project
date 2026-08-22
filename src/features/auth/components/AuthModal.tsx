@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react'
-import type { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react'
+import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Check, Eye, EyeOff, X } from 'lucide-react'
 import { toast } from 'sonner'
 
-type Tab = 'kirish' | 'royxatdan'
+import type {
+  Tab,
+  AuthModalProps,
+  TabButtonProps,
+  LoginFormProps,
+  RegisterFormProps,
+  InputProps,
+  PasswordInputProps,
+} from '../types'
 
 const inputClass =
   'w-full rounded-lg border border-white/15 bg-transparent px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-amber-400/70 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(251,191,36,0.08)]'
@@ -22,12 +30,6 @@ const toastStyle = {
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const phoneRegex = /^\+?[0-9]{9,13}$/
-
-export interface AuthModalProps {
-  isOpen: boolean
-  onClose: () => void
-  initialTab?: Tab
-}
 
 export default function AuthModal({
   isOpen,
@@ -64,18 +66,6 @@ export default function AuthModal({
     setShowPass2(false)
   }
 
-  /*
-   * ============================================================
-   * SCROLLBAR / BACKGROUND FIX
-   * ============================================================
-   *
-   * scrollbar-gutter: stable
-   * scrollbar yo'qolganda sahifaning kengligi o'zgarmasligini
-   * ta'minlaydi.
-   *
-   * html background berilishi esa scrollbar gutter joyida
-   * oq chiziq paydo bo'lishining oldini oladi.
-   */
   useEffect(() => {
     const styleId = 'auth-modal-scrollbar-gutter-fix'
 
@@ -107,11 +97,6 @@ export default function AuthModal({
     }
   }, [])
 
-  /*
-   * Modal ochilganda background scrollini bloklaymiz.
-   * scrollbar-gutter sabab navbar va background joyidan
-   * siljimaydi.
-   */
   useEffect(() => {
     if (!isOpen) {
       queueMicrotask(() => resetForm())
@@ -202,7 +187,7 @@ export default function AuthModal({
     }
 
     if (
-      cleanEmail === 'cashsher@gmail.com' &&
+      cleanEmail === 'cashier@gmail.com' &&
       cleanPassword === '12345'
     ) {
       executeLogin('cashier', '/cashier', 'Kassir')
@@ -361,83 +346,32 @@ export default function AuthModal({
 
       <style>{`
         @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-
-          to {
-            opacity: 1;
-          }
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
-
         @keyframes modalIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px) scale(0.96);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
+          from { opacity: 0; transform: translateY(20px) scale(0.96); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         @keyframes contentIn {
-          from {
-            opacity: 0;
-            transform: translateY(8px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes tabIn {
-          from {
-            opacity: 0;
-            transform: scaleX(0);
-          }
-
-          to {
-            opacity: 1;
-            transform: scaleX(1);
-          }
+          from { opacity: 0; transform: scaleX(0); }
+          to { opacity: 1; transform: scaleX(1); }
         }
-
         @keyframes checkIn {
-          from {
-            opacity: 0;
-            transform: scale(0.5);
-          }
-
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
+          from { opacity: 0; transform: scale(0.5); }
+          to { opacity: 1; transform: scale(1); }
         }
-
         @keyframes iconIn {
-          from {
-            opacity: 0;
-            transform: scale(0.7);
-          }
-
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
+          from { opacity: 0; transform: scale(0.7); }
+          to { opacity: 1; transform: scale(1); }
         }
       `}</style>
     </div>
   )
-}
-
-interface TabButtonProps {
-  active: boolean
-  onClick: () => void
-  children: ReactNode
 }
 
 function TabButton({
@@ -464,19 +398,6 @@ function TabButton({
       )}
     </button>
   )
-}
-
-interface LoginFormProps {
-  email: string
-  setEmail: Dispatch<SetStateAction<string>>
-  password: string
-  setPassword: Dispatch<SetStateAction<string>>
-  remember: boolean
-  setRemember: Dispatch<SetStateAction<boolean>>
-  showPass: boolean
-  setShowPass: Dispatch<SetStateAction<boolean>>
-  onRegister: () => void
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void
 }
 
 function LoginForm({
@@ -564,27 +485,6 @@ function LoginForm({
       </p>
     </form>
   )
-}
-
-interface RegisterFormProps {
-  name: string
-  setName: Dispatch<SetStateAction<string>>
-  surname: string
-  setSurname: Dispatch<SetStateAction<string>>
-  email: string
-  setEmail: Dispatch<SetStateAction<string>>
-  phone: string
-  setPhone: Dispatch<SetStateAction<string>>
-  password: string
-  setPassword: Dispatch<SetStateAction<string>>
-  password2: string
-  setPassword2: Dispatch<SetStateAction<string>>
-  showPass: boolean
-  showPass2: boolean
-  setShowPass: Dispatch<SetStateAction<boolean>>
-  setShowPass2: Dispatch<SetStateAction<boolean>>
-  onLogin: () => void
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void
 }
 
 function RegisterForm({
@@ -686,14 +586,6 @@ function RegisterForm({
   )
 }
 
-interface InputProps {
-  type: string
-  placeholder: string
-  value: string
-  onChange: Dispatch<SetStateAction<string>>
-  autoComplete?: string
-}
-
 function Input({
   type,
   placeholder,
@@ -713,15 +605,6 @@ function Input({
       className={`${inputClass} cursor-text transition-all duration-300 hover:border-white/25`}
     />
   )
-}
-
-interface PasswordInputProps {
-  placeholder: string
-  show: boolean
-  value: string
-  onChange: Dispatch<SetStateAction<string>>
-  onToggle: () => void
-  autoComplete?: string
 }
 
 function PasswordInput({
@@ -773,7 +656,7 @@ function PasswordInput({
 function SubmitButton({
   children,
 }: {
-  children: ReactNode
+  children: React.ReactNode
 }) {
   return (
     <button
@@ -832,17 +715,14 @@ function GoogleIcon({
         fill="#FFC107"
         d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"
       />
-
       <path
         fill="#FF3D00"
         d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
       />
-
       <path
         fill="#4CAF50"
         d="M24 44c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.6c-2 1.4-4.6 2.3-7.7 2.3-5.3 0-9.7-3.4-11.3-8H5.7v6.2C9.1 39.7 16 44 24 44z"
       />
-
       <path
         fill="#1976D2"
         d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.6l6.6 5.6C41.4 36 44 30.5 44 24c0-1.3-.1-2.7-.4-3.5z"

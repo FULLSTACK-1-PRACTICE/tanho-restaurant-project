@@ -1,8 +1,9 @@
 import { createContext, useState, type ReactNode } from 'react'
 import AuthModal from '../components/AuthModal'
+import type { Tab } from '../types'
 
 export interface AuthModalContextType {
-  openAuthModal: (tab?: 'kirish' | 'royxatdan') => void
+  openAuthModal: (tab?: Tab) => void
   closeAuthModal: () => void
 }
 
@@ -11,9 +12,9 @@ export const AuthModalContext = createContext<AuthModalContextType | undefined>(
 
 export const AuthModalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [initialTab, setInitialTab] = useState<'kirish' | 'royxatdan'>('kirish')
+  const [initialTab, setInitialTab] = useState<Tab>('kirish')
 
-  const openAuthModal = (tab: 'kirish' | 'royxatdan' = 'kirish') => {
+  const openAuthModal = (tab: Tab = 'kirish') => {
     setInitialTab(tab)
     setIsOpen(true)
   }

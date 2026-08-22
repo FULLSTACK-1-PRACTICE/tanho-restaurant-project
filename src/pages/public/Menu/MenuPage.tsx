@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import oshimg from "../../../assets/images/Menu/Cards/osh.png";
-import lagmonimg from "../../../assets/images/Menu/Cards/suyuk lag'mon.png";
+import oshimg from "../../../assets/images/Menu/Cards/Osh.png";
+import lagmonimg from "../../../assets/images/Menu/Cards/Suyuk-Lagmon.png";
+import jujaCheesnochni from "../../../assets/images/Menu/Cards/Juja-Chesnochni.png";
+import juja from "../../../assets/images/Menu/Cards/Juja.png";
+import kovurmaLagmon from "../../../assets/images/Menu/Cards/Kovurma-Lagmon.png";
+import mevaliAssorti from "../../../assets/images/Menu/Cards/Mevali-Assorti.png";
+import molJizi from "../../../assets/images/Menu/Cards/Mol-Jizi.png";
+import quyJizi from "../../../assets/images/Menu/Cards/Quy-Jizi.png";
 
 import {
   Cake,
@@ -58,7 +64,7 @@ const MenuPage = () => {
       price: 36000,
       status: "Mavjud",
       description: "Qat-qat sabzi va mayin mol go'shti bilan Samarqandcha palov.",
-      image: "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80",
+      image: oshimg,
     },
     {
       id: "menu-3",
@@ -67,7 +73,7 @@ const MenuPage = () => {
       price: 35000,
       status: "Mavjud",
       description: "To'q qip-qizil guruch va qo'y go'shtli maxsus palov.",
-      image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80",
+      image: oshimg,
     },
     {
       id: "menu-4",
@@ -76,7 +82,7 @@ const MenuPage = () => {
       price: 37000,
       status: "Mavjud",
       description: "Devzira guruchidan tayyorlangan achchiqroq an'anaviy osh.",
-      image: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=600&q=80",
+      image: oshimg,
     },
     {
       id: "menu-5",
@@ -85,7 +91,7 @@ const MenuPage = () => {
       price: 65000,
       status: "Mavjud",
       description: "Yumshoq mol go'shti va maxsus garnir.",
-      image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80",
+      image: molJizi,
     },
     {
       id: "menu-6",
@@ -94,7 +100,7 @@ const MenuPage = () => {
       price: 48000,
       status: "Mavjud",
       description: "Olovda pishirilgan butun tovuq grill va sabzavotlar.",
-      image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80",
+      image: juja,
     },
     {
       id: "menu-7",
@@ -103,7 +109,7 @@ const MenuPage = () => {
       price: 75000,
       status: "Mavjud",
       description: "Qo'y qoburg'alari ziravorlar bilan grillda pishirilgan.",
-      image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=600&q=80",
+      image: quyJizi,
     },
     {
       id: "menu-8",
@@ -112,7 +118,7 @@ const MenuPage = () => {
       price: 120000,
       status: "Mavjud",
       description: "Mol, tovuq va kolbasa assorti grill to'plami.",
-      image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",
+      image: jujaCheesnochni,
     },
     {
       id: "menu-9",
@@ -121,7 +127,7 @@ const MenuPage = () => {
       price: 40000,
       status: "Mavjud",
       description: "Tovuq go'shti, krutonlar va parmesan pishlog'i bilan.",
-      image: "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-10",
@@ -130,7 +136,7 @@ const MenuPage = () => {
       price: 35000,
       status: "Mavjud",
       description: "Yangi bodring, pomidor, oliviya va feta pishlog'i.",
-      image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-11",
@@ -139,7 +145,7 @@ const MenuPage = () => {
       price: 18000,
       status: "Mavjud",
       description: "Osh uchun mo'ljallangan yupqa to'g'ralgan pomidor va piyoz.",
-      image: "https://images.unsplash.com/photo-1592417817098-8f3d6eb12765?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-12",
@@ -148,7 +154,7 @@ const MenuPage = () => {
       price: 42000,
       status: "Mavjud",
       description: "Issiq tovuq bo'laklari va qovurilgan sabzavotlar salati.",
-      image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-13",
@@ -157,7 +163,7 @@ const MenuPage = () => {
       price: 70000,
       status: "Mavjud",
       description: "Qozonda qizartirib qovurilgan go'sht va kartoshka.",
-      image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80",
+      image: molJizi,
     },
     {
       id: "menu-14",
@@ -166,16 +172,16 @@ const MenuPage = () => {
       price: 38000,
       status: "Mavjud",
       description: "Qo'lda cho'zilgan xamir va qovurilgan go'sht-sabzavotlar.",
-      image: lagmonimg,
+      image: kovurmaLagmon,
     },
     {
       id: "menu-15",
-      name: "Chuchvara",
+      name: "Suyuk Lag'mon",
       category: "Milliy taomlar",
       price: 32000,
       status: "Mavjud",
-      description: "Kichik manti shaklidagi sho'rva va qatiq bilan xamir taom.",
-      image: "https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=600&q=80",
+      description: "Mazali sho'rvali va cho'zilgan uy lag'moni.",
+      image: lagmonimg,
     },
     {
       id: "menu-16",
@@ -184,7 +190,7 @@ const MenuPage = () => {
       price: 35000,
       status: "Mavjud",
       description: "Bug'da pishirilgan qiymali va piyozli bug' dori.",
-      image: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=600&q=80",
+      image: quyJizi,
     },
     {
       id: "menu-17",
@@ -193,7 +199,7 @@ const MenuPage = () => {
       price: 12000,
       status: "Mavjud",
       description: "Tandirda pishirilgan varaqi qiymali somsa.",
-      image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80",
+      image: molJizi,
     },
     {
       id: "menu-18",
@@ -202,7 +208,7 @@ const MenuPage = () => {
       price: 45000,
       status: "Mavjud",
       description: "Yupqa kesilgan xamir va ot go'shti (qazi) aralashmasi.",
-      image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=600&q=80",
+      image: oshimg,
     },
     {
       id: "menu-19",
@@ -211,7 +217,7 @@ const MenuPage = () => {
       price: 18000,
       status: "Mavjud",
       description: "Ko'mirda pishirilgan yumshoq mol go'shti shashlik.",
-      image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",
+      image: molJizi,
     },
     {
       id: "menu-20",
@@ -220,7 +226,7 @@ const MenuPage = () => {
       price: 16000,
       status: "Mavjud",
       description: "Marinovka qilingan tovuq go'shti shashlik.",
-      image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80",
+      image: juja,
     },
     {
       id: "menu-21",
@@ -229,7 +235,7 @@ const MenuPage = () => {
       price: 35000,
       status: "Mavjud",
       description: "Issiq shokolad sousi bilan taqdim etiladigan chizkeyk.",
-      image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-22",
@@ -238,7 +244,7 @@ const MenuPage = () => {
       price: 32000,
       status: "Mavjud",
       description: "Italiya uslubidagi kofe va maskarpone pishloqli desert.",
-      image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-23",
@@ -247,7 +253,7 @@ const MenuPage = () => {
       price: 30000,
       status: "Mavjud",
       description: "Mavsumiy yangi mevalar to'plami va qaymoq.",
-      image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-24",
@@ -256,7 +262,7 @@ const MenuPage = () => {
       price: 38000,
       status: "Mavjud",
       description: "Ichida suyuq shokolad va yonida muzqaymoq bilan.",
-      image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-25",
@@ -265,7 +271,7 @@ const MenuPage = () => {
       price: 28000,
       status: "Mavjud",
       description: "Mayin krem va varaqi xamirdan tayyorlangan klassik desert.",
-      image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-26",
@@ -274,7 +280,7 @@ const MenuPage = () => {
       price: 27000,
       status: "Mavjud",
       description: "Tabiiy asal va xushbo'y krem bilan tayyorlangan tort.",
-      image: "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-27",
@@ -283,7 +289,7 @@ const MenuPage = () => {
       price: 22000,
       status: "Mavjud",
       description: "Shokolad, vanil va qulupnayli muzqaymoq shariklari.",
-      image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-28",
@@ -292,7 +298,7 @@ const MenuPage = () => {
       price: 34000,
       status: "Mavjud",
       description: "To'q shokoladli brauni va vanilli muzqaymoq.",
-      image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-29",
@@ -301,7 +307,7 @@ const MenuPage = () => {
       price: 26000,
       status: "Mavjud",
       description: "Yumshoq pankeyklar, asal va rezavor mevalar.",
-      image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "menu-30",
@@ -310,7 +316,7 @@ const MenuPage = () => {
       price: 31000,
       status: "Mavjud",
       description: "Vena vaflisi, Nutella va yangi banan/qulupnay.",
-      image: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "drink-1",
@@ -319,7 +325,7 @@ const MenuPage = () => {
       price: 8000,
       status: "Mavjud",
       description: "Xushbo'y va tetiklashtiruvchi an'anaviy ko'k choy.",
-      image: "https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?auto=format&fit=crop&w=600&q=80",
+      image: jujaCheesnochni,
     },
     {
       id: "drink-2",
@@ -328,7 +334,7 @@ const MenuPage = () => {
       price: 10000,
       status: "Mavjud",
       description: "Issiq qora choy, yangi limon bo'laklari bilan.",
-      image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80",
+      image: jujaCheesnochni,
     },
     {
       id: "drink-3",
@@ -337,7 +343,7 @@ const MenuPage = () => {
       price: 22000,
       status: "Mavjud",
       description: "Yalpiz, malina va sitrus mevalari qo'shilgan choy.",
-      image: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "drink-4",
@@ -346,7 +352,7 @@ const MenuPage = () => {
       price: 25000,
       status: "Mavjud",
       description: "Yangi siqilgan limon sharbati va muzli uy limonadi.",
-      image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80",
+      image: jujaCheesnochni,
     },
     {
       id: "drink-5",
@@ -355,7 +361,7 @@ const MenuPage = () => {
       price: 28000,
       status: "Mavjud",
       description: "Yalpiz, laym, soda va muzdan tayyorlangan salqin ichimlik.",
-      image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+      image: jujaCheesnochni,
     },
     {
       id: "drink-6",
@@ -364,7 +370,7 @@ const MenuPage = () => {
       price: 30000,
       status: "Mavjud",
       description: "Malina, qulupnay va klubnika ezmasidan limonad.",
-      image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
     {
       id: "drink-7",
@@ -373,7 +379,7 @@ const MenuPage = () => {
       price: 15000,
       status: "Mavjud",
       description: "Quyuq va achchiq klassik italyancha kofe.",
-      image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=600&q=80",
+      image: jujaCheesnochni,
     },
     {
       id: "drink-8",
@@ -382,7 +388,7 @@ const MenuPage = () => {
       price: 22000,
       status: "Mavjud",
       description: "Mayin sut ko'pigi va espresso aralashmasi.",
-      image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80",
+      image: jujaCheesnochni,
     },
     {
       id: "drink-9",
@@ -391,7 +397,7 @@ const MenuPage = () => {
       price: 24000,
       status: "Mavjud",
       description: "Ko'p miqdordagi sut va yengil espresso qatlami.",
-      image: "https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80",
+      image: jujaCheesnochni,
     },
     {
       id: "drink-10",
@@ -400,16 +406,16 @@ const MenuPage = () => {
       price: 26000,
       status: "Mavjud",
       description: "Sut va shokoladli muzqaymoqdan tayyorlangan kokteyl.",
-      image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80",
+      image: jujaCheesnochni,
     },
     {
       id: "drink-11",
-      name: "Tazhe Siqilgan Oportokal Sharbati",
+      name: "Tazhe Siqilgan Apelsin Sharbati",
       category: "Ichimliklar",
       price: 32000,
       status: "Mavjud",
-      description: "100% tabiy yangi siqilgan apelsin sharbati (Fresh).",
-      image: "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80",
+      description: "100% tabiiy yangi siqilgan apelsin sharbati (Fresh).",
+      image: mevaliAssorti,
     },
     {
       id: "drink-12",
@@ -418,7 +424,7 @@ const MenuPage = () => {
       price: 12000,
       status: "Mavjud",
       description: "0.5l idishdagi salqin gazlangan drink.",
-      image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80",
+      image: jujaCheesnochni,
     },
     {
       id: "drink-13",
@@ -427,12 +433,11 @@ const MenuPage = () => {
       price: 15000,
       status: "Mavjud",
       description: "Uy sharoitida gilos va olmadorlardan tayyorlangan kompot.",
-      image: "https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=600&q=80",
+      image: mevaliAssorti,
     },
   ]);
 
   const [activeCategory, setActiveCategory] = useState("Barchasi");
-  
   const loading = false;
 
   const visibleItems = items
@@ -462,7 +467,7 @@ const MenuPage = () => {
         </div>
       </section>
 
-      {/* Kategoriya tugmalari moslashtirildi */}
+      {/* Kategoriya tugmalari */}
       <section className="relative z-10 mx-auto max-w-[1240px] px-4 sm:px-6 -mt-6 sm:-mt-8">
         <div className="flex gap-2 overflow-x-auto pb-2 sm:grid sm:grid-cols-4 lg:grid-cols-7 rounded-xl border border-white/10 bg-[#121619] p-2 backdrop-blur-md [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {categories.map((category) => {
@@ -506,7 +511,6 @@ const MenuPage = () => {
             Hozircha bu bo'limda taom yo'q
           </div>
         ) : (
-          /* Mobil va planshetlarda 2 tadan, keng ekranlarda 3-4 tadan chiqishi uchun grid to'g'irlandi */
           <div className="grid grid-cols-2 gap-3 sm:gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {visibleItems.map((food) => (
               <div
@@ -566,7 +570,7 @@ const MenuPage = () => {
           <div className="grid md:grid-cols-[280px_1fr]">
             <div className="relative h-[200px] sm:h-[220px] overflow-hidden bg-[#121619] md:h-auto">
               <img
-                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
+                src={mevaliAssorti}
                 alt="Maxsus taomlar"
                 className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
               />

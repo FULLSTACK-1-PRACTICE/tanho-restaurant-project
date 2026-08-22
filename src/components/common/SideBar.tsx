@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { ReactNode, ComponentType } from "react";
+import type { ReactNode, ComponentType, ComponentProps } from "react";
 import { ChevronDown, LogOut } from "lucide-react";
 import logoImg from "../../assets/images/Layout/Header/Logo-2.png";
 
@@ -7,7 +7,7 @@ export interface SidebarSubItem {
   label: string;
   path?: string;
   key?: string;
-  icon?: ReactNode | ComponentType<any>;
+  icon?: ReactNode | ComponentType<ComponentProps<"svg"> & { size?: number; className?: string; strokeWidth?: number }>;
   badge?: number | string;
 }
 
@@ -15,7 +15,7 @@ export interface SidebarItem {
   label: string;
   path?: string;
   key?: string;
-  icon: ReactNode | ComponentType<any>;
+  icon: ReactNode | ComponentType<ComponentProps<"svg"> & { size?: number; className?: string; strokeWidth?: number }>;
   badge?: number | string;
   section?: string;
   children?: SidebarSubItem[];
@@ -72,7 +72,7 @@ export function SideBar({
     }
   };
 
-  const renderIcon = (icon: any) => {
+  const renderIcon = (icon: SidebarItem["icon"] | SidebarSubItem["icon"]) => {
     if (!icon) return null;
     if (React.isValidElement(icon)) {
       return icon;
@@ -81,7 +81,7 @@ export function SideBar({
       typeof icon === "function" ||
       (typeof icon === "object" && icon !== null && "$$typeof" in icon)
     ) {
-      const IconComp = icon as React.ComponentType<{
+      const IconComp = icon as ComponentType<{
         size?: number;
         className?: string;
         strokeWidth?: number;
@@ -231,7 +231,7 @@ export function SideBar({
                           onClick={() =>
                             handleSelect(child.path || child.key || "")
                           }
-                          className={`w-full cursor-pointer flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                        className={`w-full cursor-pointer flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
                             isSubActive
                               ? "text-amber-400 bg-amber-500/15 font-semibold"
                               : "text-gray-400 hover:text-gray-200 hover:bg-white/5"

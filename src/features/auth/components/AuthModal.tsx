@@ -64,6 +64,54 @@ export default function AuthModal({
     setShowPass2(false)
   }
 
+  /*
+   * ============================================================
+   * SCROLLBAR / BACKGROUND FIX
+   * ============================================================
+   *
+   * scrollbar-gutter: stable
+   * scrollbar yo'qolganda sahifaning kengligi o'zgarmasligini
+   * ta'minlaydi.
+   *
+   * html background berilishi esa scrollbar gutter joyida
+   * oq chiziq paydo bo'lishining oldini oladi.
+   */
+  useEffect(() => {
+    const styleId = 'auth-modal-scrollbar-gutter-fix'
+
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style')
+
+      style.id = styleId
+
+      style.textContent = `
+        html {
+          scrollbar-gutter: stable;
+          background: #0a0a0a;
+        }
+
+        body {
+          margin: 0;
+        }
+      `
+
+      document.head.appendChild(style)
+    }
+
+    return () => {
+      const style = document.getElementById(styleId)
+
+      if (style) {
+        style.remove()
+      }
+    }
+  }, [])
+
+  /*
+   * Modal ochilganda background scrollini bloklaymiz.
+   * scrollbar-gutter sabab navbar va background joyidan
+   * siljimaydi.
+   */
   useEffect(() => {
     if (!isOpen) {
       queueMicrotask(() => resetForm())
@@ -71,18 +119,8 @@ export default function AuthModal({
     }
 
     const previousOverflow = document.body.style.overflow
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-    
+
     document.body.style.overflow = 'hidden'
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`
-      const fixedElements = document.querySelectorAll('header, nav, .fixed, [class*="fixed"]')
-      fixedElements.forEach((el) => {
-        const htmlEl = el as HTMLElement
-        const currentPad = window.getComputedStyle(htmlEl).paddingRight
-        htmlEl.style.paddingRight = `${parseFloat(currentPad || '0') + scrollbarWidth}px`
-      })
-    }
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -94,12 +132,6 @@ export default function AuthModal({
 
     return () => {
       document.body.style.overflow = previousOverflow
-      document.body.style.paddingRight = ''
-      const fixedElements = document.querySelectorAll('header, nav, .fixed, [class*="fixed"]')
-      fixedElements.forEach((el) => {
-        const htmlEl = el as HTMLElement
-        htmlEl.style.paddingRight = ''
-      })
       window.removeEventListener('keydown', handleEscape)
     }
   }, [isOpen, onClose])
@@ -119,26 +151,30 @@ export default function AuthModal({
     const cleanPassword = password.trim()
 
     if (!cleanEmail && !cleanPassword) {
-      toast.error("Iltimos, email va parolni kiriting", toastStyle)
+      toast.error('Iltimos, email va parolni kiriting', toastStyle)
       return
     }
 
     if (!cleanEmail) {
-      toast.error("Iltimos, emailni kiriting", toastStyle)
+      toast.error('Iltimos, emailni kiriting', toastStyle)
       return
     }
 
     if (!cleanPassword) {
-      toast.error("Iltimos, parolni kiriting", toastStyle)
+      toast.error('Iltimos, parolni kiriting', toastStyle)
       return
     }
 
     if (!emailRegex.test(cleanEmail)) {
-      toast.error("Iltimos, yaroqli email manzilini kiriting", toastStyle)
+      toast.error('Iltimos, yaroqli email manzilini kiriting', toastStyle)
       return
     }
 
-    const executeLogin = (role: string, redirectPath: string, roleName: string) => {
+    const executeLogin = (
+      role: string,
+      redirectPath: string,
+      roleName: string,
+    ) => {
       localStorage.setItem('token', 'fake-jwt-token')
       localStorage.setItem('role', role)
       localStorage.setItem('userEmail', cleanEmail)
@@ -165,7 +201,10 @@ export default function AuthModal({
       return
     }
 
-    if (cleanEmail === 'cashsher@gmail.com' && cleanPassword === '12345') {
+    if (
+      cleanEmail === 'cashsher@gmail.com' &&
+      cleanPassword === '12345'
+    ) {
       executeLogin('cashier', '/cashier', 'Kassir')
       return
     }
@@ -189,17 +228,23 @@ export default function AuthModal({
       !registerPassword ||
       !registerPassword2
     ) {
-      toast.error("Iltimos, barcha maydonlarni to'ldiring", toastStyle)
+      toast.error(
+        "Iltimos, barcha maydonlarni to'ldiring",
+        toastStyle,
+      )
       return
     }
 
     if (!emailRegex.test(registerEmail.trim())) {
-      toast.error("Yaroqli email formatini kiriting", toastStyle)
+      toast.error('Yaroqli email formatini kiriting', toastStyle)
       return
     }
 
     if (!phoneRegex.test(registerPhone.trim())) {
-      toast.error("Yaroqli telefon raqamini kiriting (masalan: +998901234567)", toastStyle)
+      toast.error(
+        'Yaroqli telefon raqamini kiriting (masalan: +998901234567)',
+        toastStyle,
+      )
       return
     }
 
@@ -229,6 +274,7 @@ export default function AuthModal({
         onClick={(event) => event.stopPropagation()}
       >
         <div className="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-amber-400/10 blur-3xl" />
+
         <div className="pointer-events-none absolute -bottom-24 -left-24 h-48 w-48 rounded-full bg-amber-400/5 blur-3xl" />
 
         <button
@@ -237,7 +283,10 @@ export default function AuthModal({
           onClick={onClose}
           className="group absolute right-4 top-4 z-20 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-white/50 transition-all duration-300 hover:rotate-90 hover:bg-white/10 hover:text-white active:scale-90"
         >
-          <X size={20} className="transition-transform duration-300" />
+          <X
+            size={20}
+            className="transition-transform duration-300"
+          />
         </button>
 
         <div className="relative z-10">
@@ -245,6 +294,7 @@ export default function AuthModal({
             <h2 className="text-lg font-semibold text-white">
               Kirish yoki ro'yxatdan o'tish
             </h2>
+
             <p className="mt-1 text-xs text-white/40">
               Hisobingizga kirish uchun ma'lumotlarni kiriting
             </p>
@@ -266,7 +316,10 @@ export default function AuthModal({
             </TabButton>
           </div>
 
-          <div key={tab} className="animate-[contentIn_300ms_ease-out]">
+          <div
+            key={tab}
+            className="animate-[contentIn_300ms_ease-out]"
+          >
             {tab === 'kirish' ? (
               <LoginForm
                 email={email}
@@ -308,54 +361,69 @@ export default function AuthModal({
 
       <style>{`
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+
+          to {
+            opacity: 1;
+          }
         }
+
         @keyframes modalIn {
           from {
             opacity: 0;
             transform: translateY(20px) scale(0.96);
           }
+
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
           }
         }
+
         @keyframes contentIn {
           from {
             opacity: 0;
             transform: translateY(8px);
           }
+
           to {
             opacity: 1;
             transform: translateY(0);
           }
         }
+
         @keyframes tabIn {
           from {
             opacity: 0;
             transform: scaleX(0);
           }
+
           to {
             opacity: 1;
             transform: scaleX(1);
           }
         }
+
         @keyframes checkIn {
           from {
             opacity: 0;
             transform: scale(0.5);
           }
+
           to {
             opacity: 1;
             transform: scale(1);
           }
         }
+
         @keyframes iconIn {
           from {
             opacity: 0;
             transform: scale(0.7);
           }
+
           to {
             opacity: 1;
             transform: scale(1);
@@ -372,13 +440,19 @@ interface TabButtonProps {
   children: ReactNode
 }
 
-function TabButton({ active, onClick, children }: TabButtonProps) {
+function TabButton({
+  active,
+  onClick,
+  children,
+}: TabButtonProps) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={`relative flex-1 cursor-pointer pb-3 text-sm font-medium transition-all duration-300 ${
-        active ? 'text-amber-400' : 'text-white/50 hover:text-white/80'
+        active
+          ? 'text-amber-400'
+          : 'text-white/50 hover:text-white/80'
       }`}
     >
       <span className="inline-block transition-transform duration-300 active:scale-95">
@@ -418,7 +492,11 @@ function LoginForm({
   onSubmit,
 }: LoginFormProps) {
   return (
-    <form className="space-y-4" onSubmit={onSubmit} autoComplete="off">
+    <form
+      className="space-y-4"
+      onSubmit={onSubmit}
+      autoComplete="off"
+    >
       <Input
         type="text"
         placeholder="Email manzilingiz"
@@ -442,7 +520,9 @@ function LoginForm({
             <input
               type="checkbox"
               checked={remember}
-              onChange={(event) => setRemember(event.target.checked)}
+              onChange={(event) =>
+                setRemember(event.target.checked)
+              }
               className="h-4 w-4 cursor-pointer appearance-none rounded border border-white/30 bg-transparent transition-all duration-200 checked:border-amber-400 checked:bg-amber-400"
             />
 
@@ -528,7 +608,11 @@ function RegisterForm({
   onSubmit,
 }: RegisterFormProps) {
   return (
-    <form className="space-y-4" onSubmit={onSubmit} autoComplete="off">
+    <form
+      className="space-y-4"
+      onSubmit={onSubmit}
+      autoComplete="off"
+    >
       <div className="grid grid-cols-2 gap-3">
         <Input
           type="text"
@@ -580,7 +664,9 @@ function RegisterForm({
         />
       </div>
 
-      <SubmitButton>Ro'yxatdan o'tish</SubmitButton>
+      <SubmitButton>
+        Ro'yxatdan o'tish
+      </SubmitButton>
 
       <Divider />
 
@@ -621,7 +707,9 @@ function Input({
       placeholder={placeholder}
       value={value}
       autoComplete={autoComplete}
-      onChange={(event) => onChange(event.target.value)}
+      onChange={(event) =>
+        onChange(event.target.value)
+      }
       className={`${inputClass} cursor-text transition-all duration-300 hover:border-white/25`}
     />
   )
@@ -651,34 +739,51 @@ function PasswordInput({
         placeholder={placeholder}
         value={value}
         autoComplete={autoComplete}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) =>
+          onChange(event.target.value)
+        }
         className={`${inputClass} pr-11`}
       />
 
       <button
         type="button"
         onClick={onToggle}
-        aria-label={show ? 'Parolni yashirish' : 'Parolni ko‘rsatish'}
+        aria-label={
+          show
+            ? 'Parolni yashirish'
+            : 'Parolni ko‘rsatish'
+        }
         className="absolute right-3 top-1/2 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-md p-1 text-white/40 transition-all duration-200 hover:scale-110 hover:bg-white/5 hover:text-white active:scale-90"
       >
         <span
           key={show ? 'eye-off' : 'eye'}
           className="animate-[iconIn_200ms_ease-out]"
         >
-          {show ? <EyeOff size={18} /> : <Eye size={18} />}
+          {show ? (
+            <EyeOff size={18} />
+          ) : (
+            <Eye size={18} />
+          )}
         </span>
       </button>
     </div>
   )
 }
 
-function SubmitButton({ children }: { children: ReactNode }) {
+function SubmitButton({
+  children,
+}: {
+  children: ReactNode
+}) {
   return (
     <button
       type="submit"
       className="group relative mt-2 w-full cursor-pointer overflow-hidden rounded-lg bg-amber-400 py-3 text-sm font-semibold text-neutral-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-[0_8px_25px_rgba(251,191,36,0.2)] active:translate-y-0 active:scale-[0.98]"
     >
-      <span className="relative z-10">{children}</span>
+      <span className="relative z-10">
+        {children}
+      </span>
+
       <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-full" />
     </button>
   )
@@ -688,7 +793,11 @@ function Divider() {
   return (
     <div className="flex items-center gap-3 py-1">
       <div className="h-px flex-1 bg-white/10" />
-      <span className="text-xs text-white/40">yoki</span>
+
+      <span className="text-xs text-white/40">
+        yoki
+      </span>
+
       <div className="h-px flex-1 bg-white/10" />
     </div>
   )
@@ -701,26 +810,39 @@ function SocialButton() {
       className="group flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/15 px-4 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] sm:text-sm"
     >
       <GoogleIcon className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
+
       <span>Google</span>
     </button>
   )
 }
 
-function GoogleIcon({ className = '' }: { className?: string }) {
+function GoogleIcon({
+  className = '',
+}: {
+  className?: string
+}) {
   return (
-    <svg width="16" height="16" viewBox="0 0 48 48" className={className}>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 48 48"
+      className={className}
+    >
       <path
         fill="#FFC107"
         d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"
       />
+
       <path
         fill="#FF3D00"
         d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
       />
+
       <path
         fill="#4CAF50"
         d="M24 44c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.6c-2 1.4-4.6 2.3-7.7 2.3-5.3 0-9.7-3.4-11.3-8H5.7v6.2C9.1 39.7 16 44 24 44z"
       />
+
       <path
         fill="#1976D2"
         d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.6l6.6 5.6C41.4 36 44 30.5 44 24c0-1.3-.1-2.7-.4-3.5z"

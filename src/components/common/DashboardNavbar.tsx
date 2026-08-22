@@ -20,6 +20,8 @@ export interface DashboardNavbarProps {
   onLogout?: () => void;
   onProfileClick?: () => void;
   onSettingsClick?: () => void;
+  onProfile?: () => void;
+  onSettings?: () => void;
   onNavigate?: (page: string) => void;
   user?: DashboardUser;
   notificationCount?: number;
@@ -38,6 +40,8 @@ export function DashboardNavbar({
   onLogout,
   onProfileClick,
   onSettingsClick,
+  onProfile,
+  onSettings,
   onNavigate,
   user = {
     name: "Admin",
@@ -80,7 +84,9 @@ export function DashboardNavbar({
 
   const handleProfileClick = () => {
     setProfileDropdownOpen(false);
-    if (onProfileClick) {
+    if (onProfile) {
+      onProfile();
+    } else if (onProfileClick) {
       onProfileClick();
     } else if (onNavigate) {
       onNavigate("profil");
@@ -89,7 +95,9 @@ export function DashboardNavbar({
 
   const handleSettingsClick = () => {
     setProfileDropdownOpen(false);
-    if (onSettingsClick) {
+    if (onSettings) {
+      onSettings();
+    } else if (onSettingsClick) {
       onSettingsClick();
     } else if (onNavigate) {
       onNavigate("sozlamalar");
@@ -98,7 +106,6 @@ export function DashboardNavbar({
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-[#0d1114] px-4 md:px-6">
-      {/* Left: Hamburger & Title / Breadcrumbs */}
       <div className="flex items-center gap-3 md:gap-4">
         {onToggleSidebar && (
           <button
@@ -129,7 +136,6 @@ export function DashboardNavbar({
         </div>
       </div>
 
-      {/* Right: Search, Notifications, Actions, User Profile */}
       <div className="flex items-center gap-3 md:gap-4">
         {(onSearchChange || setHeaderSearch) && (
           <div className="relative hidden md:block w-48 lg:w-64">
@@ -160,7 +166,6 @@ export function DashboardNavbar({
           </span>
         </button>
 
-        {/* User Profile Dropdown */}
         <div ref={dropdownRef} className="relative">
           <button
             type="button"

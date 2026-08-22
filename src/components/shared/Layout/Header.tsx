@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { LogIn, X, Phone, MapPin, Send, ArrowUpRight, Clock } from "lucide-react";
+import {
+  LogIn,
+  X,
+  Phone,
+  MapPin,
+  Send,
+  ArrowUpRight,
+  Clock,
+} from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../../assets/images/Layout/Header/Logo-2.png";
 import Container from "../../ui/container/Container";
@@ -25,7 +33,8 @@ function Header() {
     const link = document.createElement("link");
     link.id = "tanho-font-cormorant";
     link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap";
     document.head.appendChild(link);
   }, []);
 
@@ -109,12 +118,12 @@ function Header() {
               <button
                 type="button"
                 onClick={() => openAuthModal("kirish")}
-                className="hidden lg:flex group cursor-pointer items-center gap-2 rounded-md border border-[#6d531f] px-5 py-2.5 text-[12px] font-medium text-[#dcae4d] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_6px_20px_rgba(220,174,77,0.18)]"
+                className="hidden lg:flex group relative cursor-pointer items-center gap-2 rounded-lg border border-[#dcae4d]/40 bg-transparent px-5 py-2 text-[13px] font-semibold tracking-wider text-[#dcae4d] hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_0_20px_rgba(220,174,77,0.3)] active:scale-[0.98] transition-all duration-300"
               >
                 <LogIn
-                  size={15}
-                  strokeWidth={1.8}
-                  className="transition-transform duration-300 group-hover:-translate-x-0.5"
+                  size={16}
+                  strokeWidth={2}
+                  className="transition-transform duration-300 group-hover:translate-x-0.5"
                 />
                 <span>KIRISH</span>
               </button>
@@ -344,7 +353,14 @@ function Header() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         >
-                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                          <rect
+                            x="2"
+                            y="2"
+                            width="20"
+                            height="20"
+                            rx="5"
+                            ry="5"
+                          />
                           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                           <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                         </svg>
@@ -363,7 +379,7 @@ function Header() {
             </div>
           </aside>
         </>,
-        document.body
+        document.body,
       )}
     </>
   );

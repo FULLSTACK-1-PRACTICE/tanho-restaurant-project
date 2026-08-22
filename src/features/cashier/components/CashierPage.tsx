@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   ArrowUpRight, 
   ChevronRight, 
@@ -13,95 +13,145 @@ import {
   Filter,
   DollarSign,
   Send,
-  X
+  X,
+  ChevronDown,
+  Check
 } from 'lucide-react';
-
-interface OrderInfo {
-  id: string;
-  total: string;
-  time: string;
-}
-
-interface Table {
-  id: string;
-  number: number;
-  seats: number;
-  status: string;
-  hall: string;
-  order: OrderInfo | null;
-}
+import { initialTables, initialRecentOrders, cashierMenuItems } from '@/data/cashierData';
+import type { Table } from '@/data/cashierData';
+import { NewOrder } from './NewOrder';
 
 export const CashierPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'tables' | 'orders' | 'menu'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'tables' | 'orders' | 'menu' | 'new-order'>('overview');
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [selectedTableId, setSelectedTableId] = useState<string>('1');
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const [tables] = useState<Table[]>([
-    { id: "01", number: 1, seats: 4, status: "free", hall: "Asosiy zal", order: null },
-    { id: "02", number: 2, seats: 2, status: "free", hall: "Asosiy zal", order: null },
-    { id: "03", number: 3, seats: 6, status: "busy", hall: "Asosiy zal", order: { id: "#1258", total: "285 000 so'm", time: "19:45" } },
-    { id: "04", number: 4, seats: 4, status: "reserved", hall: "Asosiy zal", order: null },
-    { id: "05", number: 5, seats: 4, status: "free", hall: "Asosiy zal", order: null },
-    { id: "06", number: 6, seats: 8, status: "busy", hall: "Terrassa", order: { id: "#1256", total: "95 000 so'm", time: "19:05" } },
-    { id: "07", number: 7, seats: 2, status: "free", hall: "Terrassa", order: null },
-    { id: "08", number: 8, seats: 4, status: "cleaning", hall: "Terrassa", order: null },
-    { id: "09", number: 9, seats: 4, status: "free", hall: "VIP zal", order: null },
-    { id: "10", number: 10, seats: 10, status: "busy", hall: "VIP zal", order: { id: "#1257", total: "180 000 so'm", time: "19:20" } },
-  ]);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const [recentOrders] = useState([
-    { id: "#1258", table: "Stol 03", time: "19:45", price: "285 000 so'm", status: "To'landi", items: "Qozon kabob, Norin, 2x Cola" },
-    { id: "#1257", table: "Stol 10", time: "19:20", price: "180 000 so'm", status: "To'landi", items: "Mastava, Somsa, Ko'k choy" },
-    { id: "#1256", table: "Stol 06", time: "19:05", price: "95 000 so'm", status: "To'landi", items: "Manti, Achchiq-chuchuk" },
-    { id: "#1255", table: "Stol 15", time: "18:40", price: "120 000 so'm", status: "Jarayonda", items: "Shashlik assorti" },
-    { id: "#1254", table: "Stol 02", time: "18:15", price: "150 000 so'm", status: "To'landi", items: "Uyg'urcha lag'mon" },
-  ]);
+  const [tables] = useState<Table[]>(initialTables);
+  const [recentOrders] = useState(initialRecentOrders);
+  const [menuItems] = useState(cashierMenuItems);
 
-  const menuItems = [
-    { id: 1, name: "Qozon kabob", price: "45 000 so'm", category: "Milliy taomlar", image: "🍖" },
-    { id: 2, name: "Norin", price: "40 000 so'm", category: "Milliy taomlar", image: "🍜" },
-    { id: 3, name: "Manti (4 dona)", price: "32 000 so'm", category: "Milliy taomlar", image: "🥟" },
-    { id: 4, name: "Uyg'urcha lag'mon", price: "38 000 so'm", category: "Suyuq taomlar", image: "🍲" },
-    { id: 5, name: "Kavkazcha shashlik", price: "18 000 so'm", category: "Fastfood & Grill", image: "🍢" },
-    { id: 6, name: "Coca-Cola 1L", price: "12 000 so'm", category: "Ichimliklar", image: "🥤" },
-  ];
+  const currentTable = tables.find((t) => t.id === selectedTableId);
+
+  const showNotification = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {toastMessage && (
+        <div className="fixed bottom-5 right-5 z-50 bg-emerald-500 text-black font-semibold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 animate-bounce">
+          <Check size={18} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-[#1a1a1a] p-4 rounded-xl border border-[#262626]">
         <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
           <button 
             onClick={() => setActiveTab('overview')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'overview' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:bg-[#262626] hover:text-white'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap cursor-pointer focus:outline-none ${activeTab === 'overview' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:bg-[#262626] hover:text-white'}`}
           >
             Asosiy panel
           </button>
           <button 
             onClick={() => setActiveTab('tables')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'tables' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:bg-[#262626] hover:text-white'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap cursor-pointer focus:outline-none ${activeTab === 'tables' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:bg-[#262626] hover:text-white'}`}
           >
             Stollar boshqaruvi
           </button>
           <button 
             onClick={() => setActiveTab('orders')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'orders' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:bg-[#262626] hover:text-white'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap cursor-pointer focus:outline-none ${activeTab === 'orders' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:bg-[#262626] hover:text-white'}`}
           >
             Buyurtmalar tarixi
           </button>
           <button 
             onClick={() => setActiveTab('menu')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'menu' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:bg-[#262626] hover:text-white'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap cursor-pointer focus:outline-none ${activeTab === 'menu' ? 'bg-amber-500 text-black' : 'text-gray-400 hover:bg-[#262626] hover:text-white'}`}
           >
             Menyu va narxlar
           </button>
         </div>
 
         <div className="flex items-center gap-3">
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+              className="flex items-center justify-between gap-3 bg-[#262626] hover:bg-[#333] border border-[#383838] text-white text-sm py-2 px-3.5 rounded-xl transition cursor-pointer min-w-[240px]"
+            >
+              <span className="truncate">
+                Stol #{currentTable?.id} ({currentTable?.hall} - {currentTable?.seats} kishilik)
+              </span>
+              <ChevronDown
+                size={16}
+                className={`text-gray-400 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+
+            {isDropdownOpen && (
+              <div className="absolute right-0 top-[calc(100%+6px)] z-50 w-full min-w-[260px] max-h-60 overflow-y-auto bg-[#1a1a1a] border border-[#333] rounded-xl shadow-2xl py-1.5 scrollbar-thin scrollbar-thumb-[#333]">
+                {tables.map((table) => {
+                  const isBusy = table.status === 'busy';
+                  const isSelected = table.id === selectedTableId;
+
+                  return (
+                    <button
+                      key={table.id}
+                      type="button"
+                      disabled={isBusy}
+                      onClick={() => {
+                        setSelectedTableId(table.id);
+                        setIsDropdownOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 text-xs text-left transition ${
+                        isBusy
+                          ? 'opacity-40 cursor-not-allowed bg-transparent text-gray-500'
+                          : isSelected
+                          ? 'bg-amber-500/10 text-amber-400 font-semibold cursor-pointer'
+                          : 'text-gray-200 hover:bg-[#262626] cursor-pointer'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2 h-2 rounded-full ${isBusy ? 'bg-red-500' : 'bg-emerald-500'}`} />
+                        <span>
+                          Stol #{table.id} ({table.hall} - {table.seats} kishilik)
+                        </span>
+                      </div>
+                      {isBusy ? (
+                        <span className="text-[10px] text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded font-normal">
+                          Band
+                        </span>
+                      ) : isSelected ? (
+                        <Check size={14} className="text-amber-500" />
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
           <button 
-            onClick={() => setIsOrderModalOpen(true)}
-            className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black font-semibold rounded-lg text-sm flex items-center gap-2 transition-colors"
+            onClick={() => setActiveTab('new-order')}
+            className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black font-semibold rounded-lg text-sm flex items-center gap-2 transition-colors cursor-pointer focus:outline-none"
           >
             <Plus size={18} /> Yangi buyurtma
           </button>
@@ -195,7 +245,7 @@ export const CashierPage: React.FC = () => {
               </div>
               <button 
                 onClick={() => setActiveTab('tables')}
-                className="w-full py-3 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 font-medium text-sm flex items-center justify-center gap-2 transition-colors"
+                className="w-full py-3 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 font-medium text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer focus:outline-none"
               >
                 Barcha stollarni boshqarish <ChevronRight size={16} />
               </button>
@@ -206,43 +256,43 @@ export const CashierPage: React.FC = () => {
                 <h3 className="text-lg font-semibold mb-4">Tezkor amallar</h3>
                 <div className="grid grid-cols-3 gap-3">
                   <button 
-                    onClick={() => setIsOrderModalOpen(true)}
-                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors"
+                    onClick={() => setActiveTab('new-order')}
+                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors cursor-pointer focus:outline-none"
                   >
                     <Plus size={20} />
                     <span className="text-xs text-white text-center">Yangi buyurtma</span>
                   </button>
                   <button 
                     onClick={() => setActiveTab('tables')}
-                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors"
+                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors cursor-pointer focus:outline-none"
                   >
                     <Grid size={20} />
                     <span className="text-xs text-white text-center">Stol tanlash</span>
                   </button>
                   <button 
                     onClick={() => setIsPaymentModalOpen(true)}
-                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors"
+                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors cursor-pointer focus:outline-none"
                   >
                     <CreditCard size={20} />
                     <span className="text-xs text-white text-center">To'lov qabul qilish</span>
                   </button>
                   <button 
-                    onClick={() => alert("Chek printerga yuborildi!")}
-                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors"
+                    onClick={() => showNotification("Chek printerga yuborildi!")}
+                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors cursor-pointer focus:outline-none"
                   >
                     <Printer size={20} />
                     <span className="text-xs text-white text-center">Chek chiqarish</span>
                   </button>
                   <button 
                     onClick={() => setActiveTab('orders')}
-                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors"
+                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors cursor-pointer focus:outline-none"
                   >
                     <ClipboardList size={20} />
                     <span className="text-xs text-white text-center">Buyurtmalar</span>
                   </button>
                   <button 
                     onClick={() => setActiveTab('menu')}
-                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors"
+                    className="flex flex-col items-center justify-center p-4 bg-[#262626] hover:bg-[#333] rounded-xl text-amber-500 gap-2 transition-colors cursor-pointer focus:outline-none"
                   >
                     <Utensils size={20} />
                     <span className="text-xs text-white text-center">Menyu</span>
@@ -334,13 +384,13 @@ export const CashierPage: React.FC = () => {
                   <div className="flex items-center gap-2 pt-2 border-t border-[#262626]">
                     <button 
                       onClick={() => { setSelectedTable(t); setIsPaymentModalOpen(true); }}
-                      className="flex-1 py-2 bg-[#262626] hover:bg-[#333] text-xs font-medium rounded-lg text-center transition-colors"
+                      className="flex-1 py-2 bg-[#262626] hover:bg-[#333] text-xs font-medium rounded-lg text-center transition-colors cursor-pointer focus:outline-none"
                     >
                       To'lov qilish
                     </button>
                     <button 
-                      onClick={() => setIsOrderModalOpen(true)}
-                      className="px-3 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 text-xs font-medium rounded-lg transition-colors"
+                      onClick={() => setActiveTab('new-order')}
+                      className="px-3 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 text-xs font-medium rounded-lg transition-colors cursor-pointer focus:outline-none"
                     >
                       Buyurtma
                     </button>
@@ -367,7 +417,7 @@ export const CashierPage: React.FC = () => {
                   className="w-full bg-[#262626] border border-[#333] rounded-lg pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                 />
               </div>
-              <button className="p-2 bg-[#262626] border border-[#333] rounded-lg text-gray-300 hover:text-white">
+              <button className="p-2 bg-[#262626] border border-[#333] rounded-lg text-gray-300 hover:text-white cursor-pointer focus:outline-none">
                 <Filter size={18} />
               </button>
             </div>
@@ -400,7 +450,7 @@ export const CashierPage: React.FC = () => {
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right">
-                      <button onClick={() => setIsPaymentModalOpen(true)} className="px-3 py-1.5 bg-[#262626] hover:bg-[#333] rounded-lg text-xs font-medium text-amber-400 transition-colors">
+                      <button onClick={() => setIsPaymentModalOpen(true)} className="px-3 py-1.5 bg-[#262626] hover:bg-[#333] rounded-lg text-xs font-medium text-amber-400 transition-colors cursor-pointer focus:outline-none">
                         Chek
                       </button>
                     </td>
@@ -434,45 +484,8 @@ export const CashierPage: React.FC = () => {
         </div>
       )}
 
-      {isOrderModalOpen && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#1a1a1a] border border-[#262626] rounded-2xl w-full max-w-lg p-6 space-y-5 shadow-2xl">
-            <div className="flex justify-between items-center border-b border-[#262626] pb-4">
-              <h3 className="text-lg font-bold">Yangi buyurtma yaratish</h3>
-              <button onClick={() => setIsOrderModalOpen(false)} className="text-gray-400 hover:text-white">
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs text-gray-400 mb-1">Stolni tanlang</label>
-                <select className="w-full bg-[#262626] border border-[#333] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
-                  {tables.filter(t => t.status === 'free').map(t => (
-                    <option key={t.id} value={t.id}>Stol #{t.id} ({t.hall} - {t.seats} kishilik)</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs text-gray-400 mb-1">Taomlar qo'shish</label>
-                <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto p-1 bg-[#262626]/30 rounded-xl border border-[#262626]">
-                  {menuItems.map(m => (
-                    <div key={m.id} className="p-2.5 bg-[#262626] rounded-lg flex justify-between items-center cursor-pointer hover:bg-[#333]">
-                      <span className="text-xs font-medium">{m.name}</span>
-                      <button className="p-1 bg-amber-500 text-black rounded"><Plus size={12} /></button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-4 border-t border-[#262626]">
-              <button onClick={() => setIsOrderModalOpen(false)} className="px-4 py-2 rounded-xl bg-[#262626] text-sm text-gray-300 hover:bg-[#333]">Bekor qilish</button>
-              <button onClick={() => { alert("Buyurtma muvaffaqiyatli saqlandi!"); setIsOrderModalOpen(false); }} className="px-5 py-2 rounded-xl bg-amber-500 text-black font-semibold text-sm hover:bg-amber-400">Saqlash va yuborish</button>
-            </div>
-          </div>
-        </div>
+      {activeTab === 'new-order' && (
+        <NewOrder />
       )}
 
       {isPaymentModalOpen && (
@@ -482,7 +495,7 @@ export const CashierPage: React.FC = () => {
               <h3 className="text-lg font-bold">
                 To'lovni qabul qilish {selectedTable ? `- Stol ${selectedTable.id}` : ''}
               </h3>
-              <button onClick={() => setIsPaymentModalOpen(false)} className="text-gray-400 hover:text-white">
+              <button onClick={() => setIsPaymentModalOpen(false)} className="text-gray-400 hover:text-white cursor-pointer focus:outline-none">
                 <X size={20} />
               </button>
             </div>
@@ -500,13 +513,13 @@ export const CashierPage: React.FC = () => {
               <div>
                 <label className="block text-xs text-gray-400 mb-2">To'lov turi</label>
                 <div className="grid grid-cols-3 gap-3">
-                  <button className="p-3 bg-amber-500 text-black font-semibold rounded-xl text-xs flex flex-col items-center gap-1">
+                  <button className="p-3 bg-amber-500 text-black font-semibold rounded-xl text-xs flex flex-col items-center gap-1 cursor-pointer focus:outline-none">
                     <DollarSign size={18} /> Naqd pul
                   </button>
-                  <button className="p-3 bg-[#262626] hover:bg-[#333] text-white font-semibold rounded-xl text-xs flex flex-col items-center gap-1">
+                  <button className="p-3 bg-[#262626] hover:bg-[#333] text-white font-semibold rounded-xl text-xs flex flex-col items-center gap-1 cursor-pointer focus:outline-none">
                     <CreditCard size={18} /> Plastik karta
                   </button>
-                  <button className="p-3 bg-[#262626] hover:bg-[#333] text-white font-semibold rounded-xl text-xs flex flex-col items-center gap-1">
+                  <button className="p-3 bg-[#262626] hover:bg-[#333] text-white font-semibold rounded-xl text-xs flex flex-col items-center gap-1 cursor-pointer focus:outline-none">
                     <Send size={18} /> Payme / Click
                   </button>
                 </div>
@@ -514,8 +527,18 @@ export const CashierPage: React.FC = () => {
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t border-[#262626]">
-              <button onClick={() => setIsPaymentModalOpen(false)} className="px-4 py-2 rounded-xl bg-[#262626] text-sm text-gray-300 hover:bg-[#333]">Bekor qilish</button>
-              <button onClick={() => { alert("To'lov muvaffaqiyatli yakunlandi!"); setIsPaymentModalOpen(false); }} className="px-5 py-2 rounded-xl bg-emerald-500 text-black font-semibold text-sm hover:bg-emerald-400">To'lovni tasdiqlash</button>
+              <button onClick={() => setIsPaymentModalOpen(false)} className="px-4 py-2 rounded-xl bg-[#262626] text-sm text-gray-300 hover:bg-[#333] cursor-pointer focus:outline-none">
+                Bekor qilish
+              </button>
+              <button 
+                onClick={() => {
+                  showNotification("To'lov muvaffaqiyatli yakunlandi!");
+                  setIsPaymentModalOpen(false);
+                }} 
+                className="px-5 py-2 rounded-xl bg-emerald-500 text-black font-semibold text-sm hover:bg-emerald-400 cursor-pointer focus:outline-none"
+              >
+                To'lovni tasdiqlash
+              </button>
             </div>
           </div>
         </div>

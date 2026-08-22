@@ -9,7 +9,6 @@ import {
   Utensils,
   Receipt,
   BarChart2,
-  Settings,
 } from 'lucide-react';
 import { SideBar, type SidebarItem } from '../../components/common/SideBar';
 import { DashboardNavbar } from '../../components/common/DashboardNavbar';
@@ -21,6 +20,20 @@ export const CashierLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/');
+  };
+
+  const handleNavigateProfile = () => {
+    navigate('/user/profil');
+  };
+
+  const handleNavigateSettings = () => {
+    navigate('/user/sozlamalar');
+  };
+
   const cashierSidebarItems: SidebarItem[] = [
     { path: "/cashier", key: "/cashier", label: "Bosh sahifa", icon: Home },
     { path: "/cashier/new-order", key: "/cashier/new-order", label: "Yangi buyurtma", icon: PlusCircle },
@@ -30,7 +43,6 @@ export const CashierLayout: React.FC = () => {
     { path: "/cashier/menu", key: "/cashier/menu", label: "Menyu", icon: Utensils },
     { path: "/cashier/checks", key: "/cashier/checks", label: "Cheklar", icon: Receipt },
     { path: "/cashier/reports", key: "/cashier/reports", label: "Hisobotlar", icon: BarChart2 },
-    { path: "/cashier/settings", key: "/cashier/settings", label: "Sozlamalar", icon: Settings },
   ];
 
   return (
@@ -48,6 +60,13 @@ export const CashierLayout: React.FC = () => {
           onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
           headerTitle="Bosh sahifa"
           breadcrumb={["Cashier", "Bosh sahifa"]}
+          user={{
+            name: "Kassir",
+            role: "Cashier",
+          }}
+          onProfile={handleNavigateProfile}
+          onSettings={handleNavigateSettings}
+          onLogout={handleLogout}
         />
         <main className="flex-1 overflow-y-auto p-6 bg-[#0a0a0a]">
           <Outlet />

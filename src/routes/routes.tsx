@@ -22,6 +22,9 @@ import UserLayout from "../layouts/UserLayout/UserLayout"
 
 import ManagerLayout from "../features/manager/components/ManagerDashboard"
 import CashierPage from "../features/cashier/components/CashierPage"
+import { NewOrder } from "../features/cashier/components/NewOrder"
+import { Orders } from "../features/cashier/components/Orders"
+import { Payments } from "../features/cashier/components/Payments"
 
 import BoshSahifa from "../layouts/UserLayout/Userpanel/BoshSahifa"
 import Meningprofilim from "../layouts/UserLayout/Userpanel/Meningprofilim"
@@ -88,6 +91,9 @@ const routes = createBrowserRouter([
             element: <CashierLayout />,
             children: [
               { index: true, element: <CashierPage /> },
+              { path: "new-order", element: <NewOrder /> },
+              { path: "orders", element: <Orders /> },
+              { path: "payments", element: <Payments /> },
             ],
           },
         ],

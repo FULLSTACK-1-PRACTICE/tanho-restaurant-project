@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import oshimg from "../../../assets/images/Menu/Cards/Osh.png";
@@ -57,6 +57,176 @@ const categories = [
   { name: "Ichimliklar", icon: Wine },
   { name: "Desertlar", icon: Coffee },
 ];
+
+function CategoryTabs({
+  activeCategory,
+  onChange,
+}: {
+  activeCategory: string;
+  onChange: (category: string) => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const [isCompact, setIsCompact] = useState(true);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [trackWidth, setTrackWidth] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const dragState = useRef({
+    isDragging: false,
+    startX: 0,
+    startOffset: 0,
+    moved: false,
+  });
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsCompact(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const containerEl = containerRef.current;
+    const trackEl = trackRef.current;
+    if (!containerEl || !trackEl) return;
+
+    const measure = () => {
+      setContainerWidth(containerEl.clientWidth);
+      setTrackWidth(trackEl.scrollWidth);
+    };
+
+    measure();
+
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(containerEl);
+    resizeObserver.observe(trackEl);
+    window.addEventListener("resize", measure);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  const maxOffset = isCompact ? Math.max(0, trackWidth - containerWidth) : 0;
+  const clampedOffset = Math.min(Math.max(offset, 0), maxOffset);
+  const clamp = (value: number) => Math.min(Math.max(value, 0), maxOffset);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isCompact) return;
+    dragState.current = {
+      isDragging: true,
+      startX: e.clientX,
+      startOffset: clampedOffset,
+      moved: false,
+    };
+    setIsDragging(true);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isCompact || !dragState.current.isDragging) return;
+    const delta = dragState.current.startX - e.clientX;
+    if (Math.abs(delta) > 3) dragState.current.moved = true;
+    setOffset(clamp(dragState.current.startOffset + delta));
+  };
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (dragState.current.isDragging) {
+      try {
+        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+    }
+    dragState.current.isDragging = false;
+    setIsDragging(false);
+  };
+
+  const isScrollable = isCompact && maxOffset > 0;
+  const thumbWidthPct = containerWidth
+    ? Math.max(15, (containerWidth / Math.max(trackWidth, containerWidth)) * 100)
+    : 100;
+  const thumbLeftPct = maxOffset > 0 ? (clampedOffset / maxOffset) * (100 - thumbWidthPct) : 0;
+
+  return (
+    <div className="relative rounded-xl border border-white/10 bg-[#121619] p-2 backdrop-blur-md">
+      <div
+        ref={containerRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endDrag}
+        onPointerLeave={endDrag}
+        onPointerCancel={endDrag}
+        className="cursor-grab overflow-hidden active:cursor-grabbing [touch-action:pan-y] sm:cursor-auto sm:overflow-visible"
+      >
+        <div
+          ref={trackRef}
+          className="flex w-max gap-2 sm:grid sm:w-full sm:grid-cols-4 lg:grid-cols-7"
+          style={{
+            transform: isCompact ? `translateX(-${clampedOffset}px)` : "none",
+            transition: isDragging ? "none" : "transform 200ms ease-out",
+          }}
+        >
+          {categories.map((category) => {
+            const Icon = category.icon;
+            const isActive = activeCategory === category.name;
+            return (
+              <button
+                key={category.name}
+                type="button"
+                onClick={() => {
+                  if (dragState.current.moved) {
+                    dragState.current.moved = false;
+                    return;
+                  }
+                  onChange(category.name);
+                }}
+                className={`group flex shrink-0 sm:shrink cursor-pointer select-none items-center justify-center gap-1.5 sm:gap-2 rounded-lg px-3 sm:px-2.5 py-3 sm:py-3.5 text-[11px] sm:text-xs transition-all duration-300 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none ${
+                  isActive
+                    ? "border border-[#8c651d]/50 bg-[#191e22] text-[#e5ad45]"
+                    : "border border-transparent text-gray-300 hover:-translate-y-0.5 hover:bg-[#191e22] hover:text-[#e5ad45]"
+                }`}
+              >
+                <Icon size={16} strokeWidth={1.5} className="text-[#d9a441] transition-transform duration-300 group-hover:scale-110 shrink-0" />
+                <span className="whitespace-nowrap">{category.name}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-9 rounded-l-xl bg-gradient-to-r from-[#121619] via-[#121619]/80 to-transparent transition-opacity duration-200 sm:hidden ${
+          clampedOffset > 4 ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-14 rounded-r-xl bg-gradient-to-l from-[#121619] from-40% via-[#121619]/90 to-transparent transition-opacity duration-200 sm:hidden ${
+          clampedOffset < maxOffset - 4 ? "opacity-100" : "opacity-0"
+        }`}
+      />
+
+      {isScrollable && (
+        <div className="relative mx-2 mt-2 h-[3px] sm:hidden">
+          <div
+            className="absolute inset-y-0 rounded-full bg-[#d9a441]"
+            style={{
+              width: `${thumbWidthPct}%`,
+              left: `${thumbLeftPct}%`,
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
 
 const MenuPage = () => {
   const navigate = useNavigate();
@@ -463,27 +633,7 @@ const MenuPage = () => {
 
       {/* Kategoriya tugmalari */}
       <section className="relative z-10 mx-auto max-w-[1240px] px-4 sm:px-6 -mt-6 sm:-mt-8">
-        <div className="flex gap-2 overflow-x-auto pb-2 sm:grid sm:grid-cols-4 lg:grid-cols-7 rounded-xl border border-white/10 bg-[#121619] p-2 backdrop-blur-md [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {categories.map((category) => {
-            const Icon = category.icon;
-            const isActive = activeCategory === category.name;
-            return (
-              <button
-                key={category.name}
-                type="button"
-                onClick={() => setActiveCategory(category.name)}
-                className={`group flex shrink-0 sm:shrink cursor-pointer items-center justify-center gap-1.5 sm:gap-2 rounded-lg px-3 sm:px-2.5 py-3 sm:py-3.5 text-[11px] sm:text-xs transition-all duration-300 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none select-none ${
-                  isActive
-                    ? "border border-[#8c651d]/50 bg-[#191e22] text-[#e5ad45]"
-                    : "border border-transparent text-gray-300 hover:-translate-y-0.5 hover:bg-[#191e22] hover:text-[#e5ad45]"
-                }`}
-              >
-                <Icon size={16} strokeWidth={1.5} className="text-[#d9a441] transition-transform duration-300 group-hover:scale-110 shrink-0" />
-                <span className="whitespace-nowrap">{category.name}</span>
-              </button>
-            );
-          })}
-        </div>
+        <CategoryTabs activeCategory={activeCategory} onChange={setActiveCategory} />
       </section>
 
       <section className="mx-auto max-w-[1240px] px-4 sm:px-6 py-10 sm:py-12">

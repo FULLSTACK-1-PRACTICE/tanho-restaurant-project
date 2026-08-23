@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -42,7 +42,7 @@ function ArticleCard({
   return (
     <article
       onClick={() => navigate(`/blog/${article.id}`)}
-      className={`group relative flex min-h-[340px] cursor-pointer flex-col overflow-hidden rounded-[10px] border border-[#332713] bg-[#10100e] transition duration-300 hover:-translate-y-1 hover:border-[#a8751d] hover:shadow-[0_18px_45px_rgba(0,0,0,0.34)] sm:min-h-[370px] ${
+      className={`group relative flex min-h-[340px] cursor-pointer flex-col overflow-hidden rounded-[10px] border border-[#332713] bg-[#10100e] sm:min-h-[370px] ${
         isWide ? "xl:col-span-6" : "xl:col-span-3"
       }`}
       style={{ animationDelay: `${index * 55}ms` }}
@@ -51,10 +51,11 @@ function ArticleCard({
         <img
           src={article.image}
           alt={article.title}
-          className="h-full w-full object-cover opacity-90 transition duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"
+          style={{ backfaceVisibility: "hidden" }}
+          className="block h-full w-full object-cover opacity-90 transition duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#10100e] via-[#0b0b09]/15 to-transparent" />
+        <div className="absolute -bottom-1 inset-x-0 h-full bg-gradient-to-t from-[#10100e] via-[#0b0b09]/15 to-transparent pointer-events-none" />
 
         <div className="absolute left-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-[#c89228]/70 bg-[#080807]/80 text-[#f6b531] backdrop-blur-sm">
           <Icon size={18} strokeWidth={1.45} />
@@ -105,6 +106,177 @@ function ArticleCard({
         </div>
       </div>
     </article>
+  );
+}
+
+function CategoryScroller({
+  activeCategory,
+  onChange,
+}: {
+  activeCategory: string;
+  onChange: (category: string) => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const [isCompact, setIsCompact] = useState(true);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [trackWidth, setTrackWidth] = useState(0);
+  const [offset, setOffset] = useState(0);
+
+  const dragState = useRef({
+    isDragging: false,
+    startX: 0,
+    startOffset: 0,
+    moved: false,
+  });
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsCompact(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const containerEl = containerRef.current;
+    const trackEl = trackRef.current;
+    if (!containerEl || !trackEl) return;
+
+    const measure = () => {
+      setContainerWidth(containerEl.clientWidth);
+      setTrackWidth(trackEl.scrollWidth);
+    };
+
+    measure();
+
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(containerEl);
+    resizeObserver.observe(trackEl);
+    window.addEventListener("resize", measure);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  const maxOffset = Math.max(0, trackWidth - containerWidth);
+  const clampedOffset = Math.min(Math.max(offset, 0), maxOffset);
+
+  const clamp = (value: number) => Math.min(Math.max(value, 0), maxOffset);
+
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isCompact) return;
+    dragState.current = {
+      isDragging: true,
+      startX: e.clientX,
+      startOffset: clampedOffset,
+      moved: false,
+    };
+    setIsDragging(true);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isCompact || !dragState.current.isDragging) return;
+    const delta = dragState.current.startX - e.clientX;
+    if (Math.abs(delta) > 3) dragState.current.moved = true;
+    setOffset(clamp(dragState.current.startOffset + delta));
+  };
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (dragState.current.isDragging) {
+      try {
+        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+    }
+    dragState.current.isDragging = false;
+    setIsDragging(false);
+  };
+
+  const isScrollable = isCompact && maxOffset > 0;
+  const thumbWidthPct = containerWidth
+    ? Math.max(15, (containerWidth / Math.max(trackWidth, containerWidth)) * 100)
+    : 100;
+  const thumbLeftPct = maxOffset > 0 ? (clampedOffset / maxOffset) * (100 - thumbWidthPct) : 0;
+
+  return (
+    <div className="relative mt-6">
+      <div
+        ref={containerRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endDrag}
+        onPointerLeave={endDrag}
+        onPointerCancel={endDrag}
+        className="cursor-grab overflow-hidden active:cursor-grabbing [touch-action:pan-y] sm:cursor-auto sm:overflow-visible"
+      >
+        <div
+          ref={trackRef}
+          className="flex w-max gap-2 sm:w-full sm:flex-wrap sm:justify-center"
+          style={{
+            transform: isCompact ? `translateX(-${clampedOffset}px)` : "none",
+            transition: isDragging ? "none" : "transform 200ms ease-out",
+          }}
+        >
+          {categoryLabels.map((category) => {
+            const isActive = activeCategory === category;
+
+            return (
+              <Button
+                key={category}
+                type="button"
+                onClick={() => {
+                  if (dragState.current.moved) {
+                    dragState.current.moved = false;
+                    return;
+                  }
+                  onChange(category);
+                }}
+                className={`shrink-0 select-none rounded-full border px-4.5 py-2 text-[11.5px] font-medium transition duration-200 active:scale-[0.97] ${
+                  isActive
+                    ? "border-[#f6b531] bg-[#f6b531] text-[#17120b] shadow-[0_6px_20px_rgba(246,181,49,0.12)]"
+                    : "border-[#423727] bg-[#0c0c0a]/70 text-[#c4bcb2] hover:border-[#aa761e] hover:text-[#f6b531]"
+                }`}
+              >
+                {category}
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-9 bg-gradient-to-r from-[#080807] via-[#080807]/80 to-transparent transition-opacity duration-200 sm:hidden ${
+          clampedOffset > 4 ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#080807] from-40% via-[#080807]/90 to-transparent transition-opacity duration-200 sm:hidden ${
+          clampedOffset < maxOffset - 4 ? "opacity-100" : "opacity-0"
+        }`}
+      />
+
+      {isScrollable && (
+        <div className="relative mt-2 h-[3px] w-full sm:hidden">
+          <div
+            className="absolute inset-y-0 rounded-full bg-[#f6b531]"
+            style={{
+              width: `${thumbWidthPct}%`,
+              left: `${thumbLeftPct}%`,
+            }}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -222,26 +394,7 @@ export default function BlogPage() {
             </p>
           </div>
 
-          <div className="hide-scrollbar mt-6 flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:justify-center sm:overflow-visible sm:pb-0">
-            {categoryLabels.map((category) => {
-              const isActive = activeCategory === category;
-
-              return (
-                <Button
-                  key={category}
-                  type="button"
-                  onClick={() => handleCategory(category)}
-                  className={`shrink-0 rounded-full border px-4.5 py-2 text-[11.5px] font-medium transition duration-200 active:scale-[0.97] ${
-                    isActive
-                      ? "border-[#f6b531] bg-[#f6b531] text-[#17120b] shadow-[0_6px_20px_rgba(246,181,49,0.12)]"
-                      : "border-[#423727] bg-[#0c0c0a]/70 text-[#c4bcb2] hover:border-[#aa761e] hover:text-[#f6b531]"
-                  }`}
-                >
-                  {category}
-                </Button>
-              );
-            })}
-          </div>
+          <CategoryScroller activeCategory={activeCategory} onChange={handleCategory} />
         </Container>
       </section>
 
@@ -413,7 +566,7 @@ export default function BlogPage() {
                   type="button"
                   key={social}
                   aria-label={`${social} sahifamiz`}
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3c2e1a] `text-[11px]` font-semibold uppercase text-[#c18b28] transition hover:border-[#f6b531] hover:text-[#f6b531] active:scale-[0.95]"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3c2e1a] text-[11px] font-semibold uppercase text-[#c18b28] transition hover:border-[#f6b531] hover:text-[#f6b531] active:scale-[0.95]"
                 >
                   {social === "ig" ? "◎" : social}
                 </Button>

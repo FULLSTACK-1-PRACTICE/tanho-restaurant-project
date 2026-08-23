@@ -12,6 +12,7 @@ import {
   X,
   CheckCircle2,
   BellRing,
+  AlertCircle,
 } from "lucide-react";
 
 type CategoryKey = "barchasi" | "maxsus" | "tadbir" | "yangilik" | "elon";
@@ -64,7 +65,7 @@ const NEWS: NewsItem[] = [
     date: "10.08.2026",
     title: "Qashqadaryocha Tandir go'shti kechasi",
     description:
-      "Har shanba oqshomida Qarshi Tanho restoranida maxsus Qashqadaryocha tandir go'shti taqdimoti o'tkaziladi. Mohir oshpazlarimiz tomonidan maxsus maxalliy ziravorlarda tayyorlangan tandir taomlari va jonli milliy cholg'u kuylari sizni kutmoqda.",
+      "Har shanba oqshomida Qarshi Tanho restoranida maxsus Qashqadaryocha tandir go'shti taqdimoti o'tkaziladi. Mohir oshpazlarimiz tomonidan maxsus mahalliy ziravorlarda tayyorlangan tandir taomlari va jonli milliy cholg'u kuylari sizni kutmoqda.",
     image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
   },
   {
@@ -112,7 +113,7 @@ const NEWS: NewsItem[] = [
 const SORT_OPTIONS = ["Eng yangi", "Eng eski", "Nomi bo'yicha"] as const;
 type SortOption = (typeof SORT_OPTIONS)[number];
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 
 interface NewsModalProps {
   item: NewsItem;
@@ -140,7 +141,7 @@ const NewsModal = ({ item, onClose }: NewsModalProps) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative flex max-h-[90vh] w-full max-w-[720px] flex-col overflow-hidden rounded-lg border border-white/10 bg-[#0b0d10] shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+        className="relative flex max-h-[90vh] w-full max-w-[720px] flex-col overflow-hidden rounded-lg border border-white/10 bg-[#0b0d10] shadow-2xl"
       >
         <button
           type="button"
@@ -194,19 +195,6 @@ const NewsModal = ({ item, onClose }: NewsModalProps) => {
   );
 };
 
-/**
- * Horizontally scrollable category chips with soft edge fades and a
- * single custom progress indicator — the same pattern used by
- * Airbnb / Notion / Netflix tab bars on mobile.
- *
- * Scrolling is implemented entirely with a CSS `transform` driven by
- * pointer events, instead of native `overflow-x: auto`. This is
- * intentional: some mobile browsers (notably iOS Safari) draw their
- * own thin native scroll-overlay indicator on top of scrollable
- * elements that cannot be hidden with CSS, which was showing up
- * alongside our custom progress bar as a second line. Removing native
- * scrolling removes that overlay entirely, leaving only one indicator.
- */
 const CategoryScroller = ({
   activeCategory,
   onChange,
@@ -221,16 +209,14 @@ const CategoryScroller = ({
   const [containerWidth, setContainerWidth] = useState(0);
   const [trackWidth, setTrackWidth] = useState(0);
   const [offset, setOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   const dragState = useRef({
-    isDragging: false,
     startX: 0,
     startOffset: 0,
     moved: false,
   });
 
-  // Track the `sm` (640px) breakpoint in JS so we know when to enable
-  // the custom drag/transform behaviour vs. the plain wrapped layout.
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)");
     const update = () => setIsCompact(mq.matches);
@@ -239,8 +225,6 @@ const CategoryScroller = ({
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // Measure the visible container and the natural (unwrapped) width of
-  // the chip row, so we know how far it's allowed to scroll.
   useEffect(() => {
     const containerEl = containerRef.current;
     const trackEl = trackRef.current;
@@ -265,50 +249,46 @@ const CategoryScroller = ({
   }, []);
 
   const maxOffset = Math.max(0, trackWidth - containerWidth);
-
-  // Keep the offset in range if the row size changes (e.g. rotation,
-  // resize, or switching in/out of compact mode).
-  useEffect(() => {
-    setOffset((prev) => Math.min(Math.max(prev, 0), maxOffset));
-  }, [maxOffset]);
-
-  const clamp = (value: number) => Math.min(Math.max(value, 0), maxOffset);
+  const currentOffset = Math.min(Math.max(offset, 0), maxOffset);
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isCompact) return;
+    setIsDragging(true);
     dragState.current = {
-      isDragging: true,
       startX: e.clientX,
-      startOffset: offset,
+      startOffset: currentOffset,
       moved: false,
     };
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isCompact || !dragState.current.isDragging) return;
+    if (!isCompact || !isDragging) return;
 
     const delta = dragState.current.startX - e.clientX;
     if (Math.abs(delta) > 3) dragState.current.moved = true;
-    setOffset(clamp(dragState.current.startOffset + delta));
+
+    const newOffset = dragState.current.startOffset + delta;
+    setOffset(Math.min(Math.max(newOffset, 0), maxOffset));
   };
 
   const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (dragState.current.isDragging) {
+    if (isDragging) {
       try {
         (e.target as HTMLElement).releasePointerCapture(e.pointerId);
       } catch {
         // ignore
       }
     }
-    dragState.current.isDragging = false;
+    setIsDragging(false);
   };
 
   const isScrollable = isCompact && maxOffset > 0;
   const thumbWidthPct = containerWidth
     ? Math.max(15, (containerWidth / Math.max(trackWidth, containerWidth)) * 100)
     : 100;
-  const thumbLeftPct = maxOffset > 0 ? (offset / maxOffset) * (100 - thumbWidthPct) : 0;
+  const thumbLeftPct =
+    maxOffset > 0 ? (currentOffset / maxOffset) * (100 - thumbWidthPct) : 0;
 
   return (
     <div className="relative w-full sm:max-w-none">
@@ -325,10 +305,8 @@ const CategoryScroller = ({
           ref={trackRef}
           className="flex w-max items-center gap-2 sm:w-full sm:flex-wrap"
           style={{
-            transform: isCompact ? `translateX(-${offset}px)` : "none",
-            transition: dragState.current.isDragging
-              ? "none"
-              : "transform 200ms ease-out",
+            transform: isCompact ? `translateX(-${currentOffset}px)` : "none",
+            transition: isDragging ? "none" : "transform 200ms ease-out",
           }}
         >
           {CATEGORIES.map((cat) => {
@@ -338,9 +316,6 @@ const CategoryScroller = ({
                 key={cat.key}
                 type="button"
                 onClick={() => {
-                  // Ignore the click that fires at the end of a drag
-                  // gesture, so dragging doesn't accidentally select a
-                  // category.
                   if (dragState.current.moved) {
                     dragState.current.moved = false;
                     return;
@@ -360,25 +335,19 @@ const CategoryScroller = ({
         </div>
       </div>
 
-      {/* Edge fades — only visible below the `sm` breakpoint (640px),
-          i.e. exactly where the row becomes horizontally scrollable. */}
       <div
         aria-hidden="true"
         className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-9 rounded-l-md bg-gradient-to-r from-[#020305] via-[#020305]/80 to-transparent transition-opacity duration-200 sm:hidden ${
-          offset > 4 ? "opacity-100" : "opacity-0"
+          currentOffset > 4 ? "opacity-100" : "opacity-0"
         }`}
       />
       <div
         aria-hidden="true"
         className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-16 rounded-r-md bg-gradient-to-l from-[#020305] from-40% via-[#020305]/90 to-transparent transition-opacity duration-200 sm:hidden ${
-          offset < maxOffset - 4 ? "opacity-100" : "opacity-0"
+          currentOffset < maxOffset - 4 ? "opacity-100" : "opacity-0"
         }`}
       />
 
-      {/* Visible scroll-position indicator — a single floating pill,
-          no background track, so there's only ever one visible line.
-          There is no native scrollbar to conflict with it, since this
-          row no longer uses native overflow scrolling. */}
       {isScrollable && (
         <div className="relative mt-1.5 h-[3px] w-full sm:hidden">
           <div
@@ -403,6 +372,7 @@ const NewsPage = () => {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
 
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   const parseDate = (d: string) => {
@@ -431,7 +401,11 @@ const NewsPage = () => {
   }, [activeCategory, query, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const currentPage = Math.min(page, totalPages);
+  const paginated = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
 
   const handleCategoryChange = (key: CategoryKey) => {
     setActiveCategory(key);
@@ -443,12 +417,31 @@ const NewsPage = () => {
     setPage(1);
   };
 
+  const handleSortChange = (opt: SortOption) => {
+    setSort(opt);
+    setSortOpen(false);
+    setPage(1);
+  };
+
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
-      setIsSubscribed(true);
-      setEmail("");
+    
+    // Email regex tekshiruvi
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!email.trim()) {
+      setEmailError("Iltimos, elektron pochtangizni kiriting");
+      return;
     }
+    
+    if (!emailRegex.test(email.trim())) {
+      setEmailError("Iltimos, yaroqli email manzilini kiriting (masalan: user@gmail.com)");
+      return;
+    }
+
+    setEmailError("");
+    setIsSubscribed(true);
+    setEmail("");
   };
 
   return (
@@ -503,7 +496,6 @@ const NewsPage = () => {
 
             <div className="w-full lg:w-auto lg:flex-1 lg:px-4">
               <CategoryScroller
-                key="category-scroller"
                 activeCategory={activeCategory}
                 onChange={handleCategoryChange}
               />
@@ -531,10 +523,7 @@ const NewsPage = () => {
                     <button
                       key={opt}
                       type="button"
-                      onClick={() => {
-                        setSort(opt);
-                        setSortOpen(false);
-                      }}
+                      onClick={() => handleSortChange(opt)}
                       className={`block w-full cursor-pointer px-4 py-2.5 text-left text-[13px] transition-colors outline-none ${
                         opt === sort
                           ? "text-[#dcae4d]"
@@ -624,7 +613,7 @@ const NewsPage = () => {
               <button
                 type="button"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
+                disabled={currentPage === 1}
                 className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white/50 transition-colors hover:border-[#dcae4d]/40 hover:text-[#dcae4d] disabled:cursor-not-allowed disabled:opacity-30 outline-none"
               >
                 <ChevronLeft size={16} strokeWidth={1.8} />
@@ -636,7 +625,7 @@ const NewsPage = () => {
                   type="button"
                   onClick={() => setPage(n)}
                   className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-md text-[13px] font-medium transition-colors outline-none ${
-                    n === page
+                    n === currentPage
                       ? "bg-[#dcae4d] text-black"
                       : "border border-white/10 text-white/60 hover:border-[#dcae4d]/40 hover:text-[#dcae4d]"
                   }`}
@@ -648,7 +637,7 @@ const NewsPage = () => {
               <button
                 type="button"
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
+                disabled={currentPage === totalPages}
                 className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white/50 transition-colors hover:border-[#dcae4d]/40 hover:text-[#dcae4d] disabled:cursor-not-allowed disabled:opacity-30 outline-none"
               >
                 <ChevronRight size={16} strokeWidth={1.8} />
@@ -682,35 +671,53 @@ const NewsPage = () => {
                 </div>
 
                 {isSubscribed ? (
-                  <div className="flex items-center gap-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 max-w-[460px] animate-in fade-in duration-300">
+                  <div className="flex items-center gap-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 max-w-[460px]">
                     <CheckCircle2 size={22} className="text-emerald-400 shrink-0" />
                     <div>
-                      <h4 className="text-[13.5px] font-semibold text-emerald-300">Muvaffaqiyatli obuna bo'ldingiz!</h4>
-                      <p className="text-[12px] text-emerald-400/80 mt-0.5">Endi barcha yangiliklar elektron pochtangizga borib turadi.</p>
+                      <h4 className="text-[13.5px] font-semibold text-emerald-300">
+                        Muvaffaqiyatli obuna bo'ldingiz!
+                      </h4>
+                      <p className="text-[12px] text-emerald-400/80 mt-0.5">
+                        Endi barcha yangiliklar elektron pochtangizga borib turadi.
+                      </p>
                     </div>
                   </div>
                 ) : (
                   <form
                     onSubmit={handleSubscribe}
-                    className="flex flex-col sm:flex-row w-full max-w-[460px] items-stretch sm:items-center gap-3 mt-1"
+                    className="flex flex-col w-full max-w-[460px] gap-2 mt-1"
                   >
-                    <div className="relative flex-1">
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Email manzilingizni kiriting..."
-                        className="h-12 w-full rounded-xl border border-white/10 bg-[#020305]/80 px-4 text-[13.5px] text-white placeholder:text-white/35 outline-none transition-all focus:border-[#dcae4d] focus:ring-2 focus:ring-[#dcae4d]/20 shadow-inner"
-                      />
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                      <div className="relative flex-1">
+                        <input
+                          type="text"
+                          value={email}
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                            if (emailError) setEmailError("");
+                          }}
+                          placeholder="Email manzilingizni kiriting..."
+                          className={`h-12 w-full rounded-xl border bg-[#020305]/80 px-4 text-[13.5px] text-white placeholder:text-white/35 outline-none transition-all focus:ring-2 shadow-inner ${
+                            emailError
+                              ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                              : "border-white/10 focus:border-[#dcae4d] focus:ring-[#dcae4d]/20"
+                          }`}
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className="flex h-12 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#dcae4d] px-6 text-[13px] font-semibold text-black transition-all duration-300 hover:bg-[#f3c766] hover:shadow-lg hover:shadow-[#dcae4d]/20 active:scale-95 outline-none"
+                      >
+                        <span>Obuna bo'lish</span>
+                        <Send size={15} strokeWidth={2} />
+                      </button>
                     </div>
-                    <button
-                      type="submit"
-                      className="flex h-12 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#dcae4d] px-6 text-[13px] font-semibold text-black transition-all duration-300 hover:bg-[#f3c766] hover:shadow-lg hover:shadow-[#dcae4d]/20 active:scale-95 outline-none"
-                    >
-                      <span>Obuna bo'lish</span>
-                      <Send size={15} strokeWidth={2} />
-                    </button>
+                    {emailError && (
+                      <div className="flex items-center gap-1.5 text-red-400 text-[12px] mt-1 pl-1">
+                        <AlertCircle size={14} className="shrink-0" />
+                        <span>{emailError}</span>
+                      </div>
+                    )}
                   </form>
                 )}
               </div>

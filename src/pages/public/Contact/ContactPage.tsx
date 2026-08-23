@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   MapPin,
   Phone,
@@ -13,6 +14,62 @@ import {
 import Button from '../../../components/ui/Button';
 
 function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
+
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const phoneRegex = /^(\+?998)?\d{9}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError('');
+    setSuccess('');
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.name || !formData.phone || !formData.email || !formData.message) {
+      setError('Iltimos, barcha maydonlarni to‘liq to‘ldiring!');
+      return;
+    }
+
+    if (!formData.subject) {
+      setError('Mavzuni tanlang!');
+      return;
+    }
+
+    const cleanPhone = formData.phone.replace(/\s+/g, '');
+    if (!phoneRegex.test(cleanPhone)) {
+      setError('Telefon raqam noto‘g‘ri kiritildi! Masalan: +998901234567');
+      return;
+    }
+
+    if (!emailRegex.test(formData.email)) {
+      setError('Email manzil noto‘g‘ri kiritildi!');
+      return;
+    }
+
+    setError('');
+    setSuccess('Xabaringiz muvaffaqiyatli yuborildi!');
+    
+    setFormData({
+      name: '',
+      phone: '',
+      email: '',
+      subject: '',
+      message: '',
+    });
+  };
+
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#050505] text-white">
       <div className="absolute inset-0">
@@ -55,87 +112,53 @@ function ContactPage() {
             <div className="mt-8 space-y-6">
               <div className="flex gap-5">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[#725522]">
-                  <MapPin
-                    size={25}
-                    strokeWidth={1.5}
-                    className="text-[#dcae4d]"
-                  />
+                  <MapPin size={25} strokeWidth={1.5} className="text-[#dcae4d]" />
                 </div>
-
                 <div>
                   <p className="text-[13px] text-[#dcae4d]">Manzil</p>
-
                   <p className="mt-1 text-[13px] leading-5 text-neutral-300">
-                    Qarshi shahri
-                    <br />
-                    TANHO Restaurant
+                    Qarshi shahri<br />TANHO Restaurant
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-5">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[#725522]">
-                  <Phone
-                    size={25}
-                    strokeWidth={1.5}
-                    className="text-[#dcae4d]"
-                  />
+                  <Phone size={25} strokeWidth={1.5} className="text-[#dcae4d]" />
                 </div>
-
                 <div>
                   <p className="text-[13px] text-[#dcae4d]">Telefon</p>
-
                   <p className="mt-1 text-[13px] leading-5 text-neutral-300">
-                    +998 90 123 45 67
-                    <br />
-                    +998 91 987 65 43
+                    +998 90 123 45 67<br />+998 91 987 65 43
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-5">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[#725522]">
-                  <Mail
-                    size={25}
-                    strokeWidth={1.5}
-                    className="text-[#dcae4d]"
-                  />
+                  <Mail size={25} strokeWidth={1.5} className="text-[#dcae4d]" />
                 </div>
-
                 <div>
                   <p className="text-[13px] text-[#dcae4d]">Email</p>
-
-                  <p className="mt-1 text-[13px] text-neutral-300">
-                    info@tanho.uz
-                  </p>
+                  <p className="mt-1 text-[13px] text-neutral-300">info@tanho.uz</p>
                 </div>
               </div>
 
               <div className="flex gap-5">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[#725522]">
-                  <Clock
-                    size={25}
-                    strokeWidth={1.5}
-                    className="text-[#dcae4d]"
-                  />
+                  <Clock size={25} strokeWidth={1.5} className="text-[#dcae4d]" />
                 </div>
-
                 <div>
                   <p className="text-[13px] text-[#dcae4d]">Ish vaqti</p>
-
                   <p className="mt-1 text-[13px] leading-5 text-neutral-300">
-                    Har kuni
-                    <br />
-                    10:00 – 24:00
+                    Har kuni<br />10:00 – 24:00
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="mt-7 w-full">
-              <Button
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#DCAE42] px-6 text-[13px] font-medium text-black transition-all duration-200 hover:bg-[#c99b3d] active:scale-[0.98]"
-              >
+              <Button className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#DCAE42] px-6 text-[13px] font-medium text-black transition-all duration-200 hover:bg-[#c99b3d] active:scale-[0.98]">
                 <CalendarDays size={17} />
                 <span>STOL BAND QILISH</span>
               </Button>
@@ -147,36 +170,46 @@ function ContactPage() {
               BIZGA XABAR YUBORING
             </h2>
 
-            <form className="mt-7 space-y-3">
+            <form onSubmit={handleSubmit} noValidate className="mt-7 space-y-3">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <input
                   type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   placeholder="Ismingiz"
                   className="h-12 rounded-md border border-[#303030] bg-[#090909] px-4 text-[13px] text-white outline-none transition placeholder:text-neutral-500 focus:border-[#806027]"
                 />
 
                 <input
-                  type="tel"
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
                   placeholder="Telefon raqamingiz"
                   className="h-12 rounded-md border border-[#303030] bg-[#090909] px-4 text-[13px] text-white outline-none transition placeholder:text-neutral-500 focus:border-[#806027]"
                 />
               </div>
 
               <input
-                type="email"
+                type="text"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Email manzilingiz"
                 className="h-12 w-full rounded-md border border-[#303030] bg-[#090909] px-4 text-[13px] text-white outline-none transition placeholder:text-neutral-500 focus:border-[#806027]"
               />
 
               <div className="relative">
                 <select
-                  defaultValue=""
-                  className="h-12 w-full appearance-none rounded-md border border-[#303030] bg-[#090909] px-4 text-[13px] text-neutral-400 outline-none focus:border-[#806027]"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  className="h-12 w-full appearance-none rounded-md border border-[#303030] bg-[#090909] px-4 text-[13px] text-neutral-300 outline-none focus:border-[#806027]"
                 >
                   <option value="" disabled>
                     Mavzu
                   </option>
-
                   <option value="reservation">Rezervatsiya</option>
                   <option value="question">Savol</option>
                   <option value="event">Tadbir</option>
@@ -190,9 +223,23 @@ function ContactPage() {
               </div>
 
               <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 placeholder="Xabaringiz"
                 className="h-[125px] w-full resize-none rounded-md border border-[#303030] bg-[#090909] px-4 py-4 text-[13px] text-white outline-none transition placeholder:text-neutral-500 focus:border-[#806027]"
               />
+
+              {error && (
+                <div className="rounded-md bg-red-500/10 border border-red-500/30 p-3 text-center text-[13px] text-red-400">
+                  {error}
+                </div>
+              )}
+              {success && (
+                <div className="rounded-md bg-green-500/10 border border-green-500/30 p-3 text-center text-[13px] text-green-400">
+                  {success}
+                </div>
+              )}
 
               <Button
                 type="submit"
@@ -225,82 +272,34 @@ function ContactPage() {
 
         <div className="mt-5 grid overflow-hidden rounded-xl border border-[#171717] bg-[#0a0a0a] sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex items-center gap-5 border-b border-[#292929] px-7 py-6 lg:border-b-0 lg:border-r">
-            <Headphones
-              size={45}
-              strokeWidth={1.3}
-              className="shrink-0 text-[#dcae4d]"
-            />
-
+            <Headphones size={45} strokeWidth={1.3} className="shrink-0 text-[#dcae4d]" />
             <div>
-              <h3 className="text-[13px] font-semibold text-[#dcae4d]">
-                TEZ YORDAM
-              </h3>
-
-              <p className="mt-2 text-[12px] leading-5 text-neutral-400">
-                Savollaringizga tez
-                <br />
-                javob beramiz
-              </p>
+              <h3 className="text-[13px] font-semibold text-[#dcae4d]">TEZ YORDAM</h3>
+              <p className="mt-2 text-[12px] leading-5 text-neutral-400">Savollaringizga tez<br />javob beramiz</p>
             </div>
           </div>
 
           <div className="flex items-center gap-5 border-b border-[#292929] px-7 py-6 lg:border-b-0 lg:border-r">
-            <CalendarDays
-              size={45}
-              strokeWidth={1.3}
-              className="shrink-0 text-[#dcae4d]"
-            />
-
+            <CalendarDays size={45} strokeWidth={1.3} className="shrink-0 text-[#dcae4d]" />
             <div>
-              <h3 className="text-[13px] font-semibold text-[#dcae4d]">
-                ONLAYN REZERVATSIYA
-              </h3>
-
-              <p className="mt-2 text-[12px] leading-5 text-neutral-400">
-                Stol band qilishni onlayn
-                <br />
-                amalga oshiring
-              </p>
+              <h3 className="text-[13px] font-semibold text-[#dcae4d]">ONLAYN REZERVATSIYA</h3>
+              <p className="mt-2 text-[12px] leading-5 text-neutral-400">Stol band qilishni onlayn<br />amalga oshiring</p>
             </div>
           </div>
 
           <div className="flex items-center gap-5 border-b border-[#292929] px-7 py-6 lg:border-b-0 lg:border-r">
-            <Gift
-              size={45}
-              strokeWidth={1.3}
-              className="shrink-0 text-[#dcae4d]"
-            />
-
+            <Gift size={45} strokeWidth={1.3} className="shrink-0 text-[#dcae4d]" />
             <div>
-              <h3 className="text-[13px] font-semibold text-[#dcae4d]">
-                MAXSUS TAKLIFLAR
-              </h3>
-
-              <p className="mt-2 text-[12px] leading-5 text-neutral-400">
-                Yangi takliflar va chegirmalar
-                <br />
-                haqida xabardor bo‘ling
-              </p>
+              <h3 className="text-[13px] font-semibold text-[#dcae4d]">MAXSUS TAKLIFLAR</h3>
+              <p className="mt-2 text-[12px] leading-5 text-neutral-400">Yangi takliflar va chegirmalar<br />haqida xabardor bo‘ling</p>
             </div>
           </div>
 
           <div className="flex items-center gap-5 px-7 py-6">
-            <MessageCircle
-              size={45}
-              strokeWidth={1.3}
-              className="shrink-0 text-[#dcae4d]"
-            />
-
+            <MessageCircle size={45} strokeWidth={1.3} className="shrink-0 text-[#dcae4d]" />
             <div>
-              <h3 className="text-[13px] font-semibold text-[#dcae4d]">
-                SIZNING FIKRINGIZ MUHIM
-              </h3>
-
-              <p className="mt-2 text-[12px] leading-5 text-neutral-400">
-                Taklif va mulohazalaringizni
-                <br />
-                bizga yuboring
-              </p>
+              <h3 className="text-[13px] font-semibold text-[#dcae4d]">SIZNING FIKRINGIZ MUHIM</h3>
+              <p className="mt-2 text-[12px] leading-5 text-neutral-400">Taklif va mulohazalaringizni<br />bizga yuboring</p>
             </div>
           </div>
         </div>

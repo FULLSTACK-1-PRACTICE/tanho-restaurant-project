@@ -9,7 +9,11 @@ import {
   Heart,
   Calendar,
   Sparkles,
-  Award
+  Award,
+  Flame,
+  ShieldCheck,
+  Music,
+  MapPin
 } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 import Container from '../../../components/ui/container/Container';
@@ -288,77 +292,64 @@ const AboutPage: React.FC = () => {
       <Container className="mt-24">
         <div className="mb-8">
           <h2 className="text-2xl md:text-3xl font-serif text-white mb-2">
-            Bizning jamoa
+            Nima uchun aynan TANHO?
           </h2>
           <div className="flex items-center gap-2 text-amber-500">
             <span className="w-8 h-[1px] bg-amber-500/50"></span>
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             <span className="w-8 h-[1px] bg-amber-500/50"></span>
           </div>
+          <p className="text-xs md:text-sm text-gray-400 mt-2 font-light">
+            Qarshi shahridagi eng sevimli maskanga aylanishimiz siri nimada? Mana, asosiy sabablar:
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden text-center p-4 shadow-lg">
-            <div className="h-56 rounded-lg overflow-hidden mb-4">
-              <img
-                src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=600&auto=format&fit=crop"
-                alt="Rustam Karimov"
-                className="w-full h-full object-cover object-top"
-              />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-[#12151b] border border-gray-800/80 rounded-xl p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
+              <Flame className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-semibold text-white">
-              Rustam Karimov
+            <h3 className="text-base font-semibold text-white mb-2">
+              Milliy va Olovli Ta'mlar
             </h3>
-            <p className="text-xs text-amber-500 mt-1 font-medium">
-              Bosh oshpaz
+            <p className="text-xs text-gray-400 leading-relaxed font-light">
+              Sharqona an'analar asosida tayyorlanadigan kaboblar, milliy taomlar va maxsus retseptdagi tansiq ne'matlar.
             </p>
           </div>
 
-          <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden text-center p-4 shadow-lg">
-            <div className="h-56 rounded-lg overflow-hidden mb-4">
-              <img
-                src="https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=600&auto=format&fit=crop"
-                alt="Sevinch Jo'rayeva"
-                className="w-full h-full object-cover object-top"
-              />
+          <div className="bg-[#12151b] border border-gray-800/80 rounded-xl p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
+              <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-semibold text-white">
-              Sevinch Jo'rayeva
+            <h3 className="text-base font-semibold text-white mb-2">
+              Mutlaq Tozalik va Sifat
             </h3>
-            <p className="text-xs text-amber-500 mt-1 font-medium">
-              Oshpaz
+            <p className="text-xs text-gray-400 leading-relaxed font-light">
+              Mahsulotlarimiz doimo yangi va saralangan holda yetkazib beriladi. Oshxonamizda gigiyena qoidalariga qat'iy amal qilinadi.
             </p>
           </div>
 
-          <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden text-center p-4 shadow-lg">
-            <div className="h-56 rounded-lg overflow-hidden mb-4">
-              <img
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop"
-                alt="Jasur Ahmedov"
-                className="w-full h-full object-cover object-top"
-              />
+          <div className="bg-[#12151b] border border-gray-800/80 rounded-xl p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
+              <Music className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-semibold text-white">
-              Jasur Ahmedov
+            <h3 className="text-base font-semibold text-white mb-2">
+              Shinam Muhit va Musiqa
             </h3>
-            <p className="text-xs text-amber-500 mt-1 font-medium">
-              Restoran menejeri
+            <p className="text-xs text-gray-400 leading-relaxed font-light">
+              Oilaviy kechki ovqatlar, do'stlar davrasi va romantik uchrashuvlar uchun moslashgan sokin hamda yoqimli atmosferasi.
             </p>
           </div>
 
-          <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden text-center p-4 shadow-lg">
-            <div className="h-56 rounded-lg overflow-hidden mb-4">
-              <img
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop"
-                alt="Malika Rahimova"
-                className="w-full h-full object-cover object-top"
-              />
+          <div className="bg-[#12151b] border border-gray-800/80 rounded-xl p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
+              <MapPin className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-semibold text-white">
-              Malika Rahimova
+            <h3 className="text-base font-semibold text-white mb-2">
+              Qulay Joylashuv
             </h3>
-            <p className="text-xs text-amber-500 mt-1 font-medium">
-              Administrator
+            <p className="text-xs text-gray-400 leading-relaxed font-light">
+              Qarshi shahrining qo'lay hududida joylashgan bo'lib, o'z avtoturargohiga ega va tashrif buyuruvchilar uchun barcha qulayliklar muhayyo.
             </p>
           </div>
         </div>

@@ -13,7 +13,9 @@ import {
   Music, 
   Heart, 
   MessageCircle, 
-  CalendarCheck 
+  CalendarCheck,
+  AlertTriangle,
+  X
 } from 'lucide-react';
 import Container from '../../../components/ui/container/Container';
 import Button from '../../../components/ui/Button';
@@ -30,22 +32,108 @@ const ReservationPage: React.FC = () => {
   });
 
   const [openDropdown, setOpenDropdown] = useState<'guests' | 'tableType' | null>(null);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false); // Modal uchun state
 
   const guestOptions = ['1 kishi', '2 kishi', '3 kishi', '4 kishi', '5+ kishi'];
   const tableTypeOptions = ['Istalgan stol turi', 'VIP Xona', 'Zal', 'Terassa', 'Bar'];
 
+  const phoneRegex = /^\+?998\d{9}$/;
+  const nameRegex = /^[\p{L}\s]{3,}$/u;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.fullName.trim() || !formData.phone.trim()) {
-      alert("Iltimos, ism va telefon raqamingizni kiriting!");
+    setError('');
+    setSuccess(false);
+
+    const hasName = formData.fullName.trim().length > 0;
+    const hasPhone = formData.phone.trim().length > 0;
+
+    if (!hasName && !hasPhone) {
+      setError("Iltimos, barcha majburiy maydonlarni to'liq to'ldiring!");
       return;
     }
-    alert(`Rezervatsiya qabul qilindi!\nIsm: ${formData.fullName}\nSana: ${formData.date}\nVaqt: ${formData.time}`);
+
+    if (hasName && !hasPhone) {
+      setError("Iltimos, nomeringizni kiriting!");
+      return;
+    }
+
+    if (!hasName && hasPhone) {
+      setError("Iltimos, ism va familiyangizni kiriting!");
+      return;
+    }
+
+    if (!nameRegex.test(formData.fullName.trim())) {
+      setError("Ism noto'g'ri kiritildi (kamida 3 ta harf bo'lishi kerak)");
+      return;
+    }
+
+    const cleanPhone = formData.phone.replace(/[()\s-]/g, '');
+
+    if (!phoneRegex.test(cleanPhone)) {
+      setError("Telefon raqam formati noto'g'ri (+998XXXXXXXXX)");
+      return;
+    }
+
+    // Barcha tekshiruvlardan o'tsa, maxsus modal oynani ochamiz
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmReservation = () => {
+    setShowConfirmModal(false);
+    setSuccess(true);
   };
 
   return (
     <div className="min-h-screen bg-[#050708] text-white font-sans pb-12 sm:pb-16 overflow-x-hidden">
       
+      {/* Maxsus Tasdiqlash Modali (Ortada chiqadigan katta oyna) */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#0A0A0B] border border-[#23232A] rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative text-center">
+            
+            <button 
+              onClick={() => setShowConfirmModal(false)}
+              className="absolute top-4 right-4 text-neutral-400 hover:text-white transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="w-14 h-14 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/30 flex items-center justify-center mx-auto mb-4">
+              <AlertTriangle className="w-7 h-7 text-[#e5c567]" />
+            </div>
+
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
+              Tasdiqlash
+            </h3>
+            
+            <p className="text-xs sm:text-sm text-neutral-300 mb-6">
+              Aminmisiz? Band qilishga ishonchingiz komilmi?
+            </p>
+
+            <div className="grid grid-cols-2 gap-3">
+              <button 
+                type="button"
+                onClick={() => setShowConfirmModal(false)}
+                className="bg-[#141417] hover:bg-[#1E1E24] text-neutral-300 font-medium py-2.5 rounded-xl text-xs transition border border-[#23232A]"
+              >
+                Yo'q, qaytish
+              </button>
+              <button 
+                type="button"
+                onClick={handleConfirmReservation}
+                className="bg-[#e5c567] hover:bg-[#d4b456] text-[#050708] font-semibold py-2.5 rounded-xl text-xs transition shadow-lg shadow-[#e5c567]/20"
+              >
+                Ha, ishonchim komil
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
       <div 
         className="relative w-full border-b border-[#1A1A1E] bg-cover bg-center pt-20 pb-12 sm:pt-24 sm:pb-16 md:pt-32 md:pb-20"
         style={{
@@ -90,6 +178,13 @@ const ReservationPage: React.FC = () => {
               </h2>
 
               <form onSubmit={handleSubmit} noValidate className="space-y-4">
+
+                {success && (
+                  <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-3 text-green-400 text-xs">
+                    Rezervatsiya muvaffaqiyatli qabul qilindi!
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="bg-[#141417] border border-[#23232A] rounded-xl p-3 focus-within:border-[#e5c567] transition">
                     <label className="block text-[11px] text-neutral-400 font-medium mb-1">
@@ -115,7 +210,7 @@ const ReservationPage: React.FC = () => {
                       <Phone className="w-4 h-4 text-[#e5c567] shrink-0" />
                       <input 
                         type="text" 
-                        placeholder="+998 90 123 45 67"
+                        placeholder="+998901234567"
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
                         className="bg-transparent text-xs text-white placeholder-neutral-500 focus:outline-none w-full"
@@ -235,6 +330,13 @@ const ReservationPage: React.FC = () => {
                     className="bg-transparent text-xs text-white placeholder-neutral-500 focus:outline-none w-full resize-none"
                   />
                 </div>
+
+                {/* Xatolik xabari qo'shimcha izohdan pastda, tugmadan tepada */}
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 text-red-400 text-xs text-center">
+                    {error}
+                  </div>
+                )}
 
                 <Button 
                   type="submit" 

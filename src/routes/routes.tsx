@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, Outlet } from "react-router-dom"
 import { AuthModalProvider } from "../features/auth/context/AuthModalContext"
 import { ProtectedRoute } from "./ProtectedRoute"
+import ScrollToTop from "./ScrollToTop"
 
 import PublicLayout from "../components/shared/Layout/PageTransition"
 
@@ -39,6 +40,7 @@ const routes = createBrowserRouter([
   {
     element: (
       <AuthModalProvider>
+        <ScrollToTop />
         <Outlet />
       </AuthModalProvider>
     ),

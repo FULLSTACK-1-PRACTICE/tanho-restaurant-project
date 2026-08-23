@@ -9,20 +9,33 @@ import kovurmaLagmon from "../../../assets/images/Menu/Cards/Kovurma-Lagmon.png"
 import mevaliAssorti from "../../../assets/images/Menu/Cards/Mevali-Assorti.png";
 import molJizi from "../../../assets/images/Menu/Cards/Mol-Jizi.png";
 import quyJizi from "../../../assets/images/Menu/Cards/Quy-Jizi.png";
+import Cezar from "../../../assets/images/Menu/Cards/Cezar.png";
+import FranSuzkiy from "../../../assets/images/Menu/Cards/FranSuzkiy.png";
+import KotletShurva from "../../../assets/images/Menu/Cards/Kotlet-Shurva.png";
+import Grecheskiy from "../../../assets/images/Menu/Cards/Grecheskiy.png";
+import Izmir from "../../../assets/images/Menu/Cards/Izmir.png";
+import Lazzat from "../../../assets/images/Menu/Cards/Lazzat.png";
+import Mastava from "../../../assets/images/Menu/Cards/Mastava.png";
+import Pelmen from "../../../assets/images/Menu/Cards/Pelmen.png";
+import Smak from "../../../assets/images/Menu/Cards/Smak.png";
+import TeftelShorva from "../../../assets/images/Menu/Cards/Teftel-Shurva.png";
+import Tushonka from "../../../assets/images/Menu/Cards/Tushonka.png";
+import Xit from "../../../assets/images/Menu/Cards/Xit.png";
+import Yaponskiy from "../../../assets/images/Menu/Cards/Yaponskiy.png";
 
 import {
   Cake,
   ChevronRight,
   Coffee,
-  Gift,
   Grid2X2,
   Heart,
   Loader2,
-  Percent,
   ShoppingCart,
-  Star,
   UtensilsCrossed,
   Wine,
+  Sparkles,
+  Users,
+  PartyPopper,
 } from "lucide-react";
 
 interface MenuItem {
@@ -86,7 +99,7 @@ const MenuPage = () => {
     },
     {
       id: "menu-5",
-      name: "Mol go'shtli Grill",
+      name: "Mol Jizi",
       category: "Grill",
       price: 65000,
       status: "Mavjud",
@@ -95,7 +108,7 @@ const MenuPage = () => {
     },
     {
       id: "menu-6",
-      name: "Tovuq Grill",
+      name: "Jo'ja",
       category: "Grill",
       price: 48000,
       status: "Mavjud",
@@ -104,7 +117,7 @@ const MenuPage = () => {
     },
     {
       id: "menu-7",
-      name: "Koreyka Grill",
+      name: "Qo'y Jizi",
       category: "Grill",
       price: 75000,
       status: "Mavjud",
@@ -113,11 +126,11 @@ const MenuPage = () => {
     },
     {
       id: "menu-8",
-      name: "Grill Assorti",
+      name: "Jo'ja Chesnochniy",
       category: "Grill",
-      price: 120000,
+      price: 55000,
       status: "Mavjud",
-      description: "Mol, tovuq va kolbasa assorti grill to'plami.",
+      description: "Sarimsoq va maxsus sous bilan tayyorlangan mazali jo'ja.",
       image: jujaCheesnochni,
     },
     {
@@ -127,7 +140,7 @@ const MenuPage = () => {
       price: 40000,
       status: "Mavjud",
       description: "Tovuq go'shti, krutonlar va parmesan pishlog'i bilan.",
-      image: mevaliAssorti,
+      image: Cezar,
     },
     {
       id: "menu-10",
@@ -136,34 +149,34 @@ const MenuPage = () => {
       price: 35000,
       status: "Mavjud",
       description: "Yangi bodring, pomidor, oliviya va feta pishlog'i.",
-      image: mevaliAssorti,
+      image: Grecheskiy,
     },
     {
       id: "menu-11",
-      name: "Achchiq-chuchuk",
+      name: "Fransuzskiy salat",
       category: "Salatlar",
-      price: 18000,
+      price: 38000,
       status: "Mavjud",
-      description: "Osh uchun mo'ljallangan yupqa to'g'ralgan pomidor va piyoz.",
-      image: mevaliAssorti,
+      description: "Maxsus masalliqlar va mayonez bilan tayyorlangan to'yimli salat.",
+      image: FranSuzkiy,
     },
     {
       id: "menu-12",
-      name: "Tovuqli Warm salat",
+      name: "Yaponskiy salat",
       category: "Salatlar",
       price: 42000,
       status: "Mavjud",
-      description: "Issiq tovuq bo'laklari va qovurilgan sabzavotlar salati.",
-      image: mevaliAssorti,
+      description: "Sharqona uslubda tayyorlangan maxsus salat.",
+      image: Yaponskiy,
     },
     {
       id: "menu-13",
-      name: "Qozon kabob",
+      name: "Tushonka",
       category: "Milliy taomlar",
       price: 70000,
       status: "Mavjud",
-      description: "Qozonda qizartirib qovurilgan go'sht va kartoshka.",
-      image: molJizi,
+      description: "Maxsus usulda dimlab pishirilgan yumshoq lahm go'sht.",
+      image: Tushonka,
     },
     {
       id: "menu-14",
@@ -185,70 +198,70 @@ const MenuPage = () => {
     },
     {
       id: "menu-16",
-      name: "Manti (Go'shtli)",
+      name: "Pelmen",
       category: "Milliy taomlar",
       price: 35000,
       status: "Mavjud",
-      description: "Bug'da pishirilgan qiymali va piyozli bug' dori.",
-      image: quyJizi,
+      description: "Qo'lda tugilgan mazali chuchvara va qaymoq.",
+      image: Pelmen,
     },
     {
       id: "menu-17",
-      name: "Somsa (Go'shtli)",
+      name: "Mastava",
       category: "Milliy taomlar",
-      price: 12000,
+      price: 25000,
       status: "Mavjud",
-      description: "Tandirda pishirilgan varaqi qiymali somsa.",
-      image: molJizi,
+      description: "Guruchli va qiyma go'shtli quyuq milliy sho'rva.",
+      image: Mastava,
     },
     {
       id: "menu-18",
-      name: "Norin",
+      name: "Kotlet Sho'rva",
       category: "Milliy taomlar",
-      price: 45000,
+      price: 30000,
       status: "Mavjud",
-      description: "Yupqa kesilgan xamir va ot go'shti (qazi) aralashmasi.",
-      image: oshimg,
+      description: "Maxsus kotletlar solingan to'yimli sho'rva.",
+      image: KotletShurva,
     },
     {
       id: "menu-19",
-      name: "Kebab / Shashlik",
+      name: "Teftel Sho'rva",
       category: "Milliy taomlar",
-      price: 18000,
+      price: 30000,
       status: "Mavjud",
-      description: "Ko'mirda pishirilgan yumshoq mol go'shti shashlik.",
-      image: molJizi,
+      description: "Go'shtli teftellar bilan tayyorlangan mazali sho'rva.",
+      image: TeftelShorva,
     },
     {
       id: "menu-20",
-      name: "Tovuq Shashlik",
-      category: "Milliy taomlar",
-      price: 16000,
+      name: "Izmir salati",
+      category: "Salatlar",
+      price: 36000,
       status: "Mavjud",
-      description: "Marinovka qilingan tovuq go'shti shashlik.",
-      image: juja,
+      description: "Turkcha uslubda tayyorlangan o'ziga xos salat.",
+      image: Izmir,
     },
     {
       id: "menu-21",
-      name: "Cheesecake San-Sebastian",
-      category: "Desertlar",
+      name: "Lazzat salati",
+      category: "Salatlar",
       price: 35000,
       status: "Mavjud",
-      description: "Issiq shokolad sousi bilan taqdim etiladigan chizkeyk.",
-      image: mevaliAssorti,
+      description: "O'zgacha ta'mga ega to'yimli va mazali salat.",
+      image: Lazzat,
     },
     {
       id: "menu-22",
-      name: "Tiramisu",
-      category: "Desertlar",
+      name: "Smak salati",
+      category: "Salatlar",
       price: 32000,
       status: "Mavjud",
-      description: "Italiya uslubidagi kofe va maskarpone pishloqli desert.",
-      image: mevaliAssorti,
+      description: "Qarsildoq va sersuv masalliqlardan iborat salat.",
+      image: Smak,
     },
     {
       id: "menu-23",
-      name: "Mevali desert",
+      name: "Mevali Assorti",
       category: "Desertlar",
       price: 30000,
       status: "Mavjud",
@@ -257,12 +270,12 @@ const MenuPage = () => {
     },
     {
       id: "menu-24",
-      name: "Shokoladli Fondan",
-      category: "Desertlar",
+      name: "Xit salati",
+      category: "Salatlar",
       price: 38000,
       status: "Mavjud",
-      description: "Ichida suyuq shokolad va yonida muzqaymoq bilan.",
-      image: mevaliAssorti,
+      description: "Restoranimizning eng xaridorgir salatlaridan biri.",
+      image: Xit,
     },
     {
       id: "menu-25",
@@ -271,7 +284,6 @@ const MenuPage = () => {
       price: 28000,
       status: "Mavjud",
       description: "Mayin krem va varaqi xamirdan tayyorlangan klassik desert.",
-      image: mevaliAssorti,
     },
     {
       id: "menu-26",
@@ -280,7 +292,6 @@ const MenuPage = () => {
       price: 27000,
       status: "Mavjud",
       description: "Tabiiy asal va xushbo'y krem bilan tayyorlangan tort.",
-      image: mevaliAssorti,
     },
     {
       id: "menu-27",
@@ -289,7 +300,6 @@ const MenuPage = () => {
       price: 22000,
       status: "Mavjud",
       description: "Shokolad, vanil va qulupnayli muzqaymoq shariklari.",
-      image: mevaliAssorti,
     },
     {
       id: "menu-28",
@@ -298,7 +308,6 @@ const MenuPage = () => {
       price: 34000,
       status: "Mavjud",
       description: "To'q shokoladli brauni va vanilli muzqaymoq.",
-      image: mevaliAssorti,
     },
     {
       id: "menu-29",
@@ -307,7 +316,6 @@ const MenuPage = () => {
       price: 26000,
       status: "Mavjud",
       description: "Yumshoq pankeyklar, asal va rezavor mevalar.",
-      image: mevaliAssorti,
     },
     {
       id: "menu-30",
@@ -316,7 +324,6 @@ const MenuPage = () => {
       price: 31000,
       status: "Mavjud",
       description: "Vena vaflisi, Nutella va yangi banan/qulupnay.",
-      image: mevaliAssorti,
     },
     {
       id: "drink-1",
@@ -325,7 +332,6 @@ const MenuPage = () => {
       price: 8000,
       status: "Mavjud",
       description: "Xushbo'y va tetiklashtiruvchi an'anaviy ko'k choy.",
-      image: jujaCheesnochni,
     },
     {
       id: "drink-2",
@@ -334,7 +340,6 @@ const MenuPage = () => {
       price: 10000,
       status: "Mavjud",
       description: "Issiq qora choy, yangi limon bo'laklari bilan.",
-      image: jujaCheesnochni,
     },
     {
       id: "drink-3",
@@ -343,7 +348,6 @@ const MenuPage = () => {
       price: 22000,
       status: "Mavjud",
       description: "Yalpiz, malina va sitrus mevalari qo'shilgan choy.",
-      image: mevaliAssorti,
     },
     {
       id: "drink-4",
@@ -352,7 +356,6 @@ const MenuPage = () => {
       price: 25000,
       status: "Mavjud",
       description: "Yangi siqilgan limon sharbati va muzli uy limonadi.",
-      image: jujaCheesnochni,
     },
     {
       id: "drink-5",
@@ -361,7 +364,6 @@ const MenuPage = () => {
       price: 28000,
       status: "Mavjud",
       description: "Yalpiz, laym, soda va muzdan tayyorlangan salqin ichimlik.",
-      image: jujaCheesnochni,
     },
     {
       id: "drink-6",
@@ -370,7 +372,6 @@ const MenuPage = () => {
       price: 30000,
       status: "Mavjud",
       description: "Malina, qulupnay va klubnika ezmasidan limonad.",
-      image: mevaliAssorti,
     },
     {
       id: "drink-7",
@@ -379,7 +380,6 @@ const MenuPage = () => {
       price: 15000,
       status: "Mavjud",
       description: "Quyuq va achchiq klassik italyancha kofe.",
-      image: jujaCheesnochni,
     },
     {
       id: "drink-8",
@@ -388,7 +388,6 @@ const MenuPage = () => {
       price: 22000,
       status: "Mavjud",
       description: "Mayin sut ko'pigi va espresso aralashmasi.",
-      image: jujaCheesnochni,
     },
     {
       id: "drink-9",
@@ -397,7 +396,6 @@ const MenuPage = () => {
       price: 24000,
       status: "Mavjud",
       description: "Ko'p miqdordagi sut va yengil espresso qatlami.",
-      image: jujaCheesnochni,
     },
     {
       id: "drink-10",
@@ -406,7 +404,6 @@ const MenuPage = () => {
       price: 26000,
       status: "Mavjud",
       description: "Sut va shokoladli muzqaymoqdan tayyorlangan kokteyl.",
-      image: jujaCheesnochni,
     },
     {
       id: "drink-11",
@@ -415,7 +412,6 @@ const MenuPage = () => {
       price: 32000,
       status: "Mavjud",
       description: "100% tabiiy yangi siqilgan apelsin sharbati (Fresh).",
-      image: mevaliAssorti,
     },
     {
       id: "drink-12",
@@ -424,7 +420,6 @@ const MenuPage = () => {
       price: 12000,
       status: "Mavjud",
       description: "0.5l idishdagi salqin gazlangan drink.",
-      image: jujaCheesnochni,
     },
     {
       id: "drink-13",
@@ -433,7 +428,6 @@ const MenuPage = () => {
       price: 15000,
       status: "Mavjud",
       description: "Uy sharoitida gilos va olmadorlardan tayyorlangan kompot.",
-      image: mevaliAssorti,
     },
   ]);
 
@@ -565,39 +559,48 @@ const MenuPage = () => {
         )}
       </section>
 
+      {/* Marosimlar va VIP Zallar Banner Seksiyasi */}
       <section className="mx-auto max-w-[1240px] px-4 sm:px-6 pb-12">
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121619]">
           <div className="grid md:grid-cols-[280px_1fr]">
             <div className="relative h-[200px] sm:h-[220px] overflow-hidden bg-[#121619] md:h-auto">
               <img
                 src={mevaliAssorti}
-                alt="Maxsus taomlar"
+                alt="TANHO Marosimlar va Zallar"
                 className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
               />
             </div>
 
             <div className="p-5 sm:p-6 md:p-8">
               <div className="mb-6 sm:mb-7">
-                <p className="text-xs uppercase tracking-[2px] text-[#d9a441]">MAXSUS TAKLIF</p>
-                <h2 className="mt-2 font-serif text-2xl md:text-3xl">Maxsus taomlar va aksiyalar</h2>
-                <p className="mt-2 text-xs sm:text-sm text-gray-400">Doimiy mijozlarimiz uchun eng yaxshi takliflar!</p>
+                <p className="text-xs uppercase tracking-[2px] text-[#d9a441]">TADBIRLAR VA MAROSIMLAR</p>
+                <h2 className="mt-2 font-serif text-2xl md:text-3xl">Maxsus kunlaringizni biz bilan o'tkazing</h2>
+                <p className="mt-2 text-xs sm:text-sm text-gray-400">
+                  Oilaviy bayramlar, tug'ilgan kunlar va ishchi uchrashuvlar uchun shohona sharoitlar.
+                </p>
               </div>
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 <div className="group cursor-pointer">
-                  <Gift size={26} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
-                  <h3 className="mt-2.5 sm:mt-3 text-sm font-semibold">Doimiy aksiyalar</h3>
-                  <p className="mt-1.5 sm:mt-2 text-xs leading-5 text-gray-400">Har hafta yangi takliflar va chegirmalar.</p>
+                  <Sparkles size={26} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
+                  <h3 className="mt-2.5 sm:mt-3 text-sm font-semibold">VIP Xonalar</h3>
+                  <p className="mt-1.5 sm:mt-2 text-xs leading-5 text-gray-400">
+                    Aholidan holi, tinch va shinam muhitda suhbatlashish uchun maxsus xonalar.
+                  </p>
                 </div>
                 <div className="group cursor-pointer">
-                  <Percent size={26} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
-                  <h3 className="mt-2.5 sm:mt-3 text-sm font-semibold">Sodiqlik dasturi</h3>
-                  <p className="mt-1.5 sm:mt-2 text-xs leading-5 text-gray-400">Bonuslar to'plang va chegirmalar oling.</p>
+                  <PartyPopper size={26} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
+                  <h3 className="mt-2.5 sm:mt-3 text-sm font-semibold">Bayramona Stollar</h3>
+                  <p className="mt-1.5 sm:mt-2 text-xs leading-5 text-gray-400">
+                    Tug'ilgan kun va tantanalar uchun dasturxonni maxsus bezatish xizmati.
+                  </p>
                 </div>
                 <div className="group cursor-pointer">
-                  <Star size={26} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
-                  <h3 className="mt-2.5 sm:mt-3 text-sm font-semibold">Maxsus tadbirlar</h3>
-                  <p className="mt-1.5 sm:mt-2 text-xs leading-5 text-gray-400">Bayramlar va tadbirlar uchun maxsus menyu.</p>
+                  <Users size={26} strokeWidth={1.3} className="text-[#d9a441] transition-transform duration-300 group-hover:-translate-y-0.5" />
+                  <h3 className="mt-2.5 sm:mt-3 text-sm font-semibold">Katta Jamoalar</h3>
+                  <p className="mt-1.5 sm:mt-2 text-xs leading-5 text-gray-400">
+                    Ko'p kishilik korporativ kechalar uchun zallarni oldindan bron qilish.
+                  </p>
                 </div>
               </div>
 
@@ -606,7 +609,7 @@ const MenuPage = () => {
                 onClick={() => navigate("/reservation")}
                 className="mt-6 sm:mt-7 flex w-full sm:w-auto cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#d9a441] px-5 py-3 sm:py-2.5 text-sm font-medium text-black transition-all duration-300 outline-none focus:outline-none hover:bg-[#edbd58]"
               >
-                Aksiyalarni ko'rish
+                Stol band qilish
                 <ChevronRight size={17} />
               </button>
             </div>

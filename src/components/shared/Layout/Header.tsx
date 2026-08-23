@@ -182,11 +182,18 @@ function Header() {
             <div className="flex h-full flex-col justify-between overflow-hidden">
               <div className="shrink-0 px-6 pt-6">
                 <div className="flex items-center justify-between">
-                  <img
-                    src={logo}
-                    alt="Tanho Restaurant"
-                    className="h-[38px] w-auto object-contain"
-                  />
+                  <Link
+                    to="/"
+                    onClick={() => setMenuOpen(false)}
+                    className="cursor-pointer flex items-center"
+                  >
+                    {/* Logotip kattalashtirildi: h-[38px] o'rniga h-[48px] */}
+                    <img
+                      src={logo}
+                      alt="Tanho Restaurant"
+                      className="h-[70px] w-auto object-contain transition-transform hover:scale-105 duration-300"
+                    />
+                  </Link>
                   <button
                     type="button"
                     onClick={() => setMenuOpen(false)}

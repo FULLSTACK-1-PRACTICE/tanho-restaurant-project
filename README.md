@@ -11,7 +11,7 @@ Loyihada restoran faoliyati uchun bir nechta foydalanuvchi rollari mavjud:
 * User
 * Admin
 * Cashier
-* Boss
+* Manager
 
 Har bir rol uchun alohida dashboard ishlab chiqilmoqda.
 

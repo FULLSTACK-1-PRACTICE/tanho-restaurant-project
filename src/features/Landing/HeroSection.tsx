@@ -34,7 +34,7 @@ function HeroSection() {
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#dcae4d]/30 bg-[#151310]/70 px-3.5 py-1.5 backdrop-blur-md sm:mb-6">
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#dcae4d]" />
               <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#e3b859] sm:text-[11px] sm:tracking-[0.22em]">
-                Zamonaviy Muhit & Premium Gastronomiya
+                Zamonaviy Muhit & Unutilmas Ta’m
               </p>
             </div>
 
@@ -52,7 +52,6 @@ function HeroSection() {
               unutilmas onlar uchun maxsus yaratilgan restoran.
             </p>
 
-            {/* TUGMALAR QISMI - Mobil uchun to'liq kenglik, kompyuter uchun avto */}
             <div className="mt-8 flex flex-col gap-3.5 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
               <button
                 type="button"

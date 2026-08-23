@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import yangiliklar from "../../../assets/images/Layout/Header/yangiliklar.png";
 import Container from "../../../components/ui/container/Container";
 import {
@@ -194,6 +194,206 @@ const NewsModal = ({ item, onClose }: NewsModalProps) => {
   );
 };
 
+/**
+ * Horizontally scrollable category chips with soft edge fades and a
+ * single custom progress indicator — the same pattern used by
+ * Airbnb / Notion / Netflix tab bars on mobile.
+ *
+ * Scrolling is implemented entirely with a CSS `transform` driven by
+ * pointer events, instead of native `overflow-x: auto`. This is
+ * intentional: some mobile browsers (notably iOS Safari) draw their
+ * own thin native scroll-overlay indicator on top of scrollable
+ * elements that cannot be hidden with CSS, which was showing up
+ * alongside our custom progress bar as a second line. Removing native
+ * scrolling removes that overlay entirely, leaving only one indicator.
+ */
+const CategoryScroller = ({
+  activeCategory,
+  onChange,
+}: {
+  activeCategory: CategoryKey;
+  onChange: (key: CategoryKey) => void;
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const [isCompact, setIsCompact] = useState(true);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [trackWidth, setTrackWidth] = useState(0);
+  const [offset, setOffset] = useState(0);
+
+  const dragState = useRef({
+    isDragging: false,
+    startX: 0,
+    startOffset: 0,
+    moved: false,
+  });
+
+  // Track the `sm` (640px) breakpoint in JS so we know when to enable
+  // the custom drag/transform behaviour vs. the plain wrapped layout.
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsCompact(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // Measure the visible container and the natural (unwrapped) width of
+  // the chip row, so we know how far it's allowed to scroll.
+  useEffect(() => {
+    const containerEl = containerRef.current;
+    const trackEl = trackRef.current;
+    if (!containerEl || !trackEl) return;
+
+    const measure = () => {
+      setContainerWidth(containerEl.clientWidth);
+      setTrackWidth(trackEl.scrollWidth);
+    };
+
+    measure();
+
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(containerEl);
+    resizeObserver.observe(trackEl);
+    window.addEventListener("resize", measure);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  const maxOffset = Math.max(0, trackWidth - containerWidth);
+
+  // Keep the offset in range if the row size changes (e.g. rotation,
+  // resize, or switching in/out of compact mode).
+  useEffect(() => {
+    setOffset((prev) => Math.min(Math.max(prev, 0), maxOffset));
+  }, [maxOffset]);
+
+  const clamp = (value: number) => Math.min(Math.max(value, 0), maxOffset);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isCompact) return;
+    dragState.current = {
+      isDragging: true,
+      startX: e.clientX,
+      startOffset: offset,
+      moved: false,
+    };
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isCompact || !dragState.current.isDragging) return;
+
+    const delta = dragState.current.startX - e.clientX;
+    if (Math.abs(delta) > 3) dragState.current.moved = true;
+    setOffset(clamp(dragState.current.startOffset + delta));
+  };
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (dragState.current.isDragging) {
+      try {
+        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+    }
+    dragState.current.isDragging = false;
+  };
+
+  const isScrollable = isCompact && maxOffset > 0;
+  const thumbWidthPct = containerWidth
+    ? Math.max(15, (containerWidth / Math.max(trackWidth, containerWidth)) * 100)
+    : 100;
+  const thumbLeftPct = maxOffset > 0 ? (offset / maxOffset) * (100 - thumbWidthPct) : 0;
+
+  return (
+    <div className="relative w-full sm:max-w-none">
+      <div
+        ref={containerRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endDrag}
+        onPointerLeave={endDrag}
+        onPointerCancel={endDrag}
+        className="cursor-grab overflow-hidden rounded-md p-1 active:cursor-grabbing [touch-action:pan-y] sm:cursor-auto sm:overflow-visible sm:p-0"
+      >
+        <div
+          ref={trackRef}
+          className="flex w-max items-center gap-2 sm:w-full sm:flex-wrap"
+          style={{
+            transform: isCompact ? `translateX(-${offset}px)` : "none",
+            transition: dragState.current.isDragging
+              ? "none"
+              : "transform 200ms ease-out",
+          }}
+        >
+          {CATEGORIES.map((cat) => {
+            const isActive = cat.key === activeCategory;
+            return (
+              <button
+                key={cat.key}
+                type="button"
+                onClick={() => {
+                  // Ignore the click that fires at the end of a drag
+                  // gesture, so dragging doesn't accidentally select a
+                  // category.
+                  if (dragState.current.moved) {
+                    dragState.current.moved = false;
+                    return;
+                  }
+                  onChange(cat.key);
+                }}
+                className={`h-9 shrink-0 cursor-pointer select-none rounded-md px-4 text-[12.5px] font-medium transition-all duration-300 outline-none focus:outline-none focus:ring-0 ${
+                  isActive
+                    ? "border-transparent bg-[#dcae4d] text-black"
+                    : "border border-white/10 bg-transparent text-white/70 hover:border-[#dcae4d]/40 hover:text-[#dcae4d]"
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Edge fades — only visible below the `sm` breakpoint (640px),
+          i.e. exactly where the row becomes horizontally scrollable. */}
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-9 rounded-l-md bg-gradient-to-r from-[#020305] via-[#020305]/80 to-transparent transition-opacity duration-200 sm:hidden ${
+          offset > 4 ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-16 rounded-r-md bg-gradient-to-l from-[#020305] from-40% via-[#020305]/90 to-transparent transition-opacity duration-200 sm:hidden ${
+          offset < maxOffset - 4 ? "opacity-100" : "opacity-0"
+        }`}
+      />
+
+      {/* Visible scroll-position indicator — a single floating pill,
+          no background track, so there's only ever one visible line.
+          There is no native scrollbar to conflict with it, since this
+          row no longer uses native overflow scrolling. */}
+      {isScrollable && (
+        <div className="relative mt-1.5 h-[3px] w-full sm:hidden">
+          <div
+            className="absolute inset-y-0 rounded-full bg-[#dcae4d]"
+            style={{
+              width: `${thumbWidthPct}%`,
+              left: `${thumbLeftPct}%`,
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
 const NewsPage = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryKey>("barchasi");
   const [query, setQuery] = useState("");
@@ -201,7 +401,7 @@ const NewsPage = () => {
   const [sortOpen, setSortOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
-  
+
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -209,7 +409,7 @@ const NewsPage = () => {
     const [day, month, year] = d.split(".").map(Number);
     return new Date(year, month - 1, day).getTime();
   };
-  
+
   const filtered = useMemo(() => {
     let list = NEWS.filter((item) => {
       const matchesCategory =
@@ -252,7 +452,7 @@ const NewsPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#020305] overflow-x-hidden">  
+    <div className="min-h-screen w-full bg-[#020305] overflow-x-hidden">
       {/* Header Banner Section */}
       <section className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0">
@@ -301,26 +501,12 @@ const NewsPage = () => {
               />
             </div>
 
-            <div className="w-full overflow-x-auto overflow-y-hidden rounded-md border border-white/10 bg-[#0b0d10] p-1.5 lg:border-none lg:bg-transparent lg:p-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-              <div className="flex items-center gap-2 flex-nowrap min-w-max lg:flex-wrap lg:min-w-full">
-                {CATEGORIES.map((cat) => {
-                  const isActive = cat.key === activeCategory;
-                  return (
-                    <button
-                      key={cat.key}
-                      type="button"
-                      onClick={() => handleCategoryChange(cat.key)}
-                      className={`h-9 shrink-0 cursor-pointer rounded-md px-4 text-[12.5px] font-medium transition-all duration-300 outline-none focus:outline-none focus:ring-0 select-none ${
-                        isActive
-                          ? "bg-[#dcae4d] text-black border-transparent"
-                          : "border border-white/10 lg:border-white/10 bg-transparent text-white/70 hover:border-[#dcae4d]/40 hover:text-[#dcae4d]"
-                      }`}
-                    >
-                      {cat.label}
-                    </button>
-                  );
-                })}
-              </div>
+            <div className="w-full lg:w-auto lg:flex-1 lg:px-4">
+              <CategoryScroller
+                key="category-scroller"
+                activeCategory={activeCategory}
+                onChange={handleCategoryChange}
+              />
             </div>
 
             <div className="relative shrink-0">

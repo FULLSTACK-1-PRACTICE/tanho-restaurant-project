@@ -12,9 +12,7 @@ import {
 } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 
-
 function ContactPage() {
-  
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#050505] text-white">
       <div className="absolute inset-0">
@@ -135,7 +133,9 @@ function ContactPage() {
             </div>
 
             <div className="mt-7 w-full">
-              <Button className="w-full justify-center">
+              <Button
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#DCAE42] px-6 text-[13px] font-medium text-black transition-all duration-200 hover:bg-[#c99b3d] active:scale-[0.98]"
+              >
                 <CalendarDays size={17} />
                 <span>STOL BAND QILISH</span>
               </Button>
@@ -178,11 +178,8 @@ function ContactPage() {
                   </option>
 
                   <option value="reservation">Rezervatsiya</option>
-
                   <option value="question">Savol</option>
-
                   <option value="event">Tadbir</option>
-
                   <option value="other">Boshqa</option>
                 </select>
 
@@ -197,7 +194,10 @@ function ContactPage() {
                 className="h-[125px] w-full resize-none rounded-md border border-[#303030] bg-[#090909] px-4 py-4 text-[13px] text-white outline-none transition placeholder:text-neutral-500 focus:border-[#806027]"
               />
 
-              <Button type="submit" className="w-full justify-center">
+              <Button
+                type="submit"
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#DCAE42] px-6 text-[13px] font-medium text-black transition-all duration-200 hover:bg-[#c99b3d] active:scale-[0.98]"
+              >
                 <Send size={17} />
                 <span>XABARNI YUBORISH</span>
               </Button>

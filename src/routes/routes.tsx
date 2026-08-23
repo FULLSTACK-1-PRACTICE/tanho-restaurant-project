@@ -7,11 +7,12 @@ import PublicLayout from "../components/shared/Layout/PageTransition"
 import HomePage from "../pages/public/Home/HomePage"
 import MenuPage from "../pages/public/Menu/MenuPage"
 import AboutPage from "../pages/public/About/AboutPage"
-import EventsPage from "../pages/public/Blog/Blog"
+import EventsPage from "../pages/public/Blog/BlogPage"
+import BlogDetailsPage from "../pages/public/Blog/BlogDetailsPage"
 import ContactPage from "../pages/public/Contact/ContactPage"
 import ReservationPage from "../pages/public/Reservation/ReservationPage"
 
-import NewsPage from "../pages/public/News/ NewsPage"
+import NewsPage from "../pages/public/News/NewsPage"
 import NewsDetailsPage from "../pages/public/News/NewsDetailsPage"
 
 import LoginPage from "../features/auth/components/AuthModal"
@@ -50,6 +51,7 @@ const routes = createBrowserRouter([
           { path: "/about", element: <AboutPage /> },
           { path: "/reservation", element: <ReservationPage /> },
           { path: "/events", element: <EventsPage /> },
+          { path: "/blog/:id", element: <BlogDetailsPage /> },
           { path: "/contact", element: <ContactPage /> },
           { path: "/news", element: <NewsPage /> },
           { path: "/news/:id", element: <NewsDetailsPage /> },

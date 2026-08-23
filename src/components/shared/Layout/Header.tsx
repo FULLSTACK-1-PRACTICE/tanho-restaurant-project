@@ -187,7 +187,6 @@ function Header() {
                     onClick={() => setMenuOpen(false)}
                     className="cursor-pointer flex items-center"
                   >
-                    {/* Logotip kattalashtirildi: h-[38px] o'rniga h-[48px] */}
                     <img
                       src={logo}
                       alt="Tanho Restaurant"

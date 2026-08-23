@@ -48,10 +48,10 @@ const AboutPage: React.FC = () => {
             </div>
 
             <Button 
-              className="mt-8 bg-[#ECBD59]"
+              className="mt-8 bg-[#F6B531] text-[#181208] hover:bg-[#ffca50] transition cursor-pointer active:scale-[0.98] w-[240px] h-[48px] border border-amber-300/60 rounded-xl font-medium flex items-center justify-center gap-2"
               onClick={() => navigate('/menu')}
             >
-              <Utensils className="w-4 h-4" />
+              <Utensils className="w-4 h-4 shrink-0" />
               <span>Menyu bilan tanishish</span>
             </Button>
           </div>
@@ -378,8 +378,11 @@ const AboutPage: React.FC = () => {
             <p className="text-sm text-gray-300 font-light mb-6">
               Tanho restoranida o'zingiz va yaqinlaringiz uchun unutilmas dam oling.
             </p>
-            <Button onClick={() => navigate('/reservation')}>
-              <Calendar className="w-4 h-4" />
+            <Button 
+              className="bg-[#F6B531] text-[#181208] hover:bg-[#ffca50] transition cursor-pointer active:scale-[0.98] w-[200px] h-[48px] border border-amber-300/60 rounded-xl font-medium flex items-center justify-center gap-2"
+              onClick={() => navigate('/reservation')}
+            >
+              <Calendar className="w-4 h-4 shrink-0" />
               <span>Stol band qilish</span>
             </Button>
           </div>

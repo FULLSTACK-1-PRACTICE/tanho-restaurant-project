@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import yangiliklar from "../../../assets/images/Layout/Header/yangiliklar.png";
+import mevaliAssorti from "../../../assets/images/Menu/Cards/Mevali-Assorti.png";
+import initialImg from "../../../assets/images/Menu/Additional-Images/Initial.png";
 import Container from "../../../components/ui/container/Container";
 import {
   Search,
@@ -49,33 +51,23 @@ const BADGE_STYLES: Record<NewsItem["category"], string> = {
 
 const NEWS: NewsItem[] = [
   {
-    id: 1,
-    category: "maxsus",
-    badge: "MAXSUS TAKLIF",
-    date: "15.08.2026",
-    title: "Qarshi shahrida yozgi ochiq ayvon ochildi!",
-    description:
-      "Tanho restoranining Qarshidagi filialida yozgi mavsum uchun maxsus yashil ayvon o'z ishini boshladi. Issiq kunlarda salqin muhitda mazali milliy taomlarimizdan bahramand bo'lishingiz mumkin. Oilangiz va yaqinlaringiz uchun maxsus shift ventilyatsiyasi va favvorali hudud tashkil etildi.",
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
-  },
-  {
     id: 2,
     category: "tadbir",
     badge: "TADBIR",
     date: "10.08.2026",
-    title: "Qashqadaryocha Tandir go'shti kechasi",
+    title: "Mevali assorti qo'shildi",
     description:
-      "Har shanba oqshomida Qarshi Tanho restoranida maxsus Qashqadaryocha tandir go'shti taqdimoti o'tkaziladi. Mohir oshpazlarimiz tomonidan maxsus mahalliy ziravorlarda tayyorlangan tandir taomlari va jonli milliy cholg'u kuylari sizni kutmoqda.",
-    image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+      "Restoranimiz taomlar ro'yxatiga yangi va sarxil mevali assorti qo'shildi. Yaqinlaringiz davrasida mazali va vitaminlarga boy mevaxonalardan bahramand bo'ling.",
+    image: mevaliAssorti,
   },
   {
     id: 3,
     category: "yangilik",
     badge: "YANGILIK",
     date: "02.08.2026",
-    title: "Oilaviy to'ylar va marosimlar uchun yangi zal",
+    title: "Menyuyimizga yangi salatlar qo'shildi",
     description:
-      "Restoranimizda kichik oilaviy tadbirlar, sunnat to'ylari va 50 kishigacha bo'lgan ziyofatlar uchun zamonaviy ko'rinishda jihozlangan alohida VIP zal foydalanishga topshirildi. Buyurtmalar hozirdan qabul qilinmoqda.",
+      "Mijozlarimiz talabiga binoan restoranimiz menyusi yangi va mazali salatlar bilan boyitildi. Har bir salat o'ziga xosiga ta'm va sifatga ega.",
     image: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=900&q=80",
   },
   {
@@ -83,20 +75,10 @@ const NEWS: NewsItem[] = [
     category: "maxsus",
     badge: "MAXSUS TAKLIF",
     date: "25.07.2026",
-    title: "Milliy palov va qatiq aksiyasi",
+    title: "Yangi kengaytirilgan bo'limimiz o'z ishini boshladi",
     description:
-      "Qarshi shahrining barcha aholisi va mehmonlari uchun har kuni tushlik vaqtida maxsus Tanho oshi va mahalliy qatiq to'plamiga maxsus chegirmalar joriy etildi. Sifat va an'anaviy ta'm o'zgarmas qoladi.",
-    image: "https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    id: 5,
-    category: "elon",
-    badge: "E'LON",
-    date: "15.07.2026",
-    title: "Yetkazib berish (Delivery) xizmati ishga tushdi",
-    description:
-      "Endi Qarshi shahri bo'ylab uydan chiqmagan holda Tanho restoranining sevimli taomlariga buyurtma berishingiz mumkin. Issiq holatda tezkor yetkazib berish xizmati har kuni soat 10:00 dan 23:00 gacha amal qiladi.",
-    image: "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=900&q=80",
+      "Sizga yanada qulaylik yaratish maqsadida restoranimiz yonidan qo'shimcha shinam zalimiz ochildi. Barcha qulayliklar va zamonaviy interyer sizni kutmoqda.",
+    image: initialImg,
   },
   {
     id: 6,
@@ -134,6 +116,8 @@ const NewsModal = ({ item, onClose }: NewsModalProps) => {
     };
   }, [onClose]);
 
+  const isMevali = item.id === 2;
+
   return (
     <div
       onClick={onClose}
@@ -153,13 +137,21 @@ const NewsModal = ({ item, onClose }: NewsModalProps) => {
         </button>
 
         <div className="overflow-y-auto">
-          <div className="relative h-[280px] w-full shrink-0 sm:h-[380px]">
+          <div
+            className={`relative h-[280px] w-full shrink-0 sm:h-[380px] flex items-center justify-center ${
+              isMevali ? "bg-[#FEFEFE]" : "bg-[#020305]/50"
+            }`}
+          >
             <img
               src={item.image}
               alt={item.title}
-              className="h-full w-full object-cover"
+              className={
+                isMevali
+                  ? "h-full w-full object-contain p-4"
+                  : "h-full w-full object-cover"
+              }
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d10] via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d10] via-transparent to-transparent pointer-events-none" />
 
             <span
               className={`absolute left-4 top-4 rounded px-2.5 py-1 text-[10px] font-semibold tracking-wide ${
@@ -426,7 +418,6 @@ const NewsPage = () => {
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Email regex tekshiruvi
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     
     if (!email.trim()) {
@@ -446,7 +437,6 @@ const NewsPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#020305] overflow-x-hidden">
-      {/* Header Banner Section */}
       <section className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0">
           <img
@@ -476,7 +466,6 @@ const NewsPage = () => {
         </Container>
       </section>
 
-      {/* Filters & Search Section */}
       <section className="pt-8 sm:pt-10">
         <Container>
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -540,7 +529,6 @@ const NewsPage = () => {
         </Container>
       </section>
 
-      {/* Cards Grid Section */}
       <section className="py-8 sm:py-10">
         <Container>
           {paginated.length === 0 ? (
@@ -554,57 +542,69 @@ const NewsPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-              {paginated.map((item) => (
-                <article
-                  key={item.id}
-                  onClick={() => setSelectedNews(item)}
-                  className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-white/8 bg-[#0b0d10] transition-all duration-300 hover:-translate-y-1 hover:border-[#dcae4d]/30"
-                >
-                  <div className="relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
+              {paginated.map((item) => {
+                const isMevali = item.id === 2;
 
-                    <span
-                      className={`absolute left-3 top-3 rounded px-2.5 py-1 text-[10px] font-semibold tracking-wide ${
-                        BADGE_STYLES[item.category]
+                return (
+                  <article
+                    key={item.id}
+                    onClick={() => setSelectedNews(item)}
+                    className="group flex cursor-pointer flex-col overflow-hidden rounded-lg border border-white/8 bg-[#0b0d10] transition-all duration-300 hover:-translate-y-1 hover:border-[#dcae4d]/30"
+                  >
+                    <div
+                      className={`relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden flex items-center justify-center ${
+                        isMevali ? "bg-[#FEFEFE]" : "bg-[#020305]/40"
                       }`}
                     >
-                      {item.badge}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-1 flex-col gap-2 p-4">
-                    <span className="text-[11px] text-white/35">{item.date}</span>
-
-                    <h3 className="text-[14.5px] font-semibold leading-snug text-white">
-                      {item.title}
-                    </h3>
-
-                    <p className="line-clamp-2 text-[12.5px] leading-relaxed text-white/45">
-                      {item.description}
-                    </p>
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedNews(item);
-                      }}
-                      className="group/btn mt-auto flex w-full cursor-pointer items-center justify-between pt-3 text-[12.5px] font-medium text-[#dcae4d] outline-none"
-                    >
-                      <span>Batafsil o'qish</span>
-                      <ArrowUpRight
-                        size={15}
-                        strokeWidth={2}
-                        className="transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className={
+                          isMevali
+                            ? "h-full w-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
+                            : "h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        }
                       />
-                    </button>
-                  </div>
-                </article>
-              ))}
+
+                      <span
+                        className={`absolute left-3 top-3 rounded px-2.5 py-1 text-[10px] font-semibold tracking-wide shadow-md ${
+                          BADGE_STYLES[item.category]
+                        }`}
+                      >
+                        {item.badge}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-1 flex-col gap-2 p-4">
+                      <span className="text-[11px] text-white/35">{item.date}</span>
+
+                      <h3 className="text-[14.5px] font-semibold leading-snug text-white">
+                        {item.title}
+                      </h3>
+
+                      <p className="line-clamp-2 text-[12.5px] leading-relaxed text-white/45">
+                        {item.description}
+                      </p>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedNews(item);
+                        }}
+                        className="group/btn mt-auto flex w-full cursor-pointer items-center justify-between pt-3 text-[12.5px] font-medium text-[#dcae4d] outline-none"
+                      >
+                        <span>Batafsil o'qish</span>
+                        <ArrowUpRight
+                          size={15}
+                          strokeWidth={2}
+                          className="transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
+                        />
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           )}
 
@@ -647,7 +647,6 @@ const NewsPage = () => {
         </Container>
       </section>
 
-      {/* Subscription Section */}
       <section className="pb-16">
         <Container>
           <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#0b0d10] via-[#0b0d10] to-[#12161d] shadow-2xl">

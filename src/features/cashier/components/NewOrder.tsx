@@ -6,7 +6,13 @@ import {
   Search, 
   ShoppingCart, 
   CheckCircle2, 
-  Utensils 
+  Utensils,
+  Coffee,
+  Pizza,
+  Soup,
+  Beef,
+  Flame,
+  GlassWater
 } from 'lucide-react';
 import { initialTables, cashierCategories } from '@/data/cashierData';
 import { useNewOrder } from '../hooks/useNewOrder';
@@ -18,6 +24,31 @@ interface InitialTableItem {
   seats: number;
   status: string;
 }
+
+const getItemIcon = (category: string, name: string) => {
+  const lowerName = name.toLowerCase();
+  const lowerCat = category.toLowerCase();
+  
+  if (lowerName.includes('cola') || lowerName.includes('fanta') || lowerName.includes('suv') || lowerCat.includes('ichimlik')) {
+    return <GlassWater size={24} style={{ color: '#F6B530' }} />;
+  }
+  if (lowerName.includes('shashlik') || lowerName.includes('gosht') || lowerName.includes('steak')) {
+    return <Beef size={24} style={{ color: '#F6B530' }} />;
+  }
+  if (lowerName.includes('sho‘rva') || lowerName.includes('shorva')) {
+    return <Soup size={24} style={{ color: '#F6B530' }} />;
+  }
+  if (lowerName.includes('pitsa') || lowerName.includes('fast') || lowerCat.includes('fast-food')) {
+    return <Pizza size={24} style={{ color: '#F6B530' }} />;
+  }
+  if (lowerName.includes('choy') || lowerName.includes('qahva') || lowerName.includes('coffee')) {
+    return <Coffee size={24} style={{ color: '#F6B530' }} />;
+  }
+  if (lowerName.includes('issiq') || lowerName.includes('qozon')) {
+    return <Flame size={24} style={{ color: '#F6B530' }} />;
+  }
+  return <Utensils size={24} style={{ color: '#F6B530' }} />;
+};
 
 export const NewOrder: React.FC = () => {
   const {
@@ -47,7 +78,7 @@ export const NewOrder: React.FC = () => {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
       <div className="xl:col-span-2 space-y-6">
-        <div className="bg-[#1a1a1a] p-5 rounded-xl border border-[#262626] flex flex-col sm:flex-row gap-4 justify-between items-center">
+        <div className="bg-[#141414] p-5 rounded-xl border border-[#222] flex flex-col sm:flex-row gap-4 justify-between items-center">
           <div className="w-full sm:w-auto flex-1">
             <CustomTableSelect
               tables={formattedTables}
@@ -57,15 +88,15 @@ export const NewOrder: React.FC = () => {
           </div>
 
           <div className="w-full sm:w-72">
-            <label className="block text-xs text-gray-400 mb-1">Taomni qidirish</label>
+            <label className="block text-xs text-zinc-400 mb-1">Taomni qidirish</label>
             <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
               <input 
                 type="text" 
                 placeholder="Taom nomi..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#262626] border border-[#333] rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-[#1c1c1c] border border-[#2a2a2a] rounded-lg pl-9 pr-4 py-2.5 text-sm text-zinc-200 focus:outline-none focus:border-[#F6B530]"
               />
             </div>
           </div>
@@ -76,10 +107,11 @@ export const NewOrder: React.FC = () => {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-colors cursor-pointer focus:outline-none ${
+              style={selectedCategory === cat ? { backgroundColor: '#F6B530', color: '#09090b' } : {}}
+              className={`px-4 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-colors cursor-pointer focus:outline-none ${
                 selectedCategory === cat 
-                  ? 'bg-amber-500 text-black font-semibold' 
-                  : 'bg-[#1a1a1a] border border-[#262626] text-gray-400 hover:text-white hover:bg-[#262626]'
+                  ? 'font-semibold' 
+                  : 'bg-[#141414] border border-[#222] text-zinc-400 hover:text-zinc-200 hover:bg-[#1c1c1c]'
               }`}
             >
               {cat}
@@ -93,22 +125,24 @@ export const NewOrder: React.FC = () => {
               <div 
                 key={item.id}
                 onClick={() => addToCart(item)}
-                className="bg-[#1a1a1a] border border-[#262626] hover:border-amber-500/50 p-4 rounded-xl flex flex-col justify-between gap-4 cursor-pointer transition-all hover:scale-[1.02]"
+                className="bg-[#141414] border border-[#222] hover:border-[#F6B530]/50 p-4 rounded-xl flex flex-col justify-between gap-4 cursor-pointer transition-all hover:scale-[1.02]"
               >
                 <div className="flex justify-between items-start">
-                  <span className="text-3xl p-2.5 bg-[#262626] rounded-xl">{item.image}</span>
-                  <span className="text-[10px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full font-medium">
+                  <div className="p-2.5 bg-[#1c1c1c] rounded-xl border border-[#2a2a2a]">
+                    {getItemIcon(item.category, item.name)}
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: 'rgba(246, 181, 48, 0.1)', color: '#F6B530' }}>
                     {item.category}
                   </span>
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm text-white mb-1">{item.name}</h4>
-                  <div className="text-amber-500 font-semibold text-sm">{item.price}</div>
+                  <h4 className="font-bold text-sm text-zinc-200 mb-1">{item.name}</h4>
+                  <div className="font-semibold text-sm" style={{ color: '#F6B530' }}>{item.price}</div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="col-span-full py-12 text-center text-gray-400 bg-[#1a1a1a] rounded-xl border border-[#262626]">
+            <div className="col-span-full py-12 text-center text-zinc-500 bg-[#141414] rounded-xl border border-[#222]">
               <Utensils size={32} className="mx-auto mb-2 opacity-40" />
               <p className="text-sm">Hech qanday taom topilmadi</p>
             </div>
@@ -116,13 +150,13 @@ export const NewOrder: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-[#1a1a1a] p-5 rounded-xl border border-[#262626] flex flex-col justify-between h-[calc(100vh-140px)] sticky top-6">
+      <div className="bg-[#141414] p-5 rounded-xl border border-[#222] flex flex-col justify-between h-[calc(100vh-140px)] sticky top-6">
         <div>
-          <div className="flex justify-between items-center border-b border-[#262626] pb-4 mb-4">
-            <h3 className="text-base font-bold flex items-center gap-2">
-              <ShoppingCart size={18} className="text-amber-500" /> Joriy buyurtma
+          <div className="flex justify-between items-center border-b border-[#222] pb-4 mb-4">
+            <h3 className="text-base font-bold flex items-center gap-2 text-zinc-200">
+              <ShoppingCart size={18} style={{ color: '#F6B530' }} /> Joriy buyurtma
             </h3>
-            <span className="text-xs bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full font-semibold">
+            <span className="text-xs px-2.5 py-1 rounded-full font-semibold" style={{ backgroundColor: 'rgba(246, 181, 48, 0.1)', color: '#F6B530' }}>
               Stol #{selectedTable}
             </span>
           </div>
@@ -130,23 +164,23 @@ export const NewOrder: React.FC = () => {
           <div className="space-y-3 overflow-y-auto max-h-[calc(100vh-360px)] pr-1">
             {cart.length > 0 ? (
               cart.map((item) => (
-                <div key={item.id} className="p-3 bg-[#262626]/50 rounded-xl border border-[#262626] flex items-center justify-between gap-3">
+                <div key={item.id} className="p-3 bg-[#1c1c1c]/50 rounded-xl border border-[#222] flex items-center justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <h5 className="font-semibold text-xs text-white truncate">{item.name}</h5>
-                    <p className="text-[11px] text-amber-400 font-medium">{(item.price * item.quantity).toLocaleString()} so'm</p>
+                    <h5 className="font-semibold text-xs text-zinc-200 truncate">{item.name}</h5>
+                    <p className="text-[11px] font-medium" style={{ color: '#F6B530' }}>{(item.price * item.quantity).toLocaleString()} so'm</p>
                   </div>
 
-                  <div className="flex items-center gap-1 bg-[#1a1a1a] p-1 rounded-lg border border-[#333]">
+                  <div className="flex items-center gap-1 bg-[#141414] p-1 rounded-lg border border-[#2a2a2a]">
                     <button 
                       onClick={() => updateQuantity(item.id, -1)}
-                      className="p-1 hover:bg-[#262626] rounded text-gray-300 hover:text-white cursor-pointer focus:outline-none"
+                      className="p-1 hover:bg-[#1c1c1c] rounded text-zinc-400 hover:text-zinc-200 cursor-pointer focus:outline-none"
                     >
                       <Minus size={12} />
                     </button>
-                    <span className="text-xs font-bold px-2 text-white">{item.quantity}</span>
+                    <span className="text-xs font-bold px-2 text-zinc-200">{item.quantity}</span>
                     <button 
                       onClick={() => updateQuantity(item.id, 1)}
-                      className="p-1 hover:bg-[#262626] rounded text-gray-300 hover:text-white cursor-pointer focus:outline-none"
+                      className="p-1 hover:bg-[#1c1c1c] rounded text-zinc-400 hover:text-zinc-200 cursor-pointer focus:outline-none"
                     >
                       <Plus size={12} />
                     </button>
@@ -161,7 +195,7 @@ export const NewOrder: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div className="text-center py-16 text-gray-500 space-y-2">
+              <div className="text-center py-16 text-zinc-500 space-y-2">
                 <ShoppingCart size={36} className="mx-auto opacity-30" />
                 <p className="text-xs">Savat hozircha bo'sh</p>
               </div>
@@ -169,23 +203,24 @@ export const NewOrder: React.FC = () => {
           </div>
         </div>
 
-        <div className="border-t border-[#262626] pt-4 space-y-4">
+        <div className="border-t border-[#222] pt-4 space-y-4">
           <div className="space-y-2">
-            <div className="flex justify-between text-xs text-gray-400">
+            <div className="flex justify-between text-xs text-zinc-400">
               <span>Taomlar soni:</span>
-              <span className="text-white font-medium">{cart.reduce((acc, i) => acc + i.quantity, 0)} ta</span>
+              <span className="text-zinc-200 font-medium">{cart.reduce((acc, i) => acc + i.quantity, 0)} ta</span>
             </div>
             <div className="flex justify-between text-sm font-bold">
-              <span className="text-gray-300">Jami to'lov:</span>
-              <span className="text-amber-500 text-base">{totalAmount.toLocaleString()} so'm</span>
+              <span className="text-zinc-300">Jami to'lov:</span>
+              <span className="text-base" style={{ color: '#F6B530' }}>{totalAmount.toLocaleString()} so'm</span>
             </div>
           </div>
 
           <button 
             onClick={handleCompleteOrder}
-            className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-black font-semibold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer focus:outline-none shadow-lg shadow-amber-500/10"
+            style={{ backgroundColor: '#F6B530', color: '#09090b' }}
+            className="w-full py-3 hover:opacity-90 font-semibold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer focus:outline-none shadow-lg shadow-black/20"
           >
-            <CheckCircle2 size={18} /> Buyurtmani oshxonaga yuborish
+            <CheckCircle2 size={18} /> Buyurtmani managerga yuborish
           </button>
         </div>
       </div>

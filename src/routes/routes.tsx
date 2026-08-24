@@ -27,6 +27,10 @@ import CashierPage from "../features/cashier/components/CashierPage"
 import { NewOrder } from "../features/cashier/components/NewOrder"
 import { Orders } from "../features/cashier/components/Orders"
 import { Payments } from "../features/cashier/components/Payments"
+import { CashierTable } from "../features/cashier/components/CashierTable"
+import { ReceiptsView } from "../features/cashier/components/ReceiptsView"
+import { CashierReports } from "../features/cashier/components/CashierReports"
+import CashierMenuPage from "../features/cashier/components/CashierMenuPage"
 
 import BoshSahifa from "../layouts/UserLayout/Userpanel/BoshSahifa"
 import Meningprofilim from "../layouts/UserLayout/Userpanel/Meningprofilim"
@@ -36,7 +40,6 @@ import StolBandQilish from "../layouts/UserLayout/Userpanel/StolBandQilish"
 import Takliflarim from "../layouts/UserLayout/Userpanel/Takliflarim"
 import Sozlamalar from "../layouts/UserLayout/Userpanel/Sozlamalar"
 
-// 404 Not Found sahifasini import qilish
 import NotFoundPage from "../pages/public/NotFound/NotFoundPage"
 
 const routes = createBrowserRouter([
@@ -101,6 +104,10 @@ const routes = createBrowserRouter([
               { path: "new-order", element: <NewOrder /> },
               { path: "orders", element: <Orders /> },
               { path: "payments", element: <Payments /> },
+              { path: "tables", element: <CashierTable /> },
+              { path: "menu", element: <CashierMenuPage /> },
+              { path: "checks", element: <ReceiptsView /> },
+              { path: "reports", element: <CashierReports /> },
             ],
           },
         ],

@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, Outlet } from "react-router-dom"
+import { createBrowserRouter, Outlet } from "react-router-dom"
 import { AuthModalProvider } from "../features/auth/context/AuthModalContext"
 import { ProtectedRoute } from "./ProtectedRoute"
 import ScrollToTop from "./ScrollToTop"
@@ -35,6 +35,9 @@ import Sevimlilarim from "../layouts/UserLayout/Userpanel/Sevimlilarim"
 import StolBandQilish from "../layouts/UserLayout/Userpanel/StolBandQilish"
 import Takliflarim from "../layouts/UserLayout/Userpanel/Takliflarim"
 import Sozlamalar from "../layouts/UserLayout/Userpanel/Sozlamalar"
+
+// 404 Not Found sahifasini import qilish
+import NotFoundPage from "../pages/public/NotFound/NotFoundPage"
 
 const routes = createBrowserRouter([
   {
@@ -124,7 +127,7 @@ const routes = createBrowserRouter([
 
       {
         path: "*",
-        element: <Navigate to="/" replace />,
+        element: <NotFoundPage />,
       },
     ],
   },

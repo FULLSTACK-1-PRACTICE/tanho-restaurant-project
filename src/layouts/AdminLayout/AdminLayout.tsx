@@ -53,13 +53,13 @@ const AdminLayout = () => {
   }, [allowed]);
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [active, setActive] = useState<SectionKey>("dashboard");
 
+  // Alert olib tashlandi, to'g'ridan-to'g'ri chiqib ketadi
   const handleLogout = () => {
-    if (confirm("Tizimdan chiqishni tasdiqlaysizmi?")) {
-      localStorage.removeItem("admin_session");
-      navigate("/", { replace: true });
-    }
+    localStorage.removeItem("admin_session");
+    navigate("/", { replace: true });
   };
 
   const renderSection = () => {
@@ -182,13 +182,20 @@ const AdminLayout = () => {
         isOpen={sidebarOpen}
         activePath={active}
         onItemClick={(path) => setActive(path as SectionKey)}
-        onLogout={handleLogout}
+        mobileSidebarOpen={mobileSidebarOpen}
+        setMobileSidebarOpen={setMobileSidebarOpen}
       />
 
       <div className="flex h-screen flex-1 flex-col overflow-hidden">
         <DashboardNavbar
           title="Admin Dashboard"
-          onToggleSidebar={() => setSidebarOpen((val) => !val)}
+          onToggleSidebar={() => {
+            if (window.innerWidth < 1024) {
+              setMobileSidebarOpen((val) => !val);
+            } else {
+              setSidebarOpen((val) => !val);
+            }
+          }}
           onLogout={handleLogout}
           onProfileClick={() => setActive("profil")}
           onSettingsClick={() => setActive("sozlamalar")}
@@ -199,7 +206,7 @@ const AdminLayout = () => {
           }}
         />
 
-        <main className="flex-1 overflow-y-auto overscroll-contain p-6">
+        <main className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6">
           {renderSection()}
         </main>
       </div>

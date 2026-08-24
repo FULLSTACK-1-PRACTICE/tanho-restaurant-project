@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { ReactNode, ComponentType, ComponentProps } from "react";
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import logoImg from "../../assets/images/Layout/Header/Logo-2.png";
 
 export interface SidebarSubItem {
@@ -29,7 +29,6 @@ export interface SidebarProps {
   activePage?: string;
   onItemClick?: (path: string) => void;
   onSelectPage?: (key: string) => void;
-  onLogout?: () => void;
   mobileSidebarOpen?: boolean;
   setMobileSidebarOpen?: (val: boolean) => void;
   brandName?: string;
@@ -46,7 +45,6 @@ export function SideBar({
   activePage,
   onItemClick,
   onSelectPage,
-  onLogout,
   mobileSidebarOpen = false,
   setMobileSidebarOpen,
 }: SidebarProps) {
@@ -67,6 +65,7 @@ export function SideBar({
     } else if (onSelectPage) {
       onSelectPage(targetPath);
     }
+    // Mobil qurilmalarda biror bo'lim bosilganda sidebarni yopish
     if (setMobileSidebarOpen) {
       setMobileSidebarOpen(false);
     }
@@ -95,7 +94,7 @@ export function SideBar({
     <>
       <style>{scrollbarHideStyles}</style>
 
-      {/* Mobile Backdrop */}
+      {/* Mobile Backdrop - Mobil ekranda sidebar ochiq turganda orqa fonni qoraytirib bosganda yopish uchun */}
       {mobileSidebarOpen && setMobileSidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm lg:hidden transition-opacity duration-300"
@@ -103,15 +102,15 @@ export function SideBar({
         />
       )}
 
-      {/* Main Sidebar Aside */}
+      {/* Main Sidebar Aside (Fully Responsive) */}
       <aside
-        className={`fixed lg:static z-50 h-full ${
+        className={`fixed lg:relative z-50 h-full top-0 left-0 ${
           isSidebarOpen ? "w-[280px]" : "w-0 lg:w-[82px]"
         } shrink-0 bg-[#09090b]/95 backdrop-blur-xl border-r border-white/10 flex flex-col transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.5)] ${
           mobileSidebarOpen
             ? "translate-x-0"
             : "-translate-x-full lg:translate-x-0"
-        }`}
+        } overflow-hidden`}
       >
         {/* LOGO HEADER */}
         <div className="relative h-[80px] flex items-center justify-center border-b border-white/[0.08] px-4 overflow-hidden shrink-0">
@@ -231,7 +230,7 @@ export function SideBar({
                           onClick={() =>
                             handleSelect(child.path || child.key || "")
                           }
-                        className={`w-full cursor-pointer flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                          className={`w-full cursor-pointer flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
                             isSubActive
                               ? "text-amber-400 bg-amber-500/15 font-semibold"
                               : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
@@ -259,7 +258,6 @@ export function SideBar({
             );
           })}
         </nav>
-
       </aside>
     </>
   );

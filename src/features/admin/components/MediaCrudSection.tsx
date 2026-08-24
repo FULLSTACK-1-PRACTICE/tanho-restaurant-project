@@ -3,6 +3,14 @@ import { Plus, Pencil, Trash2, X, Loader2 } from "lucide-react";
 import { useCrud } from "../hooks/useCrud";
 import { fileToBase64 } from "../../../lib/utils";
 
+interface MediaItem {
+  id: string;
+  title: string;
+  content: string;
+  image?: string;
+  [key: string]: unknown;
+}
+
 export function MediaCrudSection({
   title,
   collectionName,
@@ -12,7 +20,7 @@ export function MediaCrudSection({
   collectionName: string;
   addLabel: string;
 }) {
-  const { items, loading, add, update, remove } = useCrud<any>(collectionName);
+  const { items, loading, add, update, remove } = useCrud<MediaItem>(collectionName);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -39,7 +47,7 @@ export function MediaCrudSection({
     setModalOpen(true);
   };
 
-  const openEdit = (item: any) => {
+  const openEdit = (item: MediaItem) => {
     setEditingId(item.id);
     setForm({
       title: item.title ?? "",

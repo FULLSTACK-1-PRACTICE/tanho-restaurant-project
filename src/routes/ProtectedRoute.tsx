@@ -7,39 +7,51 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({
   allowedRoles,
 }: ProtectedRouteProps) {
-  const token = localStorage.getItem("token");
-  const currentRole = localStorage.getItem("role") || "";
   const location = useLocation();
 
-  // Login qilmagan bo'lsa
+  const token = localStorage.getItem("token");
+  const currentRole = localStorage.getItem("role");
+
   if (!token) {
     return (
       <Navigate
         to="/login"
         replace
-        state={{
-          from: location,
-        }}
+        state={{ from: location }}
       />
     );
   }
 
-  // Role ruxsati yo'q bo'lsa
   if (
     allowedRoles &&
     allowedRoles.length > 0 &&
-    !allowedRoles.includes(currentRole)
+    !currentRole
   ) {
-    const roleRedirects: Record<string, string> = {
-      admin: "/admin",
-      manager: "/manager",
-      cashier: "/cashier",
-      user: "/user",
-    };
+    return null;
+  }
 
-    const redirectPath = roleRedirects[currentRole] || "/";
+  if (
+    allowedRoles &&
+    allowedRoles.length > 0 &&
+    !allowedRoles.includes(currentRole || "")
+  ) {
+    if (currentRole === "admin") {
+      return <Navigate to="/admin" replace />;
+    }
 
-    return <Navigate to={redirectPath} replace />;
+    if (currentRole === "manager") {
+      return <Navigate to="/manager" replace />;
+    }
+
+    if (currentRole === "cashier") {
+      return <Navigate to="/cashier" replace />;
+    }
+
+    if (currentRole === "user") {
+      return <Navigate to="/user" replace />;
+    }
+
+    return <Navigate to="/login" replace />;
   }
 
   return <Outlet />;

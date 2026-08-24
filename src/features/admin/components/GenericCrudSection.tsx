@@ -1,171 +1,148 @@
-import { useState } from "react";
-import { Plus, Pencil, Trash2, X, Loader2 } from "lucide-react";
-import { useCrud } from "../hooks/useCrud";
+import React, { useState } from "react";
+import { Plus, Edit2, Trash2 } from "lucide-react";
 
-export interface FieldConfig {
+interface Field {
   key: string;
   label: string;
-  type?: "text" | "number" | "select" | "date";
+  type?: "text" | "number" | "date" | "select";
   options?: string[];
 }
 
-export function GenericCrudSection({
-  title,
-  collectionName,
-  fields,
-  addLabel,
-}: {
+interface CrudItem {
+  id: number | string;
+  customer?: string;
+  name?: string;
+  table?: number;
+  itemsCount?: number;
+  total?: string;
+  time?: string;
+  status?: string;
+  phone?: string;
+  ordersCount?: number;
+  totalSpent?: string;
+  role?: string;
+  date?: string;
+  guests?: number;
+  [key: string]: string | number | undefined; 
+}
+
+interface GenericCrudSectionProps {
   title: string;
   collectionName: string;
-  fields: FieldConfig[];
   addLabel: string;
-}) {
-  const { items, loading, add, update, remove } = useCrud<any>(collectionName);
+  fields?: Field[];
+}
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState<Record<string, any>>({});
-  const [saving, setSaving] = useState(false);
-
-  const emptyForm = () =>
-    fields.reduce(
-      (acc, field) => ({
-        ...acc,
-        [field.key]:
-          field.type === "number"
-            ? 0
-            : field.type === "select"
-            ? field.options?.[0] ?? ""
-            : "",
-      }),
-      {}
-    );
-
-  const openAdd = () => {
-    setEditingId(null);
-    setForm(emptyForm());
-    setModalOpen(true);
-  };
-
-  const openEdit = (item: any) => {
-    setEditingId(item.id);
-    setForm(item);
-    setModalOpen(true);
-  };
-
-  const handleSave = async () => {
-    setSaving(true);
-
-    try {
-      if (editingId) {
-        await update(editingId, form);
-      } else {
-        await add(form);
-      }
-
-      setModalOpen(false);
-    } catch (e) {
-      alert(
-        "Xatolik: " +
-          (e instanceof Error ? e.message : "Noma'lum xatolik")
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (confirm("O'chirishni tasdiqlaysizmi?")) {
-      await remove(id);
-    }
-  };
+export const GenericCrudSection: React.FC<GenericCrudSectionProps> = ({
+  title,
+  addLabel,
+  fields = [],
+}) => {
+  const [data] = useState<CrudItem[]>([
+    {
+      id: 1,
+      customer: "Ali Valiyev",
+      name: "Ali Valiyev",
+      table: 4,
+      itemsCount: 3,
+      total: "95,000",
+      time: "12:30",
+      status: "Yangi",
+      phone: "+998 90 123 45 67",
+      ordersCount: 8,
+      totalSpent: "520,000",
+      role: "Administrator",
+    },
+    {
+      id: 2,
+      customer: "Sardor Karimov",
+      name: "Sardor Karimov",
+      table: 7,
+      itemsCount: 2,
+      total: "70,000",
+      time: "13:10",
+      status: "Tayyorlanmoqda",
+      phone: "+998 91 234 56 78",
+      ordersCount: 5,
+      totalSpent: "310,000",
+      role: "Ofitsiant",
+    },
+  ]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 pb-10">
+      {/* HEADER SECTION */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold">{title}</h1>
-          <p className="text-sm text-gray-400">
-            Jami: {items.length}
+          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-wide">
+            {title}
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-400 mt-0.5">
+            Jami: {data.length} ta yozuv
           </p>
         </div>
 
         <button
-          onClick={openAdd}
-          className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-4 py-2.5 text-sm font-medium text-black hover:bg-[#edbd58]"
+          type="button"
+          className="cursor-pointer inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-gray-950 font-semibold text-xs sm:text-sm transition-all shadow-[0_4px_20px_rgba(245,158,11,0.3)]"
         >
-          <Plus size={16} />
-          {addLabel}
+          <Plus size={18} />
+          <span>{addLabel}</span>
         </button>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#121619]">
-        {loading ? (
-          <div className="flex items-center justify-center gap-2 p-10 text-gray-400">
-            <Loader2
-              className="animate-spin"
-              size={18}
-            />
-            Yuklanmoqda...
-          </div>
-        ) : items.length === 0 ? (
-          <div className="p-10 text-center text-gray-400">
-            Ma'lumot topilmadi
-          </div>
-        ) : (
-          <table className="w-full text-left text-sm">
+      {/* RESPONSIVE TABLE CONTAINER */}
+      <div className="bg-[#121619] border border-white/[0.08] rounded-2xl overflow-hidden shadow-xl">
+        <div className="overflow-x-auto w-full admin-table-scroll">
+          <table className="w-full text-left border-collapse min-w-[600px] sm:min-w-full">
             <thead>
-              <tr className="text-xs text-gray-400">
+              <tr className="border-b border-white/[0.08] text-gray-400 text-[11px] sm:text-xs uppercase tracking-wider bg-white/[0.02]">
                 {fields.map((field) => (
-                  <th
-                    key={field.key}
-                    className="p-4 font-normal"
-                  >
+                  <th key={field.key} className="py-3.5 px-4 font-semibold">
                     {field.label}
                   </th>
                 ))}
-
-                <th className="p-4 font-normal">
-                  Amallar
-                </th>
+                <th className="py-3.5 px-4 font-semibold text-right">Amallar</th>
               </tr>
             </thead>
-
-            <tbody>
-              {items.map((item) => (
+            <tbody className="divide-y divide-white/[0.06] text-xs sm:text-sm text-gray-300">
+              {data.map((item, index) => (
                 <tr
-                  key={item.id}
-                  className="border-t border-white/5"
+                  key={item.id || index}
+                  className="hover:bg-white/[0.03] transition-colors"
                 >
                   {fields.map((field) => (
-                    <td
-                      key={field.key}
-                      className="p-4"
-                    >
-                      {field.type === "number"
-                        ? Number(
-                            item[field.key] ?? 0
-                          ).toLocaleString()
-                        : String(
-                            item[field.key] ?? ""
-                          )}
+                    <td key={field.key} className="py-4 px-4 whitespace-nowrap">
+                      {field.key === "status" ? (
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-medium ${
+                            item[field.key] === "Yangi"
+                              ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                              : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                          }`}
+                        >
+                          {item[field.key]}
+                        </span>
+                      ) : (
+                        <span className="truncate block max-w-[150px] sm:max-w-none">
+                          {item[field.key]}
+                        </span>
+                      )}
                     </td>
                   ))}
-
-                  <td className="p-4">
-                    <div className="flex items-center gap-2">
+                  <td className="py-4 px-4 text-right whitespace-nowrap">
+                    <div className="flex items-center justify-end gap-2">
                       <button
-                        onClick={() => openEdit(item)}
-                        className="cursor-pointer rounded-lg p-1.5 text-gray-300 hover:bg-white/10"
+                        type="button"
+                        className="p-1.5 rounded-lg bg-white/5 hover:bg-amber-500/20 text-gray-400 hover:text-amber-400 transition-colors"
+                        title="Tahrirlash"
                       >
-                        <Pencil size={15} />
+                        <Edit2 size={15} />
                       </button>
-
                       <button
-                        onClick={() =>
-                          handleDelete(item.id)
-                        }
-                        className="cursor-pointer rounded-lg p-1.5 text-red-400 hover:bg-red-500/10"
+                        type="button"
+                        className="p-1.5 rounded-lg bg-white/5 hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-colors"
+                        title="O'chirish"
                       >
                         <Trash2 size={15} />
                       </button>
@@ -175,110 +152,8 @@ export function GenericCrudSection({
               ))}
             </tbody>
           </table>
-        )}
-      </div>
-
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-md rounded-xl border border-white/10 bg-[#121619] p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">
-                {editingId ? "Tahrirlash" : addLabel}
-              </h2>
-
-              <button
-                onClick={() => setModalOpen(false)}
-                className="cursor-pointer text-gray-400 hover:text-white"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="space-y-3">
-              {fields.map((field) => (
-                <div key={field.key}>
-                  <label className="mb-1 block text-xs text-gray-400">
-                    {field.label}
-                  </label>
-
-                  {field.type === "select" ? (
-                    <select
-                      value={form[field.key] ?? ""}
-                      onChange={(e) =>
-                        setForm((state) => ({
-                          ...state,
-                          [field.key]:
-                            e.target.value,
-                        }))
-                      }
-                      className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#d9a441]/50"
-                    >
-                      {field.options?.map(
-                        (option) => (
-                          <option
-                            key={option}
-                            value={option}
-                          >
-                            {option}
-                          </option>
-                        )
-                      )}
-                    </select>
-                  ) : (
-                    <input
-                      type={
-                        field.type === "number"
-                          ? "number"
-                          : field.type === "date"
-                          ? "date"
-                          : "text"
-                      }
-                      value={form[field.key] ?? ""}
-                      onChange={(e) =>
-                        setForm((state) => ({
-                          ...state,
-                          [field.key]:
-                            field.type === "number"
-                              ? Number(
-                                  e.target.value
-                                )
-                              : e.target.value,
-                        }))
-                      }
-                      className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#d9a441]/50"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-5 flex justify-end gap-2">
-              <button
-                onClick={() =>
-                  setModalOpen(false)
-                }
-                className="cursor-pointer rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-300 hover:bg-white/5"
-              >
-                Bekor qilish
-              </button>
-
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-4 py-2 text-sm font-medium text-black hover:bg-[#edbd58] disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {saving && (
-                  <Loader2
-                    size={14}
-                    className="animate-spin"
-                  />
-                )}
-                Saqlash
-              </button>
-            </div>
-          </div>
         </div>
-      )}
+      </div>
     </div>
   );
-}
+};

@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { Plus, Pencil, Trash2, X, Loader2, Table2, Receipt, CheckCircle2 } from "lucide-react";
-import { useCrud } from "../hooks/useCrud"; // O'zingizning to'g'ri yo'lingizni ko'rsating
+import { useCrud } from "../hooks/useCrud";
 
-// Tiplarni e'lon qilish (Agar bular alohida faylda bo'lsa, import qilib oling)
+export interface BillItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  [key: string]: unknown;
+}
+
 export interface RestaurantTable {
   id: string;
   number: string | number;
@@ -14,12 +21,14 @@ export interface RestaurantTable {
 }
 
 export interface Bill {
-  items: any[];
+  items: BillItem[];
 }
 
-// Vaqtinchalik hisoblash funksiyasi (agar loyihada bo'lsa uni ishlating)
-const calculateBillTotals = (items: any[], waiterFeePercent: number) => {
-  return { itemsTotal: 0, waiterFee: 0, grandTotal: 0 };
+const calculateBillTotals = (items: BillItem[], waiterFeePercent: number) => {
+  const itemsTotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const waiterFee = (itemsTotal * waiterFeePercent) / 100;
+  const grandTotal = itemsTotal + waiterFee;
+  return { itemsTotal, waiterFee, grandTotal };
 };
 
 type TableRow = RestaurantTable;
@@ -131,7 +140,6 @@ export function TablesAdminSection() {
 
   return (
     <div className="space-y-6">
-      {/* Yuqori qism: Sarlavha va Qo'shish tugmasi */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold">Stollar</h1>
@@ -147,7 +155,6 @@ export function TablesAdminSection() {
         </button>
       </div>
 
-      {/* Yuklanish va Bo'sh holatlar */}
       {loading ? (
         <div className="flex items-center justify-center gap-2 p-10 text-gray-400">
           <Loader2 className="animate-spin" size={18} />
@@ -158,7 +165,6 @@ export function TablesAdminSection() {
           Stollar topilmadi
         </div>
       ) : (
-        /* Stollar ro'yxati (Grid) */
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {tables.map((table) => {
             const bill = bills[String(table.number)];
@@ -264,7 +270,6 @@ export function TablesAdminSection() {
         </div>
       )}
 
-      {/* Qo'shish / Tahrirlash Modali */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
           <div className="w-full max-w-sm rounded-xl border border-white/10 bg-[#121619] p-6">

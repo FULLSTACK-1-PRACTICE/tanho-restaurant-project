@@ -7,6 +7,7 @@ import {
   Heart,
   ChevronDown,
 } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 import footerImage from '../../../assets/images/Layout/Footer/image.png'
 import Container from '../../../components/ui/container/Container'
@@ -65,20 +66,20 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   )
 }
 
-function LinkItem({ children }: { children: React.ReactNode }) {
+function LinkItem({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <li className="group flex items-center gap-3">
       <span
         className="h-[6px] w-[6px] shrink-0 rounded-full transition-all duration-300 group-hover:scale-150"
         style={{ backgroundColor: gold }}
       />
-      <a
-        href="#"
+      <Link
+        to={to}
         className="relative text-[15px] text-neutral-200 transition-all duration-300 hover:translate-x-1 hover:text-[#F5B942]"
       >
         {children}
         <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#F5B942] transition-all duration-300 group-hover:w-full" />
-      </a>
+      </Link>
     </li>
   )
 }
@@ -141,30 +142,30 @@ export default function TanhoFooter() {
   }
 
   const menuLinks = [
-    'Bosh sahifa',
-    'Menyu',
-    'Biz haqimizda',
-    'Tadbirlar',
-    'Yangiliklar',
-    'Aloqa',
+    { label: 'Bosh sahifa', path: '/' },
+    { label: 'Menyu', path: '/menu' },
+    { label: 'Biz haqimizda', path: '/about' },
+    { label: 'Maqolalar', path: '/events' },
+    { label: 'Yangiliklar', path: '/news' },
+    { label: 'Aloqa', path: '/contact' },
   ]
 
   const categoryLinks = [
-    'Salatlar',
-    'Issiq taomlar',
-    'Milliy taomlar',
-    'Shashliklar',
-    'Ichimliklar',
-    'Desertlar',
+    { label: 'Salatlar', path: '/menu?category=salatlar' },
+    { label: 'Issiq taomlar', path: '/menu?category=issiq-taomlar' },
+    { label: 'Milliy taomlar', path: '/menu?category=milliy-taomlar' },
+    { label: 'Shashliklar', path: '/menu?category=shashliklar' },
+    { label: 'Ichimliklar', path: '/menu?category=ichimliklar' },
+    { label: 'Desertlar', path: '/menu?category=desertlar' },
   ]
 
   const usefulLinks = [
-    'Stol band qilish',
-    'Maxsus takliflar',
-    'Korporativ xizmat',
-    'Yetkazib berish',
-    'Qoidalar',
-    'Maxfiylik siyosati',
+    { label: 'Stol band qilish', path: '/reservation' },
+    { label: 'Maxsus takliflar', path: '/news' },
+    { label: 'Korporativ xizmat', path: '/about' },
+    { label: 'Yetkazib berish', path: '/contact' },
+    { label: 'Qoidalar', path: '/about' },
+    { label: 'Maxfiylik siyosati', path: '/about' },
   ]
 
   const socialIcons = [InstagramGlyph, TelegramGlyph, FacebookGlyph, BadgeGlyph]
@@ -213,7 +214,7 @@ export default function TanhoFooter() {
             <SectionHeading>MENYU</SectionHeading>
             <ul className="space-y-4">
               {menuLinks.map(item => (
-                <LinkItem key={item}>{item}</LinkItem>
+                <LinkItem key={item.label} to={item.path}>{item.label}</LinkItem>
               ))}
             </ul>
           </div>
@@ -225,7 +226,7 @@ export default function TanhoFooter() {
             </SectionHeading>
             <ul className="space-y-4">
               {categoryLinks.map(item => (
-                <LinkItem key={item}>{item}</LinkItem>
+                <LinkItem key={item.label} to={item.path}>{item.label}</LinkItem>
               ))}
             </ul>
           </div>
@@ -237,7 +238,7 @@ export default function TanhoFooter() {
             </SectionHeading>
             <ul className="space-y-4">
               {usefulLinks.map(item => (
-                <LinkItem key={item}>{item}</LinkItem>
+                <LinkItem key={item.label} to={item.path}>{item.label}</LinkItem>
               ))}
             </ul>
           </div>
@@ -343,9 +344,9 @@ export default function TanhoFooter() {
             {openSection === 'menu' && (
               <ul className="px-4 pb-4 space-y-3 border-t pt-3" style={{ borderColor: line }}>
                 {menuLinks.map(item => (
-                  <li key={item} className="text-[14px] text-neutral-300 flex items-center gap-2">
+                  <li key={item.label} className="text-[14px] text-neutral-300 flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: gold }} />
-                    <a href="#" className="hover:text-[#F5B942] transition-colors">{item}</a>
+                    <Link to={item.path} className="hover:text-[#F5B942] transition-colors">{item.label}</Link>
                   </li>
                 ))}
               </ul>
@@ -363,9 +364,9 @@ export default function TanhoFooter() {
             {openSection === 'categories' && (
               <ul className="px-4 pb-4 space-y-3 border-t pt-3" style={{ borderColor: line }}>
                 {categoryLinks.map(item => (
-                  <li key={item} className="text-[14px] text-neutral-300 flex items-center gap-2">
+                  <li key={item.label} className="text-[14px] text-neutral-300 flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: gold }} />
-                    <a href="#" className="hover:text-[#F5B942] transition-colors">{item}</a>
+                    <Link to={item.path} className="hover:text-[#F5B942] transition-colors">{item.label}</Link>
                   </li>
                 ))}
               </ul>
@@ -383,9 +384,9 @@ export default function TanhoFooter() {
             {openSection === 'useful' && (
               <ul className="px-4 pb-4 space-y-3 border-t pt-3" style={{ borderColor: line }}>
                 {usefulLinks.map(item => (
-                  <li key={item} className="text-[14px] text-neutral-300 flex items-center gap-2">
+                  <li key={item.label} className="text-[14px] text-neutral-300 flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: gold }} />
-                    <a href="#" className="hover:text-[#F5B942] transition-colors">{item}</a>
+                    <Link to={item.path} className="hover:text-[#F5B942] transition-colors">{item.label}</Link>
                   </li>
                 ))}
               </ul>

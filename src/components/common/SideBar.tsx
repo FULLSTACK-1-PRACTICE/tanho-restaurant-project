@@ -260,19 +260,6 @@ export function SideBar({
           })}
         </nav>
 
-        {/* LOGOUT BUTTON */}
-        {onLogout && (
-          <div className="p-3 border-t border-white/[0.08] mt-auto">
-            <button
-              type="button"
-              onClick={onLogout}
-              className="w-full cursor-pointer flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
-            >
-              <LogOut size={18} className="shrink-0" />
-              {isSidebarOpen && <span>Chiqish</span>}
-            </button>
-          </div>
-        )}
       </aside>
     </>
   );

@@ -1,0 +1,1 @@
+export const ADMIN_LEFT_FLAG = "tanho_admin_left";

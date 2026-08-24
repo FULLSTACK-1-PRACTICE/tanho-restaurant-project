@@ -2,6 +2,8 @@ import { createBrowserRouter, Outlet } from "react-router-dom"
 import { AuthModalProvider } from "../features/auth/context/AuthModalContext"
 import { ProtectedRoute } from "./ProtectedRoute"
 import ScrollToTop from "./ScrollToTop"
+import { Toaster } from "../components/ui/sonner" // Sonner toaster importi
+import { toast } from "sonner" // Toast funksiyasi uchun
 
 import PublicLayout from "../components/shared/Layout/PageTransition"
 
@@ -44,11 +46,27 @@ import Sozlamalar from "../layouts/UserLayout/Userpanel/Sozlamalar"
 
 import NotFoundPage from "../pages/public/NotFound/NotFoundPage"
 
+export const triggerLogout = (navigateFn?: (path: string) => void) => {
+  toast.info("Tizimdan chiqildi", {
+    description: "Xayr, sog' bo'ling!",
+    duration: 1500,
+  })
+  setTimeout(() => {
+    localStorage.clear()
+    if (navigateFn) {
+      navigateFn("/")
+    } else {
+      window.location.href = "/"
+    }
+  }, 1200)
+}
+
 const routes = createBrowserRouter([
   {
     element: (
       <AuthModalProvider>
         <ScrollToTop />
+        <Toaster position="top-right" richColors />
         <Outlet />
       </AuthModalProvider>
     ),

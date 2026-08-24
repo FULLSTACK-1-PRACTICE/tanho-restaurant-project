@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { SideBar, type SidebarItem } from '../../components/common/SideBar';
 import { DashboardNavbar } from '../../components/common/DashboardNavbar';
+import { triggerLogout } from '../../routes/routes';
 
 export const CashierLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -21,17 +22,13 @@ export const CashierLayout: React.FC = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/');
+    triggerLogout(navigate);
   };
 
-  // 1. Profil bosilganda alohida profil sahifasiga o'tadi
   const handleNavigateProfile = () => {
     navigate('/cashier/profile');
   };
 
-  // 2. Sozlamalar bosilganda sozlamalar sahifasiga o'tadi
   const handleNavigateSettings = () => {
     navigate('/cashier/settings');
   };
@@ -47,7 +44,6 @@ export const CashierLayout: React.FC = () => {
     { path: "/cashier/reports", key: "/cashier/reports", label: "Hisobotlar", icon: BarChart2 },
   ];
 
-  // Breadcrumb nomini sahifaga qarab avtomatik chiqarish
   const getBreadcrumbTitle = () => {
     if (location.pathname.includes('settings')) return "Sozlamalar";
     if (location.pathname.includes('profile')) return "Profil";
@@ -55,7 +51,7 @@ export const CashierLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-[#121212] text-white overflow-hidden">
+    <div className="flex h-screen bg-[#121212] text-white overflow-hidden relative">
       <SideBar
         items={cashierSidebarItems}
         sidebarOpen={sidebarOpen}

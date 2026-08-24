@@ -13,6 +13,7 @@ import { MediaCrudSection } from "../../features/admin/components/MediaCrudSecti
 import { SideBar } from "../../components/common/SideBar";
 import { DashboardNavbar } from "../../components/common/DashboardNavbar";
 import { adminSidebarItems } from "../../data/sidebarData";
+import { triggerLogout } from "../../routes/routes";
 
 type SectionKey = string;
 const ADMIN_LEFT_FLAG = "admin_left";
@@ -56,10 +57,9 @@ const AdminLayout = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [active, setActive] = useState<SectionKey>("dashboard");
 
-  // Alert olib tashlandi, to'g'ridan-to'g'ri chiqib ketadi
   const handleLogout = () => {
     localStorage.removeItem("admin_session");
-    navigate("/", { replace: true });
+    triggerLogout(navigate);
   };
 
   const renderSection = () => {

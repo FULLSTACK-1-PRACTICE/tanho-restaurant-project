@@ -31,6 +31,8 @@ import { CashierTable } from "../features/cashier/components/CashierTable"
 import { ReceiptsView } from "../features/cashier/components/ReceiptsView"
 import { CashierReports } from "../features/cashier/components/CashierReports"
 import CashierMenuPage from "../features/cashier/components/CashierMenuPage"
+import CashierSettingsSection from "../features/cashier/components/SettingsSection"
+import CashierProfile from "../features/cashier/components/CashierProfile"
 
 import BoshSahifa from "../layouts/UserLayout/Userpanel/BoshSahifa"
 import Meningprofilim from "../layouts/UserLayout/Userpanel/Meningprofilim"
@@ -108,6 +110,8 @@ const routes = createBrowserRouter([
               { path: "menu", element: <CashierMenuPage /> },
               { path: "checks", element: <ReceiptsView /> },
               { path: "reports", element: <CashierReports /> },
+              { path: "settings", element: <CashierSettingsSection /> },
+              { path: "profile", element: <CashierProfile /> },
             ],
           },
         ],

@@ -26,12 +26,14 @@ export const CashierLayout: React.FC = () => {
     navigate('/');
   };
 
+  // 1. Profil bosilganda alohida profil sahifasiga o'tadi
   const handleNavigateProfile = () => {
-    navigate('/user/profil');
+    navigate('/cashier/profile');
   };
 
+  // 2. Sozlamalar bosilganda sozlamalar sahifasiga o'tadi
   const handleNavigateSettings = () => {
-    navigate('/user/sozlamalar');
+    navigate('/cashier/settings');
   };
 
   const cashierSidebarItems: SidebarItem[] = [
@@ -45,6 +47,13 @@ export const CashierLayout: React.FC = () => {
     { path: "/cashier/reports", key: "/cashier/reports", label: "Hisobotlar", icon: BarChart2 },
   ];
 
+  // Breadcrumb nomini sahifaga qarab avtomatik chiqarish
+  const getBreadcrumbTitle = () => {
+    if (location.pathname.includes('settings')) return "Sozlamalar";
+    if (location.pathname.includes('profile')) return "Profil";
+    return "Bosh sahifa";
+  };
+
   return (
     <div className="flex h-screen bg-[#121212] text-white overflow-hidden">
       <SideBar
@@ -57,9 +66,15 @@ export const CashierLayout: React.FC = () => {
       />
       <div className="flex flex-col flex-1 h-full overflow-hidden">
         <DashboardNavbar
-          onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
-          headerTitle="Bosh sahifa"
-          breadcrumb={["Cashier", "Bosh sahifa"]}
+          onToggleSidebar={() => {
+            if (window.innerWidth < 768) {
+              setMobileSidebarOpen(true);
+            } else {
+              setSidebarOpen((prev) => !prev);
+            }
+          }}
+          headerTitle="Kassir paneli"
+          breadcrumb={["Cashier", getBreadcrumbTitle()]}
           user={{
             name: "Kassir",
             role: "Cashier",

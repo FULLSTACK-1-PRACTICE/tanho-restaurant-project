@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   MapPin,
   Phone,
@@ -12,6 +12,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import Button from '../../../components/ui/Button';
+import Container from '../../../components/ui/container/Container';
 
 function ContactPage() {
   const [formData, setFormData] = useState({
@@ -24,12 +25,38 @@ function ContactPage() {
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const phoneRegex = /^(\+?998)?\d{9}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const subjectOptions = [
+    { value: 'reservation', label: 'Rezervatsiya' },
+    { value: 'question', label: 'Savol' },
+    { value: 'event', label: 'Tadbir' },
+    { value: 'other', label: 'Boshqa' },
+  ];
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsSelectOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError('');
+    setSuccess('');
+  };
+
+  const handleSelect = (value: string) => {
+    setFormData({ ...formData, subject: value });
+    setIsSelectOpen(false);
     setError('');
     setSuccess('');
   };
@@ -77,7 +104,7 @@ function ContactPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/80 to-[#050505]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1255px] px-5 py-16 md:px-8">
+      <Container className="relative z-10 py-16">
         <div className="text-center">
           <h1 className="font-serif text-[46px] font-medium tracking-wide text-white md:text-[58px]">
             ALOQA
@@ -200,26 +227,47 @@ function ContactPage() {
                 className="h-12 w-full rounded-md border border-[#303030] bg-[#090909] px-4 text-[13px] text-white outline-none transition placeholder:text-neutral-500 focus:border-[#806027]"
               />
 
-              <div className="relative">
-                <select
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="h-12 w-full appearance-none rounded-md border border-[#303030] bg-[#090909] px-4 text-[13px] text-neutral-300 outline-none focus:border-[#806027]"
+              <div className="relative" ref={dropdownRef}>
+                <div
+                  onClick={() => setIsSelectOpen(!isSelectOpen)}
+                  className={`flex h-12 w-full cursor-pointer items-center justify-between rounded-md border bg-[#090909] px-4 text-[13px] outline-none transition-all duration-200 ${
+                    isSelectOpen ? 'border-[#806027]' : 'border-[#303030]'
+                  }`}
                 >
-                  <option value="" disabled>
-                    Mavzu
-                  </option>
-                  <option value="reservation">Rezervatsiya</option>
-                  <option value="question">Savol</option>
-                  <option value="event">Tadbir</option>
-                  <option value="other">Boshqa</option>
-                </select>
+                  <span
+                    className={`${
+                      formData.subject ? 'text-neutral-300' : 'text-neutral-500'
+                    }`}
+                  >
+                    {formData.subject
+                      ? subjectOptions.find((opt) => opt.value === formData.subject)?.label
+                      : 'Mavzu'}
+                  </span>
+                  <ChevronDown
+                    size={17}
+                    className={`text-neutral-400 transition-transform duration-200 ${
+                      isSelectOpen ? 'rotate-180 text-[#806027]' : ''
+                    }`}
+                  />
+                </div>
 
-                <ChevronDown
-                  size={17}
-                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400"
-                />
+                {isSelectOpen && (
+                  <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-md border border-[#303030] bg-[#090909] shadow-lg shadow-black/50">
+                    {subjectOptions.map((option) => (
+                      <div
+                        key={option.value}
+                        onClick={() => handleSelect(option.value)}
+                        className={`cursor-pointer px-4 py-3 text-[13px] transition-colors duration-150 ${
+                          formData.subject === option.value
+                            ? 'bg-[#151515] text-[#dcae4d]'
+                            : 'text-neutral-300 hover:bg-[#151515] hover:text-[#dcae4d]'
+                        }`}
+                      >
+                        {option.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <textarea
@@ -303,7 +351,7 @@ function ContactPage() {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

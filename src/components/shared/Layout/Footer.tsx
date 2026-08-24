@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 
 import footerImage from '../../../assets/images/Layout/Footer/image.png'
+import Container from '../../../components/ui/container/Container'
 
 const gold = '#F5B942'
 const line = '#2a2210'
@@ -52,9 +53,9 @@ function HeadingDivider() {
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <div className="group">
+    <div>
       <h3
-        className="font-serif text-[16px] font-semibold leading-snug tracking-wide transition-all duration-300 group-hover:tracking-[0.12em]"
+        className="font-serif text-[16px] font-semibold leading-snug tracking-wide"
         style={{ color: gold }}
       >
         {children}
@@ -179,11 +180,12 @@ export default function TanhoFooter() {
         className="pointer-events-none absolute -right-2 top-20 hidden h-[320px] w-auto object-contain opacity-90 transition-transform duration-[2000ms] hover:scale-105 md:block"
       />
       <div className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[500px] -translate-x-1/2 rounded-full bg-[#F5B942]/[0.03] blur-[100px]" />
-      <div className="mx-auto max-w-[1240px] px-6 pt-16">
+      
+      <Container className="pt-16">
         <div className="hidden lg:grid grid-cols-[1.25fr_1fr_1fr_1fr_1.15fr] gap-x-8">
           <div className={`${colDivider} animate-[footerUp_700ms_ease-out_both]`}>
             <h2
-              className="font-serif text-[36px] leading-none tracking-[0.03em] transition-all duration-500 hover:scale-105 hover:tracking-[0.08em]"
+              className="font-serif text-[36px] leading-none tracking-[0.03em]"
               style={{ color: gold }}
             >
               TANHO
@@ -216,15 +218,11 @@ export default function TanhoFooter() {
             </ul>
           </div>
           <div className={`${colDivider} animate-[footerUp_700ms_200ms_ease-out_both]`}>
-            <h3
-              className="font-serif text-[16px] font-semibold leading-snug tracking-wide"
-              style={{ color: gold }}
-            >
+            <SectionHeading>
               MENYU
               <br />
               KATEGORIYALARI
-            </h3>
-            <HeadingDivider />
+            </SectionHeading>
             <ul className="space-y-4">
               {categoryLinks.map(item => (
                 <LinkItem key={item}>{item}</LinkItem>
@@ -232,15 +230,11 @@ export default function TanhoFooter() {
             </ul>
           </div>
           <div className={`${colDivider} animate-[footerUp_700ms_300ms_ease-out_both]`}>
-            <h3
-              className="font-serif text-[16px] font-semibold leading-snug tracking-wide"
-              style={{ color: gold }}
-            >
+            <SectionHeading>
               FOYDALI
               <br />
               HAVOLALAR
-            </h3>
-            <HeadingDivider />
+            </SectionHeading>
             <ul className="space-y-4">
               {usefulLinks.map(item => (
                 <LinkItem key={item}>{item}</LinkItem>
@@ -432,7 +426,6 @@ export default function TanhoFooter() {
           </div>
         </div>
 
-        {/* Pastki qism (Copyright va yurakcha) desktopda yonma-yon qilindi */}
         <div
           className="mt-10 flex flex-col md:flex-row items-center justify-between gap-4 border-t py-8"
           style={{ borderColor: '#1a1a1a' }}
@@ -450,7 +443,7 @@ export default function TanhoFooter() {
             maxsus yaratilgan
           </p>
         </div>
-      </div>
+      </Container>
       <style>{`
         @keyframes footerUp {
           from {

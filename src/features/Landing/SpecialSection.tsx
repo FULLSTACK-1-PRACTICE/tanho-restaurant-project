@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 
-// Swiper CSS lari
 import "swiper/css";
 import "swiper/css/pagination";
 
 import { offers, news } from "../../data/landingData";
-import menuHeadImg from "../../assets/images/Menu/HeadLogo/MenuHead.png";
+import menuHeadImg from "../../assets/images/Menu/Additional-Images/MenuHead.png";
 
 function SpecialSection() {
   const navigate = useNavigate();
@@ -23,9 +22,7 @@ function SpecialSection() {
       <div className="mx-auto max-w-[1250px] px-4 lg:px-6">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.7fr_1fr] items-stretch">
           
-          {/* Maxsus takliflar qismi */}
           <div className="flex flex-col justify-between">
-            {/* Sarlavha qismi - Mobil va Desktop uchun moslashtirilgan */}
             <div className="mb-4 flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5 min-w-0">
                 <Sparkles size={16} className="text-[#dcae43] shrink-0" />
@@ -42,7 +39,6 @@ function SpecialSection() {
               </button>
             </div>
 
-            {/* DESKTOP VIEW: 3 ta card yonma-yon grid holatida (Mobilga ta'sir qilmaydi) */}
             <div className="hidden lg:grid grid-cols-3 gap-4 h-full">
               {offers.map((offer, index) => (
                 <div
@@ -85,12 +81,11 @@ function SpecialSection() {
               ))}
             </div>
 
-            {/* MOBILE & TABLET VIEW: Haqiqiy Swiper */}
             <div className="block lg:hidden w-full pb-8">
               <Swiper
                 modules={[Pagination]}
                 spaceBetween={12}
-                slidesPerView={1.15} // 1.15 qilib berildi, shunda ikkinchi rasm uchi ko'rinib turadi
+                slidesPerView={1.15} 
                 pagination={{ clickable: true }}
                 className="special-offers-swiper"
               >
@@ -138,7 +133,6 @@ function SpecialSection() {
             </div>
           </div>
 
-          {/* Tadbirlar va yangiliklar qismi */}
           <div className="flex flex-col justify-between">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-serif text-[17px] sm:text-[20px] md:text-[24px] text-[#f1eee7]">Tadbirlar va yangiliklar</h2>
@@ -182,7 +176,6 @@ function SpecialSection() {
         </div>
       </div>
 
-      {/* Swiper uchun Maxsus CSS - Oltin rangli chiroyli navigatsiya nuqtalari */}
       <style>{`
         .special-offers-swiper {
           padding-bottom: 30px !important;

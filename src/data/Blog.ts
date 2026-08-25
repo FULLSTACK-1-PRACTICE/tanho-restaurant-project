@@ -1,5 +1,5 @@
 import pishirish from "../assets/images/Menu/Cards/pishirrish_jarayoni.png";
-import manchuri from "../assets/images/Menu/Cards/manchuri.png";
+import manchuri from "../assets/images/Menu/Cards/Manchuri.png";
 
 import {
   Camera,
@@ -11,8 +11,6 @@ import {
   Utensils,
   type LucideIcon,
 } from "lucide-react";
-
-
 
 export type Article = {
   id: number;

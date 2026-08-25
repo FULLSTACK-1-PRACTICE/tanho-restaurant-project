@@ -39,9 +39,17 @@ function ArticleCard({
   const navigate = useNavigate();
   const Icon = article.icon;
 
+  const handleNavigation = () => {
+    if (article.title.toLowerCase().includes("salat")) {
+      navigate("/menu", { state: { category: "Salatlar" } });
+    } else {
+      navigate(`/blog/${article.id}`);
+    }
+  };
+
   return (
     <article
-      onClick={() => navigate(`/blog/${article.id}`)}
+      onClick={handleNavigation}
       className={`group relative flex min-h-[340px] cursor-pointer flex-col overflow-hidden rounded-[10px] border border-[#332713] bg-[#10100e] sm:min-h-[370px] ${
         isWide ? "xl:col-span-6" : "xl:col-span-3"
       }`}
@@ -92,7 +100,7 @@ function ArticleCard({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`/blog/${article.id}`);
+              handleNavigation();
             }}
             className="inline-flex shrink-0 items-center gap-1 text-[10.5px] font-medium text-[#f6b531] transition hover:text-[#ffd778]"
           >
@@ -193,7 +201,7 @@ function CategoryScroller({
       try {
         (e.target as HTMLElement).releasePointerCapture(e.pointerId);
       } catch {
-        // ignore
+        // ...
       }
     }
     dragState.current.isDragging = false;

@@ -9,6 +9,7 @@ import PublicLayout from "../components/shared/Layout/PageTransition"
 
 import HomePage from "../pages/public/Home/HomePage"
 import MenuPage from "../pages/public/Menu/MenuPage"
+import MenuDetailsPage from "../pages/public/Menu/MenuDetailsPage"
 import AboutPage from "../pages/public/About/AboutPage"
 import EventsPage from "../pages/public/Blog/BlogPage"
 import BlogDetailsPage from "../pages/public/Blog/BlogDetailsPage"
@@ -76,9 +77,11 @@ const routes = createBrowserRouter([
         children: [
           { path: "/", element: <HomePage /> },
           { path: "/menu", element: <MenuPage /> },
+          { path: "/menu/:id", element: <MenuDetailsPage /> },
           { path: "/about", element: <AboutPage /> },
           { path: "/reservation", element: <ReservationPage /> },
           { path: "/events", element: <EventsPage /> },
+          { path: "/blog", element: <EventsPage /> },
           { path: "/blog/:id", element: <BlogDetailsPage /> },
           { path: "/contact", element: <ContactPage /> },
           { path: "/news", element: <NewsPage /> },

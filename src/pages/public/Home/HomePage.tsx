@@ -5,6 +5,7 @@ import SpecialSection from "../../../features/Landing/SpecialSection";
 import Stolband from "../../../features/Landing/BookaTable";
 import UserComments from "../../../features/Landing/UserComments";
 
+
 function Home() {
   return (
     <div className="min-h-screen bg-[#050708] text-white">

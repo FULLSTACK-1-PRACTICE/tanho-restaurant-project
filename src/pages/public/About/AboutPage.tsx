@@ -18,18 +18,21 @@ import {
 import Button from '../../../components/ui/Button';
 import Container from '../../../components/ui/container/Container';
 import aboutImg from "../../../assets/images/Landing/About/Tanho-Img.png";
+import thebesttaste from "../../../assets/images/Menu//Additional-Images/three-salad.png"
+import Cabina from "../../../assets/images/About/Cabina.png"
+import TheBestServe from "../../../assets/images/About/TheBestServe.png"
 
 const AboutPage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-[#0b0d10] text-gray-200 font-sans pb-20">
-      <div
-        className="relative w-full bg-cover bg-center py-20 md:py-28 border-b border-amber-900/20"
-        style={{
-          backgroundImage: `linear-gradient(to right, rgba(11, 13, 16, 0.95) 25%, rgba(11, 13, 16, 0.75) 60%, rgba(11, 13, 16, 0.85) 100%), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1920&auto=format&fit=crop')`,
-        }}
-      >
+     <div
+  className="relative w-full bg-cover bg-center py-20 md:py-28 border-b border-amber-900/20"
+  style={{
+    backgroundImage: `linear-gradient(to right, rgba(11, 13, 16, 0.95) 25%, rgba(11, 13, 16, 0.75) 60%, rgba(11, 13, 16, 0.85) 100%), url(${Cabina})`,
+  }}
+>
         <Container>
           <div className="max-w-xl">
             <h1 className="text-4xl md:text-5xl font-serif text-white mb-4 tracking-wide">
@@ -218,7 +221,7 @@ const AboutPage: React.FC = () => {
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=600&auto=format&fit=crop"
+                src={thebesttaste}
                 alt="Eng yaxshi ta'm"
                 className="w-full h-full object-cover"
               />
@@ -236,7 +239,7 @@ const AboutPage: React.FC = () => {
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=crop"
+                src={Cabina}
                 alt="Samimiy muhit"
                 className="w-full h-full object-cover"
               />
@@ -254,7 +257,7 @@ const AboutPage: React.FC = () => {
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=600&auto=format&fit=crop"
+                src={TheBestServe}
                 alt="Sifatli xizmat"
                 className="w-full h-full object-cover"
               />

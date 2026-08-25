@@ -8,8 +8,10 @@ import {
   Send,
   ArrowUpRight,
   Clock,
+  User,
+  LayoutDashboard,
 } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../../assets/images/Layout/Header/Logo-2.png";
 import Container from "../../ui/container/Container";
 import { useAuthModal } from "../../../features/auth/hooks/useAuthModal";
@@ -17,7 +19,11 @@ import { useAuthModal } from "../../../features/auth/hooks/useAuthModal";
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
   const { openAuthModal } = useAuthModal();
+  const navigate = useNavigate();
 
   const navLinks = [
     { name: "Bosh sahifa", path: "/" },
@@ -27,6 +33,24 @@ function Header() {
     { name: "Yangiliklar", path: "/news" },
     { name: "Aloqa", path: "/contact" },
   ];
+
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const loggedIn = localStorage.getItem("is_logged_in") === "true";
+      const role = localStorage.getItem("user_role");
+      setIsLoggedIn(loggedIn);
+      setUserRole(role ? role.toLowerCase().trim() : null);
+    };
+    
+    checkAuthStatus();
+    window.addEventListener("storage", checkAuthStatus);
+    window.addEventListener("auth-change", checkAuthStatus);
+    
+    return () => {
+      window.removeEventListener("storage", checkAuthStatus);
+      window.removeEventListener("auth-change", checkAuthStatus);
+    };
+  }, []);
 
   useEffect(() => {
     if (document.getElementById("tanho-font-cormorant")) return;
@@ -60,6 +84,36 @@ function Header() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handleProfileClick = () => {
+    switch (userRole) {
+      case "admin":
+        navigate("/admin");
+        break;
+      case "manager":
+        navigate("/manager");
+        break;
+      case "cashier":
+        navigate("/cashier");
+        break;
+      default:
+        navigate("/user");
+        break;
+    }
+  };
+
+  const getButtonLabel = () => {
+    switch (userRole) {
+      case "admin":
+        return "ADMIN PANEL";
+      case "manager":
+        return "MANAGER PANEL";
+      case "cashier":
+        return "KASSA PANEL";
+      default:
+        return "PROFILIM";
+    }
+  };
 
   return (
     <>
@@ -115,18 +169,41 @@ function Header() {
             </nav>
 
             <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => openAuthModal("kirish")}
-                className="hidden lg:flex group relative cursor-pointer items-center gap-2.5 rounded-xl border border-[#dcae4d]/40 bg-transparent px-6 py-2.5 text-[13px] font-semibold tracking-wider text-[#dcae4d] hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_0_20px_rgba(220,174,77,0.3)] active:scale-[0.98] transition-all duration-300"
-              >
-                <LogIn
-                  size={16}
-                  strokeWidth={2}
-                  className="transition-transform duration-300 group-hover:translate-x-0.5"
-                />
-                <span>KIRISH</span>
-              </button>
+              {isLoggedIn ? (
+                <button
+                  type="button"
+                  onClick={handleProfileClick}
+                  className="hidden lg:flex group relative cursor-pointer items-center gap-2.5 rounded-xl border border-[#dcae4d]/40 bg-transparent px-6 py-2.5 text-[13px] font-semibold tracking-wider text-[#dcae4d] hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_0_20px_rgba(220,174,77,0.3)] active:scale-[0.98] transition-all duration-300"
+                >
+                  {userRole && userRole !== "user" ? (
+                    <LayoutDashboard
+                      size={16}
+                      strokeWidth={2}
+                      className="transition-transform duration-300 group-hover:scale-110"
+                    />
+                  ) : (
+                    <User
+                      size={16}
+                      strokeWidth={2}
+                      className="transition-transform duration-300 group-hover:scale-110"
+                    />
+                  )}
+                  <span>{getButtonLabel()}</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => openAuthModal("kirish")}
+                  className="hidden lg:flex group relative cursor-pointer items-center gap-2.5 rounded-xl border border-[#dcae4d]/40 bg-transparent px-6 py-2.5 text-[13px] font-semibold tracking-wider text-[#dcae4d] hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_0_20px_rgba(220,174,77,0.3)] active:scale-[0.98] transition-all duration-300"
+                >
+                  <LogIn
+                    size={16}
+                    strokeWidth={2}
+                    className="transition-transform duration-300 group-hover:translate-x-0.5"
+                  />
+                  <span>KIRISH</span>
+                </button>
+              )}
 
               <button
                 type="button"
@@ -286,26 +363,53 @@ function Header() {
                   </NavLink>
                 ))}
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMenuOpen(false);
-                    openAuthModal("kirish");
-                  }}
-                  className={`group my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] px-5 py-3 text-[12px] font-medium text-[#dcae4d] transition-all duration-300 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
-                    menuOpen
-                      ? "translate-x-0 opacity-100"
-                      : "translate-x-4 opacity-0"
-                  }`}
-                  style={{
-                    transitionDelay: menuOpen
-                      ? `${navLinks.length * 60 + 180}ms`
-                      : "0ms",
-                  }}
-                >
-                  <LogIn size={15} strokeWidth={1.8} />
-                  <span>KIRISH</span>
-                </button>
+                {isLoggedIn ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      handleProfileClick();
+                    }}
+                    className={`group my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] px-5 py-3 text-[12px] font-medium text-[#dcae4d] transition-all duration-300 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
+                      menuOpen
+                        ? "translate-x-0 opacity-100"
+                        : "translate-x-4 opacity-0"
+                    }`}
+                    style={{
+                      transitionDelay: menuOpen
+                        ? `${navLinks.length * 60 + 180}ms`
+                        : "0ms",
+                    }}
+                  >
+                    {userRole && userRole !== "user" ? (
+                      <LayoutDashboard size={15} strokeWidth={1.8} />
+                    ) : (
+                      <User size={15} strokeWidth={1.8} />
+                    )}
+                    <span>{getButtonLabel()}</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      openAuthModal("kirish");
+                    }}
+                    className={`group my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] px-5 py-3 text-[12px] font-medium text-[#dcae4d] transition-all duration-300 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
+                      menuOpen
+                        ? "translate-x-0 opacity-100"
+                        : "translate-x-4 opacity-0"
+                    }`}
+                    style={{
+                      transitionDelay: menuOpen
+                        ? `${navLinks.length * 60 + 180}ms`
+                        : "0ms",
+                    }}
+                  >
+                    <LogIn size={15} strokeWidth={1.8} />
+                    <span>KIRISH</span>
+                  </button>
+                )}
               </nav>
 
               <div

@@ -2,8 +2,8 @@ import { createBrowserRouter, Outlet } from "react-router-dom"
 import { AuthModalProvider } from "../features/auth/context/AuthModalContext"
 import { ProtectedRoute } from "./ProtectedRoute"
 import ScrollToTop from "./ScrollToTop"
-import { Toaster } from "../components/ui/sonner" // Sonner toaster importi
-import { toast } from "sonner" // Toast funksiyasi uchun
+import { Toaster } from "../components/ui/sonner"
+import { toast } from "sonner"
 
 import PublicLayout from "../components/shared/Layout/PageTransition"
 
@@ -22,7 +22,7 @@ import LoginPage from "../features/auth/components/AuthModal"
 
 import AdminLayout from "../layouts/AdminLayout/AdminLayout"
 import CashierLayout from "../layouts/CashierLayout/CashierLayout"
-import UserLayout from "../layouts/UserLayout/UserLayout"
+import UserLayout from "../layouts/UserLayout"
 
 import ManagerLayout from "../features/manager/components/ManagerDashboard"
 import CashierPage from "../features/cashier/components/CashierPage"
@@ -36,13 +36,13 @@ import CashierMenuPage from "../features/cashier/components/CashierMenuPage"
 import CashierSettingsSection from "../features/cashier/components/SettingsSection"
 import CashierProfile from "../features/cashier/components/CashierProfile"
 
-import BoshSahifa from "../layouts/UserLayout/Userpanel/BoshSahifa"
-import Meningprofilim from "../layouts/UserLayout/Userpanel/Meningprofilim"
-import MeningBuyurtmalarim from "../layouts/UserLayout/Userpanel/MeningBuyurtmalarim"
-import Sevimlilarim from "../layouts/UserLayout/Userpanel/Sevimlilarim"
-import StolBandQilish from "../layouts/UserLayout/Userpanel/StolBandQilish"
-import Takliflarim from "../layouts/UserLayout/Userpanel/Takliflarim"
-import Sozlamalar from "../layouts/UserLayout/Userpanel/Sozlamalar"
+import UserHome from "../features/user/components/UserHome"
+import UserProfile from "../features/user/components/UserProfile"
+import UserOrders from "../features/user/components/UserOrders"
+import UserFavorites from "../features/user/components/UserFavorites"
+import UserReservations from "../features/user/components/UserReservations"
+import UserSettings from "../features/user/components/UserSettings"
+import UserSuggestions from "../features/user/components/UserSuggestions"
 
 import NotFoundPage from "../pages/public/NotFound/NotFoundPage"
 
@@ -142,13 +142,13 @@ const routes = createBrowserRouter([
             path: "/user",
             element: <UserLayout />,
             children: [
-              { index: true, element: <BoshSahifa /> },
-              { path: "profil", element: <Meningprofilim /> },
-              { path: "buyurtmalar", element: <MeningBuyurtmalarim /> },
-              { path: "sevimlilar", element: <Sevimlilarim /> },
-              { path: "stollar", element: <StolBandQilish /> },
-              { path: "takliflar", element: <Takliflarim /> },
-              { path: "sozlamalar", element: <Sozlamalar /> },
+              { index: true, element: <UserHome /> },
+              { path: "profil", element: <UserProfile /> },
+              { path: "buyurtmalar", element: <UserOrders /> },
+              { path: "sevimlilar", element: <UserFavorites /> },
+              { path: "stollar", element: <UserReservations /> },
+              { path: "sozlamalar", element: <UserSettings /> },
+              { path: "takliflar", element: <UserSuggestions /> },
             ],
           },
         ],

@@ -370,15 +370,15 @@ function Header() {
                       setMenuOpen(false);
                       handleProfileClick();
                     }}
-                    className={`group my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] px-5 py-3 text-[12px] font-medium text-[#dcae4d] transition-all duration-300 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
+                    className={`my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] px-5 py-3 text-[12px] font-medium text-[#dcae4d] bg-transparent transition-colors duration-150 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
                       menuOpen
                         ? "translate-x-0 opacity-100"
                         : "translate-x-4 opacity-0"
                     }`}
                     style={{
-                      transitionDelay: menuOpen
-                        ? `${navLinks.length * 60 + 180}ms`
-                        : "0ms",
+                      transitionProperty: "transform, opacity",
+                      transitionDuration: "300ms",
+                      transitionDelay: menuOpen ? "400ms" : "0ms",
                     }}
                   >
                     {userRole && userRole !== "user" ? (
@@ -395,15 +395,15 @@ function Header() {
                       setMenuOpen(false);
                       openAuthModal("kirish");
                     }}
-                    className={`group my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] px-5 py-3 text-[12px] font-medium text-[#dcae4d] transition-all duration-300 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
+                    className={`my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] px-5 py-3 text-[12px] font-medium text-[#dcae4d] bg-transparent transition-colors duration-150 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
                       menuOpen
                         ? "translate-x-0 opacity-100"
                         : "translate-x-4 opacity-0"
                     }`}
                     style={{
-                      transitionDelay: menuOpen
-                        ? `${navLinks.length * 60 + 180}ms`
-                        : "0ms",
+                      transitionProperty: "transform, opacity",
+                      transitionDuration: "300ms",
+                      transitionDelay: menuOpen ? "400ms" : "0ms",
                     }}
                   >
                     <LogIn size={15} strokeWidth={1.8} />
@@ -419,9 +419,7 @@ function Header() {
                     : "translate-y-3 opacity-0"
                 }`}
                 style={{
-                  transitionDelay: menuOpen
-                    ? `${navLinks.length * 60 + 220}ms`
-                    : "0ms",
+                  transitionDelay: menuOpen ? "450ms" : "0ms",
                 }}
               >
                 <div className="flex flex-col gap-2.5">

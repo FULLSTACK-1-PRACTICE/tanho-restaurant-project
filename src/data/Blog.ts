@@ -1,3 +1,6 @@
+import pishirish from "../assets/images/Menu/Cards/pishirrish_jarayoni.png";
+import manchuri from "../assets/images/Menu/Cards/manchuri.png";
+
 import {
   Camera,
   CalendarDays,
@@ -8,6 +11,8 @@ import {
   Utensils,
   type LucideIcon,
 } from "lucide-react";
+
+
 
 export type Article = {
   id: number;
@@ -30,8 +35,7 @@ export const articles: Article[] = [
       "TANHO oshpazlari taomlarimizni qanday mehr va sifat bilan tayyorlashini bilib oling.",
     date: "18 May, 2026",
     duration: "5 daqiqa",
-    image:
-      "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&q=80&w=1200",
+    image: pishirish,
     icon: ChefHat,
     content: [
       "TANHO restoranida har bir taom alohida e'tibor va mehr bilan tayyorlanadi. Biz faqat eng saralangan va yangi mahsulotlardan foydalanamiz. Bizning oshxonamiz — bu sifat va an'analar uyg'unlashgan maskan.",
@@ -42,18 +46,19 @@ export const articles: Article[] = [
   {
     id: 2,
     category: "Maslahatlar",
-    title: "Steak tanlash bo‘yicha qo‘llanma",
+    title: "Manchuri — mazali va to‘yimli taom",
     description:
-      "Turli steak turlari, ularning xususiyatlari va qaysi biri sizga mos kelishini bilib oling.",
+      "Mazali va to‘yimli Manchuri taomi, o‘ziga xos ta’m va xushbo‘y ziravorlar uyg‘unligi bilan tayyorlanadi.",
     date: "15 May, 2026",
     duration: "4 daqiqa",
-    image:
-      "https://images.unsplash.com/photo-1544025162-83688cd6543b?auto=format&fit=crop&q=80&w=1200",
+    image: manchuri,
     icon: Utensils,
     content: [
-      "Steak sevuvchilar uchun go'sht tanlash eng muhim jarayon. Har bir qismning o'ziga xos yog'liligi, yumshoqligi va ta'm xususiyatlari bor.",
-      "Ribeye — eng mashhur va sersuv steak turi. Uning tarkibidagi yog' qatlamlari pishirish jarayonida erib, unga ajoyib ta'm beradi. Agar yumshoqlikni xohlasangiz, Filet Mignon aynan siz uchun.",
-      "Bizning restoranda steaklar maxsus haroratda saqlanadi va haqiqiy ko'mir olovida pishiriladi. Bu orqali biz go'shtning tabiiy ta'mini to'liq saqlab qolamiz.",
+      "Manchuri — mazali va to‘yimli taomни yoqtiradiganlar uchun ajoyib tanlov.",
+
+      "Ushbu taom go‘shtning mayinligi va xushbo‘y ziravorlarning o‘ziga xos uyg‘unligi bilan ajralib turadi.To‘g‘ri tayyorlash jarayoni orqali go‘shtning tabiiy mazasi saqlanib, taomga yanada yoqimli ta’m beriladi.",
+
+      "restoranida Manchuri maxsus usulda tayyorlanib, mehmonlarga issiq va mazali holatda taqdim etiladi.",
     ],
   },
   {

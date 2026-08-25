@@ -28,7 +28,7 @@ function AboutSection() {
           </div>
 
           <div className="grid grid-cols-2 overflow-hidden rounded-lg border border-[#25292b] bg-[#0a0d0f] md:grid-cols-4">
-            <div className="group flex cursor-pointer flex-col items-center justify-center border-b border-[#25292b] px-3 py-4 transition duration-300 hover:bg-[#111416] md:border-b-0 md:border-r">
+            <div className="group flex flex-col items-center justify-center border-b border-[#25292b] px-3 py-4 transition duration-300 hover:bg-[#111416] md:border-b-0 md:border-r">
               <Award
                 size={22}
                 strokeWidth={1.5}
@@ -44,7 +44,7 @@ function AboutSection() {
               </span>
             </div>
 
-            <div className="group flex cursor-pointer flex-col items-center justify-center border-b border-[#25292b] px-3 py-4 transition duration-300 hover:bg-[#111416] md:border-b-0 md:border-r">
+            <div className="group flex flex-col items-center justify-center border-b border-[#25292b] px-3 py-4 transition duration-300 hover:bg-[#111416] md:border-b-0 md:border-r">
               <Users
                 size={22}
                 strokeWidth={1.5}
@@ -60,7 +60,7 @@ function AboutSection() {
               </span>
             </div>
 
-            <div className="group flex cursor-pointer flex-col items-center justify-center border-r border-[#25292b] px-3 py-4 transition duration-300 hover:bg-[#111416]">
+            <div className="group flex flex-col items-center justify-center border-r border-[#25292b] px-3 py-4 transition duration-300 hover:bg-[#111416]">
               <ChefHat
                 size={22}
                 strokeWidth={1.5}
@@ -76,7 +76,7 @@ function AboutSection() {
               </span>
             </div>
 
-            <div className="group flex cursor-pointer flex-col items-center justify-center px-3 py-4 transition duration-300 hover:bg-[#111416]">
+            <div className="group flex flex-col items-center justify-center px-3 py-4 transition duration-300 hover:bg-[#111416]">
               <Star
                 size={22}
                 strokeWidth={1.5}

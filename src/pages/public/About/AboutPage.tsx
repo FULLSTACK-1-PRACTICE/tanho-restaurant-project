@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Users,
   Utensils,
@@ -12,27 +12,27 @@ import {
   Award,
   Flame,
   ShieldCheck,
-  Music,
-  MapPin
-} from 'lucide-react';
-import Button from '../../../components/ui/Button';
-import Container from '../../../components/ui/container/Container';
+  DoorOpen,
+  MapPin,
+} from "lucide-react";
+import Button from "../../../components/ui/Button";
+import Container from "../../../components/ui/container/Container";
 import aboutImg from "../../../assets/images/Landing/About/Tanho-Img.png";
-import thebesttaste from "../../../assets/images/Menu//Additional-Images/three-salad.png"
-import Cabina from "../../../assets/images/About/Cabina.png"
-import TheBestServe from "../../../assets/images/About/TheBestServe.png"
+import thebesttaste from "../../../assets/images/Menu//Additional-Images/three-salad.png";
+import Cabina from "../../../assets/images/About/Cabina.png";
+import TheBestServe from "../../../assets/images/About/TheBestServe.png";
 
 const AboutPage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-[#0b0d10] text-gray-200 font-sans pb-20">
-     <div
-  className="relative w-full bg-cover bg-center py-20 md:py-28 border-b border-amber-900/20"
-  style={{
-    backgroundImage: `linear-gradient(to right, rgba(11, 13, 16, 0.95) 25%, rgba(11, 13, 16, 0.75) 60%, rgba(11, 13, 16, 0.85) 100%), url(${Cabina})`,
-  }}
->
+      <div
+        className="relative w-full bg-cover bg-center py-20 md:py-28 border-b border-amber-900/20"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(11, 13, 16, 0.95) 25%, rgba(11, 13, 16, 0.75) 60%, rgba(11, 13, 16, 0.85) 100%), url(${Cabina})`,
+        }}
+      >
         <Container>
           <div className="max-w-xl">
             <h1 className="text-4xl md:text-5xl font-serif text-white mb-4 tracking-wide">
@@ -47,16 +47,20 @@ const AboutPage: React.FC = () => {
 
             <div className="space-y-4 text-gray-300 text-sm md:text-base font-light leading-relaxed">
               <p>
-                TANHO restorani 2018-yilda Qarshi shahrida ochilgan. Bizning maqsadimiz – mehmonlarimizga unutilmas ta'm va maroqli muhit taqdim etish.
+                TANHO restorani 2018-yilda Qarshi shahrida ochilgan. Bizning
+                maqsadimiz – mehmonlarimizga unutilmas ta'm va maroqli muhit
+                taqdim etish.
               </p>
               <p>
-                An'anaviy o'zbek taomlari va milliy qadriyatlarni zamonaviy xizmat bilan uyg'unlashtirib, sizga eng yaxshi tajribani taqdim etamiz.
+                An'anaviy o'zbek taomlari va milliy qadriyatlarni zamonaviy
+                xizmat bilan uyg'unlashtirib, sizga eng yaxshi tajribani taqdim
+                etamiz.
               </p>
             </div>
 
-            <Button 
+            <Button
               className="mt-8 bg-[#F6B531] text-[#181208] hover:bg-[#ffca50] transition cursor-pointer active:scale-[0.98] w-[240px] h-[48px] border border-amber-300/60 rounded-xl font-medium flex items-center justify-center gap-2"
-              onClick={() => navigate('/menu')}
+              onClick={() => navigate("/menu")}
             >
               <Utensils className="w-4 h-4 shrink-0" />
               <span>Menyu bilan tanishish</span>
@@ -146,13 +150,17 @@ const AboutPage: React.FC = () => {
 
             <div className="space-y-4 text-xs md:text-sm text-gray-300 font-light leading-relaxed">
               <p>
-                TANHO nomi "tanholikda topilgan huzur" ma'nosini anglatadi. Restoranimizda har bir mehmon o'zini alohida va qadrli his qilish uchun barcha sharoitlar yaratilgan.
+                TANHO nomi "tanholikda topilgan huzur" ma'nosini anglatadi.
+                Restoranimizda har bir mehmon o'zini alohida va qadrli his
+                qilish uchun barcha sharoitlar yaratilgan.
               </p>
               <p>
-                Biz sifatli mahsulotlar, tajribali oshpazlar va samimiy xizmat orqali sizga eng yaxshi taom va muhitni taqdim etamiz.
+                Biz sifatli mahsulotlar, tajribali oshpazlar va samimiy xizmat
+                orqali sizga eng yaxshi taom va muhitni taqdim etamiz.
               </p>
               <p>
-                Mahsulotlarimizning katta qismi mahalliy fermer xo'jaliklaridan yetkazib beriladi va har kuni yangiligi tekshiriladi.
+                Mahsulotlarimizning katta qismi mahalliy fermer xo'jaliklaridan
+                yetkazib beriladi va har kuni yangiligi tekshiriladi.
               </p>
             </div>
 
@@ -231,7 +239,8 @@ const AboutPage: React.FC = () => {
                 Eng yaxshi ta'm
               </h3>
               <p className="text-xs text-gray-400 leading-relaxed">
-                An'anaviy va zamonaviy retseptlarni uyg'unlashtirib, sizga eng yaxshi taomlarni taqdim etish.
+                An'anaviy va zamonaviy retseptlarni uyg'unlashtirib, sizga eng
+                yaxshi taomlarni taqdim etish.
               </p>
             </div>
           </div>
@@ -249,7 +258,8 @@ const AboutPage: React.FC = () => {
                 Samimiy muhit
               </h3>
               <p className="text-xs text-gray-400 leading-relaxed">
-                Zamonaviy va qulay muhitda yaqinlaringiz bilan maroqli vaqt o'tkazishingiz uchun.
+                Zamonaviy va qulay muhitda yaqinlaringiz bilan maroqli vaqt
+                o'tkazishingiz uchun.
               </p>
             </div>
           </div>
@@ -285,7 +295,8 @@ const AboutPage: React.FC = () => {
                 Baxtli mijozlar
               </h3>
               <p className="text-xs text-gray-400 leading-relaxed">
-                Mamnun mijozlar sonini oshirish va ularning ishonchini qozonish – bizning asosiy maqsadimiz.
+                Mamnun mijozlar sonini oshirish va ularning ishonchini qozonish
+                – bizning asosiy maqsadimiz.
               </p>
             </div>
           </div>
@@ -303,7 +314,8 @@ const AboutPage: React.FC = () => {
             <span className="w-8 h-[1px] bg-amber-500/50"></span>
           </div>
           <p className="text-xs md:text-sm text-gray-400 mt-2 font-light">
-            Qarshi shahridagi eng sevimli maskanga aylanishimiz siri nimada? Mana, asosiy sabablar:
+            Qarshi shahridagi eng sevimli maskanga aylanishimiz siri nimada?
+            Mana, asosiy sabablar:
           </p>
         </div>
 
@@ -316,7 +328,8 @@ const AboutPage: React.FC = () => {
               Milliy va Olovli Ta'mlar
             </h3>
             <p className="text-xs text-gray-400 leading-relaxed font-light">
-              Sharqona an'analar asosida tayyorlanadigan kaboblar, milliy taomlar va maxsus retseptdagi tansiq ne'matlar.
+              Sharqona an'analar asosida tayyorlanadigan kaboblar, milliy
+              taomlar va maxsus retseptdagi tansiq ne'matlar.
             </p>
           </div>
 
@@ -328,19 +341,24 @@ const AboutPage: React.FC = () => {
               Mutlaq Tozalik va Sifat
             </h3>
             <p className="text-xs text-gray-400 leading-relaxed font-light">
-              Mahsulotlarimiz doimo yangi va saralangan holda yetkazib beriladi. Oshxonamizda gigiyena qoidalariga qat'iy amal qilinadi.
+              Mahsulotlarimiz doimo yangi va saralangan holda yetkazib beriladi.
+              Oshxonamizda gigiyena qoidalariga qat'iy amal qilinadi.
             </p>
           </div>
 
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1">
             <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
-              <Music className="w-6 h-6" />
+              <DoorOpen className="w-6 h-6" />
             </div>
+
             <h3 className="text-base font-semibold text-white mb-2">
-              Shinam Muhit va Musiqa
+              Alohida Kabinalar
             </h3>
+
             <p className="text-xs text-gray-400 leading-relaxed font-light">
-              Oilaviy kechki ovqatlar, do'stlar davrasi va romantik uchrashuvlar uchun moslashgan sokin hamda yoqimli atmosferasi.
+              Maxfiylik va qulaylikni qadrlaydigan mehmonlar uchun mo‘ljallangan
+              alohida kabinalar. Oila, do‘stlar davrasi yoki maxsus uchrashuvlar
+              uchun qulay va sokin joy.
             </p>
           </div>
 
@@ -352,29 +370,31 @@ const AboutPage: React.FC = () => {
               Qulay Joylashuv
             </h3>
             <p className="text-xs text-gray-400 leading-relaxed font-light">
-              Qarshi shahrining qo'lay hududida joylashgan bo'lib, o'z avtoturargohiga ega va tashrif buyuruvchilar uchun barcha qulayliklar muhayyo.
+              Qarshi shahrining qo'lay hududida joylashgan bo'lib, o'z
+              avtoturargohiga ega va tashrif buyuruvchilar uchun barcha
+              qulayliklar muhayyo.
             </p>
           </div>
         </div>
       </Container>
-
-      <Container className="mt-20">
-        <div
-          className="relative rounded-2xl overflow-hidden border border-gray-800 p-8 md:p-12 bg-cover bg-center flex flex-col items-start justify-center"
-          style={{
-            backgroundImage: `linear-gradient(to right, rgba(11, 13, 16, 0.95), rgba(11, 13, 16, 0.6)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop')`,
-          }}
-        >
+<Container className="mt-20">
+  <div
+    className="relative rounded-2xl overflow-hidden border border-gray-800 p-8 md:p-12 bg-cover bg-center flex flex-col items-start justify-center"
+    style={{
+      backgroundImage: `linear-gradient(to right, rgba(11, 13, 16, 0.95), rgba(11, 13, 16, 0.6)), url(${Cabina})`,
+    }}
+  >
           <div className="max-w-xl z-10">
             <h2 className="text-3xl md:text-4xl font-serif text-white mb-3">
               Biz sizni kutamiz!
             </h2>
             <p className="text-sm text-gray-300 font-light mb-6">
-              Tanho restoranida o'zingiz va yaqinlaringiz uchun unutilmas dam oling.
+              Tanho restoranida o'zingiz va yaqinlaringiz uchun unutilmas dam
+              oling.
             </p>
-            <Button 
+            <Button
               className="bg-[#F6B531] text-[#181208] hover:bg-[#ffca50] transition cursor-pointer active:scale-[0.98] w-[200px] h-[48px] border border-amber-300/60 rounded-xl font-medium flex items-center justify-center gap-2"
-              onClick={() => navigate('/reservation')}
+              onClick={() => navigate("/reservation")}
             >
               <Calendar className="w-4 h-4 shrink-0" />
               <span>Stol band qilish</span>

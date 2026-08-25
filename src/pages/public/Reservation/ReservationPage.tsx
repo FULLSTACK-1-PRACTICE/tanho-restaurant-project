@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import Container from '../../../components/ui/container/Container';
 import Button from '../../../components/ui/Button';
+import Cabina from "../../../assets/images/About/Cabina.png";
 
 const ReservationPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -37,7 +38,7 @@ const ReservationPage: React.FC = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false); // Modal uchun state
 
   const guestOptions = ['1 kishi', '2 kishi', '3 kishi', '4 kishi', '5+ kishi'];
-  const tableTypeOptions = ['Istalgan stol turi', 'VIP Xona', 'Zal', 'Terassa', 'Bar'];
+  const tableTypeOptions = ['Istalgan stol turi', 'Kabina', 'Zal', 'Devor Oldidan'];
 
   const phoneRegex = /^\+?998\d{9}$/;
   const nameRegex = /^[\p{L}\s]{3,}$/u;
@@ -77,7 +78,6 @@ const ReservationPage: React.FC = () => {
       return;
     }
 
-    // Barcha tekshiruvlardan o'tsa, maxsus modal oynani ochamiz
     setShowConfirmModal(true);
   };
 
@@ -89,7 +89,6 @@ const ReservationPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#050708] text-white font-sans pb-12 sm:pb-16 overflow-x-hidden">
       
-      {/* Maxsus Tasdiqlash Modali (Ortada chiqadigan katta oyna) */}
       {showConfirmModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
           <div className="bg-[#0A0A0B] border border-[#23232A] rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative text-center">
@@ -331,7 +330,6 @@ const ReservationPage: React.FC = () => {
                   />
                 </div>
 
-                {/* Xatolik xabari qo'shimcha izohdan pastda, tugmadan tepada */}
                 {error && (
                   <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 text-red-400 text-xs text-center">
                     {error}
@@ -444,7 +442,7 @@ const ReservationPage: React.FC = () => {
           
           <div className="md:col-span-5 h-36 sm:h-28 rounded-xl overflow-hidden border border-[#23232A]">
             <img 
-              src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop" 
+              src={Cabina}
               alt="Restaurant ambiance" 
               className="w-full h-full object-cover"
             />

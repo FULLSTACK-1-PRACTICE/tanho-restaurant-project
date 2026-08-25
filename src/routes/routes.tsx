@@ -40,7 +40,7 @@ import UserHome from "../features/user/components/UserHome"
 import UserProfile from "../features/user/components/UserProfile"
 import UserOrders from "../features/user/components/UserOrders"
 import UserFavorites from "../features/user/components/UserFavorites"
-import UserReservations from "../features/user/components/UserReservations"
+import UserCabinas from "../features/user/components/UserCabinas"
 import UserSettings from "../features/user/components/UserSettings"
 import UserSuggestions from "../features/user/components/UserSuggestions"
 
@@ -146,7 +146,7 @@ const routes = createBrowserRouter([
               { path: "profil", element: <UserProfile /> },
               { path: "buyurtmalar", element: <UserOrders /> },
               { path: "sevimlilar", element: <UserFavorites /> },
-              { path: "stollar", element: <UserReservations /> },
+              { path: "stollar", element: <UserCabinas /> },
               { path: "sozlamalar", element: <UserSettings /> },
               { path: "takliflar", element: <UserSuggestions /> },
             ],

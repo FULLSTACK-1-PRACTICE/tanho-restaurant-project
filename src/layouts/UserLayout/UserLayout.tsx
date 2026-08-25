@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { Outlet, useNavigate, useLocation } from "react-router-dom"
 import { SideBar } from "../../components/common/SideBar"
 import { Navbar } from "../../components/common/DashboardNavbar"
-import { Home, ShoppingBag, Calendar, Heart, MessageSquare, Globe } from "lucide-react"
+import { Home, Calendar, Heart, MessageSquare, Globe } from "lucide-react"
 
 interface NavItem {
   label: string
@@ -14,7 +14,6 @@ export default function UserLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   
-  // Kompyuter va telefon uchun alohida state'larni boshqaramiz
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
@@ -25,7 +24,6 @@ export default function UserLayout() {
 
   const userNavItems: NavItem[] = [
     { label: "Bosh sahifa", path: "/user", icon: Home },
-    { label: "Buyurtmalarim", path: "/user/buyurtmalar", icon: ShoppingBag },
     { label: "Stol band qilish", path: "/user/stollar", icon: Calendar },
     { label: "Sevimlilar", path: "/user/sevimlilar", icon: Heart },
     { label: "Taklif va shikoyatlar", path: "/user/takliflar", icon: MessageSquare },
@@ -70,11 +68,10 @@ export default function UserLayout() {
       <div className="flex flex-col flex-1 h-full overflow-hidden">
         <Navbar 
           onToggleSidebar={() => {
-            // Katta ekranda kengligini o'zgartiradi, kichik ekranda mobil sidebar'ni ochadi/yopadi
             if (window.innerWidth < 1024) {
-              setMobileSidebarOpen(!mobileSidebarOpen);
+              setMobileSidebarOpen(!mobileSidebarOpen)
             } else {
-              setSidebarOpen(!sidebarOpen);
+              setSidebarOpen(!sidebarOpen)
             }
           }}
           title="Foydalanuvchi paneli"

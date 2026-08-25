@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Outlet, useNavigate, useLocation } from "react-router-dom"
 import { SideBar } from "../../components/common/SideBar"
-import Navbar from "../../components/common/DashboardNavbar"
+import { Navbar } from "../../components/common/DashboardNavbar"
 import { Home, ShoppingBag, Calendar, Heart, MessageSquare, Globe } from "lucide-react"
 
 interface NavItem {
@@ -13,9 +13,11 @@ interface NavItem {
 export default function UserLayout() {
   const navigate = useNavigate()
   const location = useLocation()
+  
+  // Kompyuter va telefon uchun alohida state'larni boshqaramiz
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
-  // User auth/role holatini localStorageda saqlash
   useEffect(() => {
     localStorage.setItem("user_role", "user")
     localStorage.setItem("is_logged_in", "true")
@@ -53,22 +55,28 @@ export default function UserLayout() {
     return () => clearTimeout(timer)
   }, [location.pathname])
 
-  const CustomNavbar = Navbar as unknown as React.ComponentType<Record<string, unknown>>
-
   return (
     <div className="flex h-screen bg-zinc-950 overflow-hidden">
       <SideBar 
         items={userNavItems}
         sidebarOpen={sidebarOpen}
+        mobileSidebarOpen={mobileSidebarOpen}
+        setMobileSidebarOpen={setMobileSidebarOpen}
         activePath={location.pathname}
-        onItemClick={(item: string | NavItem) => {
-          const targetPath = typeof item === "string" ? item : item.path
+        onItemClick={(targetPath: string) => {
           if (targetPath) navigate(targetPath)
         }}
       />
       <div className="flex flex-col flex-1 h-full overflow-hidden">
-        <CustomNavbar 
-          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        <Navbar 
+          onToggleSidebar={() => {
+            // Katta ekranda kengligini o'zgartiradi, kichik ekranda mobil sidebar'ni ochadi/yopadi
+            if (window.innerWidth < 1024) {
+              setMobileSidebarOpen(!mobileSidebarOpen);
+            } else {
+              setSidebarOpen(!sidebarOpen);
+            }
+          }}
           title="Foydalanuvchi paneli"
           onLogout={handleLogout}
         />

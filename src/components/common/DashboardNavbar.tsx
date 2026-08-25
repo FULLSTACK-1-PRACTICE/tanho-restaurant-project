@@ -107,16 +107,14 @@ export function DashboardNavbar({
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-[#0d1114] px-4 md:px-6">
       <div className="flex items-center gap-3 md:gap-4">
-        {onToggleSidebar && (
-          <button
-            type="button"
-            onClick={onToggleSidebar}
-            className="cursor-pointer rounded-lg p-2 text-gray-300 transition-colors hover:bg-[#191e22] hover:text-white"
-            aria-label="Toggle Sidebar"
-          >
-            <Menu size={20} />
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          className="cursor-pointer rounded-lg p-2 text-gray-300 transition-colors hover:bg-[#191e22] hover:text-white"
+          aria-label="Toggle Sidebar"
+        >
+          <Menu size={20} />
+        </button>
 
         <div>
           <h1 className="text-base font-semibold text-white md:text-lg">

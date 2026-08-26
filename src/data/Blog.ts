@@ -1,11 +1,13 @@
 import pishirish from "../assets/images/Menu/Cards/pishirrish_jarayoni.png";
 import manchuri from "../assets/images/Menu/Cards/Manchuri.png";
+import HealthEating from "../assets/images/Blog/Health-Eating.png" 
+import RestaurantBlog from "../assets/images/Blog/Restoran-Biography.png"
+import RestaurantEvent from "../assets/images/Blog/RestaurantEvent.png"
 
 import {
   Camera,
   CalendarDays,
   ChefHat,
-  Coffee,
   Leaf,
   Sparkles,
   Utensils,
@@ -52,28 +54,9 @@ export const articles: Article[] = [
     image: manchuri,
     icon: Utensils,
     content: [
-      "Manchuri — mazali va to‘yimli taomни yoqtiradiganlar uchun ajoyib tanlov.",
-
-      "Ushbu taom go‘shtning mayinligi va xushbo‘y ziravorlarning o‘ziga xos uyg‘unligi bilan ajralib turadi.To‘g‘ri tayyorlash jarayoni orqali go‘shtning tabiiy mazasi saqlanib, taomga yanada yoqimli ta’m beriladi.",
-
-      "restoranida Manchuri maxsus usulda tayyorlanib, mehmonlarga issiq va mazali holatda taqdim etiladi.",
-    ],
-  },
-  {
-    id: 3,
-    category: "Maslahatlar",
-    title: "Qahvaning 5 xil turi",
-    description:
-      "Har bir qahva turi o‘ziga xos ta’m va hidi bilan ajralib turadi. Qaysi biri sizniki?",
-    date: "12 May, 2026",
-    duration: "3 daqiqa",
-    image:
-      "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=1200",
-    icon: Coffee,
-    content: [
-      "Ertalabki qahva nafaqat uyg'onishga yordam beradi, balki kuningizni kayfiyat bilan boshlashga ham sabab bo'ladi. Lekin qaysi qahva turini tanlashni bilasizmi?",
-      "Espresso — kuchli va qisqa. U haqiqiy qahva shinavandalari uchun yaratilgan. Cappuccino esa sut va qahva muvozanatini yaxshi ko'radiganlar uchun ajoyib tanlov.",
-      "TANHO baristalari Italiyaning eng sara qahva donalaridan foydalanishadi. Har bir finjon qahva san'at asaridek tayyorlanadi.",
+      "Manchuri — mazali va to‘yimli taomni yoqtiradiganlar uchun ajoyib tanlov.",
+      "Ushbu taom go‘shtning mayinligi va xushbo‘y ziravorlarning o‘ziga xos uyg‘unligi bilan ajralib turadi. To‘g‘ri tayyorlash jarayoni orqali go‘shtning tabiiy mazasi saqlanib, taomga yanada yoqimli ta’m beriladi.",
+      "TANHO restoranida Manchuri maxsus usulda tayyorlanib, mehmonlarga issiq va mazali holatda taqdim etiladi.",
     ],
   },
   {
@@ -84,12 +67,12 @@ export const articles: Article[] = [
       "Restoranda ham sog‘lom va muvozanatli ovqatlanish mumkin. Maslahatlarimiz bilan tanishing.",
     date: "10 May, 2026",
     duration: "4 daqiqa",
-    image:
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=1200",
+    image: HealthEating,
+      
     icon: Leaf,
     content: [
-      "Sog'lom ovqatlanish faqat uyda emas, restoranda ham imkoni bor narsa. Bizning maxsus parhez menyumiz bunga yaqqol misoldir.",
-      "Yangi uzilgan sabzavotlardan tayyorlangan salatlar va bug'da pishirilgan baliq taomlari eng ko'p xarid qilinadigan sog'lom taomlarimizdan hisoblanadi.",
+      "Sog'lom ovqatlanish faqat uyda emas, restoranda ham imkoni bor narsa. Bizning sarxil sabzavotlardan tayyorlangan yangi salatlarimiz bunga yaqqol misoldir.",
+      "Tabiiy masalliqlar va zaytun moyi solingan Grecheskiy salat hamda yangi pomidor va bodringlardan tayyorlangan Sveji salatimiz eng ko'p xarid qilinadigan va organizm uchun foydali taomlarimizdan hisoblanadi.",
     ],
   },
   {
@@ -100,8 +83,7 @@ export const articles: Article[] = [
       "Tug‘ilgan kun, oilaviy kechki ovqat yoki korporativ tadbirlar uchun TANHO — eng yaxshi tanlov.",
     date: "8 May, 2026",
     duration: "4 daqiqa",
-    image:
-      "https://images.unsplash.com/photo-1533777324565-a040eb52facd?auto=format&fit=crop&q=80&w=1200",
+    image: RestaurantEvent,
     icon: CalendarDays,
     content: [
       "Maxsus kunlaringizni biz bilan o'tkazing. Biz tadbirlaringizni yuqori darajada tashkillashtirishga yordam beramiz.",
@@ -116,8 +98,7 @@ export const articles: Article[] = [
       "Menyumizga qo‘shilgan yangi va mazali taomlar bilan tanishing.",
     date: "5 May, 2026",
     duration: "3 daqiqa",
-    image:
-      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1200",
+    image: RestaurantEvent,
     icon: Sparkles,
     content: [
       "Menyumizga bahoriy kayfiyat bag'ishlovchi yangi taomlar qo'shildi. Ularni birinchilardan bo'lib tatib ko'ring.",
@@ -133,7 +114,7 @@ export const articles: Article[] = [
     date: "3 May, 2026",
     duration: "2 daqiqa",
     image:
-      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&q=80&w=1200",
+      RestaurantBlog,
     icon: Camera,
     content: [
       "Biz uchun har bir kun yangi sarguzasht. Jamoamiz a'zolari va sevimli mehmonlarimiz bilan o'tgan eng yaxshi xotiralarni bo'lishamiz.",

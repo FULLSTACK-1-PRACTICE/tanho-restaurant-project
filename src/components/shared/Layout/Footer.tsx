@@ -7,7 +7,7 @@ import {
   Heart,
   ChevronDown,
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 import footerImage from '../../../assets/images/Layout/Footer/image.png'
 import Container from '../../../components/ui/container/Container'
@@ -66,7 +66,15 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   )
 }
 
-function LinkItem({ to, children }: { to: string; children: React.ReactNode }) {
+function LinkItem({
+  to,
+  children,
+  onClick,
+}: {
+  to: string
+  children: React.ReactNode
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void
+}) {
   return (
     <li className="group flex items-center gap-3">
       <span
@@ -75,6 +83,7 @@ function LinkItem({ to, children }: { to: string; children: React.ReactNode }) {
       />
       <Link
         to={to}
+        onClick={onClick}
         className="relative text-[15px] text-neutral-200 transition-all duration-300 hover:translate-x-1 hover:text-[#F5B942]"
       >
         {children}
@@ -136,9 +145,40 @@ function BadgeGlyph({ className = '' }: { className?: string }) {
 
 export default function TanhoFooter() {
   const [openSection, setOpenSection] = useState<string | null>(null)
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const toggleSection = (section: string) => {
     setOpenSection(openSection === section ? null : section)
+  }
+
+  // Hash link bosilganda silliq scroll qilish funksiyasi
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    path: string
+  ) => {
+    if (path.includes('#')) {
+      e.preventDefault()
+      const [targetPath, hash] = path.split('#')
+
+      const scrollToElement = () => {
+        const el = document.getElementById(hash)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+
+      // Agar allaqachon Bosh sahifada bo'lsak, shunchaki scroll qilamiz
+      if (location.pathname === targetPath || (targetPath === '/' && location.pathname === '/')) {
+        scrollToElement()
+      } else {
+        // Agar boshqa sahifada bo'lsak, avval Bosh sahifaga o'tib keyin scroll qilamiz
+        navigate(targetPath || '/')
+        setTimeout(() => {
+          scrollToElement()
+        }, 100)
+      }
+    }
   }
 
   const menuLinks = [
@@ -161,10 +201,9 @@ export default function TanhoFooter() {
 
   const usefulLinks = [
     { label: 'Stol band qilish', path: '/reservation' },
-    { label: 'Maxsus takliflar', path: '/news' },
-    { label: 'Korporativ xizmat', path: '/about' },
-    { label: 'Yetkazib berish', path: '/contact' },
-    { label: 'Qoidalar', path: '/about' },
+    { label: 'Maxsus takliflar', path: '/contact' },
+    { label: 'Korporativ xizmat', path: '/contact' },
+    { label: 'Fikr Mulohaza', path: '/#user-comments' },
     { label: 'Maxfiylik siyosati', path: '/about' },
   ]
 
@@ -181,7 +220,7 @@ export default function TanhoFooter() {
         className="pointer-events-none absolute -right-2 top-20 hidden h-[320px] w-auto object-contain opacity-90 transition-transform duration-[2000ms] hover:scale-105 md:block"
       />
       <div className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[500px] -translate-x-1/2 rounded-full bg-[#F5B942]/[0.03] blur-[100px]" />
-      
+
       <Container className="pt-16">
         <div className="hidden lg:grid grid-cols-[1.25fr_1fr_1fr_1fr_1.15fr] gap-x-8">
           <div className={`${colDivider} animate-[footerUp_700ms_ease-out_both]`}>
@@ -210,14 +249,18 @@ export default function TanhoFooter() {
               ))}
             </div>
           </div>
+
           <div className={`${colDivider} animate-[footerUp_700ms_100ms_ease-out_both]`}>
             <SectionHeading>MENYU</SectionHeading>
             <ul className="space-y-4">
-              {menuLinks.map(item => (
-                <LinkItem key={item.label} to={item.path}>{item.label}</LinkItem>
+              {menuLinks.map((item) => (
+                <LinkItem key={item.label} to={item.path}>
+                  {item.label}
+                </LinkItem>
               ))}
             </ul>
           </div>
+
           <div className={`${colDivider} animate-[footerUp_700ms_200ms_ease-out_both]`}>
             <SectionHeading>
               MENYU
@@ -225,11 +268,14 @@ export default function TanhoFooter() {
               KATEGORIYALARI
             </SectionHeading>
             <ul className="space-y-4">
-              {categoryLinks.map(item => (
-                <LinkItem key={item.label} to={item.path}>{item.label}</LinkItem>
+              {categoryLinks.map((item) => (
+                <LinkItem key={item.label} to={item.path}>
+                  {item.label}
+                </LinkItem>
               ))}
             </ul>
           </div>
+
           <div className={`${colDivider} animate-[footerUp_700ms_300ms_ease-out_both]`}>
             <SectionHeading>
               FOYDALI
@@ -237,11 +283,18 @@ export default function TanhoFooter() {
               HAVOLALAR
             </SectionHeading>
             <ul className="space-y-4">
-              {usefulLinks.map(item => (
-                <LinkItem key={item.label} to={item.path}>{item.label}</LinkItem>
+              {usefulLinks.map((item) => (
+                <LinkItem
+                  key={item.label}
+                  to={item.path}
+                  onClick={(e) => handleNavClick(e, item.path)}
+                >
+                  {item.label}
+                </LinkItem>
               ))}
             </ul>
           </div>
+
           <div className="animate-[footerUp_700ms_400ms_ease-out_both]">
             <SectionHeading>ISH VAQTI</SectionHeading>
             <div
@@ -305,6 +358,7 @@ export default function TanhoFooter() {
           </div>
         </div>
 
+        {/* Mobile menu */}
         <div className="block lg:hidden space-y-6">
           <div className="rounded-2xl border p-6 text-center flex flex-col items-center" style={{ borderColor: line, backgroundColor: '#0d0d0f' }}>
             <h2 className="font-serif text-[32px] leading-none tracking-[0.03em]" style={{ color: gold }}>
@@ -332,6 +386,7 @@ export default function TanhoFooter() {
               ))}
             </div>
           </div>
+
           <div className="rounded-2xl border overflow-hidden" style={{ borderColor: line, backgroundColor: '#0d0d0f' }}>
             <button
               onClick={() => toggleSection('menu')}
@@ -352,6 +407,7 @@ export default function TanhoFooter() {
               </ul>
             )}
           </div>
+
           <div className="rounded-2xl border overflow-hidden" style={{ borderColor: line, backgroundColor: '#0d0d0f' }}>
             <button
               onClick={() => toggleSection('categories')}
@@ -372,6 +428,7 @@ export default function TanhoFooter() {
               </ul>
             )}
           </div>
+
           <div className="rounded-2xl border overflow-hidden" style={{ borderColor: line, backgroundColor: '#0d0d0f' }}>
             <button
               onClick={() => toggleSection('useful')}
@@ -386,12 +443,19 @@ export default function TanhoFooter() {
                 {usefulLinks.map(item => (
                   <li key={item.label} className="text-[14px] text-neutral-300 flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: gold }} />
-                    <Link to={item.path} className="hover:text-[#F5B942] transition-colors">{item.label}</Link>
+                    <Link 
+                      to={item.path} 
+                      onClick={(e) => handleNavClick(e, item.path)} 
+                      className="hover:text-[#F5B942] transition-colors"
+                    >
+                      {item.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
             )}
           </div>
+
           <div className="rounded-2xl border overflow-hidden" style={{ borderColor: line, backgroundColor: '#0d0d0f' }}>
             <button
               onClick={() => toggleSection('contact')}

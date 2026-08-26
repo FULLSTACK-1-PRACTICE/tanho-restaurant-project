@@ -51,7 +51,10 @@ function ReviewsSection() {
   };
 
   return (
-    <section className="py-12 bg-[#070809] relative overflow-hidden border-t border-white/5">
+    <section 
+      id="user-comments" 
+      className="py-12 bg-[#070809] relative overflow-hidden border-t border-white/5"
+    >
       <Container>
         <div className="flex items-center justify-between mb-7">
           <h2 className="font-serif text-[25px] text-[#f1eee7]">

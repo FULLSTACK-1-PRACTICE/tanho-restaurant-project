@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { menuItems, type MenuItem } from "../../../data/menuData";
 import Initial from "../../../assets/images/Menu/Additional-Images/Initial.png";
 import AuthModal from "../../../features/auth/components/AuthModal";
+import MenuBackground from "../../../assets/images/Menu/Additional-Images/Menu-Background.png";
 
 import {
   Cake,
@@ -73,13 +74,9 @@ function CategoryTabs({
 const MenuPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
 
-  const categoryFromState = (location.state as { category?: string })?.category;
-  
-  const [activeCategory, setActiveCategory] = useState<string>(
-    categoryFromState || "Barchasi"
-  );
-
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isOpenAuthModal, setIsOpenAuthModal] = useState<boolean>(false);
   const [user] = useState<unknown>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -87,6 +84,20 @@ const MenuPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const categoryQuery = searchParams.get("category");
+  const categoryFromState = (location.state as { category?: string })?.category;
+
+  const matchedQueryCategory = categoryQuery
+    ? categories.find((c) => c.name.toLowerCase() === categoryQuery.toLowerCase())?.name
+    : null;
+
+  const activeCategory =
+    selectedCategory ?? matchedQueryCategory ?? categoryFromState ?? "Barchasi";
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
 
   const [items] = useState<MenuItem[]>(menuItems);
   const loading = false;
@@ -118,7 +129,7 @@ const MenuPage = () => {
     <div className="min-h-screen bg-[#0b0e10] text-white overflow-x-hidden">
       <section className="relative min-h-[450px] sm:min-h-[500px] overflow-hidden flex items-center">
         <img
-          src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1800&q=90"
+          src={MenuBackground}
           alt="Tanho restaurant"
           className="absolute inset-0 h-full w-full object-cover"
         />
@@ -147,7 +158,7 @@ const MenuPage = () => {
       <section className="relative z-10 mx-auto max-w-[1240px] px-4 sm:px-6 -mt-6 sm:-mt-8">
         <CategoryTabs
           activeCategory={activeCategory}
-          onChange={setActiveCategory}
+          onChange={handleCategoryChange}
         />
       </section>
 

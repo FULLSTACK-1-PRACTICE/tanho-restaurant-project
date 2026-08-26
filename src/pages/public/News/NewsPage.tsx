@@ -3,11 +3,10 @@ import yangiliklar from "../../../assets/images/Layout/Header/yangiliklar.png";
 import mevaliAssorti from "../../../assets/images/Menu/Cards/Mevali-Assorti.png";
 import initialImg from "../../../assets/images/Menu/Additional-Images/Initial.png";
 import Container from "../../../components/ui/container/Container";
+import NewSalad from "../../../assets/images/Menu/Additional-Images/three-salad.png";
 import {
   Search,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   ArrowUpRight,
   Send,
   Sparkles,
@@ -52,8 +51,8 @@ const BADGE_STYLES: Record<NewsItem["category"], string> = {
 const NEWS: NewsItem[] = [
   {
     id: 2,
-    category: "tadbir",
-    badge: "TADBIR",
+    category: "yangilik",
+    badge: "YANGILIK",
     date: "10.08.2026",
     title: "Mevali assorti qo'shildi",
     description:
@@ -68,7 +67,7 @@ const NEWS: NewsItem[] = [
     title: "Menyuyimizga yangi salatlar qo'shildi",
     description:
       "Mijozlarimiz talabiga binoan restoranimiz menyusi yangi va mazali salatlar bilan boyitildi. Har bir salat o'ziga xosiga ta'm va sifatga ega.",
-    image: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=900&q=80",
+    image: NewSalad,
   },
   {
     id: 4,
@@ -80,22 +79,10 @@ const NEWS: NewsItem[] = [
       "Sizga yanada qulaylik yaratish maqsadida restoranimiz yonidan qo'shimcha shinam zalimiz ochildi. Barcha qulayliklar va zamonaviy interyer sizni kutmoqda.",
     image: initialImg,
   },
-  {
-    id: 6,
-    category: "tadbir",
-    badge: "TADBIR",
-    date: "01.07.2026",
-    title: "Bolajonlar uchun shirinliklar master-klassi",
-    description:
-      "Dam olish kunida farzandlaringiz uchun unutilmas bayram tuhfa eting! Restoranimizda kichkintoylar uchun shirinliklar tayyorlash va ularni bezatish bo'yicha qiziqarli master-klass bo'lib o'tadi.",
-    image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=80",
-  },
 ];
 
 const SORT_OPTIONS = ["Eng yangi", "Eng eski", "Nomi bo'yicha"] as const;
 type SortOption = (typeof SORT_OPTIONS)[number];
-
-const PAGE_SIZE = 6;
 
 interface NewsModalProps {
   item: NewsItem;
@@ -360,7 +347,6 @@ const NewsPage = () => {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortOption>("Eng yangi");
   const [sortOpen, setSortOpen] = useState(false);
-  const [page, setPage] = useState(1);
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
 
   const [email, setEmail] = useState("");
@@ -392,39 +378,29 @@ const NewsPage = () => {
     return list;
   }, [activeCategory, query, sort]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const paginated = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
-
   const handleCategoryChange = (key: CategoryKey) => {
     setActiveCategory(key);
-    setPage(1);
   };
 
   const handleQueryChange = (value: string) => {
     setQuery(value);
-    setPage(1);
   };
 
   const handleSortChange = (opt: SortOption) => {
     setSort(opt);
     setSortOpen(false);
-    setPage(1);
   };
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     if (!email.trim()) {
       setEmailError("Iltimos, elektron pochtangizni kiriting");
       return;
     }
-    
+
     if (!emailRegex.test(email.trim())) {
       setEmailError("Iltimos, yaroqli email manzilini kiriting (masalan: user@gmail.com)");
       return;
@@ -531,7 +507,7 @@ const NewsPage = () => {
 
       <section className="py-8 sm:py-10">
         <Container>
-          {paginated.length === 0 ? (
+          {filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-white/10 bg-[#0b0d10] py-24 text-center">
               <p className="text-[15px] text-white/60">
                 Hech qanday yangilik topilmadi.
@@ -542,7 +518,7 @@ const NewsPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-              {paginated.map((item) => {
+              {filtered.map((item) => {
                 const isMevali = item.id === 2;
 
                 return (
@@ -605,43 +581,6 @@ const NewsPage = () => {
                   </article>
                 );
               })}
-            </div>
-          )}
-
-          {totalPages > 1 && (
-            <div className="mt-10 flex items-center justify-center gap-2">
-              <button
-                type="button"
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white/50 transition-colors hover:border-[#dcae4d]/40 hover:text-[#dcae4d] disabled:cursor-not-allowed disabled:opacity-30 outline-none"
-              >
-                <ChevronLeft size={16} strokeWidth={1.8} />
-              </button>
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-                <button
-                  key={n}
-                  type="button"
-                  onClick={() => setPage(n)}
-                  className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-md text-[13px] font-medium transition-colors outline-none ${
-                    n === currentPage
-                      ? "bg-[#dcae4d] text-black"
-                      : "border border-white/10 text-white/60 hover:border-[#dcae4d]/40 hover:text-[#dcae4d]"
-                  }`}
-                >
-                  {n}
-                </button>
-              ))}
-
-              <button
-                type="button"
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white/50 transition-colors hover:border-[#dcae4d]/40 hover:text-[#dcae4d] disabled:cursor-not-allowed disabled:opacity-30 outline-none"
-              >
-                <ChevronRight size={16} strokeWidth={1.8} />
-              </button>
             </div>
           )}
         </Container>

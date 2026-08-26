@@ -96,10 +96,10 @@ function LocationSection() {
               <p className="mt-5 text-sm text-[#c7c7c7]">
                 Yoki qo‘ng‘iroq qiling:
                 <a
-                  href="tel:+998911234567"
+                  href="tel:+998987760093"
                   className="ml-2 font-medium text-white transition hover:text-[#dcae45]"
                 >
-                  +998 91 123 45 67
+                  +998 98 776 00 93
                 </a>
               </p>
             </div>

@@ -21,6 +21,7 @@ import Container from '../../../components/ui/container/Container';
 import Button from '../../../components/ui/Button';
 import Cabina from "../../../assets/images/About/Cabina.png";
 
+
 const ReservationPage: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -35,7 +36,7 @@ const ReservationPage: React.FC = () => {
   const [openDropdown, setOpenDropdown] = useState<'guests' | 'tableType' | null>(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false); // Modal uchun state
+  const [showConfirmModal, setShowConfirmModal] = useState(false); 
 
   const guestOptions = ['1 kishi', '2 kishi', '3 kishi', '4 kishi', '5+ kishi'];
   const tableTypeOptions = ['Istalgan stol turi', 'Kabina', 'Zal', 'Devor Oldidan'];
@@ -464,7 +465,7 @@ const ReservationPage: React.FC = () => {
               </div>
               <div>
                 <span className="block text-xs font-bold text-white group-hover:text-[#e5c567] transition">
-                  +998 90 123 45 67
+                  +998 98 222 00 93
                 </span>
                 <span className="text-[10px] text-neutral-400">
                   Har kuni 10:00 – 23:00
@@ -472,16 +473,16 @@ const ReservationPage: React.FC = () => {
               </div>
             </a>
 
-            <a href="https://wa.me/998901234567" target="_blank" rel="noreferrer" className="flex items-center gap-3 group">
+            <a href="https://www.instagram.com/tanho_restorani?igsi=MWUzbDV4OG5jb3M0bA==" target="_blank" rel="noreferrer" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-full bg-[#e5c567]/10 border border-[#e5c567]/20 flex items-center justify-center shrink-0 group-hover:bg-[#e5c567]/20 transition">
                 <MessageCircle className="w-4 h-4 text-[#e5c567]" />
               </div>
               <div>
                 <span className="block text-xs font-bold text-white group-hover:text-[#e5c567] transition">
-                  WhatsApp
+                  Instagram
                 </span>
                 <span className="text-[10px] text-neutral-400">
-                  Tezkor javob beramiz
+                  Bizni Kuzatib bo'ring
                 </span>
               </div>
             </a>

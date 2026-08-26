@@ -1,8 +1,14 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Outlet, useNavigate, useLocation } from "react-router-dom"
 import { SideBar } from "../../components/common/SideBar"
 import { DashboardNavbar } from "../../components/common/DashboardNavbar"
-import { Home, Calendar, Heart, MessageSquare, Globe } from "lucide-react"
+import {
+  Home,
+  Calendar,
+  Heart,
+  MessageSquare,
+  Globe,
+} from "lucide-react"
 
 interface NavItem {
   label: string
@@ -16,40 +22,65 @@ export default function UserLayout() {
 
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
-  
-  // LocalStorage'dan ismni olish (agar bo'sh bo'lsa "USER")
+
   const [userName, setUserName] = useState(() => {
     return localStorage.getItem("user_name") || "USER"
   })
 
-  useEffect(() => {
-    localStorage.setItem("user_role", "user")
-    localStorage.setItem("is_logged_in", "true")
+  const [userAvatar, setUserAvatar] = useState(() => {
+    return localStorage.getItem("user_avatar") || ""
+  })
 
-    // Event kelganda ismni darhol yangilash
+  useEffect(() => {
     const updateUser = () => {
-      const savedName = localStorage.getItem("user_name")
-      if (savedName) {
-        setUserName(savedName)
-      }
+      setUserName(localStorage.getItem("user_name") || "USER")
+      setUserAvatar(localStorage.getItem("user_avatar") || "")
     }
 
+    updateUser()
+
     window.addEventListener("userUpdated", updateUser)
+
     return () => {
       window.removeEventListener("userUpdated", updateUser)
     }
   }, [])
 
   const userNavItems: NavItem[] = [
-    { label: "Bosh sahifa", path: "/user", icon: Home },
-    { label: "Stol band qilish", path: "/user/stollar", icon: Calendar },
-    { label: "Sevimlilar", path: "/user/sevimlilar", icon: Heart },
-    { label: "Taklif va shikoyatlar", path: "/user/takliflar", icon: MessageSquare },
-    { label: "Asosiy Sayt (Landing)", path: "/", icon: Globe },
+    {
+      label: "Bosh sahifa",
+      path: "/user",
+      icon: Home,
+    },
+    {
+      label: "Stol band qilish",
+      path: "/user/stollar",
+      icon: Calendar,
+    },
+    {
+      label: "Sevimlilar",
+      path: "/user/sevimlilar",
+      icon: Heart,
+    },
+    {
+      label: "Taklif va shikoyatlar",
+      path: "/user/takliflar",
+      icon: MessageSquare,
+    },
+    {
+      label: "Asosiy Sayt (Landing)",
+      path: "/",
+      icon: Globe,
+    },
   ]
 
   const handleLogout = () => {
-    localStorage.clear()
+    localStorage.removeItem("user")
+    localStorage.removeItem("is_logged_in")
+    localStorage.removeItem("token")
+    localStorage.removeItem("role")
+    localStorage.removeItem("user_role")
+
     navigate("/")
   }
 
@@ -64,13 +95,22 @@ export default function UserLayout() {
   const handleNavigate = (page: string) => {
     if (page.startsWith("/")) {
       navigate(page)
+      return
+    }
+
+    navigate(`/user/${page}`)
+  }
+
+  const handleToggleSidebar = () => {
+    if (window.innerWidth < 1024) {
+      setMobileSidebarOpen((prev) => !prev)
     } else {
-      navigate(`/user/${page}`)
+      setSidebarOpen((prev) => !prev)
     }
   }
 
   return (
-    <div className="flex h-screen bg-zinc-950 overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-zinc-950">
       <SideBar
         items={userNavItems}
         sidebarOpen={sidebarOpen}
@@ -78,20 +118,16 @@ export default function UserLayout() {
         setMobileSidebarOpen={setMobileSidebarOpen}
         activePath={location.pathname}
         onItemClick={(targetPath: string) => {
-          if (targetPath) navigate(targetPath)
+          if (targetPath) {
+            navigate(targetPath)
+          }
         }}
       />
-      
-      <div className="flex flex-col flex-1 h-full overflow-hidden">
+
+      <div className="flex h-full flex-1 flex-col overflow-hidden">
         <DashboardNavbar
           title="Foydalanuvchi paneli"
-          onToggleSidebar={() => {
-            if (window.innerWidth < 1024) {
-              setMobileSidebarOpen(!mobileSidebarOpen)
-            } else {
-              setSidebarOpen(!sidebarOpen)
-            }
-          }}
+          onToggleSidebar={handleToggleSidebar}
           onLogout={handleLogout}
           onProfileClick={handleProfileClick}
           onSettingsClick={handleSettingsClick}
@@ -99,10 +135,11 @@ export default function UserLayout() {
           user={{
             name: userName,
             role: "Foydalanuvchi",
+            avatar: userAvatar,
           }}
         />
 
-        <main className="flex-1 overflow-y-auto p-6 bg-zinc-950">
+        <main className="flex-1 overflow-y-auto bg-zinc-950 p-6">
           <Outlet />
         </main>
       </div>

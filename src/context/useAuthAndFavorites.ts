@@ -10,6 +10,12 @@ export interface User {
 
 export interface FavoriteItem {
   id: string | number
+  title?: string
+  name?: string
+  price?: string | number
+  image?: string
+  category?: string
+  description?: string
   [key: string]: unknown
 }
 
@@ -24,10 +30,29 @@ const toastStyle = {
   duration: 3000,
 }
 
+let globalFavorites: FavoriteItem[] = []
+const globalListeners: ((favs: FavoriteItem[]) => void)[] = []
+
 export const useAuthAndFavorites = () => {
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
-  const [favorites, setFavorites] = useState<FavoriteItem[]>([])
+  const [user, setUser] = useState<User | null>(() => {
+    const saved = localStorage.getItem('user')
+    return saved ? JSON.parse(saved) : null
+  })
+  
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    return localStorage.getItem('is_logged_in') === 'true'
+  })
+
+  const [favorites, setFavorites] = useState<FavoriteItem[]>(globalFavorites)
+
+  if (!globalListeners.includes(setFavorites)) {
+    globalListeners.push(setFavorites)
+  }
+
+  const updateFavorites = (newFavs: FavoriteItem[]) => {
+    globalFavorites = newFavs
+    globalListeners.forEach((listener) => listener(newFavs))
+  }
 
   const login = (userData: User) => {
     setUser(userData)
@@ -44,16 +69,16 @@ export const useAuthAndFavorites = () => {
   }
 
   const toggleFavorite = (item: FavoriteItem) => {
-    setFavorites((prev) => {
-      const exists = prev.some((fav) => fav.id === item.id)
-      if (exists) {
-        toast.error('Sevimlilardan olib tashlandi', toastStyle)
-        return prev.filter((fav) => fav.id !== item.id)
-      } else {
-        toast.success("Sevimlilarga qo'shildi", toastStyle)
-        return [...prev, item]
-      }
-    })
+    const exists = globalFavorites.some((fav) => fav.id === item.id)
+    if (exists) {
+      const filtered = globalFavorites.filter((fav) => fav.id !== item.id)
+      updateFavorites(filtered)
+      toast.error('Sevimlilardan olib tashlandi', toastStyle)
+    } else {
+      const added = [...globalFavorites, item]
+      updateFavorites(added)
+      toast.success("Sevimlilarga qo'shildi", toastStyle)
+    }
   }
 
   return {
@@ -61,7 +86,6 @@ export const useAuthAndFavorites = () => {
     isLoggedIn,
     setIsLoggedIn,
     favorites,
-    setFavorites,
     login,
     logout,
     toggleFavorite,

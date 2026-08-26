@@ -4,6 +4,7 @@ import { menuItems, type MenuItem } from "../../../data/menuData";
 import Initial from "../../../assets/images/Menu/Additional-Images/Initial.png";
 import AuthModal from "../../../features/auth/components/AuthModal";
 import MenuBackground from "../../../assets/images/Menu/Additional-Images/Menu-Background.png";
+import useAuthAndFavorites, { type FavoriteItem } from "../../../context/useAuthAndFavorites";
 
 import {
   Cake,
@@ -76,16 +77,7 @@ const MenuPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isOpenAuthModal, setIsOpenAuthModal] = useState<boolean>(false);
 
-  // User auth holatini localStorage'dan aniqlash
-  const [isLoggedIn] = useState<boolean>(() => {
-    return localStorage.getItem("is_logged_in") === "true";
-  });
-
-  // Sevimlilar ro'yxatini localStorage bilan bog'lash
-  const [favorites, setFavorites] = useState<string[]>(() => {
-    const saved = localStorage.getItem("user_favorites");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const { isLoggedIn, favorites, toggleFavorite } = useAuthAndFavorites();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -108,23 +100,26 @@ const MenuPage = () => {
   const [items] = useState<MenuItem[]>(menuItems);
   const loading = false;
 
-  const handleFavoriteClick = (e: React.MouseEvent, foodId: string | undefined) => {
+  const handleFavoriteClick = (e: React.MouseEvent, food: MenuItem) => {
     e.stopPropagation();
 
-    if (!foodId) return;
+    if (!food.id) return;
 
     if (!isLoggedIn) {
       setIsOpenAuthModal(true);
       return;
     }
 
-    setFavorites((prev) => {
-      const updated = prev.includes(foodId)
-        ? prev.filter((id) => id !== foodId)
-        : [...prev, foodId];
-      localStorage.setItem("user_favorites", JSON.stringify(updated));
-      return updated;
-    });
+    const item: FavoriteItem = {
+      id: food.id,
+      name: food.name,
+      price: food.price,
+      image: food.image,
+      category: food.category,
+      description: food.description,
+    };
+
+    toggleFavorite(item);
   };
 
   const visibleItems = items
@@ -195,7 +190,7 @@ const MenuPage = () => {
         ) : (
           <div className="grid grid-cols-2 gap-3 sm:gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {visibleItems.map((food) => {
-              const isFavorite = food.id ? favorites.includes(food.id) : false;
+              const isFavorite = favorites.some((fav) => fav.id === food.id);
               return (
                 <div
                   key={food.id}
@@ -222,14 +217,19 @@ const MenuPage = () => {
                       <button
                         type="button"
                         aria-label="Sevimlilarga qo'shish"
-                        onClick={(e) => handleFavoriteClick(e, food.id)}
-                        className={`absolute right-2.5 top-2.5 sm:right-3 sm:top-3 flex h-7 w-7 sm:h-8 sm:w-8 cursor-pointer items-center justify-center rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 outline-none focus:outline-none hover:scale-105 z-10 ${
+                        onClick={(e) => handleFavoriteClick(e, food)}
+                        className={`absolute right-2.5 top-2.5 sm:right-3 sm:top-3 flex h-9 w-9 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 outline-none focus:outline-none hover:scale-110 active:scale-95 z-10 ${
                           isFavorite
-                            ? "bg-[#d9a441] text-black"
-                            : "bg-black/50 text-[#e0ad49] hover:bg-[#d9a441] hover:text-black"
+                            ? "bg-[#d9a441] text-neutral-900 shadow-[0_0_15px_rgba(217,164,65,0.5)]"
+                            : "bg-black/50 text-[#d9a441] border border-white/10 hover:bg-black/70"
                         }`}
                       >
-                        <Heart size={14} fill={isFavorite ? "currentColor" : "none"} />
+                        <Heart
+                          size={18}
+                          className={`transition-transform duration-300 ${
+                            isFavorite ? "fill-neutral-900 scale-110" : "fill-transparent"
+                          }`}
+                        />
                       </button>
                     </div>
 

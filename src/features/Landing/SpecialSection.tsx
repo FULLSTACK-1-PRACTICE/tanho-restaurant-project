@@ -29,7 +29,6 @@ function SpecialSection() {
     }
   };
 
-  // Maqolani bosganda to'g'ri manzilga (/blog/:id) o'tishini ta'minlaymiz
   const handleArticleClick = (title: string, id: number) => {
     if (title.toLowerCase().includes("salat")) {
       navigate("/menu", { state: { category: "Salatlar" } });
@@ -73,7 +72,7 @@ function SpecialSection() {
 
   const articles = [
     {
-      id: 4, // Blogdagi ID larga moslashtirildi
+      id: 5,
       icon: Leaf,
       category: "Yangiliklar",
       date: "02.08.2026",

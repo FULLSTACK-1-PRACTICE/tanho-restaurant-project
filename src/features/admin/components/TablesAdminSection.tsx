@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Plus, Pencil, Trash2, X, Loader2, Table2, Receipt, CheckCircle2 } from "lucide-react";
 import { useCrud } from "../hooks/useCrud";
 
@@ -25,7 +25,7 @@ export interface Bill {
 }
 
 const calculateBillTotals = (items: BillItem[], waiterFeePercent: number) => {
-  const itemsTotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const itemsTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const waiterFee = (itemsTotal * waiterFeePercent) / 100;
   const grandTotal = itemsTotal + waiterFee;
   return { itemsTotal, waiterFee, grandTotal };
@@ -42,7 +42,7 @@ export function TablesAdminSection() {
     remove,
   } = useCrud<TableRow>("tables");
 
-  const [waiterFeePercent] = useState(10);
+  const waiterFeePercent = 10;
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -55,7 +55,7 @@ export function TablesAdminSection() {
   });
 
   const [saving, setSaving] = useState(false);
-  const [bills] = useState<Record<string, Bill>>({});
+  const bills = useMemo<Record<string, Bill>>(() => ({}), []);
 
   const openAdd = () => {
     setEditingId(null);
@@ -77,7 +77,6 @@ export function TablesAdminSection() {
 
   const handleSave = async () => {
     if (!form.number.toString().trim()) {
-      alert("Stol raqamini kiriting");
       return;
     }
 
@@ -98,31 +97,22 @@ export function TablesAdminSection() {
       }
 
       setModalOpen(false);
-    } catch (error) {
-      alert(
-        "Xatolik: " +
-          (error instanceof Error ? error.message : "Noma'lum xatolik")
-      );
+    } catch {
+      // Xatolikni jim bosish yoki UI feedback berish mumkin
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Stolni o'chirishni tasdiqlaysizmi?")) {
+    try {
       await remove(id);
+    } catch {
+      // Xatolikni boshqarish
     }
   };
 
   const handleCloseBill = async (table: TableRow) => {
-    if (
-      !confirm(
-        `${table.number}-stol: hisob yopilib, "to'landi" deb belgilansinmi?`
-      )
-    ) {
-      return;
-    }
-
     try {
       await update(table.id, {
         status: "Bo'sh",
@@ -130,11 +120,8 @@ export function TablesAdminSection() {
         reservedDate: "",
         reservedBy: "",
       } as Partial<TableRow>);
-    } catch (error) {
-      alert(
-        "Xatolik: " +
-          (error instanceof Error ? error.message : "Noma'lum xatolik")
-      );
+    } catch {
+      // Xatolikni boshqarish
     }
   };
 
@@ -148,7 +135,7 @@ export function TablesAdminSection() {
 
         <button
           onClick={openAdd}
-          className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-4 py-2.5 text-sm font-medium text-black hover:bg-[#edbd58]"
+          className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#FE9A00] px-4 py-2.5 text-sm font-medium text-black hover:bg-[#FE9A00]/80"
         >
           <Plus size={16} />
           Stol qo'shish
@@ -232,7 +219,7 @@ export function TablesAdminSection() {
                       <span>{totals.waiterFee.toLocaleString()} so'm</span>
                     </div>
 
-                    <div className="mt-1 flex justify-between border-t border-white/10 pt-1 font-semibold text-[#e5ad45]">
+                    <div className="mt-1 flex justify-between border-t border-white/10 pt-1 font-semibold text-[#FE9A00]">
                       <span>Jami</span>
                       <span>{totals.grandTotal.toLocaleString()} so'm</span>
                     </div>
@@ -257,7 +244,7 @@ export function TablesAdminSection() {
                   {!isFree && (
                     <button
                       onClick={() => handleCloseBill(table)}
-                      className="ml-auto flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#d9a441] px-3 py-2 text-xs font-medium text-black hover:bg-[#edbd58]"
+                      className="ml-auto flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#FE9A00] px-3 py-2 text-xs font-medium text-black hover:bg-[#FE9A00]/80"
                     >
                       <CheckCircle2 size={14} />
                       {bill ? "To'landi, shot yopildi" : "Bandlikni bekor qilish"}
@@ -299,7 +286,7 @@ export function TablesAdminSection() {
                       number: e.target.value,
                     }))
                   }
-                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#d9a441]/50"
+                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#FE9A00]/50"
                   placeholder="Masalan: 1, 2, VIP"
                 />
               </div>
@@ -317,7 +304,7 @@ export function TablesAdminSection() {
                       seats: Number(e.target.value),
                     }))
                   }
-                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#d9a441]/50"
+                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#FE9A00]/50"
                   min="1"
                 />
               </div>
@@ -334,7 +321,7 @@ export function TablesAdminSection() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-4 py-2 text-sm font-medium text-black hover:bg-[#edbd58] disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#FE9A00] px-4 py-2 text-sm font-medium text-black hover:bg-[#FE9A00]/80 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saving && <Loader2 size={14} className="animate-spin" />}
                 Saqlash

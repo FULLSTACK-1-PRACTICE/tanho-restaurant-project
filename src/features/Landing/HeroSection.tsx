@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import heroImg from "@/assets/images/Landing/Hero/Hero-Section-2.png";
+import heroResponsiveImg from "@/assets/images/Landing/Hero/Hero-Section-Responsive.png";
 import Container from "../../components/ui/container/Container";
 
 function HeroSection() {
@@ -17,11 +18,18 @@ function HeroSection() {
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#070809] text-[#f1eee7]">
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <img
-          src={heroImg}
-          alt="Tanho Restaurant"
-          className="h-full w-full object-cover object-center"
-        />
+        <picture className="block h-full w-full">
+          <source
+            media="(max-width: 639px)"
+            srcSet={heroResponsiveImg}
+          />
+
+          <img
+            src={heroImg}
+            alt="Tanho Restaurant"
+            className="relative -top-[140px] h-full w-full object-cover sm:static sm:top-0"
+          />
+        </picture>
 
         <div className="absolute inset-0 bg-gradient-to-r from-[#070809]/95 via-[#070809]/70 to-[#070809]/10" />
         <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-[#070809]/90 via-[#070809]/45 to-transparent" />
@@ -33,6 +41,7 @@ function HeroSection() {
           <div className="max-w-[580px]">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#dcae4d]/30 bg-[#151310]/70 px-3.5 py-1.5 backdrop-blur-md sm:mb-6">
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#dcae4d]" />
+
               <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#e3b859] sm:text-[11px] sm:tracking-[0.22em]">
                 Zamonaviy Muhit & Unutilmas Ta’m
               </p>
@@ -59,6 +68,7 @@ function HeroSection() {
                 onClick={() => navigate("/menu")}
               >
                 <span>MENYUNI KO‘RISH</span>
+
                 <ArrowRight
                   size={15}
                   strokeWidth={2.2}
@@ -76,6 +86,7 @@ function HeroSection() {
                   strokeWidth={1.8}
                   className="text-[#dcae4d]"
                 />
+
                 <span>STOL BAND QILISH</span>
               </button>
             </div>
@@ -83,7 +94,10 @@ function HeroSection() {
             <div className="mt-10 flex items-center gap-4 border-t border-white/10 pt-6">
               <div className="flex -space-x-1.5">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="flex h-7 w-7 items-center justify-center rounded-full border border-[#070809] bg-[#dcae4d]/20 text-[10px] font-bold text-[#dcae4d]">
+                  <div
+                    key={i}
+                    className="flex h-7 w-7 items-center justify-center rounded-full border border-[#070809] bg-[#dcae4d]/20 text-[10px] font-bold text-[#dcae4d]"
+                  >
                     ★
                   </div>
                 ))}
@@ -106,10 +120,12 @@ function HeroSection() {
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d]">
                   <ChefHat size={22} strokeWidth={1.5} />
                 </div>
+
                 <div>
                   <h4 className="text-[13px] font-medium text-[#f1eee7]">
                     Mualliflik menyusi
                   </h4>
+
                   <p className="mt-1 text-[11px] font-light text-[#888a85]">
                     Har bir ta’mda takrorlanmas san’at
                   </p>
@@ -122,10 +138,12 @@ function HeroSection() {
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d]">
                   <Utensils size={21} strokeWidth={1.5} />
                 </div>
+
                 <div>
                   <h4 className="text-[13px] font-medium text-[#f1eee7]">
                     Sertifikatlangan sifat
                   </h4>
+
                   <p className="mt-1 text-[11px] font-light text-[#888a85]">
                     Faqat saralangan va yangi ingredientlar
                   </p>
@@ -138,10 +156,12 @@ function HeroSection() {
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d]">
                   <Clock size={21} strokeWidth={1.5} />
                 </div>
+
                 <div>
                   <h4 className="text-[13px] font-medium text-[#f1eee7]">
                     Ish vaqti
                   </h4>
+
                   <p className="mt-1 text-[11px] font-light text-[#888a85]">
                     Har kuni: 11:00 — 23:00
                   </p>
@@ -154,10 +174,12 @@ function HeroSection() {
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#dcae4d]/30 bg-[#dcae4d]/5 text-[#dcae4d]">
                   <MapPin size={21} strokeWidth={1.5} />
                 </div>
+
                 <div>
                   <h4 className="text-[13px] font-medium text-[#f1eee7]">
                     Qulay joylashuv
                   </h4>
+
                   <p className="mt-1 text-[11px] font-light text-[#888a85]">
                     Shahar markazida, bepul avtoturargoh
                   </p>

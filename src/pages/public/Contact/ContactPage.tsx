@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   MapPin,
   Phone,
-  Mail,
+  UtensilsCrossed,
   Clock,
   CalendarDays,
   Send,
@@ -15,6 +16,8 @@ import Button from '../../../components/ui/Button';
 import Container from '../../../components/ui/container/Container';
 
 function ContactPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -144,7 +147,7 @@ function ContactPage() {
                 <div>
                   <p className="text-[13px] text-[#dcae4d]">Manzil</p>
                   <p className="mt-1 text-[13px] leading-5 text-neutral-300">
-                    Qarshi shahri<br />TANHO Restaurant
+                    Qarshi sh., Paxtazor MFY<br />(Aloqa Bank ro’parasida)
                   </p>
                 </div>
               </div>
@@ -156,18 +159,18 @@ function ContactPage() {
                 <div>
                   <p className="text-[13px] text-[#dcae4d]">Telefon</p>
                   <p className="mt-1 text-[13px] leading-5 text-neutral-300">
-                    +998 90 123 45 67<br />+998 91 987 65 43
+                    +998 98 776 00 93<br />+998 98 222 00 93
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-5">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[#725522]">
-                  <Mail size={25} strokeWidth={1.5} className="text-[#dcae4d]" />
+                  <UtensilsCrossed size={25} strokeWidth={1.5} className="text-[#dcae4d]" />
                 </div>
                 <div>
-                  <p className="text-[13px] text-[#dcae4d]">Email</p>
-                  <p className="mt-1 text-[13px] text-neutral-300">info@tanho.uz</p>
+                  <p className="text-[13px] text-[#dcae4d]">Xizmat turi</p>
+                  <p className="mt-1 text-[13px] text-neutral-300">Ovqatlanish va olib ketish</p>
                 </div>
               </div>
 
@@ -178,14 +181,17 @@ function ContactPage() {
                 <div>
                   <p className="text-[13px] text-[#dcae4d]">Ish vaqti</p>
                   <p className="mt-1 text-[13px] leading-5 text-neutral-300">
-                    Har kuni<br />10:00 – 24:00
+                    Har kuni<br />09:30 – 23:00
                   </p>
                 </div>
               </div>
             </div>
 
             <div className="mt-7 w-full">
-              <Button className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#DCAE42] px-6 text-[13px] font-medium text-black transition-all duration-200 hover:bg-[#c99b3d] active:scale-[0.98]">
+              <Button
+                onClick={() => navigate('/reservation')}
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#DCAE42] px-6 text-[13px] font-medium text-black transition-all duration-200 hover:bg-[#c99b3d] active:scale-[0.98]"
+              >
                 <CalendarDays size={17} />
                 <span>STOL BAND QILISH</span>
               </Button>
@@ -322,8 +328,8 @@ function ContactPage() {
           <div className="flex items-center gap-5 border-b border-[#292929] px-7 py-6 lg:border-b-0 lg:border-r">
             <Headphones size={45} strokeWidth={1.3} className="shrink-0 text-[#dcae4d]" />
             <div>
-              <h3 className="text-[13px] font-semibold text-[#dcae4d]">TEZ YORDAM</h3>
-              <p className="mt-2 text-[12px] leading-5 text-neutral-400">Savollaringizga tez<br />javob beramiz</p>
+              <h3 className="text-[13px] font-semibold text-[#dcae4d]">QO‘LLAB-QUVVATLASH</h3>
+              <p className="mt-2 text-[12px] leading-5 text-neutral-400">Savollaringizga tezkor<br />javob beramiz</p>
             </div>
           </div>
 

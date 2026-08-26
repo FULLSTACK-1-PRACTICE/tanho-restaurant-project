@@ -8,7 +8,6 @@ import {
   BarChart3,
 } from "lucide-react";
 
-// SectionKey tipingizni mos ravishda import qiling
 type SectionKey = "menyu" | "buyurtmalar" | "rezervatsiyalar" | "hisobotlar" | "stollar" | "profil";
 
 interface DashboardSectionProps {
@@ -83,33 +82,33 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <button
             onClick={() => goTo("menyu")}
-            className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-white/10 py-4 text-xs hover:border-[#d9a441]/50 hover:bg-[#191e22]"
+            className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-white/10 py-4 text-xs hover:border-[#FE9A00]/50 hover:bg-[#191e22]"
           >
-            <Plus className="text-[#d9a441]" size={22} />
+            <Plus className="text-[#FE9A00]" size={22} />
             Taom qo'shish
           </button>
 
           <button
             onClick={() => goTo("buyurtmalar")}
-            className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-white/10 py-4 text-xs hover:border-[#d9a441]/50 hover:bg-[#191e22]"
+            className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-white/10 py-4 text-xs hover:border-[#FE9A00]/50 hover:bg-[#191e22]"
           >
-            <PackageSearch className="text-green-400" size={22} />
+            <PackageSearch className="text-[#FE9A00]" size={22} />
             Buyurtmalar
           </button>
 
           <button
             onClick={() => goTo("rezervatsiyalar")}
-            className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-white/10 py-4 text-xs hover:border-[#d9a441]/50 hover:bg-[#191e22]"
+            className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-white/10 py-4 text-xs hover:border-[#FE9A00]/50 hover:bg-[#191e22]"
           >
-            <CalendarCheck className="text-blue-400" size={22} />
+            <CalendarCheck className="text-[#FE9A00]" size={22} />
             Rezervatsiya
           </button>
 
           <button
             onClick={() => goTo("hisobotlar")}
-            className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-white/10 py-4 text-xs hover:border-[#d9a441]/50 hover:bg-[#191e22]"
+            className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-white/10 py-4 text-xs hover:border-[#FE9A00]/50 hover:bg-[#191e22]"
           >
-            <BarChart3 className="text-red-400" size={22} />
+            <BarChart3 className="text-[#FE9A00]" size={22} />
             Hisobotlar
           </button>
         </div>

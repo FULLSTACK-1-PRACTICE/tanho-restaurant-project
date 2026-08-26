@@ -67,19 +67,13 @@ export function MediaCrudSection({
         ...state,
         image: base64String,
       }));
-    } catch (error) {
-      alert(
-        "Rasmni yuklashda xatolik: " +
-          (error instanceof Error ? error.message : "Noma'lum xatolik")
-      );
+    } catch {
+      setSaving(false);
     }
   };
 
   const handleSave = async () => {
-    if (!form.title.trim()) {
-      alert("Sarlavhani kiriting");
-      return;
-    }
+    if (!form.title.trim()) return;
 
     setSaving(true);
 
@@ -106,7 +100,7 @@ export function MediaCrudSection({
 
         <button
           onClick={openAdd}
-          className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-4 py-2.5 text-sm font-medium text-black hover:bg-[#edbd58]"
+          className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#FE9A00] px-4 py-2.5 text-sm font-medium text-black hover:bg-[#FE9A00]/80"
         >
           <Plus size={16} />
           {addLabel}
@@ -153,9 +147,7 @@ export function MediaCrudSection({
                   </button>
 
                   <button
-                    onClick={() =>
-                      confirm("O'chirishni tasdiqlaysizmi?") && remove(item.id)
-                    }
+                    onClick={() => remove(item.id)}
                     className="cursor-pointer rounded-lg p-1.5 text-red-400 hover:bg-red-500/10"
                   >
                     <Trash2 size={15} />
@@ -218,7 +210,7 @@ export function MediaCrudSection({
                       title: e.target.value,
                     }))
                   }
-                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#d9a441]/50"
+                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#FE9A00]/50"
                 />
               </div>
 
@@ -236,7 +228,7 @@ export function MediaCrudSection({
                     }))
                   }
                   rows={4}
-                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#d9a441]/50"
+                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#FE9A00]/50"
                 />
               </div>
             </div>
@@ -252,7 +244,7 @@ export function MediaCrudSection({
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#d9a441] px-4 py-2 text-sm font-medium text-black hover:bg-[#edbd58] disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#FE9A00] px-4 py-2 text-sm font-medium text-black hover:bg-[#FE9A00]/80 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saving && <Loader2 size={14} className="animate-spin" />}
                 Saqlash

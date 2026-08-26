@@ -14,6 +14,7 @@ import {
 import Container from "@/components/ui/container/Container";
 import Button from "@/components/ui/Button/Button";
 import { articles, type Article } from "@/data/Blog";
+import BackgroundImg from "../../../assets/images/Reservation/BackgroundImg.png";
 
 const categoryLabels = [
   "Barchasi",
@@ -55,17 +56,18 @@ function ArticleCard({
       }`}
       style={{ animationDelay: `${index * 55}ms` }}
     >
-      <div className="relative h-[150px] overflow-hidden bg-[#17130d]">
+      {/* 1px ortiqcha chiziq chiqib ketishini to'liq yopish uchun isolation-auto va inset-0 qo'shildi */}
+      <div className="relative h-[150px] overflow-hidden rounded-t-[9px] bg-[#17130d] isolation-auto">
         <img
           src={article.image}
           alt={article.title}
           style={{ backfaceVisibility: "hidden" }}
-          className="block h-full w-full object-cover opacity-90 transition duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"
+          className="block h-full w-full object-cover opacity-95 transform-gpu transition duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"
         />
 
-        <div className="absolute -bottom-1 inset-x-0 h-full bg-gradient-to-t from-[#10100e] via-[#0b0b09]/15 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 h-full bg-gradient-to-t from-[#10100e] via-[#0b0b09]/20 to-transparent pointer-events-none" />
 
-        <div className="absolute left-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-[#c89228]/70 bg-[#080807]/80 text-[#f6b531] backdrop-blur-sm">
+        <div className="absolute left-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#c89228]/70 bg-[#080807]/80 text-[#f6b531] backdrop-blur-sm">
           <Icon size={18} strokeWidth={1.45} />
         </div>
       </div>
@@ -366,7 +368,7 @@ export default function BlogPage() {
       <section className="relative isolate border-b border-[#17130d] pb-7 pt-[78px] sm:pt-[88px]">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[205px] overflow-hidden opacity-50">
           <img
-            src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=1920"
+            src={BackgroundImg}
             alt=""
             className="h-full w-full object-cover object-center"
           />
@@ -477,8 +479,8 @@ export default function BlogPage() {
       </Container>
 
       <Container className="pb-7 pt-3">
-        <div className="grid gap-6 rounded-[10px] border border-[#3a2b17] bg-[linear-gradient(100deg,#12120f_0%,#0d0d0b_54%,#12100b_100%)] px-6 py-6 sm:grid-cols-[1.1fr_1.6fr_0.9fr] sm:items-center sm:px-7">
-          <div className="flex items-start gap-4">
+        <div className="grid gap-6 rounded-[10px] border border-[#3a2b17] bg-[linear-gradient(100deg,#12120f_0%,#0d0d0b_54%,#12100b_100%)] px-6 py-6 sm:grid-cols-[1.2fr_1.8fr] sm:items-center sm:px-8">
+          <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#b77d1c] text-[#f6b531]">
               <Mail size={21} strokeWidth={1.25} />
             </div>
@@ -488,10 +490,10 @@ export default function BlogPage() {
                 className="text-[19px] leading-tight text-[#f4efe7]"
                 style={{ fontFamily: "Cambria, Georgia, serif" }}
               >
-                Yangi maqolalar va yangiliklardan xabardor bo‘ling
+                Yangi maqolalardan xabardor bo‘ling
               </h2>
 
-              <p className="mt-1.5 max-w-[250px] text-[11.5px] leading-[1.55] text-[#958d83]">
+              <p className="mt-1.5 text-[11.5px] leading-[1.55] text-[#958d83]">
                 Emailingizni qoldiring va bizning eng so‘nggi maqolalarimizni
                 o‘tkazib yubormang.
               </p>
@@ -559,28 +561,6 @@ export default function BlogPage() {
               {subscribed ? "Yuborildi" : "Obuna bo‘lish"}
             </Button>
           </form>
-
-          <div className="sm:justify-self-end">
-            <p
-              className="text-[16px] text-[#ded7ce] sm:text-right"
-              style={{ fontFamily: "Cambria, Georgia, serif" }}
-            >
-              Bizni ijtimoiy tarmoqlarda kuzating
-            </p>
-
-            <div className="mt-3 flex gap-2.5 sm:justify-end">
-              {["ig", "f", "tg", "yt"].map((social) => (
-                <Button
-                  type="button"
-                  key={social}
-                  aria-label={`${social} sahifamiz`}
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-[#3c2e1a] text-[11px] font-semibold uppercase text-[#c18b28] transition hover:border-[#f6b531] hover:text-[#f6b531] active:scale-[0.95]"
-                >
-                  {social === "ig" ? "◎" : social}
-                </Button>
-              ))}
-            </div>
-          </div>
         </div>
 
         <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-[10px] uppercase tracking-[0.14em] text-[#5e574e]">

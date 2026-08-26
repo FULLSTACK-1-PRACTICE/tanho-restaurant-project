@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ChevronRight, Flame, Sparkles, ChefHat, Utensils, Coffee, Leaf } from "lucide-react";
+import { ArrowRight, ChevronRight, Flame, Sparkles, ChefHat, Utensils, CalendarDays, Leaf } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 
@@ -12,6 +12,8 @@ import tanhoPremiumImg from "../../assets/images/Menu/Cards/Yangi-Tanho.png";
 import manchuriImg from "../../assets/images/Menu/Cards/Manchuri.png"; 
 import pishirishImg from "../../assets/images/Menu/Cards/pishirrish_jarayoni.png";
 import threeSaladImg from "../../assets/images/Menu/Additional-Images/three-salad.png";
+import RestaurantEvent from "../../assets/images/Blog/RestaurantEvent.png";
+import HealthEating from "../../assets/images/Blog/Health-Eating.png";
 
 function SpecialSection() {
   const navigate = useNavigate();
@@ -29,11 +31,11 @@ function SpecialSection() {
     }
   };
 
-  const handleArticleClick = (title: string, id: number) => {
-    if (title.toLowerCase().includes("salat")) {
-      navigate("/menu", { state: { category: "Salatlar" } });
+  const handleArticleClick = (item: typeof articles[0]) => {
+    if (item.isMenuLink) {
+      navigate("/menu", { state: { category: item.categoryName } });
     } else {
-      navigate(`/blog/${id}`);
+      navigate(`/blog/${item.id}`);
     }
   };
 
@@ -72,7 +74,7 @@ function SpecialSection() {
 
   const articles = [
     {
-      id: 5,
+      id: 6,
       icon: Leaf,
       category: "Yangiliklar",
       date: "02.08.2026",
@@ -80,6 +82,8 @@ function SpecialSection() {
       description:
         "Mijozlarimiz talabiga binoan restoranimiz menyusi yangi va mazali salatlar bilan boyitildi.",
       image: threeSaladImg,
+      isMenuLink: true,
+      categoryName: "Salatlar",
     },
     {
       id: 1, 
@@ -90,17 +94,18 @@ function SpecialSection() {
       description:
         "TANHO oshpazlari taomlarimizni qanday mehr va sifat bilan tayyorlashini bilib oling.",
       image: pishirishImg,
+      isMenuLink: false,
     },
     {
-      id: 3,
-      icon: Coffee,
-      category: "Maslahatlar",
-      date: "12 May, 2026",
-      title: "Qahvaning 5 xil turi",
+      id: 5,
+      icon: CalendarDays,
+      category: "Tadbirlar",
+      date: "08 May, 2026",
+      title: "Restoranda tadbir tashkil qilish",
       description:
-        "Har bir qahva turi o'ziga xos ta'm va hidi bilan ajralib turadi. Qaysi biri sizniki?",
-      image:
-        "https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=600&auto=format&fit=crop",
+        "Tug‘ilgan kun, oilaviy kechki ovqat yoki korporativ tadbirlar uchun TANHO — eng yaxshi tanlov.",
+      image: RestaurantEvent,
+      isMenuLink: false,
     },
     {
       id: 4,
@@ -110,8 +115,8 @@ function SpecialSection() {
       title: "Sog'lom ovqatlanish",
       description:
         "Restoranda ham sog'lom va muvozanatli ovqatlanish mumkin. Maslahatlarimiz bilan tanishing.",
-      image:
-        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=600&auto=format&fit=crop",
+      image: HealthEating,
+      isMenuLink: false,
     },
   ];
 
@@ -248,7 +253,7 @@ function SpecialSection() {
               {articles.map((item) => (
                 <div
                   key={item.id}
-                  onClick={() => handleArticleClick(item.title, item.id)} 
+                  onClick={() => handleArticleClick(item)} 
                   className="group flex flex-1 cursor-pointer items-center gap-3.5 border-b border-[#202427] p-3 transition duration-300 last:border-b-0 hover:bg-[#121619]"
                 >
                   <div className="h-[72px] w-[85px] shrink-0 overflow-hidden rounded-lg bg-[#1a1d1f]">

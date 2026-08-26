@@ -126,11 +126,10 @@ function Header() {
       >
         <Container>
           <div className="flex h-[64px] items-center justify-between md:h-[76px]">
-            {/* Logoni chap tomonga aniq 7px surish uchun -translate-x-[7px] qo'shildi */}
             <Link
               to="/"
               onClick={() => setMenuOpen(false)}
-              className="relative flex h-[42px] w-[110px] shrink-0 cursor-pointer items-center justify-center overflow-hidden md:h-[50px] md:w-[140px] -translate-x-[7px]"
+              className="relative flex h-[42px] w-[110px] shrink-0 cursor-pointer items-center justify-center overflow-hidden md:h-[50px] md:w-[140px] -translate-x-[2px] lg:-translate-x-[7px]"
             >
               <img
                 src={logo}

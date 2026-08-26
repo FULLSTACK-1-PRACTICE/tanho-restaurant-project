@@ -1,8 +1,8 @@
-import pishirish from "../assets/images/Menu/Cards/pishirrish_jarayoni.png";
-import manchuri from "../assets/images/Menu/Cards/Manchuri.png";
-import HealthEating from "../assets/images/Blog/Health-Eating.png" 
-import RestaurantBlog from "../assets/images/Blog/Restoran-Biography.png"
-import RestaurantEvent from "../assets/images/Blog/RestaurantEvent.png"
+import Cooking from "../assets/images/Menu/Cards/pishirrish_jarayoni.png";
+import Manchuri from "../assets/images/Blog/Manchuri.png";
+import HealthEating from "../assets/images/Blog/Health-Eating.png"; 
+import RestaurantBlog from "../assets/images/Blog/Restoran-Biography.png";
+import RestaurantEvent from "../assets/images/Blog/RestaurantEvent.png";
 
 import {
   Camera,
@@ -35,7 +35,7 @@ export const articles: Article[] = [
       "TANHO oshpazlari taomlarimizni qanday mehr va sifat bilan tayyorlashini bilib oling.",
     date: "18 May, 2026",
     duration: "5 daqiqa",
-    image: pishirish,
+    image: Cooking,
     icon: ChefHat,
     content: [
       "TANHO restoranida har bir taom alohida e'tibor va mehr bilan tayyorlanadi. Biz faqat eng saralangan va yangi mahsulotlardan foydalanamiz. Bizning oshxonamiz — bu sifat va an'analar uyg'unlashgan maskan.",
@@ -51,7 +51,7 @@ export const articles: Article[] = [
       "Mazali va to‘yimli Manchuri taomi, o‘ziga xos ta’m va xushbo‘y ziravorlar uyg‘unligi bilan tayyorlanadi.",
     date: "15 May, 2026",
     duration: "4 daqiqa",
-    image: manchuri,
+    image: Manchuri,
     icon: Utensils,
     content: [
       "Manchuri — mazali va to‘yimli taomni yoqtiradiganlar uchun ajoyib tanlov.",
@@ -68,7 +68,6 @@ export const articles: Article[] = [
     date: "10 May, 2026",
     duration: "4 daqiqa",
     image: HealthEating,
-      
     icon: Leaf,
     content: [
       "Sog'lom ovqatlanish faqat uyda emas, restoranda ham imkoni bor narsa. Bizning sarxil sabzavotlardan tayyorlangan yangi salatlarimiz bunga yaqqol misoldir.",
@@ -113,8 +112,7 @@ export const articles: Article[] = [
       "TANHO’dagi eng sara lahzalar, mehmonlarimiz va jamoamiz hayotidan lavhalar.",
     date: "3 May, 2026",
     duration: "2 daqiqa",
-    image:
-      RestaurantBlog,
+    image: RestaurantBlog,
     icon: Camera,
     content: [
       "Biz uchun har bir kun yangi sarguzasht. Jamoamiz a'zolari va sevimli mehmonlarimiz bilan o'tgan eng yaxshi xotiralarni bo'lishamiz.",

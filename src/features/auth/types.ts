@@ -1,6 +1,6 @@
 import type { Dispatch, FormEvent, ReactNode, SetStateAction } from 'react'
 
-export type Tab = 'kirish' | 'royxatdan'
+export type Tab = 'kirish' | 'royxatdan' | 'tiklash'
 
 export interface AuthModalProps {
   isOpen: boolean
@@ -24,6 +24,7 @@ export interface LoginFormProps {
   showPass: boolean
   setShowPass: Dispatch<SetStateAction<boolean>>
   onRegister: () => void
+  onForgotPassword: () => void
   onSubmit: (event: FormEvent<HTMLFormElement>) => void
 }
 
@@ -48,11 +49,15 @@ export interface RegisterFormProps {
   onSubmit: (event: FormEvent<HTMLFormElement>) => void
 }
 
+export interface ForgotPasswordFormProps {
+  onBackToLogin: () => void
+}
+
 export interface InputProps {
   type: string
   placeholder: string
   value: string
-  onChange: Dispatch<SetStateAction<string>>
+  onChange: Dispatch<SetStateAction<string>> | ((value: string) => void)
   autoComplete?: string
 }
 
@@ -60,7 +65,7 @@ export interface PasswordInputProps {
   placeholder: string
   show: boolean
   value: string
-  onChange: Dispatch<SetStateAction<string>>
+  onChange: Dispatch<SetStateAction<string>> | ((value: string) => void)
   onToggle: () => void
   autoComplete?: string
 }

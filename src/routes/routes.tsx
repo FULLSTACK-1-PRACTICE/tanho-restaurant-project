@@ -17,7 +17,6 @@ import ContactPage from "../pages/public/Contact/ContactPage"
 import ReservationPage from "../pages/public/Reservation/ReservationPage"
 
 import NewsPage from "../pages/public/News/NewsPage"
-import NewsDetailsPage from "../pages/public/News/NewsDetailsPage"
 
 import LoginPage from "../features/auth/components/AuthModal"
 
@@ -85,7 +84,6 @@ const routes = createBrowserRouter([
           { path: "/blog/:id", element: <BlogDetailsPage /> },
           { path: "/contact", element: <ContactPage /> },
           { path: "/news", element: <NewsPage /> },
-          { path: "/news/:id", element: <NewsDetailsPage /> },
         ],
       },
 
@@ -165,4 +163,4 @@ const routes = createBrowserRouter([
   },
 ])
 
-export default routes;
+export default routes

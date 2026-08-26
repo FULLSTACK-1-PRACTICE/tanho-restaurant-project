@@ -41,11 +41,11 @@ function Header() {
       setIsLoggedIn(loggedIn);
       setUserRole(role ? role.toLowerCase().trim() : null);
     };
-    
+
     checkAuthStatus();
     window.addEventListener("storage", checkAuthStatus);
     window.addEventListener("auth-change", checkAuthStatus);
-    
+
     return () => {
       window.removeEventListener("storage", checkAuthStatus);
       window.removeEventListener("auth-change", checkAuthStatus);
@@ -124,12 +124,12 @@ function Header() {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <Container>
+        <Container className="!px-3 sm:!px-4 md:!px-6">
           <div className="flex h-[64px] items-center justify-between md:h-[76px]">
             <Link
               to="/"
               onClick={() => setMenuOpen(false)}
-              className="relative flex h-[42px] w-[110px] shrink-0 cursor-pointer items-center justify-center overflow-hidden md:h-[50px] md:w-[140px]"
+              className="relative -ml-2.5 flex h-[42px] w-[110px] shrink-0 cursor-pointer items-center justify-center overflow-hidden md:-ml-3 md:h-[50px] md:w-[140px]"
             >
               <img
                 src={logo}
@@ -173,7 +173,7 @@ function Header() {
                 <button
                   type="button"
                   onClick={handleProfileClick}
-                  className="hidden lg:flex group relative cursor-pointer items-center gap-2.5 rounded-xl border border-[#dcae4d]/40 bg-transparent px-6 py-2.5 text-[13px] font-semibold tracking-wider text-[#dcae4d] hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_0_20px_rgba(220,174,77,0.3)] active:scale-[0.98] transition-all duration-300"
+                  className="hidden group relative cursor-pointer items-center gap-2.5 rounded-xl border border-[#dcae4d]/40 bg-transparent px-6 py-2.5 text-[13px] font-semibold tracking-wider text-[#dcae4d] transition-all duration-300 hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_0_20px_rgba(220,174,77,0.3)] active:scale-[0.98] lg:flex"
                 >
                   {userRole && userRole !== "user" ? (
                     <LayoutDashboard
@@ -194,7 +194,7 @@ function Header() {
                 <button
                   type="button"
                   onClick={() => openAuthModal("kirish")}
-                  className="hidden lg:flex group relative cursor-pointer items-center gap-2.5 rounded-xl border border-[#dcae4d]/40 bg-transparent px-6 py-2.5 text-[13px] font-semibold tracking-wider text-[#dcae4d] hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_0_20px_rgba(220,174,77,0.3)] active:scale-[0.98] transition-all duration-300"
+                  className="hidden group relative cursor-pointer items-center gap-2.5 rounded-xl border border-[#dcae4d]/40 bg-transparent px-6 py-2.5 text-[13px] font-semibold tracking-wider text-[#dcae4d] transition-all duration-300 hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-black hover:shadow-[0_0_20px_rgba(220,174,77,0.3)] active:scale-[0.98] lg:flex"
                 >
                   <LogIn
                     size={16}
@@ -262,12 +262,12 @@ function Header() {
                   <Link
                     to="/"
                     onClick={() => setMenuOpen(false)}
-                    className="cursor-pointer flex items-center"
+                    className="flex cursor-pointer items-center"
                   >
                     <img
                       src={logo}
                       alt="Tanho Restaurant"
-                      className="h-[70px] w-auto object-contain transition-transform hover:scale-105 duration-300"
+                      className="h-[70px] w-auto object-contain transition-transform duration-300 hover:scale-105"
                     />
                   </Link>
                   <button
@@ -370,7 +370,7 @@ function Header() {
                       setMenuOpen(false);
                       handleProfileClick();
                     }}
-                    className={`my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] px-5 py-3 text-[12px] font-medium text-[#dcae4d] bg-transparent transition-colors duration-150 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
+                    className={`my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] bg-transparent px-5 py-3 text-[12px] font-medium text-[#dcae4d] transition-colors duration-150 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
                       menuOpen
                         ? "translate-x-0 opacity-100"
                         : "translate-x-4 opacity-0"
@@ -395,7 +395,7 @@ function Header() {
                       setMenuOpen(false);
                       openAuthModal("kirish");
                     }}
-                    className={`my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] px-5 py-3 text-[12px] font-medium text-[#dcae4d] bg-transparent transition-colors duration-150 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
+                    className={`my-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-[#6d531f] bg-transparent px-5 py-3 text-[12px] font-medium text-[#dcae4d] transition-colors duration-150 hover:bg-[#dcae4d] hover:text-black lg:hidden ${
                       menuOpen
                         ? "translate-x-0 opacity-100"
                         : "translate-x-4 opacity-0"
@@ -487,7 +487,7 @@ function Header() {
             </div>
           </aside>
         </>,
-        document.body,
+        document.body
       )}
     </>
   );

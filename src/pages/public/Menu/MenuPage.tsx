@@ -36,10 +36,7 @@ interface CategoryTabsProps {
   onChange: (category: string) => void;
 }
 
-function CategoryTabs({
-  activeCategory,
-  onChange,
-}: CategoryTabsProps) {
+function CategoryTabs({ activeCategory, onChange }: CategoryTabsProps) {
   return (
     <div className="rounded-xl border border-white/10 bg-[#121619] p-2.5 backdrop-blur-md">
       <div className="flex sm:grid sm:grid-cols-4 lg:grid-cols-7 overflow-x-auto sm:overflow-x-visible gap-2 scrollbar-thin scrollbar-thumb-black scrollbar-track-[#121619] pb-1 sm:pb-0">
@@ -78,8 +75,17 @@ const MenuPage = () => {
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isOpenAuthModal, setIsOpenAuthModal] = useState<boolean>(false);
-  const [user] = useState<unknown>(null);
-  const [favorites, setFavorites] = useState<string[]>([]);
+
+  // User auth holatini localStorage'dan aniqlash
+  const [isLoggedIn] = useState<boolean>(() => {
+    return localStorage.getItem("is_logged_in") === "true";
+  });
+
+  // Sevimlilar ro'yxatini localStorage bilan bog'lash
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    const saved = localStorage.getItem("user_favorites");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -107,16 +113,18 @@ const MenuPage = () => {
 
     if (!foodId) return;
 
-    if (!user) {
+    if (!isLoggedIn) {
       setIsOpenAuthModal(true);
       return;
     }
 
-    setFavorites((prev) =>
-      prev.includes(foodId)
+    setFavorites((prev) => {
+      const updated = prev.includes(foodId)
         ? prev.filter((id) => id !== foodId)
-        : [...prev, foodId]
-    );
+        : [...prev, foodId];
+      localStorage.setItem("user_favorites", JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const visibleItems = items

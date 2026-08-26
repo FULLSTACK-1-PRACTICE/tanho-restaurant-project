@@ -23,7 +23,7 @@ import LoginPage from "../features/auth/components/AuthModal"
 
 import AdminLayout from "../layouts/AdminLayout/AdminLayout"
 import CashierLayout from "../layouts/CashierLayout/CashierLayout"
-import UserLayout from "../layouts/UserLayout"
+import UserLayout from "../layouts/UserLayout/UserLayout"
 
 import ManagerLayout from "../features/manager/components/ManagerDashboard"
 import CashierPage from "../features/cashier/components/CashierPage"
@@ -165,4 +165,4 @@ const routes = createBrowserRouter([
   },
 ])
 
-export default routes
+export default routes;

@@ -24,6 +24,11 @@ export default function ManagerLayout() {
     }, 1500);
   };
 
+  // Menyu bo'limini olib tashlash
+  const filteredManagerSections = managerSections.filter(
+    (section) => section.key !== "menyu"
+  );
+
   return (
     <div className="flex h-screen bg-[#0a0a0b] text-gray-200 overflow-hidden relative">
       {showLogoutToast && (
@@ -43,15 +48,20 @@ export default function ManagerLayout() {
         onSelectPage={(page) => {
           setActivePage(page);
           navigate(`/manager/${page}`);
+          setMobileSidebarOpen(false); // Bo'lim tanlanganda mobilda yopish
         }}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
-        items={managerSections}
+        items={filteredManagerSections}
       />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Navbar
-          onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
+          // MANA SHU YERDA: Hambuger bosilganda mobileSidebarOpen va sidebarOpen ikkalasi ham to'g'ri o'zgaradi
+          onToggleSidebar={() => {
+            setMobileSidebarOpen((prev) => !prev);
+            setSidebarOpen((prev) => !prev);
+          }}
           headerTitle={
             activePage === "bosh-sahifa"
               ? "Bosh sahifa"

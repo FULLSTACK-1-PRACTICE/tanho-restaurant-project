@@ -487,7 +487,7 @@ function Header() {
             </div>
           </aside>
         </>,
-        document.body,
+        document.body
       )}
     </>
   );

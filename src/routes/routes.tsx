@@ -25,6 +25,9 @@ import CashierLayout from "../layouts/CashierLayout/CashierLayout"
 import UserLayout from "../layouts/UserLayout/UserLayout"
 
 import ManagerLayout from "../features/manager/components/ManagerDashboard"
+import DashboardPage from "../features/manager/components/DashboardPage"
+import ProfilePage from "../features/manager/components/ProfilePage"
+
 import CashierPage from "../features/cashier/components/CashierPage"
 import { NewOrder } from "../features/cashier/components/NewOrder"
 import { Orders } from "../features/cashier/components/Orders"
@@ -110,6 +113,13 @@ const routes = createBrowserRouter([
           {
             path: "/manager",
             element: <ManagerLayout />,
+            children: [
+              { index: true, element: <DashboardPage /> },
+              { path: "bosh-sahifa", element: <DashboardPage /> },
+              { path: "profil", element: <ProfilePage /> },
+              /* Manager ichidagi barcha boshqa sidebar routing-lar uchun catch-all */
+              { path: "*", element: null },
+            ],
           },
         ],
       },

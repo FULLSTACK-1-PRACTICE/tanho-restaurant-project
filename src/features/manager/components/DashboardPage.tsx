@@ -11,9 +11,9 @@ export interface Order {
   time: string;
 }
 
-interface DashboardPageProps {
-  orders: Order[];
-  onViewAllOrders: () => void;
+export interface DashboardPageProps {
+  orders?: Order[];
+  onViewAllOrders?: () => void;
 }
 
 export default function DashboardPage({ orders = [], onViewAllOrders }: DashboardPageProps) {
@@ -74,12 +74,14 @@ export default function DashboardPage({ orders = [], onViewAllOrders }: Dashboar
             <h3 className="font-semibold text-white text-base">So'nggi buyurtmalar</h3>
             <p className="text-xs text-gray-400">Eng oxirgi tushgan buyurtmalar ro'yxati</p>
           </div>
-          <button
-            onClick={onViewAllOrders}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-xs font-medium transition-colors cursor-pointer"
-          >
-            Barchasini ko'rish <ArrowRight size={14} />
-          </button>
+          {onViewAllOrders && (
+            <button
+              onClick={onViewAllOrders}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-xs font-medium transition-colors cursor-pointer"
+            >
+              Barchasini ko'rish <ArrowRight size={14} />
+            </button>
+          )}
         </div>
 
         <div className="space-y-3">

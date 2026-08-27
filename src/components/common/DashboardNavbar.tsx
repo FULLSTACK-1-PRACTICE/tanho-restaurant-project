@@ -53,30 +53,9 @@ export function DashboardNavbar({
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // LocalStorage'dan avatar va ismni dinamik o'qib borish uchun state'lar
-  const [currentAvatar, setCurrentAvatar] = useState(() => {
-    return user.avatar || localStorage.getItem("user_avatar") || "";
-  });
-
-  const [currentName, setCurrentName] = useState(() => {
-    return user.name || localStorage.getItem("user_name") || "Admin";
-  });
-
-  useEffect(() => {
-    const handleStorageUpdate = () => {
-      setCurrentAvatar(localStorage.getItem("user_avatar") || user.avatar || "");
-      setCurrentName(localStorage.getItem("user_name") || user.name || "Admin");
-    };
-
-    window.addEventListener("userUpdated", handleStorageUpdate);
-    return () => {
-      window.removeEventListener("userUpdated", handleStorageUpdate);
-    };
-  }, [user.avatar, user.name]);
-
   const displayTitle = title ?? headerTitle ?? "Admin Dashboard";
   const currentSearchValue = searchValue ?? headerSearch;
-  const userInitial = currentName ? currentName.charAt(0).toUpperCase() : "A";
+  const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "A";
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -191,17 +170,13 @@ export function DashboardNavbar({
             onClick={() => setProfileDropdownOpen((prev) => !prev)}
             className="flex cursor-pointer items-center gap-2 rounded-lg p-1.5 transition-colors hover:bg-[#191e22]"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d9a441] text-sm font-semibold text-black shadow-sm overflow-hidden border border-[#d9a441]/30">
-              {currentAvatar ? (
-                <img src={currentAvatar} alt="Avatar" className="w-full h-full object-cover" />
-              ) : (
-                userInitial
-              )}
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d9a441] text-sm font-semibold text-black shadow-sm">
+              {userInitial}
             </div>
 
             <div className="hidden text-left text-sm sm:block">
               <div className="font-medium text-white leading-tight">
-                {currentName}
+                {user.name}
               </div>
               <div className="text-xs text-gray-400 leading-tight">
                 {user.role}

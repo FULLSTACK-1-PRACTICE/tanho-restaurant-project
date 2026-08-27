@@ -1,254 +1,183 @@
-import { useState } from "react";
-import type { FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { Download, Send, UtensilsCrossed } from "lucide-react";
+import React from "react";
+import type { ReactNode, ComponentType, ComponentProps } from "react";
+import logoImg from "../../assets/images/Layout/Header/Logo-2.png";
 
-import { Sidebar } from "../../../components/common/SideBar";
-import { Navbar } from "../../../components/common/DashboardNavbar";
-import DashboardPage from "./DashboardPage";
-import SettingsPage from "./SettingsPage";
-import ManagerMenuSection from "./ManagerMenuSection";
+export interface SidebarItem {
+  label: string;
+  path?: string;
+  key?: string;
+  icon: ReactNode | ComponentType<ComponentProps<"svg"> & { size?: number; className?: string; strokeWidth?: number }>;
+  badge?: number | string;
+  section?: string;
+}
 
-import {
-  managerSections,
-  mockCategories,
-  mockFoods,
-  mockOrders,
-} from "../../../data/mockData";
-import type {
-  Category,
-  Food,
-  NewFoodForm,
-  Order,
-} from "../../../data/mockData";
+export interface SidebarProps {
+  items: SidebarItem[];
+  isOpen?: boolean;
+  sidebarOpen?: boolean;
+  activePath?: string;
+  activePage?: string;
+  onItemClick?: (path: string) => void;
+  onSelectPage?: (key: string) => void;
+  mobileSidebarOpen?: boolean;
+  setMobileSidebarOpen?: (val: boolean) => void;
+  brandName?: string;
+  brandSubtitle?: string;
+}
 
-const inputClass =
-  "w-full px-3.5 py-2.5 bg-[#1a1a1e] border border-white/10 rounded-xl text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 transition-colors [&>option]:bg-[#161619] [&>option]:text-white";
+export function SideBar({
+  items = [],
+  isOpen,
+  sidebarOpen,
+  activePath,
+  activePage,
+  onItemClick,
+  onSelectPage,
+  mobileSidebarOpen = false,
+  setMobileSidebarOpen,
+}: SidebarProps) {
+  const isSidebarOpen = isOpen ?? sidebarOpen ?? true;
+  const currentActive = activePath ?? activePage ?? "";
 
-export default function ManagerDashboard() {
-  const navigate = useNavigate();
-
-  const [activePage, setActivePage] = useState("bosh-sahifa");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [headerSearch, setHeaderSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Barchasi");
-  const [statusFilter, setStatusFilter] = useState("Barchasi");
-
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(true);
-
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
-  const [importFile, setImportFile] = useState<File | null>(null);
-
-  const [newFood, setNewFood] = useState<NewFoodForm>({
-    name: "",
-    category: "Milliy taomlar",
-    price: "",
-    status: "Mavjud",
-  });
-
-  const [orders] = useState<Order[]>(mockOrders);
-  const [foods, setFoods] = useState<Food[]>(mockFoods);
-  const [categories] = useState<Category[]>(mockCategories);
-
-  const isMenuPage =
-    activePage === "taomlar" ||
-    activePage === "kategoriyalar" ||
-    activePage === "qoshimchalar" ||
-    activePage === "menyu";
-
-  const handleSelectPage = (page: string) => {
-    setActivePage(page);
-    setMobileSidebarOpen(false);
-  };
-
-  const handleDeleteFood = (id: number) => {
-    setFoods((previousFoods) =>
-      previousFoods.filter((food) => food.id !== id),
-    );
-    toast.error("Taom menyudan o‘chirildi");
-  };
-
-  const handleAddFoodSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!newFood.name.trim() || !newFood.price) {
-      toast.error("Barcha maydonlarni to‘ldiring");
-      return;
+  const handleSelect = (targetPath: string) => {
+    if (onItemClick) {
+      onItemClick(targetPath);
+    } else if (onSelectPage) {
+      onSelectPage(targetPath);
     }
-
-    const price = Number(newFood.price);
-    if (price <= 0) {
-      toast.error("Narx 0 dan katta bo‘lishi kerak");
-      return;
+    if (setMobileSidebarOpen) {
+      setMobileSidebarOpen(false);
     }
-
-    const food: Food = {
-      id: Date.now(),
-      name: newFood.name.trim(),
-      category: newFood.category,
-      price,
-      status: newFood.status,
-    };
-
-    setFoods((previousFoods) => [...previousFoods, food]);
-    setNewFood({
-      name: "",
-      category: "Milliy taomlar",
-      price: "",
-      status: "Mavjud",
-    });
-    setIsAddModalOpen(false);
-    toast.success("Yangi taom muvaffaqiyatli qo‘shildi!");
   };
 
-  const handleImportSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!importFile) {
-      toast.error("Avval fayl tanlang");
-      return;
+  const renderIcon = (icon: SidebarItem["icon"]) => {
+    if (!icon) return null;
+    if (React.isValidElement(icon)) {
+      return icon;
     }
-
-    if (importFile.size > 5 * 1024 * 1024) {
-      toast.error("Fayl hajmi 5MB dan oshmasligi kerak");
-      return;
+    if (
+      typeof icon === "function" ||
+      (typeof icon === "object" && icon !== null && "$$typeof" in icon)
+    ) {
+      const IconComp = icon as ComponentType<{
+        size?: number;
+        className?: string;
+        strokeWidth?: number;
+      }>;
+      return <IconComp size={19} strokeWidth={1.75} />;
     }
-
-    setIsImportModalOpen(false);
-    setImportFile(null);
-    toast.success("Fayl muvaffaqiyatli import qilindi!");
-  };
-
-  const handleLogout = () => {
-    localStorage.clear();
-    toast.info("Tizimdan chiqildi", {
-      description: "Xayr, sog‘ bo‘ling!",
-    });
-
-    setTimeout(() => navigate("/"), 500);
-  };
-
-  const getHeaderTitle = () => {
-    if (activePage === "bosh-sahifa") return "Bosh sahifa";
-    if (activePage === "sozlamalar") return "Sozlamalar";
-    if (isMenuPage) return "Taomlar va Menyu";
-
-    return activePage
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+    return <>{icon}</>;
   };
 
   return (
-    <div className="flex h-screen bg-[#0a0a0b] text-gray-200 overflow-hidden">
-      <Sidebar
-        isOpen={sidebarOpen}
-        sidebarOpen={sidebarOpen}
-        mobileSidebarOpen={mobileSidebarOpen}
-        setMobileSidebarOpen={setMobileSidebarOpen}
-        activePage={activePage}
-        onSelectPage={handleSelectPage}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        items={managerSections}
-      />
+    <>
+      <style>{scrollbarHideStyles}</style>
 
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <Navbar
-          onToggleSidebar={() => {
-            if (window.innerWidth < 1024) {
-              setMobileSidebarOpen((previous) => !previous);
-            } else {
-              setSidebarOpen((previous) => !previous);
-            }
-          }}
-          headerTitle={getHeaderTitle()}
-          breadcrumb={["Menejer", activePage]}
-          headerSearch={headerSearch}
-          setHeaderSearch={setHeaderSearch}
-          onLogout={handleLogout}
-          onNavigate={handleSelectPage}
-          user={{ name: "Manager", role: "Manager" }}
+      {mobileSidebarOpen && setMobileSidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm lg:hidden transition-opacity duration-300"
+          onClick={() => setMobileSidebarOpen(false)}
         />
+      )}
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-[#0a0a0b]">
-          {activePage === "bosh-sahifa" && (
-            <div className="space-y-6">
-              <div className="flex flex-wrap items-center justify-between gap-4 bg-[#111113] border border-white/5 p-4 rounded-2xl">
-                <div>
-                  <h2 className="text-base font-semibold text-white">
-                    Xush kelibsiz, Menejer!
-                  </h2>
-                  <p className="text-xs text-gray-400">
-                    Bugungi restoran faoliyati va ko‘rsatkichlarni nazorat qiling.
-                  </p>
-                </div>
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <button type="button" className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 text-gray-200 text-xs font-medium border border-white/5">
-                    <Download size={14} className="text-amber-400" />
-                    Hisobotni yuklab olish
-                  </button>
-                  <button type="button" className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/10 text-amber-400 text-xs font-medium border border-amber-500/20">
-                    <Send size={14} /> Oshxonaga xabar
-                  </button>
-                </div>
-              </div>
-              <DashboardPage
-                orders={orders}
-                onViewAllOrders={() => setActivePage("buyurtmalar")}
-              />
-            </div>
-          )}
+      <aside
+        className={`fixed lg:relative z-50 h-full top-0 left-0 ${
+          isSidebarOpen ? "w-[280px]" : "w-0 lg:w-[82px]"
+        } shrink-0 bg-[#09090b]/95 backdrop-blur-xl border-r border-white/10 flex flex-col transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.5)] ${
+          mobileSidebarOpen
+            ? "translate-x-0"
+            : "-translate-x-full lg:translate-x-0"
+        } overflow-hidden`}
+      >
+        <div className="relative h-[80px] flex items-center justify-center border-b border-white/[0.08] px-4 overflow-hidden shrink-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-transparent to-transparent pointer-events-none" />
 
-          {activePage === "sozlamalar" && <SettingsPage />}
-
-          {isMenuPage && (
-            <ManagerMenuSection
-              foods={foods}
-              categories={categories}
-              selectedCategory={selectedCategory}
-              statusFilter={statusFilter}
-              searchTerm={searchTerm}
-              inputClass={inputClass}
-              newFood={newFood}
-              importFile={importFile}
-              isAddModalOpen={isAddModalOpen}
-              isImportModalOpen={isImportModalOpen}
-              onCategoryChange={setSelectedCategory}
-              onStatusChange={setStatusFilter}
-              onSearchChange={setSearchTerm}
-              onNewFoodChange={setNewFood}
-              onImportFileChange={setImportFile}
-              onAddFoodOpen={() => setIsAddModalOpen(true)}
-              onImportOpen={() => setIsImportModalOpen(true)}
-              onAddFoodClose={() => setIsAddModalOpen(false)}
-              onImportClose={() => setIsImportModalOpen(false)}
-              onAddFoodSubmit={handleAddFoodSubmit}
-              onImportSubmit={handleImportSubmit}
-              onDeleteFood={handleDeleteFood}
-              onOpenCategories={() => setActivePage("kategoriyalar")}
+          <div className="flex items-center justify-center w-full px-2">
+            <img
+              src={logoImg}
+              alt="Tanho Restaurant Logo"
+              className={`${
+                isSidebarOpen ? "h-[70px] w-auto max-w-[220px]" : "h-8 w-auto"
+              } object-contain filter drop-shadow-[0_2px_8px_rgba(251,191,36,0.3)] transition-all duration-300 scale-110`}
             />
-          )}
+          </div>
+        </div>
 
-          {activePage !== "bosh-sahifa" &&
-            activePage !== "sozlamalar" &&
-            !isMenuPage && (
-              <div className="flex flex-col items-center justify-center h-64 text-gray-400 space-y-2">
-                <UtensilsCrossed size={36} className="text-amber-400/50" />
-                <p className="text-base font-medium text-white capitalize">
-                  {activePage.replace("-", " ")} sahifasi
-                </p>
-                <p className="text-xs text-gray-500">
-                  Ushbu bo‘lim tez orada to‘liq ishga tushiriladi.
-                </p>
+        <nav className="flex-1 overflow-y-auto px-3.5 py-4 space-y-1.5 admin-sidebar-scroll">
+          {items.map((item, index) => {
+            const itemKey = item.path || item.key || `item-${index}`;
+            const isActive =
+              currentActive === item.path || currentActive === item.key;
+
+            const prevItem = index > 0 ? items[index - 1] : null;
+            const showSectionHeader =
+              item.section && item.section !== prevItem?.section;
+
+            return (
+              <div key={itemKey} className="space-y-1">
+                {showSectionHeader && isSidebarOpen && (
+                  <div
+                    className={`px-3 text-[10px] uppercase tracking-widest text-gray-500 font-medium ${
+                      index > 0 ? "mt-4 mb-2" : "mb-2"
+                    }`}
+                  >
+                    {item.section}
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => handleSelect(item.path || item.key || "")}
+                  className={`w-full cursor-pointer flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold transition-all duration-200 group relative ${
+                    isActive
+                      ? "bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-transparent text-amber-400 border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.15)]"
+                      : "text-gray-400 hover:text-white hover:bg-white/[0.05] border border-transparent"
+                  }`}
+                >
+                  {isActive && (
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-gradient-to-b from-amber-300 to-amber-500 shadow-[0_0_10px_#f59e0b]" />
+                  )}
+
+                  <div
+                    className={`shrink-0 transition-transform duration-200 group-hover:scale-110 ${
+                      isActive ? "text-amber-400" : "text-gray-400"
+                    }`}
+                  >
+                    {renderIcon(item.icon)}
+                  </div>
+
+                  {isSidebarOpen && (
+                    <>
+                      <span className="flex-1 text-left truncate tracking-wide text-xs font-semibold">
+                        {item.label}
+                      </span>
+
+                      {item.badge !== undefined && (
+                        <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                          {item.badge}
+                        </span>
+                      )}
+                    </>
+                  )}
+                </button>
               </div>
-            )}
-        </main>
-      </div>
-    </div>
+            );
+          })}
+        </nav>
+      </aside>
+    </>
   );
 }
+
+const scrollbarHideStyles = `
+  .admin-sidebar-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .admin-sidebar-scroll::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export { SideBar as Sidebar };
+export default SideBar;

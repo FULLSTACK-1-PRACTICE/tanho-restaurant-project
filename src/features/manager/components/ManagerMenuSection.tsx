@@ -14,6 +14,7 @@ import {
   Utensils,
   ChevronDown,
   Check,
+  FolderPlus,
 } from "lucide-react";
 import { formatSum } from "../../../lib/utils";
 import { StatCard } from "./StatCard";
@@ -49,6 +50,7 @@ type Props = {
   onAddFoodSubmit?: (event: FormEvent<HTMLFormElement>) => void;
   onImportSubmit?: (event: FormEvent<HTMLFormElement>) => void;
   onDeleteFood?: (id: number) => void;
+  onAddCategorySubmit?: (categoryName: string) => void;
 };
 
 function InlineCustomSelect({
@@ -144,14 +146,34 @@ export default function ManagerMenuSection({
   onAddFoodSubmit,
   onImportSubmit,
   onDeleteFood,
+  onAddCategorySubmit,
 }: Props) {
-  const categories = propsCategories.length > 0 ? propsCategories : DEFAULT_CATEGORIES;
+  // LocalStorage dan kategoriyalarni yuklab olish
+  const [internalCategories, setInternalCategories] = useState<Category[]>(() => {
+    const saved = localStorage.getItem("menu_categories");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return propsCategories.length > 0 ? propsCategories : DEFAULT_CATEGORIES;
+  });
+
+  // Har safar kategoriyalar o'zgarganda localStorage ga saqlash
+  useEffect(() => {
+    localStorage.setItem("menu_categories", JSON.stringify(internalCategories));
+  }, [internalCategories]);
+
+  const categories = internalCategories;
 
   const [internalSelectedCategory, setInternalSelectedCategory] = useState("Barchasi");
   const [internalStatusFilter, setInternalStatusFilter] = useState("Barchasi");
   const [internalSearchTerm, setInternalSearchTerm] = useState("");
   const [internalIsAddModalOpen, setInternalIsAddModalOpen] = useState(false);
   const [internalIsImportModalOpen, setInternalIsImportModalOpen] = useState(false);
+  const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
 
   const [internalImportFile, setInternalImportFile] = useState<File | null>(null);
   const [internalNewFood, setInternalNewFood] = useState<NewFoodForm>({
@@ -232,6 +254,15 @@ export default function ManagerMenuSection({
     }
   };
 
+  const handleCreateCategory = (categoryName: string) => {
+    const newCatObj: Category = {
+      id: Date.now(),
+      name: categoryName,
+    };
+    setInternalCategories((prev) => [...prev, newCatObj]);
+    onAddCategorySubmit?.(categoryName);
+  };
+
   const totalCount = foods.length;
   const availableCount = foods.filter((food) => food.status === "Mavjud").length;
   const unavailableCount = foods.filter((food) => food.status !== "Mavjud").length;
@@ -266,7 +297,10 @@ export default function ManagerMenuSection({
           <StatCard icon={ListTree} iconBg="bg-sky-500/15" iconColor="text-sky-400" label="Kategoriyalar" value={String(categories.length)} sub="Barchasi faol" subColor="text-gray-400" />
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+        <div className="flex flex-wrap items-center justify-end gap-3">
+          <button type="button" onClick={() => setIsAddCategoryModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-amber-500/80 hover:border-amber-500 text-amber-400 hover:text-amber-300 text-sm font-semibold transition-colors cursor-pointer">
+            <FolderPlus size={16} /> Kategoriya qo‘shish
+          </button>
           <button type="button" onClick={handleAddFoodOpen} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black text-sm font-semibold transition-colors cursor-pointer">
             <Plus size={17} /> Taom qo‘shish
           </button>
@@ -318,7 +352,56 @@ export default function ManagerMenuSection({
 
       {isAddModalOpen && <AddFoodModal categories={categories} form={newFood} onChange={handleNewFoodChange} onClose={handleAddFoodClose} onSubmit={handleAddFoodSubmit} />}
       {isImportModalOpen && <ImportFoodModal file={importFile} onFileChange={handleImportFileChange} onClose={handleImportClose} onSubmit={handleImportSubmit} />}
+      {isAddCategoryModalOpen && <AddCategoryModal onClose={() => setIsAddCategoryModalOpen(false)} onSubmit={handleCreateCategory} />}
     </>
+  );
+}
+
+function AddCategoryModal({ onClose, onSubmit }: { onClose: () => void; onSubmit: (name: string) => void }) {
+  const [name, setName] = useState("");
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (name.trim()) {
+      onSubmit(name.trim());
+      onClose();
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+      <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+        <div className="flex items-center justify-between p-4 border-b border-white/5">
+          <h3 className="text-base font-semibold text-white flex items-center gap-2">
+            <FolderPlus className="text-amber-400" size={18} /> Yangi kategoriya qo‘shish
+          </h3>
+          <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
+            <X size={18} />
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+          <label className="block text-xs text-gray-400">
+            Kategoriya nomi
+            <input
+              required
+              autoFocus
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full bg-[#141416] border border-amber-500/80 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:border-amber-500 mt-1"
+              placeholder="Masalan: Milliy taomlar"
+            />
+          </label>
+          <div className="flex justify-end gap-3 pt-2">
+            <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">
+              Bekor qilish
+            </button>
+            <button type="submit" className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
+              Saqlash
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
 
@@ -399,4 +482,4 @@ function ImportFoodModal({ file, onFileChange, onClose, onSubmit }: { file: File
       </div>
     </div>
   );
-} 
+}

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { CheckCircle2 } from "lucide-react";
 
 import { Sidebar } from "../../components/common/SideBar";
 import { Navbar } from "../../components/common/DashboardNavbar";
@@ -14,9 +13,7 @@ export default function ManagerLayout() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(true);
   const [headerSearch, setHeaderSearch] = useState("");
-  const [showLogoutToast, setShowLogoutToast] = useState(false);
 
-  // URL'dan joriy aktiv sahifa nomini aniqlash
   const pathSegments = location.pathname.split("/").filter(Boolean);
   const activePage = pathSegments[1] || "bosh-sahifa";
 
@@ -44,13 +41,9 @@ export default function ManagerLayout() {
   }, []);
 
   const handleLogout = () => {
-    setShowLogoutToast(true);
-
-    setTimeout(() => {
-      localStorage.removeItem("token");
-      localStorage.clear();
-      navigate("/");
-    }, 1500);
+    localStorage.removeItem("token");
+    localStorage.clear();
+    navigate("/");
   };
 
   const goToPage = (page: string) => {
@@ -83,15 +76,6 @@ export default function ManagerLayout() {
 
   return (
     <div className="relative flex h-dvh min-h-0 overflow-hidden bg-[#0a0a0b] text-gray-200">
-      {showLogoutToast && (
-        <div className="fixed right-4 top-4 z-[100] flex items-center gap-3 rounded-2xl border border-amber-500/30 bg-[#161619] px-4 py-3 shadow-2xl sm:right-5 sm:top-5">
-          <CheckCircle2 className="text-amber-400" size={18} />
-          <span className="text-xs font-semibold text-white">
-            Tizimdan chiqildi!
-          </span>
-        </div>
-      )}
-
       <Sidebar
         sidebarOpen={sidebarOpen}
         mobileSidebarOpen={mobileSidebarOpen}

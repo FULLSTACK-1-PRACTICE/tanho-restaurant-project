@@ -65,7 +65,7 @@ export const menuItems: MenuItem[] = [
     category: "Osh",
     price: 38000,
     status: "Mavjud",
-    description: "An'anaviy Toshkent to'y palovi, qazi va tuxum bilan.",
+    description: "An'anaviy to'y palovi.",
     image: oshimg,
   },
   {

@@ -84,7 +84,7 @@ function AboutSection() {
               />
 
               <span className="mt-1 font-serif text-[21px] text-[#e4b84e]">
-                4.7 
+                4.9 
               </span>
 
               <span className="text-center text-[10px] text-[#999]">

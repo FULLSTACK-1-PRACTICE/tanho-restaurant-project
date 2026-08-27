@@ -24,9 +24,11 @@ import AdminLayout from "../layouts/AdminLayout/AdminLayout"
 import CashierLayout from "../layouts/CashierLayout/CashierLayout"
 import UserLayout from "../layouts/UserLayout/UserLayout"
 
-import ManagerLayout from "../features/manager/components/ManagerDashboard"
+import ManagerLayout from "../layouts/ManagerLayout/ManagerLayout"
 import DashboardPage from "../features/manager/components/DashboardPage"
 import ProfilePage from "../features/manager/components/ProfilePage"
+import SettingsPage from "../features/manager/components/SettingsPage"
+import ManagerMenuSection from "../features/manager/components/ManagerMenuSection"
 
 import CashierPage from "../features/cashier/components/CashierPage"
 import { NewOrder } from "../features/cashier/components/NewOrder"
@@ -117,8 +119,11 @@ const routes = createBrowserRouter([
               { index: true, element: <DashboardPage /> },
               { path: "bosh-sahifa", element: <DashboardPage /> },
               { path: "profil", element: <ProfilePage /> },
-              /* Manager ichidagi barcha boshqa sidebar routing-lar uchun catch-all */
-              { path: "*", element: null },
+              { path: "profile", element: <ProfilePage /> },
+              { path: "sozlamalar", element: <SettingsPage /> },
+              { path: "settings", element: <SettingsPage /> },
+              { path: "menyu", element: <ManagerMenuSection /> },
+              { path: "taomlar", element: <ManagerMenuSection /> },
             ],
           },
         ],
@@ -173,4 +178,4 @@ const routes = createBrowserRouter([
   },
 ])
 
-export default routes
+export default routes;

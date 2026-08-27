@@ -69,36 +69,12 @@ const AdminLayout = () => {
         return <DashboardSection goTo={setActive} />;
       case "menyu":
       case "taomlar":
-      case "kategoriyalar":
-      case "qoshimchalar":
         return <MenuAdminSection />;
-      case "buyurtmalar":
-        return (
-          <GenericCrudSection
-            title="Buyurtmalar"
-            collectionName="orders"
-            addLabel="Buyurtma qo'shish"
-            fields={[
-              { key: "customer", label: "Mijoz" },
-              { key: "table", label: "Stol" },
-              { key: "itemsCount", label: "Taomlar soni", type: "number" },
-              { key: "total", label: "Summa", type: "number" },
-              { key: "time", label: "Vaqt" },
-              {
-                key: "status",
-                label: "Holat",
-                type: "select",
-                options: ["Yangi", "Tayyorlanmoqda", "Tayyorlandi"],
-              },
-            ]}
-          />
-        );
       case "rezervatsiyalar":
         return (
           <GenericCrudSection
             title="Rezervatsiyalar"
             collectionName="reservations"
-            addLabel="Rezervatsiya qo'shish"
             fields={[
               { key: "customer", label: "Mijoz" },
               { key: "table", label: "Stol" },

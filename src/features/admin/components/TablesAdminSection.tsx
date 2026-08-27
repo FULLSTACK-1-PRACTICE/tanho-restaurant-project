@@ -48,7 +48,7 @@ export function TablesAdminSection() {
 
   const [form, setForm] = useState<{
     number: string;
-    seats: number;
+    seats: string | number;
   }>({
     number: "",
     seats: 2,
@@ -83,22 +83,24 @@ export function TablesAdminSection() {
     setSaving(true);
 
     try {
+      const parsedSeats = Number(form.seats) || 2;
+
       if (editingId) {
         await update(editingId, {
           number: form.number,
-          seats: form.seats,
+          seats: parsedSeats,
         } as Partial<TableRow>);
       } else {
         await add({
           number: form.number,
-          seats: form.seats,
+          seats: parsedSeats,
           status: "Bo'sh",
         } as Omit<TableRow, "id">);
       }
 
       setModalOpen(false);
     } catch {
-      // Xatolikni jim bosish yoki UI feedback berish mumkin
+      // Xatolikni boshqarish
     } finally {
       setSaving(false);
     }
@@ -286,7 +288,7 @@ export function TablesAdminSection() {
                       number: e.target.value,
                     }))
                   }
-                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#FE9A00]/50"
+                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm text-white outline-none focus:border-[#FE9A00]/50"
                   placeholder="Masalan: 1, 2, VIP"
                 />
               </div>
@@ -298,13 +300,15 @@ export function TablesAdminSection() {
                 <input
                   type="number"
                   value={form.seats}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const val = e.target.value;
                     setForm((state) => ({
                       ...state,
-                      seats: Number(e.target.value),
-                    }))
-                  }
-                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm outline-none focus:border-[#FE9A00]/50"
+                      seats: val === "" ? "" : Number(val),
+                    }));
+                  }}
+                  onFocus={(e) => e.target.select()}
+                  className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm text-white outline-none focus:border-[#FE9A00]/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   min="1"
                 />
               </div>

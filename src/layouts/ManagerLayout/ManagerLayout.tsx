@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { CheckCircle2 } from "lucide-react";
 
 import { Sidebar } from "../../components/common/SideBar";
@@ -8,13 +8,17 @@ import { managerSections } from "../../data/sidebarData";
 
 export default function ManagerLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(true);
-  const [activePage, setActivePage] = useState("bosh-sahifa");
   const [headerSearch, setHeaderSearch] = useState("");
   const [showLogoutToast, setShowLogoutToast] = useState(false);
+
+  // URL'dan joriy aktiv sahifa nomini aniqlash
+  const pathSegments = location.pathname.split("/").filter(Boolean);
+  const activePage = pathSegments[1] || "bosh-sahifa";
 
   const handleToggleSidebar = () => {
     if (window.innerWidth < 1024) {
@@ -50,7 +54,6 @@ export default function ManagerLayout() {
   };
 
   const goToPage = (page: string) => {
-    setActivePage(page);
     setMobileSidebarOpen(false);
     navigate(`/manager/${page}`);
   };
@@ -60,11 +63,11 @@ export default function ManagerLayout() {
       return "Bosh sahifa";
     }
 
-    if (activePage === "sozlamalar") {
+    if (activePage === "sozlamalar" || activePage === "settings") {
       return "Sozlamalar";
     }
 
-    if (activePage === "profil") {
+    if (activePage === "profil" || activePage === "profile") {
       return "Profil";
     }
 

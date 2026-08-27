@@ -18,18 +18,7 @@ import type { SidebarItem } from "../components/common/SideBar";
 
 export const adminSidebarItems: SidebarItem[] = [
   { key: "dashboard", path: "dashboard", label: "Bosh sahifa", icon: LayoutDashboard },
-  {
-    key: "menyu",
-    path: "menyu",
-    label: "Menyu",
-    icon: Utensils,
-    children: [
-      { key: "taomlar", path: "taomlar", label: "Taomlar", icon: ChefHat },
-      { key: "kategoriyalar", path: "kategoriyalar", label: "Kategoriyalar", icon: Tags },
-      { key: "qoshimchalar", path: "qoshimchalar", label: "Qo‘shimchalar", icon: PlusCircle },
-    ],
-  },
-  { key: "buyurtmalar", path: "buyurtmalar", label: "Buyurtmalar", icon: ClipboardList },
+  { key: "menyu", path: "menyu", label: "Menyu", icon: Utensils },
   { key: "rezervatsiyalar", path: "rezervatsiyalar", label: "Rezervatsiyalar", icon: CalendarCheck },
   { key: "stollar", path: "stollar", label: "Stollar", icon: Grid },
   { key: "mijozlar", path: "mijozlar", label: "Mijozlar", icon: Users },

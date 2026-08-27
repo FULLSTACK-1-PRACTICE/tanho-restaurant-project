@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import type { ReactNode, ComponentType, ComponentProps } from "react";
+import { useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import logoImg from "../../assets/images/Layout/Header/Logo-2.png";
 
@@ -35,6 +36,7 @@ export interface SidebarProps {
   brandSubtitle?: string;
   menuOpen?: boolean;
   setMenuOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  onLogoClick?: () => void;
 }
 
 export function SideBar({
@@ -47,7 +49,9 @@ export function SideBar({
   onSelectPage,
   mobileSidebarOpen = false,
   setMobileSidebarOpen,
+  onLogoClick,
 }: SidebarProps) {
+  const navigate = useNavigate();
   const isSidebarOpen = isOpen ?? sidebarOpen ?? true;
   const currentActive = activePath ?? activePage ?? "";
 
@@ -65,9 +69,16 @@ export function SideBar({
     } else if (onSelectPage) {
       onSelectPage(targetPath);
     }
-    // Mobil qurilmalarda biror bo'lim bosilganda sidebarni yopish
     if (setMobileSidebarOpen) {
       setMobileSidebarOpen(false);
+    }
+  };
+
+  const handleLogoClickAction = () => {
+    if (onLogoClick) {
+      onLogoClick();
+    } else {
+      navigate("/");
     }
   };
 
@@ -94,7 +105,6 @@ export function SideBar({
     <>
       <style>{scrollbarHideStyles}</style>
 
-      {/* Mobile Backdrop - Mobil ekranda sidebar ochiq turganda orqa fonni qoraytirib bosganda yopish uchun */}
       {mobileSidebarOpen && setMobileSidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm lg:hidden transition-opacity duration-300"
@@ -102,7 +112,6 @@ export function SideBar({
         />
       )}
 
-      {/* Main Sidebar Aside (Fully Responsive) */}
       <aside
         className={`fixed lg:relative z-50 h-full top-0 left-0 ${
           isSidebarOpen ? "w-[280px]" : "w-0 lg:w-[82px]"
@@ -112,8 +121,10 @@ export function SideBar({
             : "-translate-x-full lg:translate-x-0"
         } overflow-hidden`}
       >
-        {/* LOGO HEADER */}
-        <div className="relative h-[80px] flex items-center justify-center border-b border-white/[0.08] px-4 overflow-hidden shrink-0">
+        <div 
+          onClick={handleLogoClickAction}
+          className="relative h-[80px] flex items-center justify-center border-b border-white/[0.08] px-4 overflow-hidden shrink-0 cursor-pointer"
+        >
           <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-transparent to-transparent pointer-events-none" />
 
           <div className="flex items-center justify-center w-full px-2">
@@ -127,7 +138,6 @@ export function SideBar({
           </div>
         </div>
 
-        {/* NAVIGATION */}
         <nav className="flex-1 overflow-y-auto px-3.5 py-4 space-y-1.5 admin-sidebar-scroll">
           {items.map((item, index) => {
             const itemKey = item.path || item.key || `item-${index}`;
@@ -145,7 +155,6 @@ export function SideBar({
               isChildActive;
             const isOpen = Boolean(openMenus[itemKey] || openMenus[item.key || ""]);
 
-            // Section headers
             const prevItem = index > 0 ? items[index - 1] : null;
             const showSectionHeader =
               item.section && item.section !== prevItem?.section;
@@ -213,7 +222,6 @@ export function SideBar({
                   )}
                 </button>
 
-                {/* Submenu List */}
                 {hasChildren && isSidebarOpen && isOpen && (
                   <div className="ml-5 pl-3 border-l border-white/10 space-y-1 py-1">
                     {item.children?.map((child, childIdx) => {

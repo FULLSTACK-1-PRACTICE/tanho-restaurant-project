@@ -29,6 +29,12 @@ import DashboardPage from "../features/manager/components/DashboardPage"
 import ProfilePage from "../features/manager/components/ProfilePage"
 import SettingsPage from "../features/manager/components/SettingsPage"
 import ManagerMenuSection from "../features/manager/components/ManagerMenuSection"
+import ManagerNewsSection from "../features/manager/components/ManagerNewsSection"
+import ManagerArticlesSection from "../features/manager/components/ManagerArticlesSection"
+import ManagerClientFeedback from "../features/manager/components/ManagerClientFeedback"
+import ManagerReservationsSection from "../features/manager/components/ManagerReservationsSection"
+import ManagerTablesSection from "../features/manager/components/ManagerTablesSection"
+import { Reminders } from "../features/manager/components/Reminders"
 
 import CashierPage from "../features/cashier/components/CashierPage"
 import { NewOrder } from "../features/cashier/components/NewOrder"
@@ -124,6 +130,12 @@ const routes = createBrowserRouter([
               { path: "settings", element: <SettingsPage /> },
               { path: "menyu", element: <ManagerMenuSection /> },
               { path: "taomlar", element: <ManagerMenuSection /> },
+              { path: "rezervatsiyalar", element: <ManagerReservationsSection /> },
+              { path: "stollar", element: <ManagerTablesSection /> },
+              { path: "mijozlar", element: <ManagerClientFeedback /> },
+              { path: "yangiliklar", element: <ManagerNewsSection /> },
+              { path: "maqolalar", element: <ManagerArticlesSection /> },
+              { path: "eslatmalar", element: <Reminders /> },
             ],
           },
         ],

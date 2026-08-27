@@ -1,7 +1,6 @@
 import {
   LayoutDashboard,
   Utensils,
-  ClipboardList,
   CalendarCheck,
   Grid,
   Users,
@@ -29,14 +28,11 @@ export const adminSidebarItems: SidebarItem[] = [
 export const managerSections: SidebarItem[] = [
   { key: "bosh-sahifa", path: "bosh-sahifa", label: "Bosh sahifa", icon: LayoutDashboard },
   { key: "menyu", path: "menyu", label: "Menyu", icon: Utensils },
-  { key: "buyurtmalar", path: "buyurtmalar", label: "Buyurtmalar", icon: ClipboardList, badge: 5 },
   { key: "rezervatsiyalar", path: "rezervatsiyalar", label: "Rezervatsiyalar", icon: CalendarCheck },
   { key: "stollar", path: "stollar", label: "Stollar", icon: Grid },
   { key: "mijozlar", path: "mijozlar", label: "Mijozlar", icon: Users },
   { key: "yangiliklar", path: "yangiliklar", label: "Yangiliklar", icon: Newspaper },
   { key: "maqolalar", path: "maqolalar", label: "Maqolalar", icon: FileText },
-  { key: "xodimlar", path: "xodimlar", label: "Xodimlar", icon: UserSquare2 },
-  { key: "hisobotlar", path: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
   { key: "eslatmalar", path: "eslatmalar", label: "Eslatmalar", icon: BellRing, badge: 2 },
 ];
 

@@ -68,6 +68,18 @@ export default function ManagerLayout() {
       return "Taomlar va Menyu";
     }
 
+    if (activePage === "yangiliklar") {
+      return "Yangiliklar";
+    }
+
+    if (activePage === "maqolalar") {
+      return "Maqolalar";
+    }
+
+    if (activePage === "eslatmalar") {
+      return "Eslatmalar";
+    }
+
     return activePage
       .split("-")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

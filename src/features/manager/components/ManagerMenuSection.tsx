@@ -28,27 +28,20 @@ const DEFAULT_CATEGORIES: Category[] = [
   { id: 5, name: "Qo'shimchalar" },
 ];
 
+const DEFAULT_FOODS: Food[] = [
+  { id: 1, name: "Osh Palov", category: "Asosiy taomlar", price: 35000, status: "Mavjud" },
+  { id: 2, name: "Shashlik", category: "Asosiy taomlar", price: 20000, status: "Mavjud" },
+];
+
 type Props = {
   foods?: Food[];
   categories?: Category[];
   selectedCategory?: string;
   statusFilter?: string;
   searchTerm?: string;
-  newFood?: NewFoodForm;
-  importFile?: File | null;
-  isAddModalOpen?: boolean;
-  isImportModalOpen?: boolean;
   onCategoryChange?: (value: string) => void;
   onStatusChange?: (value: string) => void;
   onSearchChange?: (value: string) => void;
-  onNewFoodChange?: (value: NewFoodForm) => void;
-  onImportFileChange?: (file: File | null) => void;
-  onAddFoodOpen?: () => void;
-  onImportOpen?: () => void;
-  onAddFoodClose?: () => void;
-  onImportClose?: () => void;
-  onAddFoodSubmit?: (event: FormEvent<HTMLFormElement>) => void;
-  onImportSubmit?: (event: FormEvent<HTMLFormElement>) => void;
   onDeleteFood?: (id: number) => void;
   onAddCategorySubmit?: (categoryName: string) => void;
 };
@@ -84,13 +77,13 @@ function InlineCustomSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between gap-3 px-4 py-2 bg-[#141416] border border-amber-500/80 rounded-full text-sm font-medium text-white hover:border-amber-500 transition-all cursor-pointer focus:outline-none"
+        className="w-full flex items-center justify-between gap-3 px-4 py-2 bg-[#141416] border border-[#DCAE4D]/80 rounded-full text-sm font-medium text-white hover:border-[#DCAE4D] transition-all cursor-pointer focus:outline-none"
       >
         <span className="truncate">{selectedOption?.label}</span>
         <ChevronDown
           size={16}
           className={`shrink-0 text-gray-300 transition-transform duration-200 ${
-            isOpen ? "rotate-180 text-amber-400" : ""
+            isOpen ? "rotate-180 text-[#DCAE4D]" : ""
           }`}
         />
       </button>
@@ -109,12 +102,12 @@ function InlineCustomSelect({
                 }}
                 className={`w-full flex items-center justify-between px-4 py-2 text-xs text-left transition-colors cursor-pointer ${
                   isSelected
-                    ? "bg-amber-500/20 text-amber-400 font-semibold"
+                    ? "bg-[#DCAE4D]/20 text-[#DCAE4D] font-semibold"
                     : "text-gray-300 hover:bg-white/5 hover:text-white"
                 }`}
               >
                 <span className="truncate">{opt.label}</span>
-                {isSelected && <Check size={14} className="text-amber-400 shrink-0 ml-2" />}
+                {isSelected && <Check size={14} className="text-[#DCAE4D] shrink-0 ml-2" />}
               </button>
             );
           })}
@@ -125,30 +118,35 @@ function InlineCustomSelect({
 }
 
 export default function ManagerMenuSection({
-  foods = [],
+  foods: propsFoods,
   categories: propsCategories = [],
   selectedCategory: propsSelectedCategory,
   statusFilter: propsStatusFilter,
   searchTerm: propsSearchTerm,
-  newFood: propsNewFood,
-  importFile: propsImportFile,
-  isAddModalOpen: propsIsAddModalOpen,
-  isImportModalOpen: propsIsImportModalOpen,
   onCategoryChange,
   onStatusChange,
   onSearchChange,
-  onNewFoodChange,
-  onImportFileChange,
-  onAddFoodOpen,
-  onImportOpen,
-  onAddFoodClose,
-  onImportClose,
-  onAddFoodSubmit,
-  onImportSubmit,
   onDeleteFood,
   onAddCategorySubmit,
 }: Props) {
-  // LocalStorage dan kategoriyalarni yuklab olish
+  const [internalFoods, setInternalFoods] = useState<Food[]>(() => {
+    const saved = localStorage.getItem("menu_foods");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return propsFoods && propsFoods.length > 0 ? propsFoods : DEFAULT_FOODS;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("menu_foods", JSON.stringify(internalFoods));
+  }, [internalFoods]);
+
+  const foods = internalFoods;
+
   const [internalCategories, setInternalCategories] = useState<Category[]>(() => {
     const saved = localStorage.getItem("menu_categories");
     if (saved) {
@@ -161,7 +159,6 @@ export default function ManagerMenuSection({
     return propsCategories.length > 0 ? propsCategories : DEFAULT_CATEGORIES;
   });
 
-  // Har safar kategoriyalar o'zgarganda localStorage ga saqlash
   useEffect(() => {
     localStorage.setItem("menu_categories", JSON.stringify(internalCategories));
   }, [internalCategories]);
@@ -171,12 +168,14 @@ export default function ManagerMenuSection({
   const [internalSelectedCategory, setInternalSelectedCategory] = useState("Barchasi");
   const [internalStatusFilter, setInternalStatusFilter] = useState("Barchasi");
   const [internalSearchTerm, setInternalSearchTerm] = useState("");
-  const [internalIsAddModalOpen, setInternalIsAddModalOpen] = useState(false);
-  const [internalIsImportModalOpen, setInternalIsImportModalOpen] = useState(false);
+  
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingFood, setEditingFood] = useState<Food | null>(null);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
 
-  const [internalImportFile, setInternalImportFile] = useState<File | null>(null);
-  const [internalNewFood, setInternalNewFood] = useState<NewFoodForm>({
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [newFood, setNewFood] = useState<NewFoodForm>({
     name: "",
     category: categories[0]?.name || "Asosiy taomlar",
     price: "",
@@ -186,10 +185,6 @@ export default function ManagerMenuSection({
   const selectedCategory = propsSelectedCategory ?? internalSelectedCategory;
   const statusFilter = propsStatusFilter ?? internalStatusFilter;
   const searchTerm = propsSearchTerm ?? internalSearchTerm;
-  const isAddModalOpen = propsIsAddModalOpen ?? internalIsAddModalOpen;
-  const isImportModalOpen = propsIsImportModalOpen ?? internalIsImportModalOpen;
-  const importFile = propsImportFile ?? internalImportFile;
-  const newFood = propsNewFood ?? internalNewFood;
 
   const handleCategoryChange = (val: string) => {
     setInternalSelectedCategory(val);
@@ -206,52 +201,27 @@ export default function ManagerMenuSection({
     onSearchChange?.(val);
   };
 
-  const handleAddFoodOpen = () => {
-    setInternalIsAddModalOpen(true);
-    onAddFoodOpen?.();
+  const handleCreateFood = (createdFood: NewFoodForm) => {
+    const item: Food = {
+      id: Date.now(),
+      name: createdFood.name,
+      category: createdFood.category,
+      price: Number(createdFood.price),
+      status: createdFood.status,
+    };
+    setInternalFoods((prev) => [item, ...prev]);
   };
 
-  const handleAddFoodClose = () => {
-    setInternalIsAddModalOpen(false);
-    onAddFoodClose?.();
+  const handleUpdateFood = (updatedFood: Food) => {
+    setInternalFoods((prev) =>
+      prev.map((item) => (item.id === updatedFood.id ? updatedFood : item))
+    );
+    setEditingFood(null);
   };
 
-  const handleImportOpen = () => {
-    setInternalIsImportModalOpen(true);
-    onImportOpen?.();
-  };
-
-  const handleImportClose = () => {
-    setInternalIsImportModalOpen(false);
-    onImportClose?.();
-  };
-
-  const handleNewFoodChange = (form: NewFoodForm) => {
-    setInternalNewFood(form);
-    onNewFoodChange?.(form);
-  };
-
-  const handleImportFileChange = (file: File | null) => {
-    setInternalImportFile(file);
-    onImportFileChange?.(file);
-  };
-
-  const handleAddFoodSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (onAddFoodSubmit) {
-      onAddFoodSubmit(e);
-    } else {
-      handleAddFoodClose();
-    }
-  };
-
-  const handleImportSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (onImportSubmit) {
-      onImportSubmit(e);
-    } else {
-      handleImportClose();
-    }
+  const handleDelete = (id: number) => {
+    setInternalFoods((prev) => prev.filter((item) => item.id !== id));
+    onDeleteFood?.(id);
   };
 
   const handleCreateCategory = (categoryName: string) => {
@@ -291,20 +261,20 @@ export default function ManagerMenuSection({
     <>
       <div className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          <StatCard icon={Utensils} iconBg="bg-amber-500/15" iconColor="text-amber-400" label="Jami taomlar" value={String(totalCount)} sub="+2 bu hafta" subColor="text-emerald-400" />
+          <StatCard icon={Utensils} iconBg="bg-[#DCAE4D]/15" iconColor="text-[#DCAE4D]" label="Jami taomlar" value={String(totalCount)} sub="+2 bu hafta" subColor="text-emerald-400" />
           <StatCard icon={ShoppingCart} iconBg="bg-emerald-500/15" iconColor="text-emerald-400" label="Mavjud taomlar" value={String(availableCount)} sub={`${availablePercent}%`} subColor="text-emerald-400" />
           <StatCard icon={ShoppingCart} iconBg="bg-red-500/15" iconColor="text-red-400" label="Mavjud emas" value={String(unavailableCount)} sub={`${unavailablePercent}%`} subColor="text-red-400" />
           <StatCard icon={ListTree} iconBg="bg-sky-500/15" iconColor="text-sky-400" label="Kategoriyalar" value={String(categories.length)} sub="Barchasi faol" subColor="text-gray-400" />
         </div>
 
         <div className="flex flex-wrap items-center justify-end gap-3">
-          <button type="button" onClick={() => setIsAddCategoryModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-amber-500/80 hover:border-amber-500 text-amber-400 hover:text-amber-300 text-sm font-semibold transition-colors cursor-pointer">
+          <button type="button" onClick={() => setIsAddCategoryModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-[#DCAE4D]/80 hover:border-[#DCAE4D] text-[#DCAE4D] text-sm font-semibold transition-colors cursor-pointer">
             <FolderPlus size={16} /> Kategoriya qo‘shish
           </button>
-          <button type="button" onClick={handleAddFoodOpen} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-amber-500 hover:bg-amber-400 text-black text-sm font-semibold transition-colors cursor-pointer">
+          <button type="button" onClick={() => setIsAddModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#DCAE4D] hover:bg-[#c99b3c] text-black text-sm font-semibold transition-colors cursor-pointer">
             <Plus size={17} /> Taom qo‘shish
           </button>
-          <button type="button" onClick={handleImportOpen} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-amber-500/80 hover:border-amber-500 text-gray-200 text-sm font-semibold transition-colors cursor-pointer">
+          <button type="button" onClick={() => setIsImportModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-[#DCAE4D]/80 hover:border-[#DCAE4D] text-gray-200 text-sm font-semibold transition-colors cursor-pointer">
             <Upload size={16} /> Import qilish
           </button>
         </div>
@@ -331,7 +301,7 @@ export default function ManagerMenuSection({
                 value={searchTerm}
                 onChange={(event) => handleSearchChange(event.target.value)}
                 placeholder="Taom nomi bo‘yicha qidirish..."
-                className="w-full bg-[#141416] border border-amber-500/80 rounded-full pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-amber-500 placeholder-gray-500"
+                className="w-full bg-[#141416] border border-[#DCAE4D]/80 rounded-full pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-[#DCAE4D] placeholder-gray-500"
               />
             </div>
           </div>
@@ -339,10 +309,51 @@ export default function ManagerMenuSection({
           <div className="bg-[#111113] border border-white/5 rounded-2xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="border-b border-white/5 text-left text-gray-500 text-xs uppercase tracking-wide"><th className="px-4 py-3">#</th><th className="px-4 py-3">Taom nomi</th><th className="px-4 py-3">Kategoriya</th><th className="px-4 py-3">Narxi</th><th className="px-4 py-3">Holati</th><th className="px-4 py-3 text-right">Amallar</th></tr></thead>
+                <thead>
+                  <tr className="border-b border-white/5 text-left text-gray-500 text-xs uppercase tracking-wide">
+                    <th className="px-4 py-3">#</th>
+                    <th className="px-4 py-3">Taom nomi</th>
+                    <th className="px-4 py-3">Kategoriya</th>
+                    <th className="px-4 py-3">Narxi</th>
+                    <th className="px-4 py-3">Holati</th>
+                    <th className="px-4 py-3 text-right">Amallar</th>
+                  </tr>
+                </thead>
                 <tbody className="divide-y divide-white/5">
-                  {filteredFoods.map((food, index) => <tr key={food.id} className="hover:bg-white/[0.02]"><td className="px-4 py-3 text-gray-500">{index + 1}</td><td className="px-4 py-3 font-medium text-white">{food.name}</td><td className="px-4 py-3 text-gray-400">{food.category}</td><td className="px-4 py-3 text-amber-400 font-medium">{formatSum(food.price)}</td><td className="px-4 py-3"><span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${food.status === "Mavjud" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>{food.status}</span></td><td className="px-4 py-3"><div className="flex justify-end gap-2"><button type="button" className="w-8 h-8 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors cursor-pointer"><Edit size={14} /></button><button type="button" onClick={() => onDeleteFood?.(food.id)} className="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center hover:bg-red-500/20 transition-colors cursor-pointer"><Trash2 size={14} /></button></div></td></tr>)}
-                  {filteredFoods.length === 0 && <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">Taomlar topilmadi</td></tr>}
+                  {filteredFoods.map((food, index) => (
+                    <tr key={food.id} className="hover:bg-white/[0.02]">
+                      <td className="px-4 py-3 text-gray-500">{index + 1}</td>
+                      <td className="px-4 py-3 font-medium text-white">{food.name}</td>
+                      <td className="px-4 py-3 text-gray-400">{food.category}</td>
+                      <td className="px-4 py-3 text-[#DCAE4D] font-medium">{formatSum(food.price)}</td>
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${food.status === "Mavjud" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>
+                          {food.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex justify-end gap-2">
+                          <button 
+                            type="button" 
+                            onClick={() => setEditingFood(food)} 
+                            className="w-8 h-8 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                          >
+                            <Edit size={14} />
+                          </button>
+                          <button type="button" onClick={() => handleDelete(food.id)} className="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center hover:bg-red-500/20 transition-colors cursor-pointer">
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {filteredFoods.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                        Taomlar topilmadi
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -350,22 +361,96 @@ export default function ManagerMenuSection({
         </div>
       </div>
 
-      {isAddModalOpen && <AddFoodModal categories={categories} form={newFood} onChange={handleNewFoodChange} onClose={handleAddFoodClose} onSubmit={handleAddFoodSubmit} />}
-      {isImportModalOpen && <ImportFoodModal file={importFile} onFileChange={handleImportFileChange} onClose={handleImportClose} onSubmit={handleImportSubmit} />}
-      {isAddCategoryModalOpen && <AddCategoryModal onClose={() => setIsAddCategoryModalOpen(false)} onSubmit={handleCreateCategory} />}
+      {isAddModalOpen && (
+        <AddFoodModal
+          categories={categories}
+          form={newFood}
+          onChange={setNewFood}
+          onClose={() => setIsAddModalOpen(false)}
+          onAdd={handleCreateFood}
+        />
+      )}
+
+      {editingFood && (
+        <EditFoodModal
+          categories={categories}
+          food={editingFood}
+          onClose={() => setEditingFood(null)}
+          onSave={handleUpdateFood}
+        />
+      )}
+
+      {isImportModalOpen && (
+        <ImportFoodModal
+          file={importFile}
+          onFileChange={setImportFile}
+          onClose={() => setIsImportModalOpen(false)}
+          onSubmit={(e) => {
+            e.preventDefault();
+            setIsImportModalOpen(false);
+          }}
+        />
+      )}
+      {isAddCategoryModalOpen && (
+        <AddCategoryModal
+          onClose={() => setIsAddCategoryModalOpen(false)}
+          onSubmit={handleCreateCategory}
+        />
+      )}
     </>
   );
 }
 
-function AddCategoryModal({ onClose, onSubmit }: { onClose: () => void; onSubmit: (name: string) => void }) {
-  const [name, setName] = useState("");
+function EditFoodModal({
+  categories,
+  food,
+  onClose,
+  onSave,
+}: {
+  categories: Category[];
+  food: Food;
+  onClose: () => void;
+  onSave: (food: Food) => void;
+}) {
+  const [form, setForm] = useState({
+    name: food.name,
+    category: food.category,
+    price: String(food.price),
+    status: food.status,
+  });
+
+  const [errors, setErrors] = useState<{ name?: string; price?: string }>({});
+
+  const modalInputClass = (hasError?: boolean) =>
+    `w-full bg-[#141416] border rounded-full px-4 py-2 text-sm text-white focus:outline-none mt-1 transition-colors ${
+      hasError ? "border-red-500 focus:border-red-500" : "border-[#DCAE4D]/80 focus:border-[#DCAE4D]"
+    }`;
+
+  const categoryOptions = categories.map((c) => ({ value: c.name, label: c.name }));
+  const statusOptions = [
+    { value: "Mavjud", label: "Mavjud" },
+    { value: "Mavjud emas", label: "Mavjud emas" },
+  ];
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (name.trim()) {
-      onSubmit(name.trim());
-      onClose();
+    const newErrors: { name?: string; price?: string } = {};
+
+    if (!form.name.trim()) newErrors.name = "Taom nomini kiriting!";
+    if (!form.price || isNaN(Number(form.price))) newErrors.price = "To‘g‘ri narx kiriting!";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
     }
+
+    onSave({
+      ...food,
+      name: form.name.trim(),
+      category: form.category,
+      price: Number(form.price),
+      status: form.status as Food["status"],
+    });
   };
 
   return (
@@ -373,29 +458,63 @@ function AddCategoryModal({ onClose, onSubmit }: { onClose: () => void; onSubmit
       <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
-            <FolderPlus className="text-amber-400" size={18} /> Yangi kategoriya qo‘shish
+            <Edit className="text-[#DCAE4D]" size={18} /> Taomni tahrirlash
           </h3>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
             <X size={18} />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="p-4 space-y-4">
-          <label className="block text-xs text-gray-400">
-            Kategoriya nomi
-            <input
-              required
-              autoFocus
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full bg-[#141416] border border-amber-500/80 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:border-amber-500 mt-1"
-              placeholder="Masalan: Milliy taomlar"
+        <form onSubmit={handleSubmit} noValidate className="p-4 space-y-4">
+          <div>
+            <label className="block text-xs text-gray-400">
+              Taom nomi
+              <input
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className={modalInputClass(!!errors.name)}
+              />
+            </label>
+            {errors.name && <p className="text-xs text-red-400 mt-1 pl-2">{errors.name}</p>}
+          </div>
+
+          <div className="block text-xs text-gray-400">
+            <span className="mb-1 block">Kategoriya</span>
+            <InlineCustomSelect
+              options={categoryOptions}
+              value={form.category}
+              onChange={(val) => setForm({ ...form, category: val })}
+              className="w-full mt-1"
             />
-          </label>
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-400">
+              Narxi (so‘mda)
+              <input
+                type="text"
+                value={form.price}
+                onChange={(e) => setForm({ ...form, price: e.target.value.replace(/[^0-9]/g, "") })}
+                className={modalInputClass(!!errors.price)}
+              />
+            </label>
+            {errors.price && <p className="text-xs text-red-400 mt-1 pl-2">{errors.price}</p>}
+          </div>
+
+          <div className="block text-xs text-gray-400">
+            <span className="mb-1 block">Holati</span>
+            <InlineCustomSelect
+              options={statusOptions}
+              value={form.status}
+              onChange={(val) => setForm({ ...form, status: val as Food["status"] })}
+              className="w-full mt-1"
+            />
+          </div>
+
           <div className="flex justify-end gap-3 pt-2">
             <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">
               Bekor qilish
             </button>
-            <button type="submit" className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
+            <button type="submit" className="px-4 py-2 bg-[#DCAE4D] hover:bg-[#c99b3c] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
               Saqlash
             </button>
           </div>
@@ -405,8 +524,79 @@ function AddCategoryModal({ onClose, onSubmit }: { onClose: () => void; onSubmit
   );
 }
 
-function AddFoodModal({ categories, form, onChange, onClose, onSubmit }: { categories: Category[]; form: NewFoodForm; onChange: (form: NewFoodForm) => void; onClose: () => void; onSubmit: (event: FormEvent<HTMLFormElement>) => void }) {
-  const modalInputClass = "w-full bg-[#141416] border border-amber-500/80 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:border-amber-500 mt-1";
+function AddCategoryModal({ onClose, onSubmit }: { onClose: () => void; onSubmit: (name: string) => void }) {
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) {
+      setError("Kategoriya nomini kiriting!");
+      return;
+    }
+    onSubmit(name.trim());
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+      <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+        <div className="flex items-center justify-between p-4 border-b border-white/5">
+          <h3 className="text-base font-semibold text-white flex items-center gap-2">
+            <FolderPlus className="text-[#DCAE4D]" size={18} /> Yangi kategoriya qo‘shish
+          </h3>
+          <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
+            <X size={18} />
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} noValidate className="p-4 space-y-4">
+          <label className="block text-xs text-gray-400">
+            Kategoriya nomi
+            <input
+              autoFocus
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+                if (error) setError("");
+              }}
+              className="w-full bg-[#141416] border border-[#DCAE4D]/80 rounded-full px-4 py-2 text-sm text-white focus:outline-none mt-1"
+              placeholder="Masalan: Milliy taomlar"
+            />
+          </label>
+          {error && <p className="text-xs text-red-400 font-medium pl-2">{error}</p>}
+          <div className="flex justify-end gap-3 pt-2">
+            <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">
+              Bekor qilish
+            </button>
+            <button type="submit" className="px-4 py-2 bg-[#DCAE4D] hover:bg-[#c99b3c] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
+              Saqlash
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function AddFoodModal({
+  categories,
+  form,
+  onChange,
+  onClose,
+  onAdd,
+}: {
+  categories: Category[];
+  form: NewFoodForm;
+  onChange: (form: NewFoodForm) => void;
+  onClose: () => void;
+  onAdd: (food: NewFoodForm) => void;
+}) {
+  const [errors, setErrors] = useState<{ name?: string; price?: string }>({});
+
+  const modalInputClass = (hasError?: boolean) =>
+    `w-full bg-[#141416] border rounded-full px-4 py-2 text-sm text-white focus:outline-none mt-1 transition-colors ${
+      hasError ? "border-red-500 focus:border-red-500" : "border-[#DCAE4D]/80 focus:border-[#DCAE4D]"
+    }`;
 
   const categoryOptions = categories.map((c) => ({ value: c.name, label: c.name }));
   const statusOptions = [
@@ -414,18 +604,62 @@ function AddFoodModal({ categories, form, onChange, onClose, onSubmit }: { categ
     { value: "Mavjud emas", label: "Mavjud emas" },
   ];
 
+  const handlePriceChange = (val: string) => {
+    const cleanValue = val.replace(/[^0-9]/g, "");
+    onChange({ ...form, price: cleanValue });
+    if (errors.price) setErrors((prev) => ({ ...prev, price: "" }));
+  };
+
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const newErrors: { name?: string; price?: string } = {};
+
+    if (!form.name.trim()) newErrors.name = "Taom nomini kiriting!";
+    if (!form.price) newErrors.price = "Taom narxini kiriting!";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    onAdd(form);
+    onChange({
+      name: "",
+      category: categories[0]?.name || "Asosiy taomlar",
+      price: "",
+      status: "Mavjud",
+    });
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
       <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
-          <h3 className="text-base font-semibold text-white flex items-center gap-2"><ChefHat className="text-amber-400" size={18} />Yangi taom qo‘shish</h3>
-          <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors"><X size={18} /></button>
+          <h3 className="text-base font-semibold text-white flex items-center gap-2">
+            <ChefHat className="text-[#DCAE4D]" size={18} />
+            Yangi taom qo‘shish
+          </h3>
+          <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
+            <X size={18} />
+          </button>
         </div>
-        <form onSubmit={onSubmit} className="p-4 space-y-4">
-          <label className="block text-xs text-gray-400">
-            Taom nomi
-            <input required value={form.name} onChange={(event) => onChange({ ...form, name: event.target.value })} className={modalInputClass} placeholder="Masalan: Osh Palov" />
-          </label>
+        <form onSubmit={handleFormSubmit} noValidate className="p-4 space-y-4">
+          <div>
+            <label className="block text-xs text-gray-400">
+              Taom nomi
+              <input
+                value={form.name}
+                onChange={(event) => {
+                  onChange({ ...form, name: event.target.value });
+                  if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                }}
+                className={modalInputClass(!!errors.name)}
+                placeholder="Masalan: Osh Palov"
+              />
+            </label>
+            {errors.name && <p className="text-xs text-red-400 mt-1 pl-2">{errors.name}</p>}
+          </div>
+
           <div className="block text-xs text-gray-400">
             <span className="mb-1 block">Kategoriya</span>
             <InlineCustomSelect
@@ -435,10 +669,22 @@ function AddFoodModal({ categories, form, onChange, onClose, onSubmit }: { categ
               className="w-full mt-1"
             />
           </div>
-          <label className="block text-xs text-gray-400">
-            Narxi
-            <input required min="1" type="number" value={form.price} onChange={(event) => onChange({ ...form, price: event.target.value })} className={modalInputClass} placeholder="35000" />
-          </label>
+
+          <div>
+            <label className="block text-xs text-gray-400">
+              Narxi (so‘mda)
+              <input
+                type="text"
+                inputMode="numeric"
+                value={form.price}
+                onChange={(event) => handlePriceChange(event.target.value)}
+                className={modalInputClass(!!errors.price)}
+                placeholder="35000"
+              />
+            </label>
+            {errors.price && <p className="text-xs text-red-400 mt-1 pl-2">{errors.price}</p>}
+          </div>
+
           <div className="block text-xs text-gray-400">
             <span className="mb-1 block">Holati</span>
             <InlineCustomSelect
@@ -448,9 +694,14 @@ function AddFoodModal({ categories, form, onChange, onClose, onSubmit }: { categ
               className="w-full mt-1"
             />
           </div>
+
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">Bekor qilish</button>
-            <button type="submit" className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">Saqlash</button>
+            <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">
+              Bekor qilish
+            </button>
+            <button type="submit" className="px-4 py-2 bg-[#DCAE4D] hover:bg-[#c99b3c] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
+              Saqlash
+            </button>
           </div>
         </form>
       </div>
@@ -463,20 +714,30 @@ function ImportFoodModal({ file, onFileChange, onClose, onSubmit }: { file: File
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
       <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
-          <h3 className="text-base font-semibold text-white flex items-center gap-2"><FileSpreadsheet className="text-amber-400" size={18} />Taomlarni import qilish</h3>
-          <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors"><X size={18} /></button>
+          <h3 className="text-base font-semibold text-white flex items-center gap-2">
+            <FileSpreadsheet className="text-[#DCAE4D]" size={18} /> Taomlarni import qilish
+          </h3>
+          <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
+            <X size={18} />
+          </button>
         </div>
         <form onSubmit={onSubmit} className="p-4 space-y-4">
-          <div className="border-2 border-dashed border-amber-500/40 rounded-2xl p-6 text-center">
-            <Upload className="mx-auto text-amber-400 mb-2" size={32} />
+          <div className="border-2 border-dashed border-[#DCAE4D]/40 rounded-2xl p-6 text-center">
+            <Upload className="mx-auto text-[#DCAE4D] mb-2" size={32} />
             <p className="text-xs text-gray-300">Excel yoki CSV faylni tanlang</p>
             <input id="manager-file-import" type="file" accept=".xlsx,.xls,.csv" onChange={(event) => onFileChange(event.target.files?.[0] || null)} className="hidden" />
-            <label htmlFor="manager-file-import" className="mt-3 inline-block px-4 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-xs text-amber-400 rounded-full cursor-pointer border border-amber-500/40 transition-colors">Faylni tanlash</label>
+            <label htmlFor="manager-file-import" className="mt-3 inline-block px-4 py-1.5 bg-[#DCAE4D]/10 hover:bg-[#DCAE4D]/20 text-xs text-[#DCAE4D] rounded-full cursor-pointer border border-[#DCAE4D]/40 transition-colors">
+              Faylni tanlash
+            </label>
           </div>
-          {file && <p className="text-xs text-emerald-400 truncate">Tanlandi: {file.name}</p>}
+          {file && <p className="text-[#DCAE4D] text-xs truncate">Tanlandi: {file.name}</p>}
           <div className="flex justify-end gap-3">
-            <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs text-gray-300 hover:bg-white/5 cursor-pointer transition-colors">Bekor qilish</button>
-            <button type="submit" disabled={!file} className="px-4 py-2 bg-amber-500 text-black rounded-full text-xs font-semibold disabled:opacity-50 cursor-pointer hover:bg-amber-400 transition-colors">Importni boshlash</button>
+            <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs text-gray-300 hover:bg-white/5 cursor-pointer transition-colors">
+              Bekor qilish
+            </button>
+            <button type="submit" disabled={!file} className="px-4 py-2 bg-[#DCAE4D] text-black rounded-full text-xs font-semibold disabled:opacity-50 cursor-pointer hover:bg-[#c99b3c] transition-colors">
+              Importni boshlash
+            </button>
           </div>
         </form>
       </div>

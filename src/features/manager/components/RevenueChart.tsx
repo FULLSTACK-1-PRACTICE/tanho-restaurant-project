@@ -91,7 +91,7 @@ export function RevenueChart() {
                             fontSize={11}
                             tickLine={false}
                             axisLine={false}
-                            tickFormatter={value => `${Math.round(value / 1000000)}M`}
+                            tickFormatter={(value: number) => `${Math.round(value / 1000000)}M`}
                         />
 
                         <Tooltip
@@ -102,7 +102,10 @@ export function RevenueChart() {
                                 fontSize: 12,
                             }}
                             labelStyle={{ color: '#e5e7eb' }}
-                            formatter={(value: any) => [formatSum(Number(value)), 'Daromad']}
+                            formatter={(value) => [
+                                formatSum ? formatSum(Number(value || 0)) : String(value),
+                                'Daromad',
+                            ]}
                         />
 
                         <Area

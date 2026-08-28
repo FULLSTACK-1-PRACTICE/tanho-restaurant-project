@@ -45,7 +45,7 @@ export const articles: Article[] = [
   },
   {
     id: 2,
-    category: "Maslahatlar",
+    category: "Taomlar",
     title: "Manchuri — mazali va to‘yimli taom",
     description:
       "Mazali va to‘yimli Manchuri taomi, o‘ziga xos ta’m va xushbo‘y ziravorlar uyg‘unligi bilan tayyorlanadi.",

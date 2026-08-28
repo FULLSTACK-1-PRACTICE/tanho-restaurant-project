@@ -1,4 +1,4 @@
-import { ArrowRight, ShoppingCart } from "lucide-react";
+import { ArrowRight, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import jojaImg from "../../assets/images/Menu/Cards/Juja.png";
@@ -11,31 +11,26 @@ const foodsData = [
   {
     name: "Jo'ja",
     description: "Maxsus marinadda pishirilgan yumshoq va mazali jo'ja.",
-    price: "45 000 so'm",
     image: jojaImg,
   },
   {
     name: "Jo'ja chesnochni",
     description: "Sarimsoqli maxsus sousda tayyorlangan lazzatli jo'ja.",
-    price: "48 000 so'm",
     image: jojaChesnochniImg,
   },
   {
     name: "Teftel sho'rva",
     description: "Mazali va to'yimli go'shtli teftellar solingan sho'rva.",
-    price: "25 000 so'm",
     image: teftelShorvaImg,
   },
   {
     name: "Manchuri",
     description: "Mazali va sersuv osiyona uslubda tayyorlangan taom.",
-    price: "42 000 so'm",
     image: manchuriImg,
   },
   {
     name: "To'y Oshi",
     description: "An'anaviy Toshkent to'y palovi, qazi va tuxum bilan.",
-    price: "38 000 so'm",
     image: oshimg,
   },
 ];
@@ -94,23 +89,17 @@ function MashhurFood() {
                 </div>
               </div>
 
-              <div className="p-4 pt-0 bg-[#0b0d0e] flex items-center justify-between">
-                <span className="text-sm font-semibold text-[#dcae4d]">
-                  {food.price}
-                </span>
+              <div className="p-4 pt-0 bg-[#0b0d0e]">
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate("/menu");
                   }}
-                  aria-label={`${food.name} savatga qo‘shish`}
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-[#765b28] bg-transparent text-[#dcae4d] transition-all duration-300 hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-[#090a0a] hover:shadow-[0_5px_18px_rgba(220,174,77,0.2)]"
+                  className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-[#765b28] bg-transparent py-2 text-xs font-medium text-[#dcae4d] transition-all duration-300 hover:border-[#dcae4d] hover:bg-[#dcae4d] hover:text-[#090a0a] hover:shadow-[0_5px_18px_rgba(220,174,77,0.2)]"
                 >
-                  <ShoppingCart
-                    size={17}
-                    strokeWidth={1.7}
-                  />
+                  Tafsilotlar
+                  <Eye size={15} strokeWidth={1.7} />
                 </button>
               </div>
             </div>

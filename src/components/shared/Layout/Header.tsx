@@ -41,11 +41,11 @@ function Header() {
       setIsLoggedIn(loggedIn);
       setUserRole(role ? role.toLowerCase().trim() : null);
     };
-    
+
     checkAuthStatus();
     window.addEventListener("storage", checkAuthStatus);
     window.addEventListener("auth-change", checkAuthStatus);
-    
+
     return () => {
       window.removeEventListener("storage", checkAuthStatus);
       window.removeEventListener("auth-change", checkAuthStatus);
@@ -129,7 +129,7 @@ function Header() {
             <Link
               to="/"
               onClick={() => setMenuOpen(false)}
-              className="relative flex h-[42px] w-[110px] shrink-0 cursor-pointer items-center justify-center overflow-hidden md:h-[50px] md:w-[140px] -translate-x-[2px] lg:-translate-x-[7px]"
+              className="relative flex h-[42px] w-[110px] shrink-0 cursor-pointer items-center justify-center overflow-hidden md:h-[50px] md:w-[140px] translate-x-[1px] lg:-translate-x-[10px]"
             >
               <img
                 src={logo}
@@ -205,12 +205,13 @@ function Header() {
                 </button>
               )}
 
+              {/* Hamburger tugmasi yana 1px chapga surildi: translate-x-[3px] */}
               <button
                 type="button"
                 onClick={() => setMenuOpen((prev) => !prev)}
                 aria-label={menuOpen ? "Menyuni yopish" : "Menyuni ochish"}
                 aria-expanded={menuOpen}
-                className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white transition-colors duration-300 hover:border-[#dcae4d] hover:text-[#dcae4d] lg:hidden"
+                className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white transition-colors duration-300 hover:border-[#dcae4d] hover:text-[#dcae4d] lg:hidden translate-x-[3px] lg:translate-x-0"
               >
                 <span className="relative flex h-4 w-[18px] flex-col items-center justify-between">
                   <span
@@ -248,7 +249,7 @@ function Header() {
 
           <aside
             className={`fixed right-0 top-0 z-[999] flex h-full h-[100dvh] w-[88%] max-w-[380px] flex-col overflow-hidden border-l border-white/10 bg-[#070809]/95 backdrop-blur-2xl shadow-[-20px_0_50px_rgba(0,0,0,0.8)] transition-transform duration-700 lg:hidden ${
-              menuOpen ? "translate-x-0" : "translate-x-full"
+              menuOpen ? "-translate-x-[5px]" : "translate-x-full"
             }`}
             style={{
               transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",

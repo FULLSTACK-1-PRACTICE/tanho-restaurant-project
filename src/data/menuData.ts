@@ -106,7 +106,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-7",
-    name: "Sezar salati",
+    name: "Sezar salat",
     category: "Salatlar",
     price: 40000,
     status: "Mavjud",
@@ -205,7 +205,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-18",
-    name: "Izmir salati",
+    name: "Izmir salat",
     category: "Salatlar",
     price: 36000,
     status: "Mavjud",
@@ -214,7 +214,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-19",
-    name: "Lazzat salati",
+    name: "Lazzat salat",
     category: "Salatlar",
     price: 35000,
     status: "Mavjud",
@@ -223,7 +223,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-20",
-    name: "Smak salati",
+    name: "Smak salat",
     category: "Salatlar",
     price: 32000,
     status: "Mavjud",
@@ -232,7 +232,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-21",
-    name: "Xit salati",
+    name: "Xit salat",
     category: "Salatlar",
     price: 38000,
     status: "Mavjud",
@@ -241,7 +241,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-22",
-    name: "Baxor salati",
+    name: "Baxor salat",
     category: "Salatlar",
     price: 33000,
     status: "Mavjud",
@@ -250,7 +250,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-23",
-    name: "Kuritsa Ananas",
+    name: "Kuritsa Ananas salat",
     category: "Salatlar",
     price: 45000,
     status: "Mavjud",
@@ -259,7 +259,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-24",
-    name: "Mujiskoy Kapriz",
+    name: "Mujiskoy Kapriz salat",
     category: "Salatlar",
     price: 46000,
     status: "Mavjud",
@@ -277,7 +277,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-26",
-    name: "Ovoshnoy Assorti",
+    name: "Ovoshnoy Assorti salat",
     category: "Salatlar",
     price: 30000,
     status: "Mavjud",
@@ -286,7 +286,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-27",
-    name: "Pod Vodochku",
+    name: "Pod Vodochku salat",
     category: "Salatlar",
     price: 35000,
     status: "Mavjud",
@@ -295,7 +295,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-28",
-    name: "Tovuq Quli",
+    name: "Tovuq Qo'li",
     category: "Grill",
     price: 34000,
     status: "Mavjud",
@@ -304,7 +304,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-29",
-    name: "Sveji Salat",
+    name: "Sveji salat",
     category: "Salatlar",
     price: 28000,
     status: "Mavjud",
@@ -313,7 +313,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-30",
-    name: "Tanho maxsus",
+    name: "Tanho salat",
     category: "Salatlar",
     price: 60000,
     status: "Mavjud",
@@ -331,7 +331,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-32",
-    name: "Yangi Tanho salati",
+    name: "Yangi Tanho salat",
     category: "Salatlar",
     price: 58000,
     status: "Mavjud",
@@ -340,7 +340,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-33",
-    name: "Yaponskiy 2",
+    name: "Yaponskiy 2 salat",
     category: "Salatlar",
     price: 44000,
     status: "Mavjud",
@@ -349,7 +349,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "menu-34",
-    name: "Oliviye",
+    name: "Oliviye salat",
     category: "Salatlar",
     price: 32000,
     status: "Mavjud",

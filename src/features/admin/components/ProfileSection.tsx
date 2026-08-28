@@ -85,7 +85,7 @@ export function ProfileSection() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="cursor-pointer rounded-lg bg-[#d9a441] px-4 py-2 text-sm font-medium text-black hover:bg-[#edbd58] disabled:cursor-not-allowed disabled:opacity-60"
+          className="cursor-pointer rounded-lg bg-[#E3A72D] px-4 py-2 text-sm font-medium text-black hover:bg-[#edbd58] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {saving ? "Saqlanmoqda..." : "Saqlash"}
         </button>

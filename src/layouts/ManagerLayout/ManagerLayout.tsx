@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { toast } from "sonner";
 
 import { Sidebar } from "../../components/common/SideBar";
 import { Navbar } from "../../components/common/DashboardNavbar";
@@ -41,9 +42,16 @@ export default function ManagerLayout() {
   }, []);
 
   const handleLogout = () => {
+    toast.info("Tizimdan chiqildi", {
+      description: "Xayr, sog' bo'ling!",
+    });
+
     localStorage.removeItem("token");
     localStorage.clear();
-    navigate("/");
+
+    setTimeout(() => {
+      navigate("/");
+    }, 300);
   };
 
   const goToPage = (page: string) => {

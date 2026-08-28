@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { Outlet, useNavigate, useLocation } from "react-router-dom"
+import { toast } from "sonner"
 import { SideBar } from "../../components/common/SideBar"
 import { DashboardNavbar } from "../../components/common/DashboardNavbar"
 import {
@@ -75,13 +76,19 @@ export default function UserLayout() {
   ]
 
   const handleLogout = () => {
+    toast.info("Tizimdan chiqildi", {
+      description: "Xayr, sog' bo'ling!",
+    })
+
     localStorage.removeItem("user")
     localStorage.removeItem("is_logged_in")
     localStorage.removeItem("token")
     localStorage.removeItem("role")
     localStorage.removeItem("user_role")
 
-    navigate("/")
+    setTimeout(() => {
+      navigate("/")
+    }, 300)
   }
 
   const handleProfileClick = () => {

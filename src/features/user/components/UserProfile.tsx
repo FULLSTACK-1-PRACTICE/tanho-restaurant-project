@@ -39,15 +39,19 @@ export default function UserProfile() {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
 
-    localStorage.setItem("user_name", name)
-    localStorage.setItem("user_phone", phone)
-    if (avatar) {
-      localStorage.setItem("user_avatar", avatar)
+    try {
+      localStorage.setItem("user_name", name)
+      localStorage.setItem("user_phone", phone)
+      if (avatar) {
+        localStorage.setItem("user_avatar", avatar)
+      }
+
+      window.dispatchEvent(new Event("userUpdated"))
+      toast.success("Profil ma'lumotlari saqlandi!")
+    } catch (error) {
+      console.error("Profilni saqlashda xatolik:", error)
+      toast.error("Saqlashda xatolik yuz berdi")
     }
-
-    window.dispatchEvent(new Event("userUpdated"))
-
-    toast.success("Profil ma'lumotlari saqlandi!")
   }
 
   return (
@@ -56,19 +60,24 @@ export default function UserProfile() {
 
       <div className="p-6 bg-zinc-900 border border-zinc-800 rounded-xl space-y-5">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-amber-500/20 text-amber-500 flex items-center justify-center font-bold text-2xl border border-amber-500/30 overflow-hidden">
+          <div className="w-16 h-16 rounded-full bg-amber-500/20 text-amber-500 flex items-center justify-center font-bold text-2xl border border-amber-500/30 overflow-hidden shrink-0 aspect-square">
             {avatar ? (
               <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
               name.trim() ? name.trim().charAt(0).toUpperCase() : "U"
             )}
           </div>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer"
-          />
+          <label className="cursor-pointer">
+            <span className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-medium rounded-lg transition-colors inline-block">
+              Rasm tanlash
+            </span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+            />
+          </label>
         </div>
 
         <form onSubmit={handleSave} className="space-y-4">

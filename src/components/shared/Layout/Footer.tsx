@@ -187,7 +187,7 @@ export default function TanhoFooter() {
     { label: 'Maxsus takliflar', path: '/contact' },
     { label: 'Korporativ xizmat', path: '/contact' },
     { label: 'Fikr Mulohaza', path: '/#user-comments' },
-    { label: 'Maxfiylik siyosati', path: '/about' },
+    { label: 'Maxfiylik siyosati', path: '/privacy-policy' }, // TOG'RILANDI
   ]
 
   const colDivider =
@@ -668,43 +668,6 @@ export default function TanhoFooter() {
           </p>
         </div>
       </Container>
-
-      <style>{`
-        @keyframes footerUp {
-          from {
-            opacity: 0;
-            transform: translateY(25px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes diamondPulse {
-          0%,
-          100% {
-            opacity: 0.7;
-            transform: rotate(0deg) scale(1);
-          }
-
-          50% {
-            opacity: 1;
-            transform: rotate(45deg) scale(1.15);
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          *,
-          *::before,
-          *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-          }
-        }
-      `}</style>
     </footer>
   )
 }

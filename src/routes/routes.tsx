@@ -16,8 +16,8 @@ import EventsPage from "../pages/public/Blog/BlogPage"
 import BlogDetailsPage from "../pages/public/Blog/BlogDetailsPage"
 import ContactPage from "../pages/public/Contact/ContactPage"
 import ReservationPage from "../pages/public/Reservation/ReservationPage"
-
 import NewsPage from "../pages/public/News/NewsPage"
+import PrivacyPolicyPage from "../pages/public/PrivacyPolicy/PrivacyPolicyPage"
 import WorkMode from "../pages/public/Service-mode/WorkMode"
 
 import LoginPage from "../features/auth/components/AuthModal"
@@ -140,6 +140,7 @@ const routes = createBrowserRouter([
           { path: "/blog/:id", element: <BlogDetailsPage /> },
           { path: "/contact", element: <ContactPage /> },
           { path: "/news", element: <NewsPage /> },
+          { path: "/privacy-policy", element: <PrivacyPolicyPage /> },
         ],
       },
 

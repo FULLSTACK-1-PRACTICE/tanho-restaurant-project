@@ -20,8 +20,8 @@ import {
 } from "lucide-react";
 import Container from "../../../components/ui/container/Container";
 import Button from "../../../components/ui/Button";
-import Cabina from "../../../assets/images/About/Cabina.png";
-import BackgroundImg from "../../../assets/images/Reservation/BackgroundImg.png"
+import Cabina from "../../../assets/images/About/Cabina.webp";
+import BackgroundImg from "../../../assets/images/Reservation/BackgroundImg.webp"
 
 const ReservationPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -510,6 +510,7 @@ const ReservationPage: React.FC = () => {
         <div className="bg-[#0A0A0B] border border-[#1E1E24] rounded-2xl p-4 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center shadow-xl">
           <div className="md:col-span-5 h-36 sm:h-28 rounded-xl overflow-hidden border border-[#23232A]">
             <img
+              loading="lazy"
               src={Cabina}
               alt="Restaurant ambiance"
               className="w-full h-full object-cover"

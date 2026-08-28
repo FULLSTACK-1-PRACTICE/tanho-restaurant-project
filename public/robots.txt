@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /manager
+Disallow: /cashier
+Disallow: /user
+Disallow: /login
+
+Sitemap: https://tanho.uz/sitemap.xml

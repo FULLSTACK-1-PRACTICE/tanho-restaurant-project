@@ -17,11 +17,11 @@ import {
 } from "lucide-react";
 import Button from "../../../components/ui/Button";
 import Container from "../../../components/ui/container/Container";
-import aboutImg from "../../../assets/images/Landing/About/Tanho-Img.png";
-import thebesttaste from "../../../assets/images/Menu//Additional-Images/three-salad.png";
-import Cabina from "../../../assets/images/About/Cabina.png";
-import TheBestServe from "../../../assets/images/About/TheBestServe.png";
-import HappyFamilyImg from "../../../assets/images/Blog/Happyfamily.png";
+import aboutImg from "../../../assets/images/Landing/About/Tanho-Img.webp";
+import thebesttaste from "../../../assets/images/Menu//Additional-Images/three-salad.webp";
+import Cabina from "../../../assets/images/About/Cabina.webp";
+import TheBestServe from "../../../assets/images/About/TheBestServe.webp";
+import HappyFamilyImg from "../../../assets/images/Blog/Happyfamily.webp";
 
 const AboutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -206,6 +206,7 @@ const AboutPage: React.FC = () => {
 
           <div className="relative rounded-2xl overflow-hidden border border-gray-800/80 shadow-2xl">
             <img
+              loading="lazy"
               src={aboutImg}
               alt="TANHO Restaurant Interior"
               className="w-full h-[400px] object-cover"
@@ -230,6 +231,7 @@ const AboutPage: React.FC = () => {
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
+                loading="lazy"
                 src={thebesttaste}
                 alt="Eng yaxshi ta'm"
                 className="w-full h-full object-cover"
@@ -249,6 +251,7 @@ const AboutPage: React.FC = () => {
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
+                loading="lazy"
                 src={Cabina}
                 alt="Samimiy muhit"
                 className="w-full h-full object-cover"
@@ -268,6 +271,7 @@ const AboutPage: React.FC = () => {
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
+                loading="lazy"
                 src={TheBestServe}
                 alt="Sifatli xizmat"
                 className="w-full h-full object-cover"
@@ -286,6 +290,7 @@ const AboutPage: React.FC = () => {
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
+                loading="lazy"
                 src={HappyFamilyImg}
                 alt="Baxtli mijozlar"
                 className="w-full h-full object-cover"

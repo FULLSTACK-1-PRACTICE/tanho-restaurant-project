@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { ReactNode, ComponentType, ComponentProps } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
-import logoImg from "../../assets/images/Layout/Header/Logo-2.png";
+import logoImg from "../../assets/images/Layout/Header/Logo-2.webp";
 
 export interface SidebarSubItem {
   label: string;
@@ -129,6 +129,7 @@ export function SideBar({
 
           <div className="flex items-center justify-center w-full px-2">
             <img
+              loading="lazy"
               src={logoImg}
               alt="Tanho Restaurant Logo"
               className={`${

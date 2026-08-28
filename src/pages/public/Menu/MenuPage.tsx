@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { menuItems, type MenuItem } from "../../../data/menuData";
-import Initial from "../../../assets/images/Menu/Additional-Images/Initial.png";
+import Initial from "../../../assets/images/Menu/Additional-Images/Initial.webp";
 import AuthModal from "../../../features/auth/components/AuthModal";
-import MenuBackground from "../../../assets/images/Menu/Additional-Images/Menu-Background.png";
+import MenuBackground from "../../../assets/images/Menu/Additional-Images/Menu-Background.webp";
 import useAuthAndFavorites, { type FavoriteItem } from "../../../context/useAuthAndFavorites";
 
 import {
@@ -132,6 +132,7 @@ const MenuPage = () => {
     <div className="min-h-screen bg-[#0b0e10] text-white overflow-x-hidden">
       <section className="relative min-h-[450px] sm:min-h-[500px] overflow-hidden flex items-center">
         <img
+          loading="lazy"
           src={MenuBackground}
           alt="Tanho restaurant"
           className="absolute inset-0 h-full w-full object-cover"
@@ -181,7 +182,7 @@ const MenuPage = () => {
 
         {loading ? (
           <div className="flex items-center justify-center gap-2 py-20 text-gray-400">
-            <Loader2 className="animate-spin" size={22} /> Yuklanmoqda...
+            <Loader2 className="animate-spin" size={22} />
           </div>
         ) : visibleItems.length === 0 ? (
           <div className="rounded-xl border border-white/10 bg-[#121619] py-20 text-center text-gray-400 text-sm">
@@ -204,6 +205,7 @@ const MenuPage = () => {
                     >
                       {food.image ? (
                         <img
+                          loading="lazy"
                           src={food.image}
                           alt={food.name}
                           className="h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-105"
@@ -271,6 +273,7 @@ const MenuPage = () => {
           <div className="grid md:grid-cols-[280px_1fr]">
             <div className="relative h-[200px] overflow-hidden bg-[#121619] sm:h-[220px] md:h-auto">
               <img
+                loading="lazy"
                 src={Initial}
                 alt="TANHO Marosimlar va Zallar"
                 className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"

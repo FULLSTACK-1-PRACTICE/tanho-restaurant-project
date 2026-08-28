@@ -5,14 +5,13 @@ import {
   X,
   Phone,
   MapPin,
-  Send,
   ArrowUpRight,
   Clock,
   User,
   LayoutDashboard,
 } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import logo from "../../../assets/images/Layout/Header/Logo-2.png";
+import logo from "../../../assets/images/Layout/Header/Logo-2.webp";
 import Container from "../../ui/container/Container";
 import { useAuthModal } from "../../../features/auth/hooks/useAuthModal";
 
@@ -132,6 +131,7 @@ function Header() {
               className="relative flex h-[42px] w-[110px] shrink-0 cursor-pointer items-center justify-center overflow-hidden md:h-[50px] md:w-[140px] translate-x-[1px] lg:-translate-x-[10px]"
             >
               <img
+                loading="lazy"
                 src={logo}
                 alt="Tanho Restaurant"
                 className="-mt-1 block h-[80px] w-auto max-w-none object-contain md:h-[100px]"
@@ -205,7 +205,6 @@ function Header() {
                 </button>
               )}
 
-              {/* Hamburger tugmasi yana 2px chapga surildi: translate-x-[1px] */}
               <button
                 type="button"
                 onClick={() => setMenuOpen((prev) => !prev)}
@@ -266,6 +265,7 @@ function Header() {
                     className="cursor-pointer flex items-center"
                   >
                     <img
+                      loading="lazy"
                       src={logo}
                       alt="Tanho Restaurant"
                       className="h-[70px] w-auto object-contain transition-transform hover:scale-105 duration-300"
@@ -377,9 +377,9 @@ function Header() {
                         : "translate-x-4 opacity-0"
                     }`}
                     style={{
-                      transitionProperty: "transform, opacity",
-                      transitionDuration: "300ms",
-                      transitionDelay: menuOpen ? "400ms" : "0ms",
+                      transitionProperty: "transform, opacity, background-color, color",
+                      transitionDuration: menuOpen ? "500ms, 500ms, 150ms, 150ms" : "500ms, 500ms, 150ms, 150ms",
+                      transitionDelay: menuOpen ? "400ms, 400ms, 0ms, 0ms" : "0ms",
                     }}
                   >
                     {userRole && userRole !== "user" ? (
@@ -402,9 +402,9 @@ function Header() {
                         : "translate-x-4 opacity-0"
                     }`}
                     style={{
-                      transitionProperty: "transform, opacity",
-                      transitionDuration: "300ms",
-                      transitionDelay: menuOpen ? "400ms" : "0ms",
+                      transitionProperty: "transform, opacity, background-color, color",
+                      transitionDuration: menuOpen ? "500ms, 500ms, 150ms, 150ms" : "500ms, 500ms, 150ms, 150ms",
+                      transitionDelay: menuOpen ? "400ms, 400ms, 0ms, 0ms" : "0ms",
                     }}
                   >
                     <LogIn size={15} strokeWidth={1.8} />
@@ -425,30 +425,32 @@ function Header() {
               >
                 <div className="flex flex-col gap-2.5">
                   <a
-                    href="tel:+998900000000"
+                    href="tel:+998987760093"
                     className="flex items-center gap-2.5 text-[13px] text-neutral-300 transition-colors duration-300 hover:text-[#dcae4d]"
                   >
                     <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#dcae4d]">
                       <Phone size={13} strokeWidth={1.8} />
                     </div>
-                    <span>+998 90 000 00 00</span>
+                    <span>+998 98 776 00 93</span>
                   </a>
 
                   <div className="flex items-center justify-between gap-2 pt-1">
                     <div className="flex flex-col gap-1 text-[11px] text-neutral-400">
                       <div className="flex items-center gap-1.5">
                         <MapPin size={12} className="text-[#dcae4d]" />
-                        <span>Samarqand, O'zbekiston</span>
+                        <span>Qarshi shahri, Alisher Navoiy ko‘chasi 15</span>
                       </div>
                       <div className="flex items-center gap-1.5 text-neutral-500">
                         <Clock size={12} className="text-[#dcae4d]/70" />
-                        <span>10:00 – 23:00</span>
+                        <span>09:30 – 23:00</span>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2">
                       <a
-                        href="#"
+                        href="https://www.instagram.com/tanho_restorani?igsi=MWUzbDV4OG5jb3M0bA=="
+                        target="_blank"
+                        rel="noopener noreferrer"
                         aria-label="Instagram"
                         className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#dcae4d] transition-all duration-300 hover:border-[#dcae4d] hover:bg-[#dcae4d]/20"
                       >
@@ -473,13 +475,6 @@ function Header() {
                           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                           <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                         </svg>
-                      </a>
-                      <a
-                        href="#"
-                        aria-label="Telegram"
-                        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#dcae4d] transition-all duration-300 hover:border-[#dcae4d] hover:bg-[#dcae4d]/20"
-                      >
-                        <Send size={13} strokeWidth={1.8} />
                       </a>
                     </div>
                   </div>

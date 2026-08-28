@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import { lazy, Suspense, useState, useEffect } from "react"
 import { createBrowserRouter, Outlet, useNavigate, useLocation } from "react-router-dom"
 import { AuthModalProvider } from "../features/auth/context/AuthModalContext"
 import { ProtectedRoute } from "./ProtectedRoute"
@@ -8,56 +8,50 @@ import { toast } from "sonner"
 
 import PublicLayout from "../components/shared/Layout/PageTransition"
 
-import HomePage from "../pages/public/Home/HomePage"
-import MenuPage from "../pages/public/Menu/MenuPage"
-import MenuDetailsPage from "../pages/public/Menu/MenuDetailsPage"
-import AboutPage from "../pages/public/About/AboutPage"
-import EventsPage from "../pages/public/Blog/BlogPage"
-import BlogDetailsPage from "../pages/public/Blog/BlogDetailsPage"
-import ContactPage from "../pages/public/Contact/ContactPage"
-import ReservationPage from "../pages/public/Reservation/ReservationPage"
-import NewsPage from "../pages/public/News/NewsPage"
-import PrivacyPolicyPage from "../pages/public/PrivacyPolicy/PrivacyPolicyPage"
-import WorkMode from "../pages/public/Service-mode/WorkMode"
-
-import LoginPage from "../features/auth/components/AuthModal"
-
-import AdminLayout from "../layouts/AdminLayout/AdminLayout"
-import CashierLayout from "../layouts/CashierLayout/CashierLayout"
-import UserLayout from "../layouts/UserLayout/UserLayout"
-
-import ManagerLayout from "../layouts/ManagerLayout/ManagerLayout"
-import DashboardPage from "../features/manager/components/DashboardPage"
-import ProfilePage from "../features/manager/components/ProfilePage"
-import SettingsPage from "../features/manager/components/SettingsPage"
-import ManagerMenuSection from "../features/manager/components/ManagerMenuSection"
-import ManagerNewsSection from "../features/manager/components/ManagerNewsSection"
-import ManagerArticlesSection from "../features/manager/components/ManagerArticlesSection"
-import ManagerClientFeedback from "../features/manager/components/ManagerClientFeedback"
-import ManagerReservationsSection from "../features/manager/components/ManagerReservationsSection"
-import ManagerTablesSection from "../features/manager/components/ManagerTablesSection"
-import { Reminders } from "../features/manager/components/Reminders"
-
-import CashierPage from "../features/cashier/components/CashierPage"
-import { NewOrder } from "../features/cashier/components/NewOrder"
-import { Orders } from "../features/cashier/components/Orders"
-import { Payments } from "../features/cashier/components/Payments"
-import { CashierTable } from "../features/cashier/components/CashierTable"
-import { ReceiptsView } from "../features/cashier/components/ReceiptsView"
-import { CashierReports } from "../features/cashier/components/CashierReports"
-import CashierMenuPage from "../features/cashier/components/CashierMenuPage"
-import CashierSettingsSection from "../features/cashier/components/SettingsSection"
-import CashierProfile from "../features/cashier/components/CashierProfile"
-
-import UserHome from "../features/user/components/UserHome"
-import UserProfile from "../features/user/components/UserProfile"
-import UserOrders from "../features/user/components/UserOrders"
-import UserFavorites from "../features/user/components/UserFavorites"
-import UserCabinas from "../features/user/components/UserCabinas"
-import UserSettings from "../features/user/components/UserSettings"
-import UserSuggestions from "../features/user/components/UserSuggestions"
-
-import NotFoundPage from "../pages/public/NotFound/NotFoundPage"
+const HomePage = lazy(() => import("../pages/public/Home/HomePage"))
+const MenuPage = lazy(() => import("../pages/public/Menu/MenuPage"))
+const MenuDetailsPage = lazy(() => import("../pages/public/Menu/MenuDetailsPage"))
+const AboutPage = lazy(() => import("../pages/public/About/AboutPage"))
+const EventsPage = lazy(() => import("../pages/public/Blog/BlogPage"))
+const BlogDetailsPage = lazy(() => import("../pages/public/Blog/BlogDetailsPage"))
+const ContactPage = lazy(() => import("../pages/public/Contact/ContactPage"))
+const ReservationPage = lazy(() => import("../pages/public/Reservation/ReservationPage"))
+const NewsPage = lazy(() => import("../pages/public/News/NewsPage"))
+const PrivacyPolicyPage = lazy(() => import("../pages/public/PrivacyPolicy/PrivacyPolicyPage"))
+const WorkMode = lazy(() => import("../pages/public/Service-mode/WorkMode"))
+const LoginPage = lazy(() => import("../features/auth/components/AuthModal"))
+const AdminLayout = lazy(() => import("../layouts/AdminLayout/AdminLayout"))
+const CashierLayout = lazy(() => import("../layouts/CashierLayout/CashierLayout"))
+const UserLayout = lazy(() => import("../layouts/UserLayout/UserLayout"))
+const ManagerLayout = lazy(() => import("../layouts/ManagerLayout/ManagerLayout"))
+const DashboardPage = lazy(() => import("../features/manager/components/DashboardPage"))
+const ProfilePage = lazy(() => import("../features/manager/components/ProfilePage"))
+const SettingsPage = lazy(() => import("../features/manager/components/SettingsPage"))
+const ManagerMenuSection = lazy(() => import("../features/manager/components/ManagerMenuSection"))
+const ManagerNewsSection = lazy(() => import("../features/manager/components/ManagerNewsSection"))
+const ManagerArticlesSection = lazy(() => import("../features/manager/components/ManagerArticlesSection"))
+const ManagerClientFeedback = lazy(() => import("../features/manager/components/ManagerClientFeedback"))
+const ManagerReservationsSection = lazy(() => import("../features/manager/components/ManagerReservationsSection"))
+const ManagerTablesSection = lazy(() => import("../features/manager/components/ManagerTablesSection"))
+const Reminders = lazy(() => import("../features/manager/components/Reminders").then((module) => ({ default: module.Reminders })))
+const CashierPage = lazy(() => import("../features/cashier/components/CashierPage"))
+const NewOrder = lazy(() => import("../features/cashier/components/NewOrder").then((module) => ({ default: module.NewOrder })))
+const Orders = lazy(() => import("../features/cashier/components/Orders").then((module) => ({ default: module.Orders })))
+const Payments = lazy(() => import("../features/cashier/components/Payments").then((module) => ({ default: module.Payments })))
+const CashierTable = lazy(() => import("../features/cashier/components/CashierTable").then((module) => ({ default: module.CashierTable })))
+const ReceiptsView = lazy(() => import("../features/cashier/components/ReceiptsView").then((module) => ({ default: module.ReceiptsView })))
+const CashierReports = lazy(() => import("../features/cashier/components/CashierReports").then((module) => ({ default: module.CashierReports })))
+const CashierMenuPage = lazy(() => import("../features/cashier/components/CashierMenuPage"))
+const CashierSettingsSection = lazy(() => import("../features/cashier/components/SettingsSection"))
+const CashierProfile = lazy(() => import("../features/cashier/components/CashierProfile"))
+const UserHome = lazy(() => import("../features/user/components/UserHome"))
+const UserProfile = lazy(() => import("../features/user/components/UserProfile"))
+const UserOrders = lazy(() => import("../features/user/components/UserOrders"))
+const UserFavorites = lazy(() => import("../features/user/components/UserFavorites"))
+const UserCabinas = lazy(() => import("../features/user/components/UserCabinas"))
+const UserSettings = lazy(() => import("../features/user/components/UserSettings"))
+const UserSuggestions = lazy(() => import("../features/user/components/UserSuggestions"))
+const NotFoundPage = lazy(() => import("../pages/public/NotFound/NotFoundPage"))
 
 export const triggerLogout = (navigateFn?: (path: string) => void) => {
   toast.info("Tizimdan chiqildi", {
@@ -123,7 +117,9 @@ const routes = createBrowserRouter([
       <AuthModalProvider>
         <ScrollToTop />
         <Toaster position="top-right" richColors />
-        <OfflineGuard />
+        <Suspense fallback={null}>
+          <OfflineGuard />
+        </Suspense>
       </AuthModalProvider>
     ),
     children: [

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://tanho.uz/</loc><priority>1.0</priority></url>
+  <url><loc>https://tanho.uz/menu</loc><priority>0.9</priority></url>
+  <url><loc>https://tanho.uz/about</loc><priority>0.7</priority></url>
+  <url><loc>https://tanho.uz/reservation</loc><priority>0.9</priority></url>
+  <url><loc>https://tanho.uz/events</loc><priority>0.7</priority></url>
+  <url><loc>https://tanho.uz/blog</loc><priority>0.7</priority></url>
+  <url><loc>https://tanho.uz/contact</loc><priority>0.8</priority></url>
+  <url><loc>https://tanho.uz/news</loc><priority>0.6</priority></url>
+  <url><loc>https://tanho.uz/privacy-policy</loc><priority>0.3</priority></url>
+</urlset>

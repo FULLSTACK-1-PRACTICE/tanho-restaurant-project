@@ -7,13 +7,13 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import tanhoMaxsusImg from "../../assets/images/Menu/Cards/Tanho.png"; 
-import tanhoPremiumImg from "../../assets/images/Menu/Cards/Yangi-Tanho.png"; 
-import manchuriImg from "../../assets/images/Menu/Cards/Manchuri.png"; 
-import pishirishImg from "../../assets/images/Menu/Cards/pishirrish_jarayoni.png";
-import threeSaladImg from "../../assets/images/Menu/Additional-Images/three-salad.png";
-import RestaurantEvent from "../../assets/images/Blog/RestaurantEvent.png";
-import HealthEating from "../../assets/images/Blog/Health-Eating.png";
+import tanhoMaxsusImg from "../../assets/images/Menu/Cards/Tanho.webp"; 
+import tanhoPremiumImg from "../../assets/images/Menu/Cards/Yangi-Tanho.webp"; 
+import manchuriImg from "../../assets/images/Menu/Cards/Manchuri.webp"; 
+import pishirishImg from "../../assets/images/Menu/Cards/pishirrish_jarayoni.webp";
+import threeSaladImg from "../../assets/images/Menu/Additional-Images/three-salad.webp";
+import RestaurantEvent from "../../assets/images/Blog/RestaurantEvent.webp";
+import HealthEating from "../../assets/images/Blog/Health-Eating.webp";
 
 function SpecialSection() {
   const navigate = useNavigate();
@@ -149,6 +149,7 @@ function SpecialSection() {
                   className="group relative w-full flex flex-col justify-between overflow-hidden rounded-xl border border-[#25292b] bg-[#0a0d0f] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-[#8d6928] hover:shadow-[0_4px_16px_rgba(0,0,0,0.35)] h-full min-h-[380px] cursor-pointer"
                 >
                   <img
+                    loading="lazy"
                     src={offer.image}
                     alt={offer.title}
                     onError={handleImageError}
@@ -198,6 +199,7 @@ function SpecialSection() {
                       className="group relative w-full flex flex-col justify-between overflow-hidden rounded-xl border border-[#25292b] bg-[#0a0d0f] p-4 h-[360px] shadow-sm cursor-pointer"
                     >
                       <img
+                        loading="lazy"
                         src={offer.image}
                         alt={offer.title}
                         onError={handleImageError}
@@ -258,6 +260,7 @@ function SpecialSection() {
                 >
                   <div className="h-[72px] w-[85px] shrink-0 overflow-hidden rounded-lg bg-[#1a1d1f]">
                     <img
+                      loading="lazy"
                       src={item.image}
                       alt={item.title}
                       onError={handleImageError}

@@ -160,6 +160,7 @@ export const CashierMenuPage: React.FC = () => {
             <div>
               <div className="h-40 w-full overflow-hidden relative bg-[#1c1c1c]">
                 <img 
+                  loading="lazy"
                   src={item.image} 
                   alt={item.name} 
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"

@@ -1,5 +1,5 @@
-import { createContext, useState, type ReactNode } from 'react'
-import AuthModal from '../components/AuthModal'
+import { lazy, Suspense, createContext, useState, type ReactNode } from 'react'
+const AuthModal = lazy(() => import('../components/AuthModal'))
 import type { Tab } from '../types'
 
 export interface AuthModalContextType {
@@ -24,12 +24,16 @@ export const AuthModalProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AuthModalContext.Provider value={{ openAuthModal, closeAuthModal }}>
       {children}
-      <AuthModal
-        key={initialTab}
-        isOpen={isOpen}
-        onClose={closeAuthModal}
-        initialTab={initialTab}
-      />
+      {isOpen && (
+        <Suspense fallback={null}>
+          <AuthModal
+            key={initialTab}
+            isOpen={isOpen}
+            onClose={closeAuthModal}
+            initialTab={initialTab}
+          />
+        </Suspense>
+      )}
     </AuthModalContext.Provider>
   )
 }

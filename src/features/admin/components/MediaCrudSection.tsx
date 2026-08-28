@@ -110,7 +110,6 @@ export function MediaCrudSection({
       {loading ? (
         <div className="flex items-center gap-2 text-gray-400">
           <Loader2 className="animate-spin" size={18} />
-          Yuklanmoqda...
         </div>
       ) : items.length === 0 ? (
         <div className="rounded-xl border border-white/10 bg-[#121619] p-10 text-center text-gray-400">
@@ -125,6 +124,7 @@ export function MediaCrudSection({
             >
               {item.image && (
                 <img
+                  loading="lazy"
                   src={item.image}
                   alt={item.title}
                   className="h-40 w-full object-cover"
@@ -190,6 +190,7 @@ export function MediaCrudSection({
 
                 {form.image && (
                   <img
+                    loading="lazy"
                     src={form.image}
                     alt="preview"
                     className="mt-2 h-24 w-24 rounded-lg object-cover"

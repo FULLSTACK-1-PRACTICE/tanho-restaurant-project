@@ -1,6 +1,6 @@
 import React from "react";
 import type { ReactNode, ComponentType, ComponentProps } from "react";
-import logoImg from "../../assets/images/Layout/Header/Logo-2.png";
+import logoImg from "../../assets/images/Layout/Header/Logo-2.webp";
 
 export interface SidebarItem {
   label: string;
@@ -94,6 +94,7 @@ export function SideBar({
 
           <div className="flex items-center justify-center w-full px-2">
             <img
+              loading="lazy"
               src={logoImg}
               alt="Tanho Restaurant Logo"
               className={`${

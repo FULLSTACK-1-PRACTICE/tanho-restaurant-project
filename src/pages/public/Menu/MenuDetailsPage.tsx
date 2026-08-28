@@ -53,6 +53,7 @@ const MenuDetailsPage = () => {
           <div className="grid md:grid-cols-2">
             <div className="relative flex min-h-[300px] items-center justify-center overflow-hidden bg-white p-5 sm:min-h-[430px] sm:p-8 md:min-h-[520px]">
               <img
+                loading="lazy"
                 src={food.image}
                 alt={food.name}
                 className="h-full max-h-[500px] w-full object-contain transition-transform duration-700 ease-out hover:scale-[1.04]"

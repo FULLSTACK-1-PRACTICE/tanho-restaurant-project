@@ -46,6 +46,7 @@ export default function BlogDetailsPage() {
     <main className="min-h-screen bg-[#080807] pb-16 pt-[78px] text-[#f4efe7] sm:pt-[88px]">
       <div className="relative h-[280px] w-full overflow-hidden sm:h-[360px]">
         <img
+          loading="lazy"
           src={article.image}
           alt={article.title}
           className="h-full w-full object-cover opacity-80"

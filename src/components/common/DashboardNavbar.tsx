@@ -281,7 +281,7 @@ export function DashboardNavbar({
               <div className="max-h-80 overflow-y-auto divide-y divide-white/5">
                 {loading ? (
                   <div className="p-4 text-center text-xs text-gray-400">
-                    Yuklanmoqda...
+
                   </div>
                 ) : notifications.length > 0 ? (
                   notifications.map((item) => (

@@ -104,6 +104,7 @@ export function ProfileSection() {
           <div className="h-16 w-16 overflow-hidden rounded-full bg-[#191e22]">
             {photo && (
               <img
+                loading="lazy"
                 src={photo}
                 alt="Profil"
                 className="h-full w-full object-cover"

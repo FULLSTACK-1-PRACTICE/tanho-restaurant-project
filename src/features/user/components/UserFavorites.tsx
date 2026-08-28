@@ -37,6 +37,7 @@ export default function UserFavorites() {
               <div className="w-16 h-16 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400 font-bold text-xs text-center px-1 shrink-0">
                 {item.image ? (
                   <img
+                    loading="lazy"
                     src={item.image}
                     alt={item.name}
                     className="w-full h-full object-cover rounded-lg"

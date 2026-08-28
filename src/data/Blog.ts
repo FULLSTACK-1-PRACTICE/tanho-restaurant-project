@@ -1,8 +1,8 @@
-import Cooking from "../assets/images/Menu/Cards/pishirrish_jarayoni.png";
-import Manchuri from "../assets/images/Blog/Manchuri.png";
-import HealthEating from "../assets/images/Blog/Health-Eating.png"; 
-import RestaurantBlog from "../assets/images/Blog/Restoran-Biography.png";
-import RestaurantEvent from "../assets/images/Blog/RestaurantEvent.png";
+import Cooking from "../assets/images/Menu/Cards/pishirrish_jarayoni.webp";
+import Manchuri from "../assets/images/Blog/Manchuri.webp";
+import HealthEating from "../assets/images/Blog/Health-Eating.webp"; 
+import RestaurantBlog from "../assets/images/Blog/Restoran-Biography.webp";
+import RestaurantEvent from "../assets/images/Blog/RestaurantEvent.webp";
 
 import {
   Camera,

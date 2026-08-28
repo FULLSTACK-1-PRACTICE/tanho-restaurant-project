@@ -1,20 +1,30 @@
 import HeroSection from "../../../features/Landing/HeroSection";
-import MashhurFood from "../../../features/Landing/PopularFood";
-import AboutSection from "../../../features/Landing/AboutSection";
-import SpecialSection from "../../../features/Landing/SpecialSection";
-import Stolband from "../../../features/Landing/BookaTable";
-import UserComments from "../../../features/Landing/UserComments";
+import { lazy, Suspense } from "react"
+import SEO from "../../../components/shared/SEO"
+import DeferredSection from "../../../components/shared/DeferredSection"
 
+const MashhurFood = lazy(() => import("../../../features/Landing/PopularFood"))
+const AboutSection = lazy(() => import("../../../features/Landing/AboutSection"))
+const SpecialSection = lazy(() => import("../../../features/Landing/SpecialSection"))
+const Stolband = lazy(() => import("../../../features/Landing/BookaTable"))
+const UserComments = lazy(() => import("../../../features/Landing/UserComments"))
 
 function Home() {
   return (
     <div className="min-h-screen bg-[#050708] text-white">
+      <SEO
+        title="Tanho Restaurant — Mazali taomlar va unutilmas taassurotlar"
+        description="Tanho Restaurant — mualliflik taomlari, qulay muhit va unutilmas taassurotlar maskani. Menyuni ko‘ring va stol band qiling."
+        path="/"
+      />
       <HeroSection />
-      <MashhurFood />
-      <AboutSection />
-      <SpecialSection />
-      <Stolband />
-      <UserComments />
+      <Suspense fallback={null}>
+        <DeferredSection><MashhurFood /></DeferredSection>
+        <DeferredSection><AboutSection /></DeferredSection>
+        <DeferredSection><SpecialSection /></DeferredSection>
+        <DeferredSection><Stolband /></DeferredSection>
+        <DeferredSection><UserComments /></DeferredSection>
+      </Suspense>
     </div>
   );
 }

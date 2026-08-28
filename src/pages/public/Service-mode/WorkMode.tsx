@@ -39,7 +39,7 @@ function RefreshIcon({ spinning }: { spinning: boolean }) {
 
 export default function WorkMode() {
   const navigate = useNavigate();
-  const [isOnline, setIsOnline] = useState(() => typeof navigator === "undefined" ? true : navigator.onLine);
+  const [, setIsOnline] = useState(() => typeof navigator === "undefined" ? true : navigator.onLine);
   const [isChecking, setIsChecking] = useState(false);
 
   const handleOnlineRedirect = () => {

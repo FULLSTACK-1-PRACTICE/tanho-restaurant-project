@@ -1,4 +1,4 @@
-import menuHeadImg from "../assets/images/Menu/Additional-Images/MenuHead.png";
+import menuHeadImg from "../assets/images/Menu/Additional-Images/MenuHead.webp";
 
 export interface FoodItem {
   name: string;

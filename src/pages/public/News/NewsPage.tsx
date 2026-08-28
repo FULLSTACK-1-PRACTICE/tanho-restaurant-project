@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import yangiliklar from "../../../assets/images/Layout/Header/yangiliklar.png";
-import mevaliAssorti from "../../../assets/images/Menu/Cards/Mevali-Assorti.png";
-import initialImg from "../../../assets/images/Menu/Additional-Images/Initial.png";
+import yangiliklar from "../../../assets/images/Layout/Header/yangiliklar.webp";
+import mevaliAssorti from "../../../assets/images/Menu/Cards/Mevali-Assorti.webp";
+import initialImg from "../../../assets/images/Menu/Additional-Images/Initial.webp";
 import Container from "../../../components/ui/container/Container";
-import NewSalad from "../../../assets/images/Menu/Additional-Images/three-salad.png";
+import NewSalad from "../../../assets/images/Menu/Additional-Images/three-salad.webp";
 import {
   Search,
   ChevronDown,
@@ -130,6 +130,7 @@ const NewsModal = ({ item, onClose }: NewsModalProps) => {
             }`}
           >
             <img
+              loading="lazy"
               src={item.image}
               alt={item.title}
               className={
@@ -416,6 +417,7 @@ const NewsPage = () => {
       <section className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0">
           <img
+            loading="lazy"
             src={yangiliklar}
             alt="Yangiliklar"
             className="h-full w-full object-cover object-center"
@@ -533,6 +535,7 @@ const NewsPage = () => {
                       }`}
                     >
                       <img
+                        loading="lazy"
                         src={item.image}
                         alt={item.title}
                         className={
@@ -662,6 +665,7 @@ const NewsPage = () => {
 
               <div className="relative hidden min-h-[380px] lg:flex lg:col-span-5 h-full w-full overflow-hidden rounded-r-2xl">
                 <img
+                  loading="lazy"
                   src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=80"
                   alt="Restaurant Atmosphere"
                   className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"

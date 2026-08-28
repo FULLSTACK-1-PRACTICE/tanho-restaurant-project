@@ -7,8 +7,8 @@ import {
 } from 'lucide-react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 
-import footerImage from '../../../assets/images/Layout/Footer/image.png'
-import logo from '../../../assets/images/Layout/Header/Logo-2.png'
+import footerImage from '../../../assets/images/Layout/Footer/image.webp'
+import logo from '../../../assets/images/Layout/Header/Logo-2.webp'
 import Container from '../../../components/ui/container/Container'
 
 const gold = '#F5B942'
@@ -196,6 +196,7 @@ export default function TanhoFooter() {
   return (
     <footer className="relative overflow-hidden bg-[#0a0a0b]">
       <img
+        loading="lazy"
         src={footerImage}
         alt=""
         aria-hidden="true"
@@ -213,6 +214,7 @@ export default function TanhoFooter() {
               <div className="flex items-start -ml-1">
                 <Link to="/" aria-label="Bosh sahifaga o'tish">
                   <img
+                    loading="lazy"
                     src={logo}
                     alt="Tanho Restaurant"
                     className="h-[95px] w-auto max-w-[260px] object-contain object-left cursor-pointer transition-opacity duration-300 hover:opacity-90"
@@ -387,6 +389,7 @@ export default function TanhoFooter() {
             <div className="flex items-center justify-center">
               <Link to="/" aria-label="Bosh sahifaga o'tish">
                 <img
+                  loading="lazy"
                   src={logo}
                   alt="Tanho Restaurant"
                   className="h-[80px] w-auto max-w-[220px] object-contain cursor-pointer transition-opacity duration-300 hover:opacity-90"

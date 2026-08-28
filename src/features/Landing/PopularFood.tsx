@@ -1,11 +1,11 @@
 import { ArrowRight, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import jojaImg from "../../assets/images/Menu/Cards/Juja.png";
-import jojaChesnochniImg from "../../assets/images/Menu/Cards/Juja-Chesnochni.png";
-import teftelShorvaImg from "../../assets/images/Menu/Cards/Teftel-Shurva.png";
-import manchuriImg from "../../assets/images/Menu/Cards/Manchuri.png";
-import oshimg from "../../assets/images/Menu/Cards/Osh.png";
+import jojaImg from "../../assets/images/Menu/Cards/Juja.webp";
+import jojaChesnochniImg from "../../assets/images/Menu/Cards/Juja-Chesnochni.webp";
+import teftelShorvaImg from "../../assets/images/Menu/Cards/Teftel-Shurva.webp";
+import manchuriImg from "../../assets/images/Menu/Cards/Manchuri.webp";
+import oshimg from "../../assets/images/Menu/Cards/Osh.webp";
 
 const foodsData = [
   {
@@ -77,6 +77,7 @@ function MashhurFood() {
                   style={{ backgroundColor: "#FEFEFE" }}
                 >
                   <img
+                    loading="lazy"
                     src={food.image}
                     alt={food.name}
                     className="h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-105"

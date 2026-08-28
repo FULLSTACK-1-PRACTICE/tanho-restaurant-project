@@ -14,7 +14,7 @@ import {
 import Container from "@/components/ui/container/Container";
 import Button from "@/components/ui/Button/Button";
 import { articles, type Article } from "@/data/Blog";
-import BackgroundImg from "../../../assets/images/Reservation/BackgroundImg.png";
+import BackgroundImg from "../../../assets/images/Reservation/BackgroundImg.webp";
 
 const categoryLabels = [
   "Barchasi",
@@ -59,6 +59,7 @@ function ArticleCard({
       {/* 1px ortiqcha chiziq chiqib ketishini to'liq yopish uchun isolation-auto va inset-0 qo'shildi */}
       <div className="relative h-[150px] overflow-hidden rounded-t-[9px] bg-[#17130d] isolation-auto">
         <img
+          loading="lazy"
           src={article.image}
           alt={article.title}
           style={{ backfaceVisibility: "hidden" }}
@@ -368,6 +369,7 @@ export default function BlogPage() {
       <section className="relative isolate border-b border-[#17130d] pb-7 pt-[78px] sm:pt-[88px]">
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[205px] overflow-hidden opacity-50">
           <img
+            loading="lazy"
             src={BackgroundImg}
             alt=""
             className="h-full w-full object-cover object-center"

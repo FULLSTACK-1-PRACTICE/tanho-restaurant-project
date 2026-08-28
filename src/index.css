@@ -152,6 +152,8 @@
   scrollbar-color: #2a3036 #121619;
 }
 
+/* --- Sonner Toast Responsive Sozlamasi --- */
+/* Mobil qurilmalar uchun (tepada markazda turadi) */
 [data-sonner-toaster] {
   position: fixed !important;
   top: 16px !important;
@@ -159,16 +161,28 @@
   transform: translateX(-50%) !important;
   width: 100% !important;
   max-width: 380px !important;
-  padding: 0 !important;
+  padding: 0 16px !important;
   box-sizing: border-box !important;
   z-index: 99999 !important;
 }
 
+[data-sonner-toaster] [data-sonner-toast] {
+  width: 100% !important;
+  max-width: 100% !important;
+  background-color: #1a1a1e !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #f3f4f6 !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5) !important;
+}
+
+/* Desktop ekranlar uchun (Asl holatiga qaytarildi - o'ng tomonda chiqadi) */
 @media (min-width: 768px) {
   [data-sonner-toaster] {
     left: auto !important;
     right: 16px !important;
     transform: none !important;
     max-width: 400px !important;
+    padding: 0 !important;
   }
 }

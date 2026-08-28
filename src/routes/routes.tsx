@@ -21,7 +21,6 @@ const PrivacyPolicyPage = lazy(() => import("../pages/public/PrivacyPolicy/Priva
 const WorkMode = lazy(() => import("../pages/public/Service-mode/WorkMode"))
 const LoginPage = lazy(() => import("../features/auth/components/AuthModal"))
 const AdminLayout = lazy(() => import("../layouts/AdminLayout/AdminLayout"))
-const CashierLayout = lazy(() => import("../layouts/CashierLayout/CashierLayout"))
 const UserLayout = lazy(() => import("../layouts/UserLayout/UserLayout"))
 const ManagerLayout = lazy(() => import("../layouts/ManagerLayout/ManagerLayout"))
 const DashboardPage = lazy(() => import("../features/manager/components/DashboardPage"))
@@ -34,16 +33,6 @@ const ManagerClientFeedback = lazy(() => import("../features/manager/components/
 const ManagerReservationsSection = lazy(() => import("../features/manager/components/ManagerReservationsSection"))
 const ManagerTablesSection = lazy(() => import("../features/manager/components/ManagerTablesSection"))
 const Reminders = lazy(() => import("../features/manager/components/Reminders").then((module) => ({ default: module.Reminders })))
-const CashierPage = lazy(() => import("../features/cashier/components/CashierPage"))
-const NewOrder = lazy(() => import("../features/cashier/components/NewOrder").then((module) => ({ default: module.NewOrder })))
-const Orders = lazy(() => import("../features/cashier/components/Orders").then((module) => ({ default: module.Orders })))
-const Payments = lazy(() => import("../features/cashier/components/Payments").then((module) => ({ default: module.Payments })))
-const CashierTable = lazy(() => import("../features/cashier/components/CashierTable").then((module) => ({ default: module.CashierTable })))
-const ReceiptsView = lazy(() => import("../features/cashier/components/ReceiptsView").then((module) => ({ default: module.ReceiptsView })))
-const CashierReports = lazy(() => import("../features/cashier/components/CashierReports").then((module) => ({ default: module.CashierReports })))
-const CashierMenuPage = lazy(() => import("../features/cashier/components/CashierMenuPage"))
-const CashierSettingsSection = lazy(() => import("../features/cashier/components/SettingsSection"))
-const CashierProfile = lazy(() => import("../features/cashier/components/CashierProfile"))
 const UserHome = lazy(() => import("../features/user/components/UserHome"))
 const UserProfile = lazy(() => import("../features/user/components/UserProfile"))
 const UserOrders = lazy(() => import("../features/user/components/UserOrders"))
@@ -187,28 +176,6 @@ const routes = createBrowserRouter([
               { path: "yangiliklar", element: <ManagerNewsSection /> },
               { path: "maqolalar", element: <ManagerArticlesSection /> },
               { path: "eslatmalar", element: <Reminders /> },
-            ],
-          },
-        ],
-      },
-
-      {
-        element: <ProtectedRoute allowedRoles={["cashier"]} />,
-        children: [
-          {
-            path: "/cashier",
-            element: <CashierLayout />,
-            children: [
-              { index: true, element: <CashierPage /> },
-              { path: "new-order", element: <NewOrder /> },
-              { path: "orders", element: <Orders /> },
-              { path: "payments", element: <Payments /> },
-              { path: "tables", element: <CashierTable /> },
-              { path: "menu", element: <CashierMenuPage /> },
-              { path: "checks", element: <ReceiptsView /> },
-              { path: "reports", element: <CashierReports /> },
-              { path: "settings", element: <CashierSettingsSection /> },
-              { path: "profile", element: <CashierProfile /> },
             ],
           },
         ],

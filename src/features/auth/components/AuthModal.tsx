@@ -281,20 +281,6 @@ export default function AuthModal({
     }
 
     if (
-      cleanEmail === "cashier@gmail.com" &&
-      cleanPassword === "cashier#2026"
-    ) {
-      executeLogin(
-        "cashier",
-        "/cashier",
-        "Kassir",
-        "cashier-id",
-        "Kassir",
-      )
-      return
-    }
-
-    if (
       cleanEmail === "manager@gmail.com" &&
       cleanPassword === "manager#2026"
     ) {

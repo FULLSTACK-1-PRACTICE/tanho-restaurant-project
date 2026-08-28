@@ -152,7 +152,6 @@
   scrollbar-color: #2a3036 #121619;
 }
 
-/* --- Sonner Toaster (Faqat joylashuvi saqlandi, ichki dizaynga tegilmadi) --- */
 [data-sonner-toaster] {
   position: fixed !important;
   top: 16px !important;
@@ -165,7 +164,6 @@
   z-index: 99999 !important;
 }
 
-/* Desktop uchun asl holatiga qaytarish */
 @media (min-width: 768px) {
   [data-sonner-toaster] {
     left: auto !important;

@@ -18,6 +18,20 @@ export default function ManagerLayout() {
   const pathSegments = location.pathname.split("/").filter(Boolean);
   const activePage = pathSegments[1] || "bosh-sahifa";
 
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+
+    const handlePopState = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
   const handleToggleSidebar = () => {
     if (window.innerWidth < 1024) {
       setMobileSidebarOpen((previous) => !previous);
@@ -50,7 +64,7 @@ export default function ManagerLayout() {
     localStorage.clear();
 
     setTimeout(() => {
-      navigate("/");
+      navigate("/", { replace: true });
     }, 300);
   };
 

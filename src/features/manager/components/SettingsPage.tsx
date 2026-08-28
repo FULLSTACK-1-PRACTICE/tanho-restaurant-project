@@ -1,30 +1,15 @@
 import { useState } from "react";
 import {
-  Building2,
-  Phone,
-  Mail,
-  MapPin,
-  Clock,
   Lock,
-  Percent,
+  Bell,
   Save,
   ShieldCheck,
   Check,
 } from "lucide-react";
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<"general" | "security" | "notifications" | "system">("general");
+  const [activeTab, setActiveTab] = useState<"security" | "notifications">("security");
   const [saved, setSaved] = useState(false);
-
-  // Form ma'lumotlari
-  const [generalInfo, setGeneralInfo] = useState({
-    restaurantName: "Tanho Restaurant",
-    phone: "+998 90 123 45 67",
-    email: "info@tanhorestaurant.uz",
-    address: "Toshkent shahri, Yunusobod tumani, Amir Temur ko'chasi 45-uy",
-    openingTime: "09:00",
-    closingTime: "23:00",
-  });
 
   const [security, setSecurity] = useState({
     currentPassword: "",
@@ -32,10 +17,10 @@ export default function SettingsPage() {
     confirmPassword: "",
   });
 
-  const [system, setSystem] = useState({
-    serviceFee: 10, // %
-    vatTax: 12, // %
-    autoConfirmOrders: true,
+  const [notifications, setNotifications] = useState({
+    newOrders: true,
+    tableReservations: true,
+    systemAlerts: false,
   });
 
   const handleSave = (e: React.FormEvent) => {
@@ -49,12 +34,11 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Sarlavha va Tablar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-white/5 pb-4">
         <div>
           <h2 className="text-xl font-semibold text-white">Sozlamalar</h2>
           <p className="text-xs text-gray-400">
-            Restoran va profil ma'lumotlarini boshqarish
+            Xavfsizlik va bildirishnoma sozlamalarini boshqarish
           </p>
         </div>
 
@@ -66,20 +50,7 @@ export default function SettingsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-6">
-        {/* Yon menyu (Tablar) */}
         <div className="space-y-1">
-          <button
-            onClick={() => setActiveTab("general")}
-            className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
-              activeTab === "general"
-                ? "bg-amber-500/15 text-amber-400 border border-amber-500/20"
-                : "text-gray-400 hover:bg-white/5 hover:text-white"
-            }`}
-          >
-            <Building2 size={16} />
-            Restoran profili
-          </button>
-
           <button
             onClick={() => setActiveTab("security")}
             className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
@@ -93,109 +64,19 @@ export default function SettingsPage() {
           </button>
 
           <button
-            onClick={() => setActiveTab("system")}
+            onClick={() => setActiveTab("notifications")}
             className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
-              activeTab === "system"
+              activeTab === "notifications"
                 ? "bg-amber-500/15 text-amber-400 border border-amber-500/20"
                 : "text-gray-400 hover:bg-white/5 hover:text-white"
             }`}
           >
-            <Percent size={16} />
-            Xizmat va Soliq
+            <Bell size={16} />
+            Bildirishnomalar
           </button>
         </div>
 
-        {/* Tab Kontenti */}
         <div className="bg-[#111113] border border-white/5 rounded-2xl p-5 md:p-6">
-          {activeTab === "general" && (
-            <form onSubmit={handleSave} className="space-y-4">
-              <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-                <Building2 size={16} className="text-amber-400" /> Restoran Asosiy Ma'lumotlari
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium"> Restoran nomi</label>
-                  <input
-                    type="text"
-                    value={generalInfo.restaurantName}
-                    onChange={(e) => setGeneralInfo({ ...generalInfo, restaurantName: e.target.value })}
-                    className={inputClass}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">
-                    <Phone size={12} className="inline mr-1" /> Telefon raqami
-                  </label>
-                  <input
-                    type="text"
-                    value={generalInfo.phone}
-                    onChange={(e) => setGeneralInfo({ ...generalInfo, phone: e.target.value })}
-                    className={inputClass}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">
-                    <Mail size={12} className="inline mr-1" /> Email manzili
-                  </label>
-                  <input
-                    type="email"
-                    value={generalInfo.email}
-                    onChange={(e) => setGeneralInfo({ ...generalInfo, email: e.target.value })}
-                    className={inputClass}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">
-                    <MapPin size={12} className="inline mr-1" /> Manzil
-                  </label>
-                  <input
-                    type="text"
-                    value={generalInfo.address}
-                    onChange={(e) => setGeneralInfo({ ...generalInfo, address: e.target.value })}
-                    className={inputClass}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">
-                    <Clock size={12} className="inline mr-1" /> Ochilish vaqti
-                  </label>
-                  <input
-                    type="time"
-                    value={generalInfo.openingTime}
-                    onChange={(e) => setGeneralInfo({ ...generalInfo, openingTime: e.target.value })}
-                    className={inputClass}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">
-                    <Clock size={12} className="inline mr-1" /> Yopilish vaqti
-                  </label>
-                  <input
-                    type="time"
-                    value={generalInfo.closingTime}
-                    onChange={(e) => setGeneralInfo({ ...generalInfo, closingTime: e.target.value })}
-                    className={inputClass}
-                  />
-                </div>
-              </div>
-
-              <div className="pt-4 flex justify-end">
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-semibold transition-colors cursor-pointer"
-                >
-                  <Save size={15} /> Saqlash
-                </button>
-              </div>
-            </form>
-          )}
-
           {activeTab === "security" && (
             <form onSubmit={handleSave} className="space-y-4">
               <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
@@ -204,34 +85,46 @@ export default function SettingsPage() {
 
               <div className="space-y-3 max-w-md">
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">Joriy parol</label>
+                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">
+                    Joriy parol
+                  </label>
                   <input
                     type="password"
                     placeholder="••••••••"
                     value={security.currentPassword}
-                    onChange={(e) => setSecurity({ ...security, currentPassword: e.target.value })}
+                    onChange={(e) =>
+                      setSecurity({ ...security, currentPassword: e.target.value })
+                    }
                     className={inputClass}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">Yangi parol</label>
+                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">
+                    Yangi parol
+                  </label>
                   <input
                     type="password"
                     placeholder="••••••••"
                     value={security.newPassword}
-                    onChange={(e) => setSecurity({ ...security, newPassword: e.target.value })}
+                    onChange={(e) =>
+                      setSecurity({ ...security, newPassword: e.target.value })
+                    }
                     className={inputClass}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">Yangi parolni tasdiqlang</label>
+                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">
+                    Yangi parolni tasdiqlang
+                  </label>
                   <input
                     type="password"
                     placeholder="••••••••"
                     value={security.confirmPassword}
-                    onChange={(e) => setSecurity({ ...security, confirmPassword: e.target.value })}
+                    onChange={(e) =>
+                      setSecurity({ ...security, confirmPassword: e.target.value })
+                    }
                     className={inputClass}
                   />
                 </div>
@@ -248,32 +141,48 @@ export default function SettingsPage() {
             </form>
           )}
 
-          {activeTab === "system" && (
+          {activeTab === "notifications" && (
             <form onSubmit={handleSave} className="space-y-4">
               <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-                <Percent size={16} className="text-amber-400" /> Xizmat ko'rsatish va Soliqlar
+                <Bell size={16} className="text-amber-400" /> Bildirishnoma Sozlamalari
               </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
-                <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">Xizmat haqi (%)</label>
+              <div className="space-y-3 max-w-md">
+                <label className="flex items-center justify-between p-3 bg-[#1a1a1e] border border-white/10 rounded-xl cursor-pointer">
+                  <span className="text-xs text-gray-200 font-medium">Yangi buyurtmalar xabarnomasi</span>
                   <input
-                    type="number"
-                    value={system.serviceFee}
-                    onChange={(e) => setSystem({ ...system, serviceFee: Number(e.target.value) })}
-                    className={inputClass}
+                    type="checkbox"
+                    checked={notifications.newOrders}
+                    onChange={(e) =>
+                      setNotifications({ ...notifications, newOrders: e.target.checked })
+                    }
+                    className="accent-amber-500 w-4 h-4 rounded cursor-pointer"
                   />
-                </div>
+                </label>
 
-                <div>
-                  <label className="block text-xs text-gray-400 mb-1.5 font-medium">QQS / Soliq (%)</label>
+                <label className="flex items-center justify-between p-3 bg-[#1a1a1e] border border-white/10 rounded-xl cursor-pointer">
+                  <span className="text-xs text-gray-200 font-medium">Stol bron qilish xabarnomasi</span>
                   <input
-                    type="number"
-                    value={system.vatTax}
-                    onChange={(e) => setSystem({ ...system, vatTax: Number(e.target.value) })}
-                    className={inputClass}
+                    type="checkbox"
+                    checked={notifications.tableReservations}
+                    onChange={(e) =>
+                      setNotifications({ ...notifications, tableReservations: e.target.checked })
+                    }
+                    className="accent-amber-500 w-4 h-4 rounded cursor-pointer"
                   />
-                </div>
+                </label>
+
+                <label className="flex items-center justify-between p-3 bg-[#1a1a1e] border border-white/10 rounded-xl cursor-pointer">
+                  <span className="text-xs text-gray-200 font-medium">Tizim yangilanishlari</span>
+                  <input
+                    type="checkbox"
+                    checked={notifications.systemAlerts}
+                    onChange={(e) =>
+                      setNotifications({ ...notifications, systemAlerts: e.target.checked })
+                    }
+                    className="accent-amber-500 w-4 h-4 rounded cursor-pointer"
+                  />
+                </label>
               </div>
 
               <div className="pt-4 flex justify-end">

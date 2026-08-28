@@ -254,7 +254,7 @@ export default function AuthModal({
 
     if (
       cleanEmail === "admin@gmail.com" &&
-      cleanPassword === "12345"
+      cleanPassword === "admin#2026"
     ) {
       executeLogin(
         "admin",
@@ -268,7 +268,7 @@ export default function AuthModal({
 
     if (
       cleanEmail === "user@gmail.com" &&
-      cleanPassword === "12345"
+      cleanPassword === "user#2026"
     ) {
       executeLogin(
         "user",
@@ -282,7 +282,7 @@ export default function AuthModal({
 
     if (
       cleanEmail === "cashier@gmail.com" &&
-      cleanPassword === "12345"
+      cleanPassword === "cashier#2026"
     ) {
       executeLogin(
         "cashier",
@@ -296,7 +296,7 @@ export default function AuthModal({
 
     if (
       cleanEmail === "manager@gmail.com" &&
-      cleanPassword === "12345"
+      cleanPassword === "manager#2026"
     ) {
       executeLogin(
         "manager",

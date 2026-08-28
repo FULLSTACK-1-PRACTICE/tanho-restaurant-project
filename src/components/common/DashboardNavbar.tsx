@@ -41,8 +41,9 @@ export interface DashboardNavbarProps {
   user?: DashboardUser;
   notificationCount?: number;
   actions?: ReactNode;
-  searchResults?: SearchResultItem[]; // Qidiruv natijalari massivi
-  onSearchResultClick?: (item: SearchResultItem) => void; // Natijaga bosilganda
+  searchResults?: SearchResultItem[];
+  onSearchResultClick?: (item: SearchResultItem) => void;
+  activeTab?: string; // Hozir qaysi sahifadaligini bilish uchun (masalan "profil" yoki "sozlamalar")
 }
 
 export function DashboardNavbar({
@@ -67,13 +68,14 @@ export function DashboardNavbar({
   actions,
   searchResults = [],
   onSearchResultClick,
+  activeTab,
 }: DashboardNavbarProps) {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
   const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
 
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const profileRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
@@ -83,20 +85,19 @@ export function DashboardNavbar({
   const currentSearchValue = searchValue ?? headerSearch;
   const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "A";
 
-  // API dan bildirishnomalarni olish
-  const fetchNotifications = async () => {
-    setLoading(true);
-    try {
-      setNotifications([]);
-    } catch (error) {
-      console.error("Xabarlarni yuklashda xatolik:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchNotifications();
+    let isMounted = true;
+    const timer = setTimeout(() => {
+      if (isMounted) {
+        setNotifications([]);
+        setLoading(false);
+      }
+    }, 0);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
   }, []);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -107,7 +108,6 @@ export function DashboardNavbar({
     );
   };
 
-  // Tashqariga bosilganda dropdownlarni yopish
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -147,7 +147,7 @@ export function DashboardNavbar({
   };
 
   const handleProfileClick = () => {
-    setProfileDropdownOpen(false);
+    setProfileDropdownOpen(false); // Dropdown yopiladi
     if (onProfile) {
       onProfile();
     } else if (onProfileClick) {
@@ -158,7 +158,7 @@ export function DashboardNavbar({
   };
 
   const handleSettingsClick = () => {
-    setProfileDropdownOpen(false);
+    setProfileDropdownOpen(false); // Dropdown yopiladi
     if (onSettings) {
       onSettings();
     } else if (onSettingsClick) {
@@ -167,6 +167,9 @@ export function DashboardNavbar({
       onNavigate("sozlamalar");
     }
   };
+
+  // Profil yoki Sozlamalar sahifasida turgan bo'lsa, asosiy profil tugmasini active holatda ko'rsatish
+  const isProfileActive = activeTab === "profil" || activeTab === "sozlamalar";
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-[#0d1114] px-4 md:px-6">
@@ -199,7 +202,6 @@ export function DashboardNavbar({
       </div>
 
       <div className="flex items-center gap-3 md:gap-4">
-        {/* Qidiruv Qismi */}
         {(onSearchChange || setHeaderSearch) && (
           <div ref={searchRef} className="relative hidden md:block w-48 lg:w-64">
             <Search
@@ -215,7 +217,6 @@ export function DashboardNavbar({
               className="w-full rounded-lg border border-white/10 bg-[#121619] py-2 pl-9 pr-3 text-sm text-white placeholder:text-gray-500 outline-none transition-colors focus:border-[#d9a441]/50"
             />
 
-            {/* Qidiruv Natijalari Dropdown */}
             {searchDropdownOpen && currentSearchValue.trim().length > 0 && (
               <div className="absolute left-0 top-[calc(100%+8px)] z-50 w-full overflow-hidden rounded-xl border border-white/10 bg-[#121619] shadow-xl py-1">
                 {searchResults.length > 0 ? (
@@ -247,7 +248,7 @@ export function DashboardNavbar({
 
         {actions}
 
-        {/* Bildirishnomalar Menyusi */}
+        {/* Notification */}
         <div ref={notificationRef} className="relative">
           <button
             type="button"
@@ -281,7 +282,7 @@ export function DashboardNavbar({
               <div className="max-h-80 overflow-y-auto divide-y divide-white/5">
                 {loading ? (
                   <div className="p-4 text-center text-xs text-gray-400">
-
+                    Yuklanmoqda...
                   </div>
                 ) : notifications.length > 0 ? (
                   notifications.map((item) => (
@@ -312,12 +313,16 @@ export function DashboardNavbar({
           )}
         </div>
 
-        {/* Profil Menyusi */}
+        {/* Profil Tugmasi va Menyusi */}
         <div ref={profileRef} className="relative">
           <button
             type="button"
             onClick={() => setProfileDropdownOpen((prev) => !prev)}
-            className="flex cursor-pointer items-center gap-2 rounded-lg p-1.5 transition-colors hover:bg-[#191e22]"
+            className={`flex cursor-pointer items-center gap-2 rounded-xl p-1.5 transition-all outline-none ${
+              profileDropdownOpen || isProfileActive
+                ? "bg-[#191e22] ring-2 ring-white/30 border border-white/40"
+                : "border border-transparent hover:bg-[#191e22]"
+            }`}
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d9a441] text-sm font-semibold text-black shadow-sm">
               {userInitial}
@@ -345,7 +350,11 @@ export function DashboardNavbar({
               <button
                 type="button"
                 onClick={handleProfileClick}
-                className="flex w-full cursor-pointer items-center gap-2.5 px-4 py-2.5 text-left text-sm text-gray-300 transition-colors hover:bg-white/5 hover:text-white"
+                className={`flex w-full cursor-pointer items-center gap-2.5 px-4 py-2.5 text-left text-sm transition-all ${
+                  activeTab === "profil"
+                    ? "bg-white/15 text-white font-medium"
+                    : "text-gray-300 hover:bg-white/10 hover:text-white"
+                }`}
               >
                 <UserCircle size={16} />
                 <span>Profil</span>
@@ -354,7 +363,11 @@ export function DashboardNavbar({
               <button
                 type="button"
                 onClick={handleSettingsClick}
-                className="flex w-full cursor-pointer items-center gap-2.5 px-4 py-2.5 text-left text-sm text-gray-300 transition-colors hover:bg-white/5 hover:text-white"
+                className={`flex w-full cursor-pointer items-center gap-2.5 px-4 py-2.5 text-left text-sm transition-all ${
+                  activeTab === "sozlamalar"
+                    ? "bg-white/15 text-white font-medium"
+                    : "text-gray-300 hover:bg-white/10 hover:text-white"
+                }`}
               >
                 <Settings size={16} />
                 <span>Sozlamalar</span>
@@ -367,7 +380,7 @@ export function DashboardNavbar({
                     setProfileDropdownOpen(false);
                     onLogout();
                   }}
-                  className="flex w-full cursor-pointer items-center gap-2.5 px-4 py-2.5 text-left text-sm text-red-400 transition-colors hover:bg-red-500/10"
+                  className="flex w-full cursor-pointer items-center gap-2.5 px-4 py-2.5 text-left text-sm text-red-400 transition-all hover:bg-red-500/10"
                 >
                   <LogOut size={16} />
                   <span>Chiqish</span>

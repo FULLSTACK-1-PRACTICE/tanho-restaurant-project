@@ -69,7 +69,7 @@ export default function UserLayout() {
       icon: MessageSquare,
     },
     {
-      label: "Asosiy Sayt (Landing)",
+      label: "Bosh Sahifa (Home Page)",
       path: "/",
       icon: Globe,
     },

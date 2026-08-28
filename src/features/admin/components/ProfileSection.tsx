@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Save, Loader2 } from "lucide-react";
+import { Save, Loader2, Camera, Check } from "lucide-react";
+
+const INITIAL_DATA = {
+  name: "Admin",
+  email: "admin@tanhorestaurant.uz",
+  phone: "+998 90 123 45 67",
+  photo: "",
+};
 
 const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -11,12 +18,15 @@ const fileToBase64 = (file: File): Promise<string> => {
 };
 
 export function ProfileSection() {
-  const [name, setName] = useState("Admin");
-  const [phone, setPhone] = useState("");
-  const [photo, setPhoto] = useState("");
+  const [initialData, setInitialData] = useState(INITIAL_DATA);
+  const [name, setName] = useState(INITIAL_DATA.name);
+  const [email, setEmail] = useState(INITIAL_DATA.email);
+  const [phone, setPhone] = useState(INITIAL_DATA.phone);
+  const [photo, setPhoto] = useState(INITIAL_DATA.photo);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<{
     name?: string;
+    email?: string;
     phone?: string;
     photo?: string;
     general?: string;
@@ -25,6 +35,12 @@ export function ProfileSection() {
 
   const nameRegex = /^[A-Za-zʻ’'`\s-]{2,50}$/;
   const phoneRegex = /^(\+?998)?[0-9]{9}$/;
+
+  const isChanged =
+    name !== initialData.name ||
+    email !== initialData.email ||
+    phone !== initialData.phone ||
+    photo !== initialData.photo;
 
   const handlePhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -72,6 +88,7 @@ export function ProfileSection() {
     setSaving(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
+      setInitialData({ name, email, phone, photo });
       setSuccessMessage("Profil ma'lumotlari muvaffaqiyatli saqlandi!");
     } catch {
       setErrors((prev) => ({
@@ -89,8 +106,8 @@ export function ProfileSection() {
 
       <div className="space-y-4 rounded-xl border border-white/10 bg-[#121619] p-6">
         {successMessage && (
-          <div className="rounded-lg border border-green-500/30 bg-green-500/10 p-3 text-xs text-green-400">
-            {successMessage}
+          <div className="flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/10 p-3 text-xs text-green-400">
+            <Check size={14} /> {successMessage}
           </div>
         )}
 
@@ -100,24 +117,34 @@ export function ProfileSection() {
           </div>
         )}
 
-        <div className="flex items-center gap-4">
-          <div className="h-16 w-16 overflow-hidden rounded-full bg-[#191e22]">
-            {photo && (
+        <div className="flex items-center gap-5">
+          <div className="relative h-16 w-16 overflow-hidden rounded-full bg-[#191e22] border border-white/10 flex items-center justify-center font-bold text-lg text-[#FF9500]">
+            {photo ? (
               <img
                 loading="lazy"
                 src={photo}
                 alt="Profil"
                 className="h-full w-full object-cover"
               />
+            ) : (
+              name.charAt(0).toUpperCase()
             )}
           </div>
 
           <div className="flex flex-col gap-1">
+            <label
+              htmlFor="admin-photo-upload"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-white/5 px-3 py-1.5 text-xs text-gray-200 border border-white/10 hover:bg-white/10 transition-colors"
+            >
+              <Camera size={14} className="text-[#FF9500]" />
+              Rasm tanlash
+            </label>
             <input
+              id="admin-photo-upload"
               type="file"
               accept="image/*"
               onChange={handlePhoto}
-              className="text-xs text-gray-400 file:mr-2 file:cursor-pointer file:rounded-md file:border-0 file:bg-white/10 file:px-2.5 file:py-1 file:text-xs file:text-white hover:file:bg-white/20"
+              className="hidden"
             />
             {errors.photo && (
               <span className="text-[11px] text-red-400">{errors.photo}</span>
@@ -145,6 +172,16 @@ export function ProfileSection() {
         </div>
 
         <div>
+          <label className="mb-1 block text-xs text-gray-400">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded-lg border border-white/10 bg-[#0d1114] px-3 py-2 text-sm text-white outline-none focus:border-[#FF9500]/50 transition-colors"
+          />
+        </div>
+
+        <div>
           <label className="mb-1 block text-xs text-gray-400">Telefon</label>
           <input
             value={phone}
@@ -164,11 +201,10 @@ export function ProfileSection() {
           )}
         </div>
 
-        {/* Rasmdagi uslubga mos to'liq yumaloq (rounded-full) tugma */}
         <button
           onClick={handleSave}
-          disabled={saving}
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-full bg-[#FF9500] px-7 py-2.5 text-sm font-semibold text-black transition-all hover:bg-[#ff8400] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={saving || !isChanged}
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-full bg-[#FF9500] px-7 py-2.5 text-sm font-semibold text-black transition-all hover:bg-[#ff8400] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {saving ? (
             <>

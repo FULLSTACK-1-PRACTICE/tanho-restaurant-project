@@ -205,13 +205,13 @@ function Header() {
                 </button>
               )}
 
-              {/* Hamburger tugmasi yana 1px chapga surildi: translate-x-[3px] */}
+              {/* Hamburger tugmasi yana 2px chapga surildi: translate-x-[1px] */}
               <button
                 type="button"
                 onClick={() => setMenuOpen((prev) => !prev)}
                 aria-label={menuOpen ? "Menyuni yopish" : "Menyuni ochish"}
                 aria-expanded={menuOpen}
-                className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white transition-colors duration-300 hover:border-[#dcae4d] hover:text-[#dcae4d] lg:hidden translate-x-[3px] lg:translate-x-0"
+                className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-white/10 text-white transition-colors duration-300 hover:border-[#dcae4d] hover:text-[#dcae4d] lg:hidden translate-x-[1px] lg:translate-x-0"
               >
                 <span className="relative flex h-4 w-[18px] flex-col items-center justify-between">
                   <span

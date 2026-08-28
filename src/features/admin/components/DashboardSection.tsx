@@ -10,8 +10,6 @@ import {
   Users,
 } from "lucide-react";
 
-// Dashboarddagi quick action tugmalari foydalaniladigan bo‘limlar bilan cheklanadi.
-// Endi admin dashboardda alohida “Taom qo‘shish” tugmasi yo‘q.
 type SectionKey =
   | "menyu"
   | "buyurtmalar"
@@ -22,7 +20,6 @@ type SectionKey =
   | "sozlamalar";
 
 interface DashboardSectionProps {
-  // Tugma bosilganda AdminLayout ichidagi aktiv bo‘limni almashtiradi.
   goTo: (section: SectionKey) => void;
 }
 
@@ -36,7 +33,6 @@ interface StatItem {
 }
 
 export function DashboardSection({ goTo }: DashboardSectionProps) {
-  // Keyinchalik bu qiymatlarni API orqali keladigan real statistikaga almashtirish mumkin.
   const stats: StatItem[] = [
     {
       label: "Jami buyurtmalar",
@@ -72,7 +68,6 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
     },
   ];
 
-  // Admin uchun tezkor amallar: tizimni nazorat qilish va boshqarish bo‘limlari.
   const quickActions = [
     {
       label: "Menyu boshqaruvi",
@@ -114,7 +109,6 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
 
   return (
     <div className="space-y-6 pb-10">
-      {/* Admin uchun qisqa salomlashuv va umumiy nazorat bloki. */}
       <section className="rounded-2xl border border-white/10 bg-[#121619] p-5 sm:p-6">
         <div className="flex items-start gap-3">
           <div className="rounded-xl bg-amber-500/15 p-3 text-amber-400">
@@ -131,7 +125,6 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
         </div>
       </section>
 
-      {/* Asosiy ko‘rsatkichlar responsiv grid ko‘rinishida chiqadi. */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
@@ -158,7 +151,6 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
         })}
       </section>
 
-      {/* “Taom qo‘shish” olib tashlandi. Bu yerda faqat admin boshqaruv amallari bor. */}
       <section className="rounded-xl border border-white/10 bg-[#121619] p-5 sm:p-6">
         <div className="mb-4">
           <h2 className="text-base font-semibold text-white sm:text-lg">
@@ -197,7 +189,6 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
         </div>
       </section>
 
-      {/* API ulanmaguncha foydalanuvchiga statistikalar demo ekanini bildiradi. */}
       <p className="text-xs text-gray-500">
         * Statistikalar hozircha statik ko‘rsatilgan — API ulanganda real raqamlar bilan almashtiriladi.
       </p>

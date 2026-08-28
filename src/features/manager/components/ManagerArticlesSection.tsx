@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Plus, Trash2, Edit, Search, BookOpen } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Plus, Trash2, Edit, Search, BookOpen, ChevronDown, Check, Upload, Image as ImageIcon } from "lucide-react";
+import Button from "@/components/ui/Button/Button";
 
 interface Article {
   id: string;
@@ -10,6 +11,8 @@ interface Article {
   readTime: string;
   image: string;
 }
+
+const CATEGORIES = ["Taomlar", "Maslahatlar", "Tadbirlar"];
 
 const initialArticles: Article[] = [
   {
@@ -28,6 +31,10 @@ export default function ManagerArticlesSection() {
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  
+  const selectRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -37,7 +44,20 @@ export default function ManagerArticlesSection() {
     image: "",
   });
 
+  const [errors, setErrors] = useState<{ title?: string; content?: string }>({});
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+        setIsSelectOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleOpenModal = (article?: Article) => {
+    setErrors({});
     if (article) {
       setEditingArticle(article);
       setFormData({
@@ -57,7 +77,19 @@ export default function ManagerArticlesSection() {
         image: "",
       });
     }
+    setIsSelectOpen(false);
     setIsModalOpen(true);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, image: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleDelete = (id: string) => {
@@ -66,8 +98,31 @@ export default function ManagerArticlesSection() {
     }
   };
 
+  const validateForm = () => {
+    const newErrors: { title?: string; content?: string } = {};
+    const emptyOrSpacesRegex = /^\s*$/;
+
+    if (emptyOrSpacesRegex.test(formData.title)) {
+      newErrors.title = "Sarlavha kiritilishi shart!";
+    } else if (formData.title.trim().length < 3) {
+      newErrors.title = "Sarlavha kamida 3 ta belgidan iborat bo'lishi kerak!";
+    }
+
+    if (emptyOrSpacesRegex.test(formData.content)) {
+      newErrors.content = "Matn kiritilishi shart!";
+    } else if (formData.content.trim().length < 10) {
+      newErrors.content = "Matn kamida 10 ta belgidan iborat bo'lishi kerak!";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) return;
+
     if (editingArticle) {
       setArticles(
         articles.map((item) =>
@@ -107,23 +162,24 @@ export default function ManagerArticlesSection() {
             Foydali maqolalarni qo'shing, tahrirlang yoki o'chiring
           </p>
         </div>
-        <button
+        <Button
+          type="button"
           onClick={() => handleOpenModal()}
           style={{ backgroundColor: "#F6B530" }}
-          className="flex items-center gap-2 hover:opacity-90 text-black px-4 py-2.5 rounded-xl font-semibold transition"
+          className="flex items-center gap-2 hover:bg-[#e0a228] text-black px-5 py-2.5 rounded-full font-semibold transition cursor-pointer active:scale-95 border-none"
         >
           <Plus size={18} /> Yangi Maqola Qo'shish
-        </button>
+        </Button>
       </div>
 
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
         <input
           type="text"
           placeholder="Maqolalarni qidirish..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-[#111113] border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none"
+          className="w-full bg-[#111113] border border-white/10 hover:border-white/20 focus:border-[#F6B530] rounded-full pl-11 pr-4 py-2.5 text-sm text-white focus:outline-none transition"
         />
       </div>
 
@@ -138,7 +194,7 @@ export default function ManagerArticlesSection() {
                 <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                 <span 
                   style={{ backgroundColor: "#F6B530" }}
-                  className="absolute top-3 left-3 text-black text-xs font-bold px-2.5 py-1 rounded-lg"
+                  className="absolute top-3 left-3 text-black text-xs font-bold px-3 py-1 rounded-full shadow-md"
                 >
                   {item.category}
                 </span>
@@ -152,18 +208,20 @@ export default function ManagerArticlesSection() {
             <div className="p-4 pt-0 border-t border-white/5 flex items-center justify-between mt-4">
               <span className="text-xs text-gray-500">{item.date}</span>
               <div className="flex items-center gap-2">
-                <button
+                <Button
+                  type="button"
                   onClick={() => handleOpenModal(item)}
-                  className="p-2 text-gray-400 hover:text-[#F6B530] hover:bg-white/5 rounded-lg transition"
+                  className="p-2 text-gray-400 hover:text-[#F6B530] hover:bg-white/5 rounded-lg transition cursor-pointer bg-transparent border-none"
                 >
                   <Edit size={16} />
-                </button>
-                <button
+                </Button>
+                <Button
+                  type="button"
                   onClick={() => handleDelete(item.id)}
-                  className="p-2 text-gray-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition"
+                  className="p-2 text-gray-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition cursor-pointer bg-transparent border-none"
                 >
                   <Trash2 size={16} />
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -171,72 +229,140 @@ export default function ManagerArticlesSection() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-lg p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#161618] border border-white/10 rounded-3xl w-full max-w-lg p-6 space-y-5 shadow-2xl">
             <h2 className="text-xl font-bold text-white">
               {editingArticle ? "Maqolani Tahrirlash" : "Yangi Maqola Qo'shish"}
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} noValidate className="space-y-4">
               <div>
-                <label className="text-xs text-gray-400">Sarlavha</label>
+                <label className="text-xs text-gray-400 ml-1">Sarlavha</label>
                 <input
-                  required
                   type="text"
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-sm text-white"
+                  onChange={(e) => {
+                    setFormData({ ...formData, title: e.target.value });
+                    if (errors.title) setErrors({ ...errors, title: undefined });
+                  }}
+                  className={`w-full bg-[#111113] border ${
+                    errors.title ? "border-red-500" : "border-white/10 focus:border-[#F6B530]"
+                  } rounded-2xl px-4 py-2.5 text-sm text-white focus:outline-none mt-1 transition`}
+                  placeholder="Sarlavhani kiriting..."
                 />
+                {errors.title && (
+                  <span className="text-xs text-red-500 ml-1 mt-1 block">{errors.title}</span>
+                )}
               </div>
 
-              <div>
-                <label className="text-xs text-gray-400">Kategoriya</label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-sm text-white"
-                >
-                  <option value="Taomlar">Taomlar</option>
-                  <option value="Maslahatlar">Maslahatlar</option>
-                  <option value="Tadbirlar">Tadbirlar</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-xs text-gray-400">Rasm URL (Opsional)</label>
-                <input
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-sm text-white"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs text-gray-400">Matn</label>
-                <textarea
-                  required
-                  rows={4}
-                  value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-sm text-white resize-none"
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
+              {/* Custom Select */}
+              <div className="relative" ref={selectRef}>
+                <label className="text-xs text-gray-400 ml-1">Kategoriya</label>
                 <button
                   type="button"
+                  onClick={() => setIsSelectOpen(!isSelectOpen)}
+                  className={`w-full bg-[#111113] border ${
+                    isSelectOpen ? "border-[#F6B530]" : "border-white/10"
+                  } rounded-2xl px-4 py-2.5 text-sm text-white flex items-center justify-between mt-1 transition cursor-pointer text-left`}
+                >
+                  <span>{formData.category}</span>
+                  <ChevronDown
+                    size={16}
+                    className={`text-gray-400 transition-transform duration-200 ${
+                      isSelectOpen ? "rotate-180 text-[#F6B530]" : ""
+                    }`}
+                  />
+                </button>
+
+                {isSelectOpen && (
+                  <div className="absolute left-0 right-0 top-full mt-2 bg-[#1c1c1f] border border-white/10 rounded-2xl shadow-xl z-50 overflow-hidden py-1.5 backdrop-blur-md">
+                    {CATEGORIES.map((cat) => (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => {
+                          setFormData({ ...formData, category: cat });
+                          setIsSelectOpen(false);
+                        }}
+                        className={`w-full px-4 py-2.5 text-sm flex items-center justify-between transition cursor-pointer ${
+                          formData.category === cat
+                            ? "bg-[#F6B530]/10 text-[#F6B530] font-medium"
+                            : "text-gray-300 hover:bg-white/5 hover:text-white"
+                        }`}
+                      >
+                        <span>{cat}</span>
+                        {formData.category === cat && <Check size={16} className="text-[#F6B530]" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* File Upload UI */}
+              <div>
+                <label className="text-xs text-gray-400 ml-1">Rasm yuklash</label>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full bg-[#111113] border border-dashed border-white/20 hover:border-[#F6B530] rounded-2xl p-4 mt-1 flex flex-col items-center justify-center cursor-pointer transition group"
+                >
+                  {formData.image ? (
+                    <div className="relative w-full h-32 rounded-xl overflow-hidden group">
+                      <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <span className="text-xs text-white flex items-center gap-1 font-medium">
+                          <Upload size={14} /> Rasmni o'zgartirish
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 text-gray-400 group-hover:text-[#F6B530] transition py-2">
+                      <ImageIcon size={28} />
+                      <span className="text-xs font-medium">Faylni tanlash uchun bosing</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs text-gray-400 ml-1">Matn</label>
+                <textarea
+                  rows={4}
+                  value={formData.content}
+                  onChange={(e) => {
+                    setFormData({ ...formData, content: e.target.value });
+                    if (errors.content) setErrors({ ...errors, content: undefined });
+                  }}
+                  className={`w-full bg-[#111113] border ${
+                    errors.content ? "border-red-500" : "border-white/10 focus:border-[#F6B530]"
+                  } rounded-2xl p-3 text-sm text-white focus:outline-none resize-none mt-1 transition`}
+                  placeholder="Maqola matnini kiriting..."
+                />
+                {errors.content && (
+                  <span className="text-xs text-red-500 ml-1 mt-1 block">{errors.content}</span>
+                )}
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3">
+                <Button
+                  type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-sm text-gray-400 hover:text-white"
+                  className="px-5 py-2.5 rounded-full text-sm font-medium text-gray-300 bg-[#222225] hover:bg-[#2c2c30] hover:text-white transition cursor-pointer active:scale-95 border-none"
                 >
                   Bekor qilish
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   style={{ backgroundColor: "#F6B530" }}
-                  className="px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 text-black"
+                  className="px-6 py-2.5 rounded-full text-sm font-semibold text-black hover:bg-[#e0a228] transition cursor-pointer active:scale-95 shadow-md shadow-[#F6B530]/20 border-none"
                 >
                   Saqlash
-                </button>
+                </Button>
               </div>
             </form>
           </div>

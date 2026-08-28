@@ -59,7 +59,6 @@ export function MenuAdminSection() {
         </p>
       </div>
 
-      {/* Asosiy Bo'limlar Tablari */}
       <div className="flex gap-2 border-b border-white/10 pb-3">
         <button
           onClick={() => setActiveTab("dishes")}
@@ -92,8 +91,7 @@ export function MenuAdminSection() {
           Qo'shimchalar ({initialExtras.length})
         </button>
       </div>
-
-      {/* TAOMLAR TABI */}
+          
       {activeTab === "dishes" && (
         <div className="space-y-4">
           <div className="flex gap-2">
@@ -156,7 +154,6 @@ export function MenuAdminSection() {
         </div>
       )}
 
-      {/* KATEGORIYALAR TABI */}
       {activeTab === "categories" && (
         <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#121619]">
           <table className="w-full text-left text-xs text-gray-300">
@@ -178,7 +175,6 @@ export function MenuAdminSection() {
         </div>
       )}
 
-      {/* QO'SHIMCHALAR TABI */}
       {activeTab === "extras" && (
         <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#121619]">
           <table className="w-full text-left text-xs text-gray-300">

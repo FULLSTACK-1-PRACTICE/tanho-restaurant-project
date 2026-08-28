@@ -100,7 +100,7 @@ export function TablesAdminSection() {
 
       setModalOpen(false);
     } catch {
-      // Xatolikni boshqarish
+      // Control Error
     } finally {
       setSaving(false);
     }
@@ -110,7 +110,7 @@ export function TablesAdminSection() {
     try {
       await remove(id);
     } catch {
-      // Xatolikni boshqarish
+      // Control Error
     }
   };
 
@@ -123,7 +123,7 @@ export function TablesAdminSection() {
         reservedBy: "",
       } as Partial<TableRow>);
     } catch {
-      // Xatolikni boshqarish
+      // Control Error
     }
   };
 

@@ -73,23 +73,23 @@ function InlineCustomSelect({
   }, []);
 
   return (
-    <div ref={ref} className={`relative inline-block ${className}`}>
+    <div ref={ref} className={`relative ${className}`}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between gap-3 px-4 py-2 bg-[#141416] border border-[#DCAE4D]/80 rounded-full text-sm font-medium text-white hover:border-[#DCAE4D] transition-all cursor-pointer focus:outline-none"
+        className="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-[#141416] border border-[#83672F]/70 hover:border-[#C99B3C] rounded-full text-sm font-medium text-white transition-all cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#C99B3C]"
       >
         <span className="truncate">{selectedOption?.label}</span>
         <ChevronDown
           size={16}
-          className={`shrink-0 text-gray-300 transition-transform duration-200 ${
-            isOpen ? "rotate-180 text-[#DCAE4D]" : ""
+          className={`shrink-0 text-[#C99B3C] transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
           }`}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 right-0 mt-1.5 z-50 bg-[#161619] border border-white/10 rounded-2xl shadow-2xl py-1.5 overflow-hidden backdrop-blur-xl max-h-60 overflow-y-auto">
+        <div className="absolute left-0 right-0 mt-2 z-50 bg-[#161619] border border-[#83672F]/50 rounded-2xl shadow-2xl py-1.5 backdrop-blur-xl max-h-56 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#141416] [&::-webkit-scrollbar-thumb]:bg-[#83672F]/50 [&::-webkit-scrollbar-thumb]:rounded-full">
           {options.map((opt) => {
             const isSelected = opt.value === value;
             return (
@@ -102,12 +102,12 @@ function InlineCustomSelect({
                 }}
                 className={`w-full flex items-center justify-between px-4 py-2 text-xs text-left transition-colors cursor-pointer ${
                   isSelected
-                    ? "bg-[#DCAE4D]/20 text-[#DCAE4D] font-semibold"
+                    ? "bg-[#83672F]/20 text-[#C99B3C] font-semibold"
                     : "text-gray-300 hover:bg-white/5 hover:text-white"
                 }`}
               >
                 <span className="truncate">{opt.label}</span>
-                {isSelected && <Check size={14} className="text-[#DCAE4D] shrink-0 ml-2" />}
+                {isSelected && <Check size={14} className="text-[#C99B3C] shrink-0 ml-2" />}
               </button>
             );
           })}
@@ -261,38 +261,38 @@ export default function ManagerMenuSection({
     <>
       <div className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          <StatCard icon={Utensils} iconBg="bg-[#DCAE4D]/15" iconColor="text-[#DCAE4D]" label="Jami taomlar" value={String(totalCount)} sub="+2 bu hafta" subColor="text-emerald-400" />
+          <StatCard icon={Utensils} iconBg="bg-[#83672F]/20" iconColor="text-[#C99B3C]" label="Jami taomlar" value={String(totalCount)} sub="+2 bu hafta" subColor="text-emerald-400" />
           <StatCard icon={ShoppingCart} iconBg="bg-emerald-500/15" iconColor="text-emerald-400" label="Mavjud taomlar" value={String(availableCount)} sub={`${availablePercent}%`} subColor="text-emerald-400" />
           <StatCard icon={ShoppingCart} iconBg="bg-red-500/15" iconColor="text-red-400" label="Mavjud emas" value={String(unavailableCount)} sub={`${unavailablePercent}%`} subColor="text-red-400" />
           <StatCard icon={ListTree} iconBg="bg-sky-500/15" iconColor="text-sky-400" label="Kategoriyalar" value={String(categories.length)} sub="Barchasi faol" subColor="text-gray-400" />
         </div>
 
-        <div className="flex flex-wrap items-center justify-end gap-3">
-          <button type="button" onClick={() => setIsAddCategoryModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-[#DCAE4D]/80 hover:border-[#DCAE4D] text-[#DCAE4D] text-sm font-semibold transition-colors cursor-pointer">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-end gap-3">
+          <button type="button" onClick={() => setIsAddCategoryModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-[#83672F] hover:border-[#C99B3C] text-[#C99B3C] text-sm font-semibold transition-all cursor-pointer">
             <FolderPlus size={16} /> Kategoriya qo‘shish
           </button>
-          <button type="button" onClick={() => setIsAddModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#DCAE4D] hover:bg-[#c99b3c] text-black text-sm font-semibold transition-colors cursor-pointer">
+          <button type="button" onClick={() => setIsAddModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#C99B3C] hover:bg-[#b08732] text-black text-sm font-semibold transition-all cursor-pointer">
             <Plus size={17} /> Taom qo‘shish
           </button>
-          <button type="button" onClick={() => setIsImportModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-[#DCAE4D]/80 hover:border-[#DCAE4D] text-gray-200 text-sm font-semibold transition-colors cursor-pointer">
+          <button type="button" onClick={() => setIsImportModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-[#83672F] hover:border-[#C99B3C] text-gray-200 text-sm font-semibold transition-all cursor-pointer">
             <Upload size={16} /> Import qilish
           </button>
         </div>
 
-        <div className="min-w-0">
-          <div className="flex flex-col md:flex-row gap-3 mb-4">
+        <div className="min-w-0 space-y-4">
+          <div className="flex flex-col md:flex-row gap-3">
             <InlineCustomSelect
               options={categorySelectOptions}
               value={selectedCategory}
               onChange={handleCategoryChange}
-              className="w-full md:w-52"
+              className="w-full md:w-56"
             />
 
             <InlineCustomSelect
               options={statusSelectOptions}
               value={statusFilter}
               onChange={handleStatusChange}
-              className="w-full md:w-52"
+              className="w-full md:w-56"
             />
 
             <div className="relative flex-1">
@@ -301,31 +301,31 @@ export default function ManagerMenuSection({
                 value={searchTerm}
                 onChange={(event) => handleSearchChange(event.target.value)}
                 placeholder="Taom nomi bo‘yicha qidirish..."
-                className="w-full bg-[#141416] border border-[#DCAE4D]/80 rounded-full pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-[#DCAE4D] placeholder-gray-500"
+                className="w-full bg-[#141416] border border-[#83672F]/70 hover:border-[#C99B3C] focus:border-[#C99B3C] rounded-full pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none placeholder-gray-500 transition-all"
               />
             </div>
           </div>
 
-          <div className="bg-[#111113] border border-white/5 rounded-2xl overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+          <div className="bg-[#111113] border border-white/5 rounded-2xl overflow-hidden shadow-xl">
+            <div className="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-[#141416] [&::-webkit-scrollbar-thumb]:bg-[#83672F]/50 [&::-webkit-scrollbar-thumb]:rounded-full">
+              <table className="w-full text-sm text-left min-w-[600px]">
                 <thead>
-                  <tr className="border-b border-white/5 text-left text-gray-500 text-xs uppercase tracking-wide">
-                    <th className="px-4 py-3">#</th>
-                    <th className="px-4 py-3">Taom nomi</th>
-                    <th className="px-4 py-3">Kategoriya</th>
-                    <th className="px-4 py-3">Narxi</th>
-                    <th className="px-4 py-3">Holati</th>
-                    <th className="px-4 py-3 text-right">Amallar</th>
+                  <tr className="border-b border-white/5 text-gray-400 text-xs uppercase tracking-wide bg-white/[0.01]">
+                    <th className="px-4 py-3.5">#</th>
+                    <th className="px-4 py-3.5">Taom nomi</th>
+                    <th className="px-4 py-3.5">Kategoriya</th>
+                    <th className="px-4 py-3.5">Narxi</th>
+                    <th className="px-4 py-3.5">Holati</th>
+                    <th className="px-4 py-3.5 text-right">Amallar</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   {filteredFoods.map((food, index) => (
-                    <tr key={food.id} className="hover:bg-white/[0.02]">
+                    <tr key={food.id} className="hover:bg-white/[0.02] transition-colors">
                       <td className="px-4 py-3 text-gray-500">{index + 1}</td>
                       <td className="px-4 py-3 font-medium text-white">{food.name}</td>
                       <td className="px-4 py-3 text-gray-400">{food.category}</td>
-                      <td className="px-4 py-3 text-[#DCAE4D] font-medium">{formatSum(food.price)}</td>
+                      <td className="px-4 py-3 text-[#C99B3C] font-semibold">{formatSum(food.price)}</td>
                       <td className="px-4 py-3">
                         <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${food.status === "Mavjud" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>
                           {food.status}
@@ -349,7 +349,7 @@ export default function ManagerMenuSection({
                   ))}
                   {filteredFoods.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                      <td colSpan={6} className="px-4 py-10 text-center text-gray-500">
                         Taomlar topilmadi
                       </td>
                     </tr>
@@ -422,8 +422,8 @@ function EditFoodModal({
   const [errors, setErrors] = useState<{ name?: string; price?: string }>({});
 
   const modalInputClass = (hasError?: boolean) =>
-    `w-full bg-[#141416] border rounded-full px-4 py-2 text-sm text-white focus:outline-none mt-1 transition-colors ${
-      hasError ? "border-red-500 focus:border-red-500" : "border-[#DCAE4D]/80 focus:border-[#DCAE4D]"
+    `w-full bg-[#141416] border rounded-full px-4 py-2.5 text-sm text-white focus:outline-none mt-1 transition-colors ${
+      hasError ? "border-red-500 focus:border-red-500" : "border-[#83672F]/70 focus:border-[#C99B3C]"
     }`;
 
   const categoryOptions = categories.map((c) => ({ value: c.name, label: c.name }));
@@ -454,11 +454,11 @@ function EditFoodModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
       <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
-            <Edit className="text-[#DCAE4D]" size={18} /> Taomni tahrirlash
+            <Edit className="text-[#C99B3C]" size={18} /> Taomni tahrirlash
           </h3>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
             <X size={18} />
@@ -514,7 +514,7 @@ function EditFoodModal({
             <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">
               Bekor qilish
             </button>
-            <button type="submit" className="px-4 py-2 bg-[#DCAE4D] hover:bg-[#c99b3c] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
+            <button type="submit" className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
               Saqlash
             </button>
           </div>
@@ -539,11 +539,11 @@ function AddCategoryModal({ onClose, onSubmit }: { onClose: () => void; onSubmit
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
       <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
-            <FolderPlus className="text-[#DCAE4D]" size={18} /> Yangi kategoriya qo‘shish
+            <FolderPlus className="text-[#C99B3C]" size={18} /> Yangi kategoriya qo‘shish
           </h3>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
             <X size={18} />
@@ -559,7 +559,7 @@ function AddCategoryModal({ onClose, onSubmit }: { onClose: () => void; onSubmit
                 setName(e.target.value);
                 if (error) setError("");
               }}
-              className="w-full bg-[#141416] border border-[#DCAE4D]/80 rounded-full px-4 py-2 text-sm text-white focus:outline-none mt-1"
+              className="w-full bg-[#141416] border border-[#83672F]/70 focus:border-[#C99B3C] rounded-full px-4 py-2.5 text-sm text-white focus:outline-none mt-1 transition-colors"
               placeholder="Masalan: Milliy taomlar"
             />
           </label>
@@ -568,7 +568,7 @@ function AddCategoryModal({ onClose, onSubmit }: { onClose: () => void; onSubmit
             <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">
               Bekor qilish
             </button>
-            <button type="submit" className="px-4 py-2 bg-[#DCAE4D] hover:bg-[#c99b3c] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
+            <button type="submit" className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
               Saqlash
             </button>
           </div>
@@ -594,8 +594,8 @@ function AddFoodModal({
   const [errors, setErrors] = useState<{ name?: string; price?: string }>({});
 
   const modalInputClass = (hasError?: boolean) =>
-    `w-full bg-[#141416] border rounded-full px-4 py-2 text-sm text-white focus:outline-none mt-1 transition-colors ${
-      hasError ? "border-red-500 focus:border-red-500" : "border-[#DCAE4D]/80 focus:border-[#DCAE4D]"
+    `w-full bg-[#141416] border rounded-full px-4 py-2.5 text-sm text-white focus:outline-none mt-1 transition-colors ${
+      hasError ? "border-red-500 focus:border-red-500" : "border-[#83672F]/70 focus:border-[#C99B3C]"
     }`;
 
   const categoryOptions = categories.map((c) => ({ value: c.name, label: c.name }));
@@ -632,11 +632,11 @@ function AddFoodModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
       <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
-            <ChefHat className="text-[#DCAE4D]" size={18} />
+            <ChefHat className="text-[#C99B3C]" size={18} />
             Yangi taom qo‘shish
           </h3>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
@@ -699,7 +699,7 @@ function AddFoodModal({
             <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">
               Bekor qilish
             </button>
-            <button type="submit" className="px-4 py-2 bg-[#DCAE4D] hover:bg-[#c99b3c] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
+            <button type="submit" className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
               Saqlash
             </button>
           </div>
@@ -711,31 +711,31 @@ function AddFoodModal({
 
 function ImportFoodModal({ file, onFileChange, onClose, onSubmit }: { file: File | null; onFileChange: (file: File | null) => void; onClose: () => void; onSubmit: (event: FormEvent<HTMLFormElement>) => void }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+      <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
-            <FileSpreadsheet className="text-[#DCAE4D]" size={18} /> Taomlarni import qilish
+            <FileSpreadsheet className="text-[#C99B3C]" size={18} /> Taomlarni import qilish
           </h3>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
             <X size={18} />
           </button>
         </div>
         <form onSubmit={onSubmit} className="p-4 space-y-4">
-          <div className="border-2 border-dashed border-[#DCAE4D]/40 rounded-2xl p-6 text-center">
-            <Upload className="mx-auto text-[#DCAE4D] mb-2" size={32} />
+          <div className="border-2 border-dashed border-[#83672F]/50 hover:border-[#C99B3C] rounded-2xl p-6 text-center transition-colors">
+            <Upload className="mx-auto text-[#C99B3C] mb-2" size={32} />
             <p className="text-xs text-gray-300">Excel yoki CSV faylni tanlang</p>
             <input id="manager-file-import" type="file" accept=".xlsx,.xls,.csv" onChange={(event) => onFileChange(event.target.files?.[0] || null)} className="hidden" />
-            <label htmlFor="manager-file-import" className="mt-3 inline-block px-4 py-1.5 bg-[#DCAE4D]/10 hover:bg-[#DCAE4D]/20 text-xs text-[#DCAE4D] rounded-full cursor-pointer border border-[#DCAE4D]/40 transition-colors">
+            <label htmlFor="manager-file-import" className="mt-3 inline-block px-4 py-1.5 bg-[#83672F]/20 hover:bg-[#83672F]/40 text-xs text-[#C99B3C] font-medium rounded-full cursor-pointer border border-[#83672F]/60 transition-colors">
               Faylni tanlash
             </label>
           </div>
-          {file && <p className="text-[#DCAE4D] text-xs truncate">Tanlandi: {file.name}</p>}
+          {file && <p className="text-[#C99B3C] text-xs truncate">Tanlandi: {file.name}</p>}
           <div className="flex justify-end gap-3">
             <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs text-gray-300 hover:bg-white/5 cursor-pointer transition-colors">
               Bekor qilish
             </button>
-            <button type="submit" disabled={!file} className="px-4 py-2 bg-[#DCAE4D] text-black rounded-full text-xs font-semibold disabled:opacity-50 cursor-pointer hover:bg-[#c99b3c] transition-colors">
+            <button type="submit" disabled={!file} className="px-4 py-2 bg-[#C99B3C] text-black rounded-full text-xs font-semibold disabled:opacity-50 cursor-pointer hover:bg-[#b08732] transition-colors">
               Importni boshlash
             </button>
           </div>

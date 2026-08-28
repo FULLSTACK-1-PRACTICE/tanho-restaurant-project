@@ -30,7 +30,7 @@ export default function BlogDetailsPage() {
 
         <Button
           type="button"
-          onClick={() => navigate("/blog")}
+          onClick={() => navigate("/articles")}
           className="mt-2 inline-flex items-center gap-2 rounded-[5px] border border-[#f6b531] px-5 py-2 text-[12px] font-semibold text-[#f6b531] transition hover:bg-[#f6b531] hover:text-[#181208]"
         >
           <ArrowLeft size={15} />
@@ -58,7 +58,7 @@ export default function BlogDetailsPage() {
         <div className="mx-auto max-w-3xl rounded-[10px] border border-[#332713] bg-[#10100e] p-6 sm:p-9">
           <Button
             type="button"
-            onClick={() => navigate("/blog")}
+            onClick={() => navigate(-1)}
             className="mb-5 inline-flex items-center gap-1.5 text-[11.5px] font-medium text-[#f6b531] transition hover:text-[#ffd778]"
           >
             <ArrowLeft size={14} />

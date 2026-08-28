@@ -2,6 +2,21 @@ import React, { useState, useRef, useEffect } from "react";
 import type { ReactNode } from "react";
 import { Search, Bell, ChevronDown, LogOut, UserCircle, Settings, Menu } from "lucide-react";
 
+export interface NotificationItem {
+  id: number;
+  title: string;
+  message: string;
+  time: string;
+  read: boolean;
+}
+
+export interface SearchResultItem {
+  id: number | string;
+  title: string;
+  category?: string;
+  link?: string;
+}
+
 export interface DashboardUser {
   name?: string;
   role?: string;
@@ -26,6 +41,8 @@ export interface DashboardNavbarProps {
   user?: DashboardUser;
   notificationCount?: number;
   actions?: ReactNode;
+  searchResults?: SearchResultItem[]; // Qidiruv natijalari massivi
+  onSearchResultClick?: (item: SearchResultItem) => void; // Natijaga bosilganda
 }
 
 export function DashboardNavbar({
@@ -47,23 +64,69 @@ export function DashboardNavbar({
     name: "Admin",
     role: "Administrator",
   },
-  notificationCount = 0,
   actions,
+  searchResults = [],
+  onSearchResultClick,
 }: DashboardNavbarProps) {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
+  const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
+
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const profileRef = useRef<HTMLDivElement>(null);
+  const notificationRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const displayTitle = title ?? headerTitle ?? "Admin Dashboard";
   const currentSearchValue = searchValue ?? headerSearch;
   const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "A";
 
+  // API dan bildirishnomalarni olish
+  const fetchNotifications = async () => {
+    setLoading(true);
+    try {
+      setNotifications([]);
+    } catch (error) {
+      console.error("Xabarlarni yuklashda xatolik:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const markAllAsRead = async () => {
+    setNotifications((prev) =>
+      prev.map((item) => ({ ...item, read: true }))
+    );
+  };
+
+  // Tashqariga bosilganda dropdownlarni yopish
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        profileRef.current &&
+        !profileRef.current.contains(event.target as Node)
       ) {
         setProfileDropdownOpen(false);
+      }
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target as Node)
+      ) {
+        setNotificationDropdownOpen(false);
+      }
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setSearchDropdownOpen(false);
       }
     };
 
@@ -80,6 +143,7 @@ export function DashboardNavbar({
     } else if (setHeaderSearch) {
       setHeaderSearch(value);
     }
+    setSearchDropdownOpen(true);
   };
 
   const handleProfileClick = () => {
@@ -135,8 +199,9 @@ export function DashboardNavbar({
       </div>
 
       <div className="flex items-center gap-3 md:gap-4">
+        {/* Qidiruv Qismi */}
         {(onSearchChange || setHeaderSearch) && (
-          <div className="relative hidden md:block w-48 lg:w-64">
+          <div ref={searchRef} className="relative hidden md:block w-48 lg:w-64">
             <Search
               size={16}
               className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
@@ -145,26 +210,110 @@ export function DashboardNavbar({
               type="text"
               value={currentSearchValue}
               onChange={handleSearchChange}
+              onFocus={() => setSearchDropdownOpen(true)}
               placeholder="Qidirish..."
               className="w-full rounded-lg border border-white/10 bg-[#121619] py-2 pl-9 pr-3 text-sm text-white placeholder:text-gray-500 outline-none transition-colors focus:border-[#d9a441]/50"
             />
+
+            {/* Qidiruv Natijalari Dropdown */}
+            {searchDropdownOpen && currentSearchValue.trim().length > 0 && (
+              <div className="absolute left-0 top-[calc(100%+8px)] z-50 w-full overflow-hidden rounded-xl border border-white/10 bg-[#121619] shadow-xl py-1">
+                {searchResults.length > 0 ? (
+                  searchResults.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        setSearchDropdownOpen(false);
+                        if (onSearchResultClick) onSearchResultClick(item);
+                      }}
+                      className="flex w-full cursor-pointer flex-col items-start px-4 py-2.5 text-left text-sm text-gray-300 transition-colors hover:bg-white/5 hover:text-white"
+                    >
+                      <span className="font-medium text-gray-200">{item.title}</span>
+                      {item.category && (
+                        <span className="text-[10px] text-gray-500">{item.category}</span>
+                      )}
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-4 py-3 text-center text-xs text-gray-500">
+                    Ma'lumot topilmadi
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
         {actions}
 
-        <button
-          type="button"
-          className="relative cursor-pointer rounded-lg p-2 text-gray-300 transition-colors hover:bg-[#191e22] hover:text-white"
-          aria-label="Notifications"
-        >
-          <Bell size={20} />
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-medium text-white">
-            {notificationCount}
-          </span>
-        </button>
+        {/* Bildirishnomalar Menyusi */}
+        <div ref={notificationRef} className="relative">
+          <button
+            type="button"
+            onClick={() => setNotificationDropdownOpen((prev) => !prev)}
+            className="relative cursor-pointer rounded-lg p-2 text-gray-300 transition-colors hover:bg-[#191e22] hover:text-white"
+            aria-label="Notifications"
+          >
+            <Bell size={20} />
+            {unreadCount > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] px-1 items-center justify-center rounded-full bg-red-500 text-[10px] font-medium text-white">
+                {unreadCount}
+              </span>
+            )}
+          </button>
 
-        <div ref={dropdownRef} className="relative">
+          {notificationDropdownOpen && (
+            <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-80 rounded-xl border border-white/10 bg-[#121619] shadow-xl overflow-hidden">
+              <div className="p-4 border-b border-white/10 flex justify-between items-center">
+                <h3 className="font-semibold text-sm text-white">Xabarlar</h3>
+                {unreadCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={markAllAsRead}
+                    className="text-xs text-[#d9a441] hover:underline transition-colors"
+                  >
+                    Hammasini o'qilgan qilish
+                  </button>
+                )}
+              </div>
+
+              <div className="max-h-80 overflow-y-auto divide-y divide-white/5">
+                {loading ? (
+                  <div className="p-4 text-center text-xs text-gray-400">
+                    Yuklanmoqda...
+                  </div>
+                ) : notifications.length > 0 ? (
+                  notifications.map((item) => (
+                    <div
+                      key={item.id}
+                      className={`p-3.5 transition-colors hover:bg-white/5 ${
+                        !item.read ? "bg-white/[0.02]" : ""
+                      }`}
+                    >
+                      <div className="flex justify-between items-start mb-1">
+                        <span className="font-medium text-sm text-gray-200">
+                          {item.title}
+                        </span>
+                        <span className="text-[10px] text-gray-500">
+                          {item.time}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400">{item.message}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-4 text-center text-xs text-gray-500">
+                    Yangi xabarlar yo'q
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Profil Menyusi */}
+        <div ref={profileRef} className="relative">
           <button
             type="button"
             onClick={() => setProfileDropdownOpen((prev) => !prev)}

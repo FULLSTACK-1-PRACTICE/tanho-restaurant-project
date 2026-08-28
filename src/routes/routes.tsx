@@ -1,4 +1,5 @@
-import { createBrowserRouter, Outlet } from "react-router-dom"
+import React, { useState, useEffect } from "react"
+import { createBrowserRouter, Outlet, useNavigate, useLocation } from "react-router-dom"
 import { AuthModalProvider } from "../features/auth/context/AuthModalContext"
 import { ProtectedRoute } from "./ProtectedRoute"
 import ScrollToTop from "./ScrollToTop"
@@ -17,6 +18,7 @@ import ContactPage from "../pages/public/Contact/ContactPage"
 import ReservationPage from "../pages/public/Reservation/ReservationPage"
 
 import NewsPage from "../pages/public/News/NewsPage"
+import WorkMode from "../pages/public/Service-mode/WorkMode"
 
 import LoginPage from "../features/auth/components/AuthModal"
 
@@ -72,13 +74,56 @@ export const triggerLogout = (navigateFn?: (path: string) => void) => {
   }, 1200)
 }
 
+function OfflineGuard() {
+  const [isOffline, setIsOffline] = useState(!navigator.onLine)
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false)
+      const lastPath = sessionStorage.getItem("last_online_path") || "/"
+      if (location.pathname === "/service-mode" || location.pathname === "/work-mode") {
+        navigate(lastPath)
+      }
+    }
+
+    const handleOffline = () => {
+      setIsOffline(true)
+      if (location.pathname !== "/service-mode" && location.pathname !== "/work-mode") {
+        sessionStorage.setItem("last_online_path", location.pathname)
+        navigate("/service-mode")
+      }
+    }
+
+    window.addEventListener("online", handleOnline)
+    window.addEventListener("offline", handleOffline)
+
+    if (!navigator.onLine && location.pathname !== "/service-mode" && location.pathname !== "/work-mode") {
+      sessionStorage.setItem("last_online_path", location.pathname)
+      navigate("/service-mode")
+    }
+
+    return () => {
+      window.removeEventListener("online", handleOnline)
+      window.removeEventListener("offline", handleOffline)
+    }
+  }, [navigate, location])
+
+  if (isOffline && location.pathname !== "/service-mode" && location.pathname !== "/work-mode") {
+    return <WorkMode />
+  }
+
+  return <Outlet />
+}
+
 const routes = createBrowserRouter([
   {
     element: (
       <AuthModalProvider>
         <ScrollToTop />
         <Toaster position="top-right" richColors />
-        <Outlet />
+        <OfflineGuard />
       </AuthModalProvider>
     ),
     children: [
@@ -96,6 +141,15 @@ const routes = createBrowserRouter([
           { path: "/contact", element: <ContactPage /> },
           { path: "/news", element: <NewsPage /> },
         ],
+      },
+
+      {
+        path: "/service-mode",
+        element: <WorkMode />,
+      },
+      {
+        path: "/work-mode",
+        element: <WorkMode />,
       },
 
       {
@@ -190,4 +244,4 @@ const routes = createBrowserRouter([
   },
 ])
 
-export default routes;
+export default routes

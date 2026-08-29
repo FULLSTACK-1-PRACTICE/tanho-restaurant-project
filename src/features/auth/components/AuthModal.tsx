@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import type { FormEvent } from "react"
+import type { FormEvent, ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import { Check, Eye, EyeOff, X } from "lucide-react"
 import { toast } from "sonner"
+
 import { useAuthAndFavorites } from "../../../context/useAuthAndFavorites"
 import ForgotPasswordForm from "./ForgotPasswordForm"
 
@@ -31,7 +32,42 @@ const toastStyle = {
 }
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-const phoneRegex = /^\+?[0-9]{9,13}$/
+
+const phoneRegex = /^\+998\d{9}$/
+
+function formatUzbekPhone(value: string): string {
+  let digits = value.replace(/\D/g, "")
+
+  if (digits.startsWith("998")) {
+    digits = digits.slice(3)
+  }
+
+  digits = digits.slice(0, 9)
+
+  if (!digits) {
+    return "+998"
+  }
+
+  let result = "+998"
+
+  if (digits.length > 0) {
+    result += ` ${digits.slice(0, 2)}`
+  }
+
+  if (digits.length > 2) {
+    result += ` ${digits.slice(2, 5)}`
+  }
+
+  if (digits.length > 5) {
+    result += ` ${digits.slice(5, 7)}`
+  }
+
+  if (digits.length > 7) {
+    result += ` ${digits.slice(7, 9)}`
+  }
+
+  return result
+}
 
 export default function AuthModal({
   isOpen,
@@ -45,6 +81,7 @@ export default function AuthModal({
 
   const [showPass, setShowPass] = useState(false)
   const [showPass2, setShowPass2] = useState(false)
+
   const [remember, setRemember] = useState(false)
 
   const [email, setEmail] = useState("")
@@ -96,6 +133,76 @@ export default function AuthModal({
         body {
           margin: 0;
         }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes modalIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.96);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes contentIn {
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes tabIn {
+          from {
+            opacity: 0;
+            transform: scaleX(0);
+          }
+
+          to {
+            opacity: 1;
+            transform: scaleX(1);
+          }
+        }
+
+        @keyframes checkIn {
+          from {
+            opacity: 0;
+            transform: scale(0.5);
+          }
+
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @keyframes iconIn {
+          from {
+            opacity: 0;
+            transform: scale(0.7);
+          }
+
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
       `
 
       document.head.appendChild(style)
@@ -129,7 +236,6 @@ export default function AuthModal({
 
     return () => {
       document.body.style.overflow = previousOverflow
-
       window.removeEventListener("keydown", handleEscape)
     }
   }, [isOpen])
@@ -161,12 +267,9 @@ export default function AuthModal({
 
     localStorage.setItem("token", token)
     localStorage.setItem("role", role)
-
     localStorage.setItem("is_logged_in", "true")
     localStorage.setItem("user_role", role)
-
     localStorage.setItem("user", JSON.stringify(userData))
-
     localStorage.setItem("user_name", userName)
     localStorage.setItem("user_email", userEmail)
 
@@ -246,6 +349,7 @@ export default function AuthModal({
         resetForm()
         setTab("kirish")
         onClose()
+
         navigate(redirectPath, {
           replace: true,
         })
@@ -263,6 +367,7 @@ export default function AuthModal({
         "admin-id",
         "Admin User",
       )
+
       return
     }
 
@@ -277,6 +382,7 @@ export default function AuthModal({
         "user-1",
         "Izzatbek",
       )
+
       return
     }
 
@@ -291,6 +397,7 @@ export default function AuthModal({
         "manager-id",
         "Manager",
       )
+
       return
     }
 
@@ -322,6 +429,7 @@ export default function AuthModal({
         "Iltimos, barcha maydonlarni to'ldiring",
         toastStyle,
       )
+
       return
     }
 
@@ -330,6 +438,7 @@ export default function AuthModal({
         "Yaroqli email formatini kiriting",
         toastStyle,
       )
+
       return
     }
 
@@ -340,9 +449,10 @@ export default function AuthModal({
 
     if (!phoneRegex.test(normalizedPhone)) {
       toast.error(
-        "Yaroqli telefon raqamini kiriting",
+        "Telefon raqami +998 90 123 45 67 formatida bo'lishi kerak",
         toastStyle,
       )
+
       return
     }
 
@@ -351,6 +461,7 @@ export default function AuthModal({
         "Parol kamida 5 ta belgidan iborat bo'lishi kerak",
         toastStyle,
       )
+
       return
     }
 
@@ -361,10 +472,12 @@ export default function AuthModal({
         "Parollar bir xil emas",
         toastStyle,
       )
+
       return
     }
 
     const userId = `user_${Date.now()}`
+
     const fullName = `${cleanName} ${cleanSurname}`
 
     const newUser = {
@@ -438,7 +551,9 @@ export default function AuthModal({
         <div className="relative z-10">
           <div className="mb-6 text-center">
             <h2 className="text-lg font-semibold text-white">
-              {tab === "tiklash" ? "Parolni tiklash" : "Kirish yoki ro'yxatdan o'tish"}
+              {tab === "tiklash"
+                ? "Parolni tiklash"
+                : "Kirish yoki ro'yxatdan o'tish"}
             </h2>
 
             <p className="mt-1 text-xs text-white/40">
@@ -527,38 +642,6 @@ export default function AuthModal({
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        @keyframes modalIn {
-          from { opacity: 0; transform: translateY(20px) scale(0.96); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes contentIn {
-          from { opacity: 0; transform: translateY(8px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes tabIn {
-          from { opacity: 0; transform: scaleX(0); }
-          to { opacity: 1; transform: scaleX(1); }
-        }
-
-        @keyframes checkIn {
-          from { opacity: 0; transform: scale(0.5); }
-          to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes iconIn {
-          from { opacity: 0; transform: scale(0.7); }
-          to { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
     </div>
   )
 }
@@ -675,6 +758,7 @@ function LoginForm({
 
       <p className="pt-1 text-center text-sm text-white/50">
         Hisobingiz yo'qmi?{" "}
+
         <button
           type="button"
           onClick={onRegister}
@@ -707,6 +791,16 @@ function RegisterForm({
   onLogin,
   onSubmit,
 }: RegisterFormProps) {
+  const handlePhoneChange = (value: string) => {
+    setPhone(formatUzbekPhone(value))
+  }
+
+  const handlePhoneFocus = () => {
+    if (!phone) {
+      setPhone("+998")
+    }
+  }
+
   return (
     <form
       className="space-y-4"
@@ -738,11 +832,10 @@ function RegisterForm({
         autoComplete="new-password"
       />
 
-      <Input
-        type="tel"
-        placeholder="Telefon raqamingiz (+998...)"
+      <PhoneInput
         value={phone}
-        onChange={setPhone}
+        onChange={handlePhoneChange}
+        onFocus={handlePhoneFocus}
       />
 
       <div className="grid grid-cols-2 gap-3">
@@ -783,6 +876,7 @@ function RegisterForm({
 
       <p className="pt-1 text-center text-sm text-white/50">
         Hisobingiz bormi?{" "}
+
         <button
           type="button"
           onClick={onLogin}
@@ -811,6 +905,32 @@ function Input({
       onChange={(event) =>
         onChange(event.target.value)
       }
+      className={`${inputClass} cursor-text transition-all duration-300 hover:border-white/25`}
+    />
+  )
+}
+
+function PhoneInput({
+  value,
+  onChange,
+  onFocus,
+}: {
+  value: string
+  onChange: (value: string) => void
+  onFocus: () => void
+}) {
+  return (
+    <input
+      type="tel"
+      inputMode="numeric"
+      placeholder="+998 90 123 45 67"
+      value={value}
+      onFocus={onFocus}
+      onChange={(event) =>
+        onChange(event.target.value)
+      }
+      maxLength={17}
+      autoComplete="tel"
       className={`${inputClass} cursor-text transition-all duration-300 hover:border-white/25`}
     />
   )
@@ -848,11 +968,7 @@ function PasswordInput({
         className="absolute right-3 top-1/2 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-md p-1 text-white/40 transition-all duration-200 hover:scale-110 hover:bg-white/5 hover:text-white active:scale-90"
       >
         <span
-          key={
-            show
-              ? "eye-off"
-              : "eye"
-          }
+          key={show ? "eye-off" : "eye"}
           className="animate-[iconIn_200ms_ease-out]"
         >
           {show ? (
@@ -869,7 +985,7 @@ function PasswordInput({
 function SubmitButton({
   children,
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
   return (
     <button
@@ -930,14 +1046,17 @@ function GoogleIcon({
         fill="#4285F4"
         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
       />
+
       <path
         fill="#34A853"
         d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
       />
+
       <path
         fill="#FBBC05"
         d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
       />
+
       <path
         fill="#EA4335"
         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"

@@ -57,6 +57,7 @@ export interface MenuItem {
   status: "Mavjud" | "Mavjud emas";
   image?: string;
   description?: string;
+  turlar?:string;
 }
 
 export const menuItems: MenuItem[] = [
@@ -379,6 +380,7 @@ export const menuItems: MenuItem[] = [
     status: "Mavjud",
     description: "Shashlik: Go'sht, piyoz, tuz, murch, zira, yog'. Tayyorlanishi: go'shtni kesish, masalliqlarni qo'shib aralashtirish, sixga terish va mangalda pishirish",
     image:shashlik ,
+    turlar:"Кускавой куй, Гиждувон, Наполеон,  Феле, Бикин, Cосиска барбекю, Джигар, Товук, Кавказский шашлык",
   },
   {
     id: "dessert-1",

@@ -79,6 +79,14 @@ const MenuDetailsPage = () => {
                 <p className="mt-4 text-sm leading-7 text-gray-400 sm:text-base">
                   {food.description}
                 </p>
+
+                 <h2 className="font-serif mt-3 text-xl text-white sm:text-2xl">
+                  Turlari
+                </h2>
+             
+                <p className="mt-4 text-sm leading-7 text-gray-400 sm:text-base">
+                  {food.turlar}
+                </p>
               </div>
 
               <div className="mt-8 border-t border-white/10 pt-6">

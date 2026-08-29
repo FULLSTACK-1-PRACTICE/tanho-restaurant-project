@@ -40,7 +40,11 @@ function HeroSection() {
             height={1022}
             fetchPriority="high"
             decoding="async"
-            className="h-full w-full object-cover brightness-105 object-center [@media(min-width:790px)_and_(max-width:815px)]:-translate-y-12 [@media(min-width:790px)_and_(max-width:815px)]:scale-105 transition-all duration-300"
+            /* 
+               Tablet versiya (640px-1023px) uchun orqa fon rasmini 50px yuqoriga ko'tarish (-translate-y-[50px]):
+               Desktopda (lg:) translate-0 ga qaytariladi.
+            */
+            className="h-full w-full object-cover brightness-105 object-center -translate-y-[65px] lg:translate-y-0 transition-all duration-300"
           />
         </picture>
 

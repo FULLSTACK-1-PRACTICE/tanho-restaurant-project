@@ -12,7 +12,7 @@ import {
   Cake,
   ChevronLeft,
   ChevronRight,
-  Coffee,
+  Flame,
   Grid2X2,
   Heart,
   Loader2,
@@ -23,16 +23,17 @@ import {
   Users,
   PartyPopper,
   Salad as SaladIcon,
+  Soup,
 } from "lucide-react";
 
 const categories = [
   { name: "Barchasi", icon: Grid2X2 },
   { name: "Salatlar", icon: SaladIcon },
-  { name: "Osh", icon: UtensilsCrossed },
-  { name: "Milliy taomlar", icon: Cake },
-  { name: "Grill", icon: UtensilsCrossed },
+  { name: "Osh", icon: Soup },
+  { name: "Milliy taomlar", icon: UtensilsCrossed },
+  { name: "Grill", icon: Flame },
   { name: "Ichimliklar", icon: Wine },
-  { name: "Desertlar", icon: Coffee },
+  { name: "Desertlar", icon: Cake },
 ];
 
 interface CategoryTabsProps {
@@ -45,8 +46,8 @@ function CategoryTabs({
   onChange,
 }: CategoryTabsProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#121619]/95 p-2 backdrop-blur-xl shadow-[0_15px_50px_rgba(0,0,0,0.35)]">
-      <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-[#8c651d] scrollbar-track-transparent">
+    <div className="w-full rounded-[20px] border border-white/10 bg-[#161a1d]/90 p-2.5 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+      <div className="flex w-full items-center justify-between gap-2 overflow-x-auto no-scrollbar scroll-smooth">
         {categories.map((category) => {
           const Icon = category.icon;
           const isActive = activeCategory === category.name;
@@ -56,15 +57,15 @@ function CategoryTabs({
               key={category.name}
               type="button"
               onClick={() => onChange(category.name)}
-              className={`group relative flex min-w-fit shrink-0 cursor-pointer select-none items-center justify-center gap-2 rounded-xl px-4 py-3 text-xs transition-all duration-300 outline-none focus:outline-none ${
+              className={`group flex flex-1 min-w-fit shrink-0 cursor-pointer select-none items-center justify-center gap-2.5 rounded-xl px-4 py-3 text-xs font-medium transition-all duration-300 outline-none focus:outline-none sm:px-5 sm:text-sm ${
                 isActive
-                  ? "bg-[#d9a441] text-black shadow-[0_8px_25px_rgba(217,164,65,0.22)]"
-                  : "text-gray-300 hover:bg-[#1b2024] hover:text-[#e5ad45]"
+                  ? "bg-gradient-to-r from-[#e5ad45] to-[#c89228] text-black font-semibold shadow-[0_4px_20px_rgba(217,164,65,0.35)]"
+                  : "text-gray-300 hover:bg-white/5 hover:text-[#e5ad45]"
               }`}
             >
               <Icon
-                size={16}
-                strokeWidth={1.6}
+                size={18}
+                strokeWidth={1.8}
                 className={`shrink-0 transition-transform duration-300 group-hover:scale-110 ${
                   isActive ? "text-black" : "text-[#d9a441]"
                 }`}
@@ -73,10 +74,6 @@ function CategoryTabs({
               <span className="whitespace-nowrap">
                 {category.name}
               </span>
-
-              {isActive && (
-                <span className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#d9a441]" />
-              )}
             </button>
           );
         })}
@@ -105,7 +102,7 @@ function Pagination({
   }
 
   return (
-    <div className="mt-10 flex w-full justify-center">
+    <div className="mt-10 flex w-full justify-center sm:hidden">
       <div className="relative flex items-center gap-1.5 rounded-2xl border border-white/10 bg-[#121619] p-1.5 shadow-[0_15px_45px_rgba(0,0,0,0.35)]">
         <div className="pointer-events-none absolute inset-x-6 -bottom-1 h-px bg-gradient-to-r from-transparent via-[#d9a441]/50 to-transparent" />
 
@@ -182,6 +179,9 @@ const MenuPage = () => {
     useState<boolean>(false);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState<boolean>(
+    typeof window !== "undefined" ? window.innerWidth < 640 : false
+  );
 
   const {
     isLoggedIn,
@@ -191,6 +191,13 @@ const MenuPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const categoryQuery = searchParams.get("category");
@@ -256,28 +263,24 @@ const MenuPage = () => {
     );
 
   const itemsPerPage = 10;
-
   const totalPages = Math.ceil(
     visibleItems.length / itemsPerPage,
   );
 
-  const startIndex =
-    (currentPage - 1) * itemsPerPage;
-
-  const paginatedItems = visibleItems.slice(
-    startIndex,
-    startIndex + itemsPerPage,
+  const safeCurrentPage = Math.max(
+    1,
+    Math.min(currentPage, totalPages || 1),
   );
 
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
+  const startIndex = (safeCurrentPage - 1) * itemsPerPage;
+
+  // Mobilda pagination bo'yicha kesiladi, Desktopda (sm va undan yuqori) barcha taomlar ko'rinadi
+  const displayedItems = isMobile
+    ? visibleItems.slice(startIndex, startIndex + itemsPerPage)
+    : visibleItems;
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#0b0e10] text-white">
-      {/* HERO */}
       <section className="relative flex min-h-[450px] items-center overflow-hidden sm:min-h-[500px]">
         <img
           loading="lazy"
@@ -312,15 +315,13 @@ const MenuPage = () => {
         </div>
       </section>
 
-      {/* CATEGORIES */}
-      <section className="relative z-10 mx-auto -mt-6 max-w-[1240px] px-4 sm:-mt-8 sm:px-6">
+      <section className="relative z-10 mx-auto -mt-6 w-full max-w-[1240px] px-4 sm:-mt-8 sm:px-6">
         <CategoryTabs
           activeCategory={activeCategory}
           onChange={handleCategoryChange}
         />
       </section>
 
-      {/* MENU */}
       <section className="mx-auto max-w-[1240px] px-4 py-10 sm:px-6 sm:py-12">
         <div className="mb-6 flex items-end justify-between sm:mb-7">
           <div>
@@ -355,9 +356,8 @@ const MenuPage = () => {
           </div>
         ) : (
           <>
-            {/* FOOD CARDS */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {paginatedItems.map((food) => {
+              {displayedItems.map((food) => {
                 const isFavorite = favorites.some(
                   (fav) => fav.id === food.id,
                 );
@@ -371,7 +371,6 @@ const MenuPage = () => {
                     className="group flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl border border-white/10 bg-[#121619] transition-all duration-300 hover:-translate-y-1 hover:border-[#d9a441]/60"
                   >
                     <div>
-                      {/* IMAGE */}
                       <div
                         className="relative flex h-[170px] w-full items-center justify-center overflow-hidden p-2 sm:h-[220px] md:h-[240px]"
                         style={{
@@ -391,7 +390,6 @@ const MenuPage = () => {
                           </div>
                         )}
 
-                        {/* FAVORITE */}
                         <button
                           type="button"
                           aria-label="Sevimlilarga qo'shish"
@@ -415,7 +413,6 @@ const MenuPage = () => {
                         </button>
                       </div>
 
-                      {/* INFO */}
                       <div className="relative z-10 bg-[#121619] p-3 pb-2 sm:p-4">
                         <h3 className="truncate text-xs font-semibold transition-colors duration-300 group-hover:text-[#e5ad45] sm:text-base">
                           {food.name}
@@ -428,7 +425,6 @@ const MenuPage = () => {
                       </div>
                     </div>
 
-                    {/* DETAIL BUTTON */}
                     <div className="bg-[#121619] p-3 pt-2 sm:p-4">
                       <button
                         type="button"
@@ -453,9 +449,8 @@ const MenuPage = () => {
               })}
             </div>
 
-            {/* PAGINATION */}
             <Pagination
-              currentPage={currentPage}
+              currentPage={safeCurrentPage}
               totalPages={totalPages}
               onPageChange={(page) => {
                 setCurrentPage(page);
@@ -465,11 +460,9 @@ const MenuPage = () => {
         )}
       </section>
 
-      {/* RESERVATION SECTION */}
       <section className="mx-auto max-w-[1240px] px-4 pb-12 sm:px-6">
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121619]">
           <div className="grid md:grid-cols-[280px_1fr]">
-            {/* IMAGE */}
             <div className="relative h-[200px] overflow-hidden bg-[#121619] sm:h-[220px] md:h-auto">
               <img
                 loading="lazy"
@@ -479,7 +472,6 @@ const MenuPage = () => {
               />
             </div>
 
-            {/* CONTENT */}
             <div className="p-5 sm:p-6 md:p-8">
               <div className="mb-6 sm:mb-7">
                 <p className="text-xs uppercase tracking-[2px] text-[#d9a441]">
@@ -498,7 +490,6 @@ const MenuPage = () => {
               </div>
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-                {/* CABINS */}
                 <div className="group cursor-pointer">
                   <Sparkles
                     size={26}
@@ -516,7 +507,6 @@ const MenuPage = () => {
                   </p>
                 </div>
 
-                {/* TABLES */}
                 <div className="group cursor-pointer">
                   <PartyPopper
                     size={26}
@@ -534,7 +524,6 @@ const MenuPage = () => {
                   </p>
                 </div>
 
-                {/* BANQUET */}
                 <div className="group cursor-pointer">
                   <Users
                     size={26}
@@ -554,7 +543,6 @@ const MenuPage = () => {
                 </div>
               </div>
 
-              {/* RESERVATION BUTTON */}
               <button
                 type="button"
                 onClick={() =>
@@ -570,7 +558,6 @@ const MenuPage = () => {
         </div>
       </section>
 
-      {/* AUTH MODAL */}
       <AuthModal
         isOpen={isOpenAuthModal}
         onClose={() => setIsOpenAuthModal(false)}

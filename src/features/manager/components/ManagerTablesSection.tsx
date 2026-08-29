@@ -1,5 +1,6 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { Plus, Trash2, Edit, X, Users, LayoutGrid, AlertCircle, Check, ChevronDown } from "lucide-react";
+import { toast } from "sonner";
 
 export type TableItem = {
   id: number;
@@ -70,6 +71,7 @@ export default function ManagerTablesSection() {
     };
 
     setTables((prev) => [item, ...prev]);
+    toast.success("Stol qo‘shildi!");
     setIsAddModalOpen(false);
     setNewTable({ number: "", capacity: "4", zone: "Zal", status: "Bo'sh" });
   };
@@ -90,11 +92,13 @@ export default function ManagerTablesSection() {
     setTables((prev) =>
       prev.map((t) => (t.id === editingTable.id ? { ...editingTable, number: trimmedNumber } : t))
     );
+    toast.success("Stol tahrirlandi!");
     setEditingTable(null);
   };
 
   const handleDelete = (id: number) => {
     setTables((prev) => prev.filter((t) => t.id !== id));
+    toast.success("Stol o‘chirildi!");
   };
 
   const filteredTables = tables.filter((table) => {
@@ -104,6 +108,19 @@ export default function ManagerTablesSection() {
 
   const zonesList = ["Zal", "Kabina", "Terassa"];
   const statusesList: TableItem["status"][] = ["Bo'sh", "Band", "Bron qilingan"];
+
+  const canSaveNewTable = newTable.number.trim().length > 0;
+  const originalEditingTable = editingTable
+    ? tables.find((table) => table.id === editingTable.id)
+    : null;
+  const hasEditChanges = Boolean(
+    editingTable &&
+      originalEditingTable &&
+      (String(editingTable.number) !== String(originalEditingTable.number) ||
+        editingTable.capacity !== originalEditingTable.capacity ||
+        editingTable.zone !== originalEditingTable.zone ||
+        editingTable.status !== originalEditingTable.status)
+  );
 
   return (
     <div className="space-y-6" onClick={() => setActiveDropdown(null)}>
@@ -381,7 +398,8 @@ export default function ManagerTablesSection() {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-[#DCAE4D] hover:bg-[#c99b3c] text-black rounded-xl text-xs font-bold cursor-pointer transition-colors shadow-lg"
+                  disabled={!canSaveNewTable}
+                  className="px-6 py-2.5 bg-[#DCAE4D] hover:bg-[#c99b3c] text-black rounded-xl text-xs font-bold cursor-pointer transition-colors shadow-lg disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#DCAE4D]"
                 >
                   Saqlash
                 </button>
@@ -553,7 +571,8 @@ export default function ManagerTablesSection() {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-[#DCAE4D] hover:bg-[#c99b3c] text-black rounded-xl text-xs font-bold cursor-pointer transition-colors shadow-lg"
+                  disabled={!hasEditChanges}
+                  className="px-6 py-2.5 bg-[#DCAE4D] hover:bg-[#c99b3c] text-black rounded-xl text-xs font-bold cursor-pointer transition-colors shadow-lg disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#DCAE4D]"
                 >
                   Saqlash
                 </button>

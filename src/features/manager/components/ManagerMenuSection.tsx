@@ -18,6 +18,7 @@ import {
   Clock,
 } from "lucide-react";
 import { StatCard } from "./StatCard";
+import { toast } from "sonner";
 import type { Category, Food } from "../../../data/mockData";
 
 type MenuFood = Omit<Food, "price"> & {
@@ -275,6 +276,7 @@ export default function ManagerMenuSection({
     };
 
     setInternalFoods((prev) => [item, ...prev]);
+    toast.success("Taom qo‘shildi!");
   };
 
   const handleUpdateFood = (updatedFood: MenuFood) => {
@@ -284,12 +286,14 @@ export default function ManagerMenuSection({
       )
     );
 
+    toast.success("Taom tahrirlandi!");
     setEditingFood(null);
   };
 
   const handleDelete = (id: number) => {
     setInternalFoods((prev) => prev.filter((item) => item.id !== id));
     onDeleteFood?.(id);
+    toast.success("Taom o‘chirildi!");
   };
 
   const handleCreateCategory = (categoryName: string) => {
@@ -300,6 +304,7 @@ export default function ManagerMenuSection({
 
     setInternalCategories((prev) => [...prev, newCatObj]);
     onAddCategorySubmit?.(categoryName);
+    toast.success("Kategoriya qo‘shildi!");
   };
 
   const totalCount = foods.length;
@@ -578,6 +583,7 @@ export default function ManagerMenuSection({
           onSubmit={(e) => {
             e.preventDefault();
             setIsImportModalOpen(false);
+            toast.success("Import muvaffaqiyatli bajarildi!");
           }}
         />
       )}
@@ -614,6 +620,12 @@ function EditFoodModal({
     name?: string;
     preparationTime?: string;
   }>({});
+
+  const hasChanges =
+    form.name !== food.name ||
+    form.category !== food.category ||
+    form.preparationTime !== String(food.preparationTime) ||
+    form.status !== food.status;
 
   const modalInputClass = (hasError?: boolean) =>
     `w-full bg-[#141416] border rounded-full px-4 py-2.5 text-sm text-white focus:outline-none mt-1 transition-colors ${
@@ -787,7 +799,8 @@ function EditFoodModal({
 
             <button
               type="submit"
-              className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors"
+              disabled={!hasChanges}
+              className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#C99B3C]"
             >
               Saqlash
             </button>
@@ -1173,11 +1186,14 @@ function ImportFoodModal({
               id="manager-file-import"
               type="file"
               accept=".xlsx,.xls,.csv"
-              onChange={(event) =>
-                onFileChange(
-                  event.target.files?.[0] || null
-                )
-              }
+              onChange={(event) => {
+                const selectedFile = event.target.files?.[0] || null;
+                onFileChange(selectedFile);
+
+                if (selectedFile) {
+                  toast.success("Fayl tanlandi!");
+                }
+              }}
               className="hidden"
             />
 

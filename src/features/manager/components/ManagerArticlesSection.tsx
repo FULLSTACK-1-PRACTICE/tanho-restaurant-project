@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Plus, Trash2, Edit, Search, BookOpen, ChevronDown, Check, Upload, Image as ImageIcon } from "lucide-react";
 import Button from "@/components/ui/Button/Button";
+import { toast } from "sonner";
 
 interface Article {
   id: string;
@@ -87,15 +88,17 @@ export default function ManagerArticlesSection() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prev) => ({ ...prev, image: reader.result as string }));
+        toast.success("Rasm muvaffaqiyatli yuklandi!");
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleDelete = (id: string) => {
-    if (confirm("Haqiqatdan ham ushbu maqolani o'chirmoqchimisiz?")) {
-      setArticles(articles.filter((item) => item.id !== id));
-    }
+    setArticles((currentArticles) =>
+      currentArticles.filter((item) => item.id !== id)
+    );
+    toast.success("Maqola o‘chirildi!");
   };
 
   const validateForm = () => {
@@ -124,11 +127,12 @@ export default function ManagerArticlesSection() {
     if (!validateForm()) return;
 
     if (editingArticle) {
-      setArticles(
-        articles.map((item) =>
+      setArticles((currentArticles) =>
+        currentArticles.map((item) =>
           item.id === editingArticle.id ? { ...item, ...formData } : item
         )
       );
+      toast.success("Maqola tahrirlandi!");
     } else {
       const newArticle: Article = {
         id: Date.now().toString(),
@@ -142,13 +146,25 @@ export default function ManagerArticlesSection() {
           formData.image ||
           "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=500&q=80",
       };
-      setArticles([newArticle, ...articles]);
+      setArticles((currentArticles) => [newArticle, ...currentArticles]);
+      toast.success("Maqola qo‘shildi!");
     }
     setIsModalOpen(false);
   };
 
   const filtered = articles.filter((a) =>
     a.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const canSave = Boolean(
+    formData.title.trim() &&
+      formData.content.trim() &&
+      (!editingArticle ||
+        formData.title !== editingArticle.title ||
+        formData.category !== editingArticle.category ||
+        formData.content !== editingArticle.content ||
+        formData.readTime !== editingArticle.readTime ||
+        formData.image !== editingArticle.image)
   );
 
   return (
@@ -183,8 +199,9 @@ export default function ManagerArticlesSection() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((item) => (
+      {filtered.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((item) => (
           <div
             key={item.id}
             className="bg-[#111113] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between"
@@ -225,12 +242,23 @@ export default function ManagerArticlesSection() {
               </div>
             </div>
           </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-white/10 bg-[#111113] px-6 py-14 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F6B530]/10">
+            <Search size={22} className="text-[#F6B530]" />
+          </div>
+          <h3 className="mt-4 text-lg font-bold text-white">Ma’lumot topilmadi</h3>
+          <p className="mx-auto mt-2 max-w-md text-sm text-gray-400">
+            “{search}” bo‘yicha hech qanday maqola topilmadi. Boshqa so‘z bilan qidirib ko‘ring.
+          </p>
+        </div>
+      )}
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#161618] border border-white/10 rounded-3xl w-full max-w-lg p-6 space-y-5 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setIsModalOpen(false)}>
+          <div className="bg-[#161618] border border-white/10 rounded-3xl w-full max-w-lg p-6 space-y-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
             <h2 className="text-xl font-bold text-white">
               {editingArticle ? "Maqolani Tahrirlash" : "Yangi Maqola Qo'shish"}
             </h2>
@@ -257,7 +285,7 @@ export default function ManagerArticlesSection() {
               {/* Custom Select */}
               <div className="relative" ref={selectRef}>
                 <label className="text-xs text-gray-400 ml-1">Kategoriya</label>
-                <button
+                <Button
                   type="button"
                   onClick={() => setIsSelectOpen(!isSelectOpen)}
                   className={`w-full bg-[#111113] border ${
@@ -271,12 +299,12 @@ export default function ManagerArticlesSection() {
                       isSelectOpen ? "rotate-180 text-[#F6B530]" : ""
                     }`}
                   />
-                </button>
+                </Button>
 
                 {isSelectOpen && (
                   <div className="absolute left-0 right-0 top-full mt-2 bg-[#1c1c1f] border border-white/10 rounded-2xl shadow-xl z-50 overflow-hidden py-1.5 backdrop-blur-md">
                     {CATEGORIES.map((cat) => (
-                      <button
+                      <Button
                         key={cat}
                         type="button"
                         onClick={() => {
@@ -291,7 +319,7 @@ export default function ManagerArticlesSection() {
                       >
                         <span>{cat}</span>
                         {formData.category === cat && <Check size={16} className="text-[#F6B530]" />}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 )}
@@ -358,8 +386,9 @@ export default function ManagerArticlesSection() {
                 </Button>
                 <Button
                   type="submit"
+                  disabled={!canSave}
                   style={{ backgroundColor: "#F6B530" }}
-                  className="px-6 py-2.5 rounded-full text-sm font-semibold text-black hover:bg-[#e0a228] transition cursor-pointer active:scale-95 shadow-md shadow-[#F6B530]/20 border-none"
+                  className="px-6 py-2.5 rounded-full text-sm font-semibold text-black hover:bg-[#e0a228] transition cursor-pointer active:scale-95 shadow-md shadow-[#F6B530]/20 border-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#F6B530]"
                 >
                   Saqlash
                 </Button>

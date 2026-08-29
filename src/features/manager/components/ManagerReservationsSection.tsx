@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Calendar, Search, CheckCircle2, XCircle, Clock, Phone, User, Users, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
+import Button from "../../../components/ui/Button";
 
 interface Reservation {
   id: string;
@@ -39,11 +41,30 @@ export default function ManagerReservationsSection() {
   const [reservations, setReservations] = useState<Reservation[]>(initialReservations);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("Barchasi");
+  const [reservationToCancel, setReservationToCancel] = useState<Reservation | null>(null);
 
   const handleStatusChange = (id: string, newStatus: Reservation["status"]) => {
-    setReservations(
-      reservations.map((item) => (item.id === id ? { ...item, status: newStatus } : item))
+    setReservations((currentReservations) =>
+      currentReservations.map((item) =>
+        item.id === id ? { ...item, status: newStatus } : item
+      )
     );
+
+    if (newStatus === "Tasdiqlangan") {
+      toast.success("Rezervatsiya tasdiqlandi!");
+    }
+  };
+
+  const requestCancellation = (reservation: Reservation) => {
+    setReservationToCancel(reservation);
+  };
+
+  const confirmCancellation = () => {
+    if (!reservationToCancel) return;
+
+    handleStatusChange(reservationToCancel.id, "Bekor qilingan");
+    toast.success("Rezervatsiya bekor qilindi!");
+    setReservationToCancel(null);
   };
 
   const filtered = reservations.filter((item) => {
@@ -66,7 +87,7 @@ export default function ManagerReservationsSection() {
 
         <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
           {["Barchasi", "Kutilmoqda", "Tasdiqlangan", "Bekor qilingan"].map((status) => (
-            <button
+            <Button
               key={status}
               onClick={() => setFilterStatus(status)}
               style={{
@@ -76,7 +97,7 @@ export default function ManagerReservationsSection() {
               className="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition whitespace-nowrap"
             >
               {status}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
@@ -148,20 +169,20 @@ export default function ManagerReservationsSection() {
 
               <div className="pt-3 border-t border-white/5 flex items-center justify-end gap-2">
                 {item.status !== "Tasdiqlangan" && (
-                  <button
+                  <Button
                     onClick={() => handleStatusChange(item.id, "Tasdiqlangan")}
                     className="flex items-center gap-1.5 bg-green-500/20 hover:bg-green-500/30 text-green-400 px-3 py-1.5 rounded-xl text-xs font-semibold transition"
                   >
                     <CheckCircle2 size={14} /> Tasdiqlash
-                  </button>
+                  </Button>
                 )}
                 {item.status !== "Bekor qilingan" && (
-                  <button
-                    onClick={() => handleStatusChange(item.id, "Bekor qilingan")}
+                  <Button
+                    onClick={() => requestCancellation(item)}
                     className="flex items-center gap-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-1.5 rounded-xl text-xs font-semibold transition"
                   >
                     <XCircle size={14} /> Bekor qilish
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>
@@ -176,6 +197,58 @@ export default function ManagerReservationsSection() {
           <p className="text-xs text-gray-400 max-w-sm">
             Hozircha bu bo'limda hech qanday rezervatsiyalar mavjud emas yoki qidiruv bo'yicha hech narsa topilmadi.
           </p>
+        </div>
+      )}
+
+      {reservationToCancel && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+          onClick={() => setReservationToCancel(null)}
+        >
+          <div
+            className="w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#111113] shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 border-b border-white/5 p-5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/15">
+                <AlertCircle size={21} className="text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-white">
+                  Rezervatsiyani bekor qilish
+                </h3>
+                <p className="mt-1 text-xs text-gray-400">
+                  Bu amalni ortga qaytarib bo‘lmaydi.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-5">
+              <p className="text-sm leading-6 text-gray-300">
+                <span className="font-semibold text-white">
+                  {reservationToCancel.clientName}
+                </span>{" "}
+                uchun rezervatsiyani bekor qilishga aminmisiz?
+              </p>
+
+              <div className="mt-5 flex justify-end gap-3">
+                <Button
+                  type="button"
+                  onClick={() => setReservationToCancel(null)}
+                  className="rounded-xl border border-white/10 px-4 py-2.5 text-xs font-semibold text-gray-300 transition hover:bg-white/5"
+                >
+                  Yo‘q, qaytish
+                </Button>
+                <Button
+                  type="button"
+                  onClick={confirmCancellation}
+                  className="rounded-xl bg-red-500 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-red-600"
+                >
+                  Ha, bekor qilish
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

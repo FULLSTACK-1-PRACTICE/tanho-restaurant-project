@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Plus, Trash2, Edit, Search, Newspaper } from "lucide-react";
+import { Plus, Trash2, Edit, Search, Newspaper, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
+import Button from "../../../components/ui/Button";
 
 interface NewsItem {
   id: string;
@@ -47,19 +49,27 @@ export default function ManagerNewsSection() {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm("Yangilikni o'chirishni tasdiqlaysizmi?")) {
-      setNews(news.filter((n) => n.id !== id));
-    }
+    setNews((currentNews) => currentNews.filter((item) => item.id !== id));
+    toast.success("Yangilik o‘chirildi!");
   };
+
+  const canSave = Boolean(
+    formData.title.trim() && formData.summary.trim() &&
+      (!editingNews ||
+        formData.title !== editingNews.title ||
+        formData.summary !== editingNews.summary ||
+        formData.image !== editingNews.image)
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingNews) {
-      setNews(
-        news.map((item) =>
+      setNews((currentNews) =>
+        currentNews.map((item) =>
           item.id === editingNews.id ? { ...item, ...formData } : item
         )
       );
+      toast.success("Yangilik tahrirlandi!");
     } else {
       const newItem: NewsItem = {
         id: Date.now().toString(),
@@ -73,7 +83,8 @@ export default function ManagerNewsSection() {
           formData.image ||
           "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500&q=80",
       };
-      setNews([newItem, ...news]);
+      setNews((currentNews) => [newItem, ...currentNews]);
+      toast.success("Yangilik qo‘shildi!");
     }
     setIsModalOpen(false);
   };
@@ -87,14 +98,14 @@ export default function ManagerNewsSection() {
           </h1>
           <p className="text-sm text-gray-400">Restoran yangiliklarini boshqarish</p>
         </div>
-        <button
+        <Button
           type="button"
           onClick={() => handleOpenModal()}
           style={{ backgroundColor: "#F6B530" }}
           className="flex items-center gap-2 hover:bg-[#e0a228] text-black px-5 py-2.5 rounded-full font-semibold transition cursor-pointer active:scale-95"
         >
           <Plus size={18} /> Yangilik Qo'shish
-        </button>
+        </Button>
       </div>
 
       <div className="relative">
@@ -108,10 +119,11 @@ export default function ManagerNewsSection() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {news
-          .filter((n) => n.title.toLowerCase().includes(search.toLowerCase()))
-          .map((item) => (
+      {news.filter((n) => n.title.toLowerCase().includes(search.toLowerCase())).length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {news
+            .filter((n) => n.title.toLowerCase().includes(search.toLowerCase()))
+            .map((item) => (
             <div
               key={item.id}
               className="bg-[#111113] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between"
@@ -126,29 +138,40 @@ export default function ManagerNewsSection() {
               <div className="p-4 pt-0 border-t border-white/5 flex items-center justify-between mt-4">
                 <span className="text-xs text-gray-500">{item.date}</span>
                 <div className="flex items-center gap-2">
-                  <button
+                  <Button
                     type="button"
                     onClick={() => handleOpenModal(item)}
                     className="p-2 text-gray-400 hover:text-[#F6B530] hover:bg-white/5 rounded-lg transition cursor-pointer"
                   >
                     <Edit size={16} />
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={() => handleDelete(item.id)}
                     className="p-2 text-gray-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition cursor-pointer"
                   >
                     <Trash2 size={16} />
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
-          ))}
-      </div>
+            ))}
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-white/10 bg-[#111113] px-6 py-14 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F6B530]/10">
+            <AlertCircle size={22} className="text-[#F6B530]" />
+          </div>
+          <h3 className="mt-4 text-lg font-bold text-white">Ma’lumot topilmadi</h3>
+          <p className="mx-auto mt-2 max-w-md text-sm text-gray-400">
+            “{search}” bo‘yicha hech qanday yangilik topilmadi. Boshqa so‘z bilan qidirib ko‘ring.
+          </p>
+        </div>
+      )}
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#161618] border border-white/10 rounded-3xl w-full max-w-lg p-6 space-y-5 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setIsModalOpen(false)}>
+          <div className="bg-[#161618] border border-white/10 rounded-3xl w-full max-w-lg p-6 space-y-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
             <h2 className="text-xl font-bold text-white">
               {editingNews ? "Yangilikni Tahrirlash" : "Yangi Maqola Qo'shish"}
             </h2>
@@ -189,20 +212,21 @@ export default function ManagerNewsSection() {
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3">
-                <button
+                <Button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
                   className="px-5 py-2.5 rounded-full text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition cursor-pointer active:scale-95"
                 >
                   Bekor qilish
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
+                  disabled={!canSave}
                   style={{ backgroundColor: "#F6B530" }}
-                  className="px-6 py-2.5 rounded-full text-sm font-semibold text-black hover:bg-[#e0a228] transition cursor-pointer active:scale-95 shadow-md shadow-[#F6B530]/20"
+                  className="px-6 py-2.5 rounded-full text-sm font-semibold text-black hover:bg-[#e0a228] transition cursor-pointer active:scale-95 shadow-md shadow-[#F6B530]/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#F6B530]"
                 >
                   Saqlash
-                </button>
+                </Button>
               </div>
             </form>
           </div>

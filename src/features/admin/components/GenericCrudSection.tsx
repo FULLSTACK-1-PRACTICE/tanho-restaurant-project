@@ -62,7 +62,6 @@ export function GenericCrudSection({
     setOpenDropdownKey(null);
   };
 
-  // Kamida bitta maydon to'ldirilganini yoki o'zgartirilganini tekshirish
   const hasValues = Object.values(formData).some(
     (val) => val !== undefined && val !== null && String(val).trim() !== ""
   );
@@ -83,22 +82,25 @@ export function GenericCrudSection({
       setData((prev) =>
         prev.map((item) => (String(item.id) === editingId ? { ...formData, id: editingId } : item))
       );
-      toast.success("Ma'lumot muvaffaqiyatli tahrirlandi");
+      toast.success("Ma'lumot muvaffaqiyatli tahrirlandi!");
     } else {
       setData((prev) => [...prev, { ...formData, id: Date.now().toString() }]);
-      toast.success("Yangi ma'lumot muvaffaqiyatli qo'shildi");
+      toast.success("Yangi ma'lumot muvaffaqiyatli qo'shildi!");
     }
     handleCloseModal();
   };
 
   const handleDelete = (id: string) => {
     setData((prev) => prev.filter((item) => String(item.id) !== id));
-    toast.error("Ma'lumot o'chirildi");
+    toast.success("Ma'lumot o'chirildi!");
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-[#121619] p-5 sm:p-6 rounded-2xl border border-white/10 shadow-xl relative overflow-hidden">
+      <div 
+        onClick={() => setOpenDropdownKey(null)}
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-[#121619] p-5 sm:p-6 rounded-2xl border border-white/10 shadow-xl relative overflow-hidden"
+      >
         <div className="absolute right-0 top-0 translate-x-6 -translate-y-6 w-32 h-32 bg-[#FF9500]/5 rounded-full blur-2xl pointer-events-none" />
         
         <div className="space-y-1">

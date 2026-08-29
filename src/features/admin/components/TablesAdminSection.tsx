@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { Plus, Pencil, Trash2, X, Loader2, Table2, Receipt, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 import { useCrud } from "../hooks/useCrud";
 
 export interface BillItem {
@@ -54,29 +55,48 @@ export function TablesAdminSection() {
     seats: 2,
   });
 
+  const [initialForm, setInitialForm] = useState<{
+    number: string;
+    seats: string | number;
+  }>({
+    number: "",
+    seats: 2,
+  });
+
   const [saving, setSaving] = useState(false);
   const bills = useMemo<Record<string, Bill>>(() => ({}), []);
 
   const openAdd = () => {
     setEditingId(null);
-    setForm({
-      number: "",
-      seats: 2,
-    });
+    const emptyForm = { number: "", seats: 2 };
+    setForm(emptyForm);
+    setInitialForm(emptyForm);
     setModalOpen(true);
   };
 
   const openEdit = (table: TableRow) => {
     setEditingId(table.id);
-    setForm({
+    const editForm = {
       number: String(table.number),
       seats: table.seats ?? 2,
-    });
+    };
+    setForm(editForm);
+    setInitialForm(editForm);
     setModalOpen(true);
   };
 
+  // Tahrirlash rejimida ma'lumot o'zgarganini tekshirish uchun:
+  const isFormChanged =
+    form.number !== initialForm.number || Number(form.seats) !== Number(initialForm.seats);
+
+  // Saqlash tugmasi qachon o'chiq turishi kerak:
+  const isSaveDisabled = editingId
+    ? !isFormChanged || !form.number.toString().trim()
+    : !form.number.toString().trim();
+
   const handleSave = async () => {
     if (!form.number.toString().trim()) {
+      toast.error("Iltimos, stol raqamini kiriting!");
       return;
     }
 
@@ -90,17 +110,19 @@ export function TablesAdminSection() {
           number: form.number,
           seats: parsedSeats,
         } as Partial<TableRow>);
+        toast.success("Stol muvaffaqiyatli tahrirlandi!");
       } else {
         await add({
           number: form.number,
           seats: parsedSeats,
           status: "Bo'sh",
         } as Omit<TableRow, "id">);
+        toast.success("Yangi stol muvaffaqiyatli qo'shildi!");
       }
 
       setModalOpen(false);
     } catch {
-      // Control Error
+      toast.error("Xatolik yuz berdi!");
     } finally {
       setSaving(false);
     }
@@ -109,8 +131,9 @@ export function TablesAdminSection() {
   const handleDelete = async (id: string) => {
     try {
       await remove(id);
+      toast.success("Stol o'chirildi!");
     } catch {
-      // Control Error
+      toast.error("O'chirishda xatolik yuz berdi!");
     }
   };
 
@@ -122,8 +145,9 @@ export function TablesAdminSection() {
         reservedDate: "",
         reservedBy: "",
       } as Partial<TableRow>);
+      toast.success("Stol bo'shatildi!");
     } catch {
-      // Control Error
+      toast.error("Xatolik yuz berdi!");
     }
   };
 
@@ -329,8 +353,8 @@ export function TablesAdminSection() {
 
               <button
                 onClick={handleSave}
-                disabled={saving}
-                className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#FE9A00] px-4 py-2 text-sm font-medium text-black hover:bg-[#FE9A00]/80 disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={isSaveDisabled || saving}
+                className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#FE9A00] px-4 py-2 text-sm font-medium text-black hover:bg-[#FE9A00]/80 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {saving && <Loader2 size={14} className="animate-spin" />}
                 Saqlash

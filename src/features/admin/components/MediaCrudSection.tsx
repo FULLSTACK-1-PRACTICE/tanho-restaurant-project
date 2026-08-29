@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, Pencil, Trash2, X, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { useCrud } from "../hooks/useCrud";
 import { fileToBase64 } from "../../../lib/utils";
 
@@ -68,25 +69,51 @@ export function MediaCrudSection({
         image: base64String,
       }));
     } catch {
+      toast.error(" Rasmni yuklashda xatolik yuz berdi!");
       setSaving(false);
     }
   };
 
   const handleSave = async () => {
-    if (!form.title.trim()) return;
+    if (!form.title.trim()) {
+      toast.error("Iltimos, sarlavhani kiriting!");
+      return;
+    }
 
     setSaving(true);
 
     try {
       if (editingId) {
         await update(editingId, form);
+        toast.success("Muvaffaqiyatli tahrirlandi!");
       } else {
         await add(form);
+        
+        // Sarlavha yoki collection nomiga qarab aniq xabar chiqarish
+        const lowerTitle = title.toLowerCase();
+        if (lowerTitle.includes("maqola")) {
+          toast.success("Maqola qo'shildi!");
+        } else if (lowerTitle.includes("yangilik")) {
+          toast.success("Yangilik qo'shildi!");
+        } else {
+          toast.success("Ma'lumot qo'shildi!");
+        }
       }
 
       setModalOpen(false);
+    } catch {
+      toast.error("Saqlashda xatolik yuz berdi!");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await remove(id);
+      toast.success("Ma'lumot o'chirildi!");
+    } catch {
+      toast.error("O'chirishda xatolik yuz berdi!");
     }
   };
 
@@ -147,7 +174,7 @@ export function MediaCrudSection({
                   </button>
 
                   <button
-                    onClick={() => remove(item.id)}
+                    onClick={() => handleDelete(item.id)}
                     className="cursor-pointer rounded-lg p-1.5 text-red-400 hover:bg-red-500/10"
                   >
                     <Trash2 size={15} />

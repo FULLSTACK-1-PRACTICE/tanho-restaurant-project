@@ -1,13 +1,12 @@
 import HeroSection from "../../../features/Landing/HeroSection";
-import { lazy, Suspense } from "react"
-import SEO from "../../../components/shared/SEO"
-import DeferredSection from "../../../components/shared/DeferredSection"
+import { lazy, Suspense } from "react";
+import SEO from "../../../components/shared/SEO";
+import DeferredSection from "../../../components/shared/DeferredSection";
 
-const MashhurFood = lazy(() => import("../../../features/Landing/PopularFood"))
-const AboutSection = lazy(() => import("../../../features/Landing/AboutSection"))
-const SpecialSection = lazy(() => import("../../../features/Landing/SpecialSection"))
-const Stolband = lazy(() => import("../../../features/Landing/BookaTable"))
-const UserComments = lazy(() => import("../../../features/Landing/UserComments"))
+const MashhurFood = lazy(() => import("../../../features/Landing/PopularFood"));
+const SpecialSection = lazy(() => import("../../../features/Landing/SpecialSection"));
+const Stolband = lazy(() => import("../../../features/Landing/BookaTable"));
+const UserComments = lazy(() => import("../../../features/Landing/UserComments"));
 
 function Home() {
   return (
@@ -20,7 +19,6 @@ function Home() {
       <HeroSection />
       <Suspense fallback={null}>
         <DeferredSection><MashhurFood /></DeferredSection>
-        <DeferredSection><AboutSection /></DeferredSection>
         <DeferredSection><SpecialSection /></DeferredSection>
         <DeferredSection><Stolband /></DeferredSection>
         <DeferredSection><UserComments /></DeferredSection>

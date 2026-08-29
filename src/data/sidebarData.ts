@@ -1,14 +1,13 @@
 import {
-  LayoutDashboard,
-  Utensils,
-  CalendarCheck,
-  Grid,
-  Users,
-  Newspaper,
-  FileText,
-  UserSquare2,
   BarChart3,
-  BellRing,
+  CalendarCheck,
+  FileText,
+  Grid,
+  LayoutDashboard,
+  Newspaper,
+  UserSquare2,
+  Users,
+  Utensils,
 } from "lucide-react";
 import type { SidebarItem } from "../components/common/SideBar";
 
@@ -22,7 +21,6 @@ export const adminSidebarItems: SidebarItem[] = [
   { key: "maqolalar", path: "maqolalar", label: "Maqolalar", icon: FileText },
   { key: "xodimlar", path: "xodimlar", label: "Xodimlar", icon: UserSquare2 },
   { key: "hisobotlar", path: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
-  { key: "eslatmalar", path: "eslatmalar", label: "Eslatmalar", icon: BellRing },
 ];
 
 export const managerSections: SidebarItem[] = [
@@ -33,7 +31,6 @@ export const managerSections: SidebarItem[] = [
   { key: "mijozlar", path: "mijozlar", label: "Mijozlar", icon: Users },
   { key: "yangiliklar", path: "yangiliklar", label: "Yangiliklar", icon: Newspaper },
   { key: "maqolalar", path: "maqolalar", label: "Maqolalar", icon: FileText },
-  { key: "eslatmalar", path: "eslatmalar", label: "Eslatmalar", icon: BellRing, badge: 2 },
 ];
 
 export const cashierSidebarItems = [

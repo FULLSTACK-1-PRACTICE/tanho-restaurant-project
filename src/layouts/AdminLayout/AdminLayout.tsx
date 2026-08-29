@@ -25,9 +25,21 @@ const AdminLayout = () => {
   const [allowed] = useState(() => {
     const alreadyLeft = sessionStorage.getItem(ADMIN_LEFT_FLAG) === "true";
     if (navigationType === "POP" && alreadyLeft) return false;
-    sessionStorage.removeItem(ADMIN_LEFT_FLAG);
     return true;
   });
+
+  useEffect(() => {
+    sessionStorage.removeItem(ADMIN_LEFT_FLAG);
+  }, []);
+
+  const [active, setActive] = useState<SectionKey>(() => {
+    return localStorage.getItem("admin_active_tab") || "dashboard";
+  });
+
+  const handleSectionChange = (section: SectionKey) => {
+    setActive(section);
+    localStorage.setItem("admin_active_tab", section);
+  };
 
   useEffect(() => {
     if (!allowed) navigate("/", { replace: true });
@@ -48,6 +60,7 @@ const AdminLayout = () => {
 
   useEffect(() => {
     if (!allowed) return;
+
     return () => {
       sessionStorage.setItem(ADMIN_LEFT_FLAG, "true");
     };
@@ -55,10 +68,10 @@ const AdminLayout = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [active, setActive] = useState<SectionKey>("dashboard");
 
   const handleLogout = () => {
-    localStorage.removeItem("admin_session");
+    localStorage.removeItem("admin_active_tab");
+    sessionStorage.removeItem(ADMIN_LEFT_FLAG);
     triggerLogout(navigate);
   };
 
@@ -66,7 +79,7 @@ const AdminLayout = () => {
     switch (active) {
       case "dashboard":
       case "bosh-sahifa":
-        return <DashboardSection goTo={setActive} />;
+        return <DashboardSection goTo={handleSectionChange} />;
       case "menyu":
       case "taomlar":
         return <MenuAdminSection />;
@@ -157,7 +170,7 @@ const AdminLayout = () => {
         items={adminSidebarItems}
         isOpen={sidebarOpen}
         activePath={active}
-        onItemClick={(path) => setActive(path as SectionKey)}
+        onItemClick={(path) => handleSectionChange(path as SectionKey)}
         mobileSidebarOpen={mobileSidebarOpen}
         setMobileSidebarOpen={setMobileSidebarOpen}
       />
@@ -173,9 +186,9 @@ const AdminLayout = () => {
             }
           }}
           onLogout={handleLogout}
-          onProfileClick={() => setActive("profil")}
-          onSettingsClick={() => setActive("sozlamalar")}
-          onNavigate={(page) => setActive(page as SectionKey)}
+          onProfileClick={() => handleSectionChange("profil")}
+          onSettingsClick={() => handleSectionChange("sozlamalar")}
+          onNavigate={(page) => handleSectionChange(page as SectionKey)}
           user={{
             name: "Admin",
             role: "Administrator",

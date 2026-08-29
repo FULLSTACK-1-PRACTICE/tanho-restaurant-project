@@ -20,19 +20,16 @@ function HeroSection() {
     <section className="relative min-h-screen overflow-hidden bg-[#070809] text-[#f1eee7]">
       <div className="absolute inset-0 z-0 overflow-hidden">
         <picture className="block h-full w-full">
-          {/* Mobile (639px gacha) */}
           <source
             media="(max-width: 639px)"
             srcSet={heroResponsiveImg}
           />
 
-          {/* Tablet (1023px gacha) */}
           <source
             media="(max-width: 1023px)"
             srcSet={heroTabletImg}
           />
 
-          {/* Desktop (1024px+) */}
           <img
             src={heroImg}
             alt="Tanho Restaurant"
@@ -40,15 +37,10 @@ function HeroSection() {
             height={1022}
             fetchPriority="high"
             decoding="async"
-            /* 
-               Tablet versiya (640px-1023px) uchun orqa fon rasmini 50px yuqoriga ko'tarish (-translate-y-[50px]):
-               Desktopda (lg:) translate-0 ga qaytariladi.
-            */
             className="h-full w-full object-cover brightness-105 object-center -translate-y-[65px] lg:translate-y-0 transition-all duration-300"
           />
         </picture>
 
-        {/* Dynamic Overlay Gradientlar */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#070809]/80 via-[#070809]/55 to-[#070809]/15 md:from-[#070809]/75 md:via-[#070809]/45 md:to-transparent" />
         <div className="absolute inset-x-0 top-0 h-[130px] bg-gradient-to-b from-[#070809]/70 via-[#070809]/30 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-[#070809] via-[#070809]/60 to-transparent" />

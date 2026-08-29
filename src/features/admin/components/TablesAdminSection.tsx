@@ -147,7 +147,6 @@ export function TablesAdminSection() {
       {loading ? (
         <div className="flex items-center justify-center gap-2 p-10 text-gray-400">
           <Loader2 className="animate-spin" size={18} />
-          
         </div>
       ) : tables.length === 0 ? (
         <div className="rounded-xl border border-white/10 bg-[#121619] p-10 text-center text-gray-400">
@@ -260,8 +259,14 @@ export function TablesAdminSection() {
       )}
 
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-sm rounded-xl border border-white/10 bg-[#121619] p-6">
+        <div 
+          onClick={() => setModalOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 cursor-pointer"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-sm rounded-xl border border-white/10 bg-[#121619] p-6 cursor-default"
+          >
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">
                 {editingId ? "Stolni tahrirlash" : "Stol qo'shish"}

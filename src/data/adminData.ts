@@ -12,7 +12,6 @@ import {
   FileText,
   UserSquare2,
   BarChart3,
-  BellRing,
 } from "lucide-react";
 import { type SidebarItem } from "../components/common/SideBar";
 
@@ -31,11 +30,99 @@ export type SectionKey =
   | "maqolalar"
   | "xodimlar"
   | "hisobotlar"
-  | "eslatmalar"
   | "profil"
   | "sozlamalar";
 
-export const STATIC_DATA: Record<string, any[]> = {
+export interface MenuItem {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  status: string;
+  image: string;
+  description: string;
+  [key: string]: unknown;
+}
+
+export interface OrderItem {
+  id: string;
+  customer: string;
+  table: string;
+  itemsCount: number;
+  total: number;
+  time: string;
+  status: string;
+  [key: string]: unknown;
+}
+
+export interface ReservationItem {
+  id: string;
+  customer: string;
+  table: string;
+  date: string;
+  time: string;
+  guests: number;
+  status: string;
+  [key: string]: unknown;
+}
+
+export interface TableItem {
+  id: string;
+  number: string;
+  seats: number;
+  status: string;
+  reservedAt: string;
+  reservedDate: string;
+  reservedBy: string;
+  [key: string]: unknown;
+}
+
+export interface CustomerItem {
+  id: string;
+  name: string;
+  phone: string;
+  ordersCount: number;
+  totalSpent: number;
+  [key: string]: unknown;
+}
+
+export interface NewsItem {
+  id: string;
+  title: string;
+  content: string;
+  image: string;
+  [key: string]: unknown;
+}
+
+export interface ArticleItem {
+  id: string;
+  title: string;
+  content: string;
+  image: string;
+  [key: string]: unknown;
+}
+
+export interface StaffItem {
+  id: string;
+  name: string;
+  role: string;
+  phone: string;
+  [key: string]: unknown;
+}
+
+export interface StaticDataStructure {
+  menu: MenuItem[];
+  orders: OrderItem[];
+  reservations: ReservationItem[];
+  tables: TableItem[];
+  customers: CustomerItem[];
+  news: NewsItem[];
+  articles: ArticleItem[];
+  staff: StaffItem[];
+  [key: string]: unknown[];
+}
+
+export const STATIC_DATA: StaticDataStructure = {
   menu: [
     {
       id: "menu-1",
@@ -212,5 +299,4 @@ export const adminSidebarItems: SidebarItem[] = [
   { key: "maqolalar", path: "maqolalar", label: "Maqolalar", icon: FileText },
   { key: "xodimlar", path: "xodimlar", label: "Xodimlar", icon: UserSquare2 },
   { key: "hisobotlar", path: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
-  { key: "eslatmalar", path: "eslatmalar", label: "Eslatmalar", icon: BellRing, badge: 2 },
 ];

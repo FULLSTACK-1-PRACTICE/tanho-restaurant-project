@@ -30,7 +30,6 @@ const AboutPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#0b0d10] text-gray-200 font-sans pb-20">
-      {/* HERO */}
       <div
         className="relative w-full bg-cover bg-center py-20 md:py-28 border-b border-amber-900/20"
         style={{
@@ -74,7 +73,6 @@ const AboutPage: React.FC = () => {
         </Container>
       </div>
 
-      {/* STATISTICS */}
       <Container className="-mt-10 relative z-20">
         <div className="relative rounded-2xl bg-[#12151e]/80 backdrop-blur-xl border border-amber-500/20 py-5 px-6 md:py-6 md:px-8 shadow-[0_15px_40px_rgba(0,0,0,0.6)] overflow-hidden">
           <div className="absolute -top-20 -left-20 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -82,7 +80,6 @@ const AboutPage: React.FC = () => {
           <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 relative z-10">
-            {/* EXPERIENCE */}
             <div className="flex items-center justify-center gap-4 py-2 px-3 transition-transform duration-300 hover:scale-105 border-r border-gray-800/80 last:border-none md:border-r md:last:border-none">
               <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-700/5 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-inner shadow-amber-500/10">
                 <Award className="w-5 h-5 text-amber-400" />
@@ -99,7 +96,6 @@ const AboutPage: React.FC = () => {
               </div>
             </div>
 
-            {/* CLIENTS */}
             <div className="flex items-center justify-center gap-4 py-2 px-3 transition-transform duration-300 hover:scale-105 border-r-0 md:border-r border-gray-800/80">
               <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-700/5 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-inner shadow-amber-500/10">
                 <Users className="w-5 h-5 text-amber-400" />
@@ -116,7 +112,6 @@ const AboutPage: React.FC = () => {
               </div>
             </div>
 
-            {/* FOOD */}
             <div className="flex items-center justify-center gap-4 py-2 px-3 transition-transform duration-300 hover:scale-105 border-r border-gray-800/80 md:border-r">
               <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-700/5 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-inner shadow-amber-500/10">
                 <Utensils className="w-5 h-5 text-amber-400" />
@@ -133,7 +128,6 @@ const AboutPage: React.FC = () => {
               </div>
             </div>
 
-            {/* RATING */}
             <div className="flex items-center justify-center gap-4 py-2 px-3 transition-transform duration-300 hover:scale-105">
               <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-700/5 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-inner shadow-amber-500/10">
                 <Star className="w-5 h-5 text-amber-400 fill-amber-400/20" />
@@ -153,10 +147,8 @@ const AboutPage: React.FC = () => {
         </div>
       </Container>
 
-      {/* OUR STORY */}
       <Container className="mt-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* TEXT */}
           <div className="space-y-6">
             <div>
               <h2 className="text-2xl md:text-3xl font-serif text-white mb-2">
@@ -189,7 +181,6 @@ const AboutPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-800/60">
-              {/* QUALITY */}
               <div className="text-center flex flex-col items-center cursor-default">
                 <div className="w-10 h-10 rounded-full border border-amber-500/30 bg-amber-500/5 flex items-center justify-center mb-2">
                   <Leaf className="w-5 h-5 text-amber-500" />
@@ -204,7 +195,6 @@ const AboutPage: React.FC = () => {
                 </p>
               </div>
 
-              {/* CHEF */}
               <div className="text-center flex flex-col items-center cursor-default">
                 <div className="w-10 h-10 rounded-full border border-amber-500/30 bg-amber-500/5 flex items-center justify-center mb-2">
                   <ChefHat className="w-5 h-5 text-amber-500" />
@@ -219,7 +209,6 @@ const AboutPage: React.FC = () => {
                 </p>
               </div>
 
-              {/* SERVICE */}
               <div className="text-center flex flex-col items-center cursor-default">
                 <div className="w-10 h-10 rounded-full border border-amber-500/30 bg-amber-500/5 flex items-center justify-center mb-2">
                   <Heart className="w-5 h-5 text-amber-500" />
@@ -236,7 +225,6 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
 
-          {/* ABOUT IMAGE */}
           <div className="relative w-full h-[400px] rounded-2xl overflow-hidden border border-gray-800/80 shadow-2xl">
             <img
               loading="lazy"
@@ -248,7 +236,6 @@ const AboutPage: React.FC = () => {
         </div>
       </Container>
 
-      {/* MAQSADIMIZ */}
       <Container className="mt-24">
         <div className="mb-8">
           <h2 className="text-2xl md:text-3xl font-serif text-white mb-2">
@@ -263,7 +250,6 @@ const AboutPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* CARD 1 */}
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
@@ -286,7 +272,6 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
 
-          {/* CARD 2 */}
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
@@ -309,7 +294,6 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
 
-          {/* CARD 3 */}
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
@@ -331,7 +315,6 @@ const AboutPage: React.FC = () => {
             </div>
           </div>
 
-          {/* CARD 4 */}
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl overflow-hidden shadow-lg">
             <div className="h-40 overflow-hidden">
               <img
@@ -356,7 +339,6 @@ const AboutPage: React.FC = () => {
         </div>
       </Container>
 
-      {/* WHY TANHO */}
       <Container className="mt-24">
         <div className="mb-8">
           <h2 className="text-2xl md:text-3xl font-serif text-white mb-2">
@@ -376,7 +358,6 @@ const AboutPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* 1 */}
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1">
             <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
               <Flame className="w-6 h-6" />
@@ -392,7 +373,6 @@ const AboutPage: React.FC = () => {
             </p>
           </div>
 
-          {/* 2 */}
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1">
             <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
               <ShieldCheck className="w-6 h-6" />
@@ -408,7 +388,6 @@ const AboutPage: React.FC = () => {
             </p>
           </div>
 
-          {/* 3 */}
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1">
             <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
               <DoorOpen className="w-6 h-6" />
@@ -425,7 +404,6 @@ const AboutPage: React.FC = () => {
             </p>
           </div>
 
-          {/* 4 */}
           <div className="bg-[#12151b] border border-gray-800/80 rounded-xl p-6 shadow-lg transition-transform duration-300 hover:-translate-y-1">
             <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
               <MapPin className="w-6 h-6" />
@@ -444,7 +422,6 @@ const AboutPage: React.FC = () => {
         </div>
       </Container>
 
-      {/* CTA */}
       <Container className="mt-20">
         <div
           className="relative rounded-2xl overflow-hidden border border-gray-800 p-8 md:p-12 bg-cover bg-center flex flex-col items-start justify-center"

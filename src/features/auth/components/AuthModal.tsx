@@ -17,8 +17,9 @@ import type {
   PasswordInputProps,
 } from "../types"
 
+// inputClass to'g'rilandi: autofill holatida matn rangi oq bo'lishi ta'minlandi
 const inputClass =
-  "w-full rounded-lg border border-white/15 bg-transparent px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-amber-400/70 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(251,191,36,0.08)]"
+  "w-full rounded-lg border border-white/15 bg-transparent px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-amber-400/70 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(251,191,36,0.08)] [:-webkit-autofill]:[-webkit-text-fill-color:white] [:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s]"
 
 const toastStyle = {
   style: {
@@ -124,6 +125,7 @@ export default function AuthModal({
 
       style.id = styleId
 
+      // Input autofill bo'lganda Chrome matnni qora qilib qo'yishini oldini oladi
       style.textContent = `
         html {
           scrollbar-gutter: stable;
@@ -132,6 +134,15 @@ export default function AuthModal({
 
         body {
           margin: 0;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+          -webkit-text-fill-color: #ffffff !important;
+          -webkit-box-shadow: 0 0 0px 1000px #171717 inset !important;
+          transition: background-color 5000s ease-in-out 0s;
         }
 
         @keyframes fadeIn {
@@ -693,11 +704,11 @@ function LoginForm({
       autoComplete="off"
     >
       <Input
-        type="text"
+        type="email"
         placeholder="Email manzilingiz"
         value={email}
         onChange={setEmail}
-        autoComplete="new-password"
+        autoComplete="email"
       />
 
       <PasswordInput
@@ -710,7 +721,7 @@ function LoginForm({
             (value) => !value,
           )
         }
-        autoComplete="new-password"
+        autoComplete="current-password"
       />
 
       <div className="flex items-center justify-between pt-1 text-sm">
@@ -825,11 +836,11 @@ function RegisterForm({
       </div>
 
       <Input
-        type="text"
+        type="email"
         placeholder="Email manzilingiz"
         value={email}
         onChange={setEmail}
-        autoComplete="new-password"
+        autoComplete="email"
       />
 
       <PhoneInput
@@ -965,7 +976,7 @@ function PasswordInput({
             ? "Parolni yashirish"
             : "Parolni ko'rsatish"
         }
-        className="absolute right-3 top-1/2 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-md p-1 text-white/40 transition-all duration-200 hover:scale-110 hover:bg-white/5 hover:text-white active:scale-90"
+        className="absolute right-3 top-1/2 z-10 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-md p-1 text-white/60 transition-all duration-200 hover:scale-110 hover:bg-white/10 hover:text-white active:scale-90"
       >
         <span
           key={show ? "eye-off" : "eye"}

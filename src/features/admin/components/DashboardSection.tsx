@@ -14,7 +14,6 @@ import {
 
 type SectionKey =
   | "menyu"
-  | "buyurtmalar"
   | "rezervatsiyalar"
   | "hisobotlar"
   | "xodimlar"
@@ -93,12 +92,6 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
       description: "Taomlar va kategoriyalar",
       icon: Store,
       section: "menyu" as SectionKey,
-    },
-    {
-      label: "Buyurtmalar",
-      description: "Barcha buyurtmalarni ko‘rish",
-      icon: ClipboardList,
-      section: "buyurtmalar" as SectionKey,
     },
     {
       label: "Xodimlar",

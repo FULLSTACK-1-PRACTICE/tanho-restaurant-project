@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, Edit2, Trash2, X, ChevronDown, Layers, Check } from "lucide-react";
+import { toast } from "sonner";
 
 export interface FieldConfig {
   key: string;
@@ -37,15 +38,18 @@ export function GenericCrudSection({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Record<string, unknown>>({});
+  const [initialFormData, setInitialFormData] = useState<Record<string, unknown>>({});
   const [openDropdownKey, setOpenDropdownKey] = useState<string | null>(null);
 
   const handleOpenModal = (item?: Record<string, unknown>) => {
     if (item) {
       setEditingId(String(item.id ?? ""));
-      setFormData(item);
+      setFormData({ ...item });
+      setInitialFormData({ ...item });
     } else {
       setEditingId(null);
       setFormData({});
+      setInitialFormData({});
     }
     setIsModalOpen(true);
   };
@@ -54,23 +58,42 @@ export function GenericCrudSection({
     setIsModalOpen(false);
     setEditingId(null);
     setFormData({});
+    setInitialFormData({});
     setOpenDropdownKey(null);
   };
 
+  // Kamida bitta maydon to'ldirilganini yoki o'zgartirilganini tekshirish
+  const hasValues = Object.values(formData).some(
+    (val) => val !== undefined && val !== null && String(val).trim() !== ""
+  );
+
+  const isChanged = JSON.stringify(formData) !== JSON.stringify(initialFormData);
+
+  const isSaveDisabled = editingId ? !isChanged : !hasValues;
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isSaveDisabled) {
+      toast.error("Iltimos, ma'lumotlarni o'zgartiring yoki to'ldiring!");
+      return;
+    }
+
     if (editingId) {
       setData((prev) =>
         prev.map((item) => (String(item.id) === editingId ? { ...formData, id: editingId } : item))
       );
+      toast.success("Ma'lumot muvaffaqiyatli tahrirlandi");
     } else {
       setData((prev) => [...prev, { ...formData, id: Date.now().toString() }]);
+      toast.success("Yangi ma'lumot muvaffaqiyatli qo'shildi");
     }
     handleCloseModal();
   };
 
   const handleDelete = (id: string) => {
     setData((prev) => prev.filter((item) => String(item.id) !== id));
+    toast.error("Ma'lumot o'chirildi");
   };
 
   return (
@@ -170,8 +193,14 @@ export function GenericCrudSection({
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#121619] p-6 shadow-2xl space-y-5 relative">
+        <div 
+          onClick={handleCloseModal}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 cursor-pointer"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md rounded-2xl border border-white/10 bg-[#121619] p-6 shadow-2xl space-y-5 relative cursor-default"
+          >
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <h3 className="text-base sm:text-lg font-bold text-white">
                 {editingId ? "Ma'lumotni tahrirlash" : addLabel || "Yangi qo'shish"}
@@ -273,7 +302,12 @@ export function GenericCrudSection({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-full bg-[#FF9500] hover:bg-[#ff8400] text-xs font-semibold text-black transition-all shadow-lg shadow-[#FF9500]/20 active:scale-[0.98] cursor-pointer"
+                  disabled={isSaveDisabled}
+                  className={`px-5 py-2.5 rounded-full text-xs font-semibold transition-all shadow-lg ${
+                    isSaveDisabled
+                      ? "bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 shadow-none"
+                      : "bg-[#FF9500] hover:bg-[#ff8400] text-black shadow-[#FF9500]/20 active:scale-[0.98] cursor-pointer"
+                  }`}
                 >
                   Saqlash
                 </button>

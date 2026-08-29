@@ -50,9 +50,9 @@ export function MediaCrudSection({
   const openEdit = (item: MediaItem) => {
     setEditingId(item.id);
     setForm({
-      title: item.title ?? "",
-      content: item.content ?? "",
-      image: item.image ?? "",
+      title: typeof item.title === "string" ? item.title : "",
+      content: typeof item.content === "string" ? item.content : "",
+      image: typeof item.image === "string" ? item.image : "",
     });
     setModalOpen(true);
   };
@@ -160,8 +160,14 @@ export function MediaCrudSection({
       )}
 
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-md rounded-xl border border-white/10 bg-[#121619] p-6">
+        <div 
+          onClick={() => setModalOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 cursor-pointer"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md rounded-xl border border-white/10 bg-[#121619] p-6 cursor-default"
+          >
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">
                 {editingId ? "Tahrirlash" : addLabel}

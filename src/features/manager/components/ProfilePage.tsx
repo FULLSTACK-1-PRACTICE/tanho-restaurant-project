@@ -1,24 +1,50 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { Camera, Save, User, Mail, Phone, Shield } from "lucide-react";
+import {
+  Camera,
+  Save,
+  User,
+  Mail,
+  Phone,
+  Building2,
+  Activity,
+  Clock,
+  ShoppingBag,
+} from "lucide-react";
+
+const INITIAL_DATA = {
+  name: "Menejer Boshqaruvchi",
+  email: "manager@tanhorestaurant.uz",
+  phone: "+998 90 123 45 67",
+  branch: "Bosh Filial (Chilonzor)",
+  avatar: null as string | null,
+};
 
 export default function ProfilePage() {
-  const [name, setName] = useState("Menejer Boshqaruvchi");
-  const [email, setEmail] = useState("manager@tanhorestaurant.uz");
-  const [phone, setPhone] = useState("+998 90 123 45 67");
-  const [avatar, setAvatar] = useState<string | null>(null);
+  const [formData, setFormData] = useState(INITIAL_DATA);
+  const [initialData, setInitialData] = useState(INITIAL_DATA);
+
+  const isChanged =
+    formData.name !== initialData.name ||
+    formData.email !== initialData.email ||
+    formData.phone !== initialData.phone ||
+    formData.branch !== initialData.branch ||
+    formData.avatar !== initialData.avatar;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setAvatar(imageUrl);
+      setFormData((prev) => ({ ...prev, avatar: imageUrl }));
       toast.info("Rasm tanlandi");
     }
   };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isChanged) return;
+
+    setInitialData(formData);
     toast.success("Profil ma'lumotlari saqlandi!");
   };
 
@@ -29,108 +55,163 @@ export default function ProfilePage() {
     <div className="max-w-4xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white">Profil</h1>
-        <p className="text-xs text-gray-400 mt-1">
+        <p className="mt-1 text-xs text-gray-400">
           Shaxsiy ma'lumotlaringiz va profil sozlamalarini boshqaring.
         </p>
       </div>
 
-      <div className="bg-[#111113] border border-white/5 rounded-2xl p-6 shadow-xl">
-        <form onSubmit={handleSave} className="space-y-6">
-          <div className="flex items-center gap-5">
-            <div className="relative w-20 h-20 rounded-full bg-[#1a1a1e] border border-white/10 flex items-center justify-center overflow-hidden group">
-              {avatar ? (
-                <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-2xl font-bold text-amber-400">
-                  {name.charAt(0).toUpperCase()}
-                </span>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="avatar-upload"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-200 text-xs font-medium border border-white/10 transition-colors cursor-pointer"
-              >
-                <Camera size={14} className="text-amber-400" />
-                Rasm tanlash
-              </label>
-              <input
-                id="avatar-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-              />
-              <p className="text-[11px] text-gray-500 mt-1.5">
-                PNG, JPG yoki WEBP formatidagi rasmlar
-              </p>
-            </div>
+      <div className="overflow-hidden rounded-2xl border border-white/5 bg-[#111113] shadow-xl">
+        <div className="relative h-28 border-b border-white/5 bg-gradient-to-r from-amber-500/20 via-orange-500/10 to-transparent">
+          <div className="absolute top-3 right-3 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[11px] font-medium text-amber-400">
+            Restoran Menejeri
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
-            <div>
-              <label className="block text-xs font-medium text-gray-400 mb-1.5">
-                <User size={12} className="inline mr-1" /> F.I.Sh (Ism va Familiya)
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className={inputClass}
-              />
+        <div className="relative px-6 pt-0 pb-6">
+          <div className="-mt-12 mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+            <div className="flex items-end gap-4">
+              {/* Profil avatari (Hover effektsiz) */}
+              <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl border-2 border-[#111113] bg-[#1a1a1e] shadow-2xl ring-1 ring-white/10">
+                {formData.avatar ? (
+                  <img
+                    src={formData.avatar}
+                    alt="Avatar"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="text-3xl font-bold text-amber-400">
+                    {formData.name.charAt(0).toUpperCase()}
+                  </span>
+                )}
+                <input
+                  id="avatar-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-white">{formData.name}</h2>
+                <p className="text-xs text-gray-400">{formData.email}</p>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-gray-400 mb-1.5">
-                <Phone size={12} className="inline mr-1" /> Telefon raqami
-              </label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-                className={inputClass}
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-gray-400 mb-1.5">
-                <Mail size={12} className="inline mr-1" /> Email manzili
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className={inputClass}
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-gray-400 mb-1.5">
-                <Shield size={12} className="inline mr-1" /> Lavozimi
-              </label>
-              <input
-                type="text"
-                value="Restoran Menejeri"
-                disabled
-                className="w-full px-3.5 py-2.5 bg-[#141417] border border-white/5 rounded-xl text-sm text-gray-400 cursor-not-allowed"
-              />
-            </div>
-          </div>
-
-          <div className="pt-2">
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-semibold transition-colors cursor-pointer"
+            <label
+              htmlFor="avatar-upload"
+              className="inline-flex cursor-pointer items-center gap-2 self-start rounded-xl border border-white/10 bg-white/5 px-3.5 py-2 text-xs font-medium text-gray-200 transition-colors hover:bg-white/10 sm:self-auto"
             >
-              <Save size={15} />
-              Saqlash
-            </button>
+              <Camera size={14} className="text-amber-400" />
+              Rasmni almashtirish
+            </label>
           </div>
-        </form>
+
+          <form onSubmit={handleSave} className="space-y-6">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-gray-400">
+                  <User size={12} className="mr-1 inline" /> F.I.Sh (Ism va Familiya)
+                </label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                  className={inputClass}
+                />
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-gray-400">
+                  <Phone size={12} className="mr-1 inline" /> Telefon raqami
+                </label>
+                <input
+                  type="text"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
+                  required
+                  className={inputClass}
+                />
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-gray-400">
+                  <Mail size={12} className="mr-1 inline" /> Email manzili
+                </label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  required
+                  className={inputClass}
+                />
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-gray-400">
+                  <Building2 size={12} className="mr-1 inline" /> Biriktirilgan Filial
+                </label>
+                <input
+                  type="text"
+                  value={formData.branch}
+                  onChange={(e) =>
+                    setFormData({ ...formData, branch: e.target.value })
+                  }
+                  className={inputClass}
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <button
+                type="submit"
+                disabled={!isChanged}
+                className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-amber-500 px-5 py-2.5 text-xs font-semibold text-black transition-all hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-amber-500"
+              >
+                <Save size={15} />
+                O'zgarishlarni Saqlash
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-[#111113] p-4">
+          <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-3 text-amber-400">
+            <ShoppingBag size={18} />
+          </div>
+          <div>
+            <p className="text-[11px] text-gray-400">Bugungi Buyurtmalar</p>
+            <p className="text-base font-bold text-white">48 ta</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-[#111113] p-4">
+          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-emerald-400">
+            <Activity size={18} />
+          </div>
+          <div>
+            <p className="text-[11px] text-gray-400">Tizim holati</p>
+            <p className="text-base font-bold text-emerald-400">Faol</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-[#111113] p-4">
+          <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-3 text-blue-400">
+            <Clock size={18} />
+          </div>
+          <div>
+            <p className="text-[11px] text-gray-400">Oxirgi kirish</p>
+            <p className="text-base font-bold text-white">Bugun, 09:15</p>
+          </div>
+        </div>
       </div>
     </div>
   );

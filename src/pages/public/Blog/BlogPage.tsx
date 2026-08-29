@@ -6,6 +6,8 @@ import {
   CalendarDays,
   Check,
   ChefHat,
+  ChevronLeft,
+  ChevronRight,
   CircleUserRound,
   Clock3,
   Mail,
@@ -56,7 +58,6 @@ function ArticleCard({
       }`}
       style={{ animationDelay: `${index * 55}ms` }}
     >
-      {/* 1px ortiqcha chiziq chiqib ketishini to'liq yopish uchun isolation-auto va inset-0 qo'shildi */}
       <div className="relative h-[150px] overflow-hidden rounded-t-[9px] bg-[#17130d] isolation-auto">
         <img
           loading="lazy"
@@ -66,7 +67,7 @@ function ArticleCard({
           className="block h-full w-full object-cover opacity-95 transform-gpu transition duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"
         />
 
-        <div className="absolute inset-0 h-full bg-gradient-to-t from-[#10100e] via-[#0b0b09]/20 to-transparent pointer-events-none" />
+        <div className="pointer-events-none absolute inset-0 h-full bg-gradient-to-t from-[#10100e] via-[#0b0b09]/20 to-transparent" />
 
         <div className="absolute left-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#c89228]/70 bg-[#080807]/80 text-[#f6b531] backdrop-blur-sm">
           <Icon size={18} strokeWidth={1.45} />
@@ -213,7 +214,7 @@ function CategoryScroller({
 
   const isScrollable = isCompact && maxOffset > 0;
   const thumbWidthPct = containerWidth
-    ? Math.max(15, (containerWidth / Math.max(trackWidth, containerWidth)) * 100)
+    ? Math.max(20, (containerWidth / Math.max(trackWidth, containerWidth)) * 100)
     : 100;
   const thumbLeftPct = maxOffset > 0 ? (clampedOffset / maxOffset) * (100 - thumbWidthPct) : 0;
 
@@ -238,7 +239,6 @@ function CategoryScroller({
         >
           {categoryLabels.map((category) => {
             const isActive = activeCategory === category;
-
             return (
               <Button
                 key={category}
@@ -277,14 +277,20 @@ function CategoryScroller({
       />
 
       {isScrollable && (
-        <div className="relative mt-2 h-[3px] w-full sm:hidden">
-          <div
-            className="absolute inset-y-0 rounded-full bg-[#f6b531]"
-            style={{
-              width: `${thumbWidthPct}%`,
-              left: `${thumbLeftPct}%`,
-            }}
-          />
+        <div className="mt-3.5 flex items-center justify-between px-2 sm:hidden">
+          <ChevronLeft size={11} className="shrink-0 text-[#545b62]" />
+
+          <div className="relative mx-2.5 h-[4px] w-full rounded-full bg-[#1b1c1e]/40 backdrop-blur-sm">
+            <div
+              className="absolute inset-y-0 rounded-full bg-[#525960] transition-[left,width] duration-75 hover:bg-[#6c747d]"
+              style={{
+                width: `${thumbWidthPct}%`,
+                left: `${thumbLeftPct}%`,
+              }}
+            />
+          </div>
+
+          <ChevronRight size={11} className="shrink-0 text-[#545b62]" />
         </div>
       )}
     </div>
@@ -359,7 +365,6 @@ export default function BlogPage() {
       setEmailError("Iltimos, to‘g‘ri email manzil kiriting.");
       return;
     }
-
     setEmailError("");
     setSubscribed(true);
   }
@@ -463,7 +468,6 @@ export default function BlogPage() {
                 </Button>
               ),
             )}
-
             <Button
               type="button"
               aria-label="Keyingi sahifa"

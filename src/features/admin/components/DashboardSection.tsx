@@ -1,9 +1,10 @@
+import { useState, useEffect } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   BarChart3,
   CalendarCheck,
   ClipboardList,
-  Flame, // Utensils yoki Flame ikonkasi
+  Flame,
   LayoutDashboard,
   Settings,
   ShieldCheck,
@@ -34,6 +35,23 @@ interface StatItem {
 }
 
 export function DashboardSection({ goTo }: DashboardSectionProps) {
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+
+  useEffect(() => {
+    // 4 soniyadan so'ng yo'qolish animatsiyasini boshlash
+    const timer = setTimeout(() => {
+      setIsAnimating(true);
+      
+      // Animatsiya tugagach DOM dan to'liq olib tashlash (500ms duration ga mos)
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 500);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const stats: StatItem[] = [
     {
       label: "Jami buyurtmalar",
@@ -44,7 +62,7 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
       color: "text-purple-400",
     },
     {
-      label: "Eng mashhur taom", // G'oya o'zgartirildi
+      label: "Eng mashhur taom",
       value: "Osh (Palov)",
       change: "Hafta hit-taomi",
       icon: Flame,
@@ -110,24 +128,32 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
 
   return (
     <div className="space-y-6 pb-10">
-      <section className="rounded-2xl border border-white/10 bg-[#121619] p-5 sm:p-6">
-        <div className="flex items-start gap-3">
-          <div className="rounded-xl bg-amber-500/15 p-3 text-amber-400">
-            <LayoutDashboard size={22} />
-          </div>
+      {isVisible && (
+        <section
+          className={`relative rounded-2xl border border-white/10 bg-[#121619] p-5 sm:p-6 transition-all duration-500 ease-in-out ${
+            isAnimating
+              ? "opacity-0 scale-95 max-h-0 p-0 overflow-hidden border-0 mb-0"
+              : "opacity-100 scale-100 max-h-40"
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            <div className="rounded-xl bg-amber-500/15 p-3 text-amber-400">
+              <LayoutDashboard size={22} />
+            </div>
 
-          <div>
-            <h1 className="text-xl font-bold text-white sm:text-2xl">
-              Xush kelibsiz, Admin!
-            </h1>
+            <div>
+              <h1 className="text-xl font-bold text-white sm:text-2xl">
+                Xush kelibsiz, Admin!
+              </h1>
 
-            <p className="mt-1 text-sm text-gray-400">
-              Restoran tizimi, xodimlar va barcha faoliyatni shu yerdan
-              boshqaring.
-            </p>
+              <p className="mt-1 text-sm text-gray-400">
+                Restoran tizimi, xodimlar va barcha faoliyatni shu yerdan
+                boshqaring.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => {

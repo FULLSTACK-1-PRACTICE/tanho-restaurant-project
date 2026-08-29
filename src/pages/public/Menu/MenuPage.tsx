@@ -57,9 +57,9 @@ function CategoryTabs({
               key={category.name}
               type="button"
               onClick={() => onChange(category.name)}
-              className={`group flex flex-1 min-w-fit shrink-0 cursor-pointer select-none items-center justify-center gap-2.5 rounded-xl px-4 py-3 text-xs font-medium transition-all duration-300 outline-none focus:outline-none sm:px-5 sm:text-sm ${
+              className={`group flex flex-1 min-w-fit shrink-0 cursor-pointer select-none items-center justify-center gap-2.5 rounded-xl px-4 py-3 text-xs font-medium transition-colors duration-300 focus:outline-none focus-visible:outline-none focus:ring-0 active:outline-none ${
                 isActive
-                  ? "bg-gradient-to-r from-[#e5ad45] to-[#c89228] text-black font-semibold shadow-[0_4px_20px_rgba(217,164,65,0.35)]"
+                  ? "bg-gradient-to-r from-[#e5ad45] to-[#c89228] text-black font-semibold"
                   : "text-gray-300 hover:bg-white/5 hover:text-[#e5ad45]"
               }`}
             >
@@ -132,7 +132,7 @@ function Pagination({
               onClick={() => onPageChange(page)}
               className={`relative flex h-10 min-w-10 cursor-pointer items-center justify-center rounded-xl px-3 text-sm font-medium transition-all duration-300 ${
                 isActive
-                  ? "bg-[#d9a441] text-black shadow-[0_5px_20px_rgba(217,164,65,0.25)]"
+                  ? "bg-[#d9a441] text-black"
                   : "text-gray-400 hover:bg-[#1d2226] hover:text-[#e5ad45]"
               }`}
             >
@@ -274,7 +274,6 @@ const MenuPage = () => {
 
   const startIndex = (safeCurrentPage - 1) * itemsPerPage;
 
-  // Mobilda pagination bo'yicha kesiladi, Desktopda (sm va undan yuqori) barcha taomlar ko'rinadi
   const displayedItems = isMobile
     ? visibleItems.slice(startIndex, startIndex + itemsPerPage)
     : visibleItems;

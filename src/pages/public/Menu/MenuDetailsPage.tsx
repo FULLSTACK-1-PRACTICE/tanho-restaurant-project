@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { menuItems } from "../../../data/menuData";
 import { ArrowLeft } from "lucide-react";
 import Container from "../../../components/ui/container/Container";
-import Button from "../../../components/ui/Button";
+import Button from "../../../components/ui/Button/Button"; 
 
 const MenuDetailsPage = () => {
   const location = useLocation();
@@ -10,14 +10,12 @@ const MenuDetailsPage = () => {
 
   const id = location.pathname.split("/").filter(Boolean).pop();
 
-  const food = menuItems.find(
-    (item) => item.id === id
-  );
+  const food = menuItems.find((item) => String(item.id) === String(id));
 
   if (!food) {
     return (
-      <section className="px-4 py-24 sm:px-6">
-        <Container className="max-w-[1100px] rounded-2xl border border-white/10 bg-[#121619] p-8 text-center">
+      <section className="py-24">
+        <Container className="rounded-2xl border border-white/10 bg-[#121619] p-8 text-center">
           <h1 className="font-serif text-2xl text-white">
             Taom topilmadi
           </h1>
@@ -35,12 +33,12 @@ const MenuDetailsPage = () => {
   }
 
   return (
-    <section className="px-4 py-16 sm:px-6 sm:py-20 md:py-28">
-      <Container className="max-w-[1100px]">
+    <section className="py-16 sm:py-20 md:py-28">
+      <Container>
         <Button
           type="button"
           onClick={() => navigate("/menu")}
-          className="group mb-6 inline-flex cursor-pointer items-center gap-2 text-sm text-gray-400 transition-colors duration-300 hover:text-[#e5ad45] bg-transparent border-none p-0"
+          className="group mb-6 inline-flex cursor-pointer items-center gap-2 border-none bg-transparent p-0 text-sm text-gray-400 transition-colors duration-300 hover:text-[#e5ad45]"
         >
           <ArrowLeft
             size={17}
@@ -80,13 +78,16 @@ const MenuDetailsPage = () => {
                   {food.description}
                 </p>
 
-                 <h2 className="font-serif mt-3 text-xl text-white sm:text-2xl">
-                  Turlari
-                </h2>
-             
-                <p className="mt-4 text-sm leading-7 text-gray-400 sm:text-base">
-                  {food.turlar}
-                </p>
+                {food.turlar && (
+                  <>
+                    <h2 className="mt-6 font-serif text-xl text-white sm:text-2xl">
+                      Turlari
+                    </h2>
+                    <p className="mt-4 text-sm leading-7 text-gray-400 sm:text-base">
+                      {food.turlar}
+                    </p>
+                  </>
+                )}
               </div>
 
               <div className="mt-8 border-t border-white/10 pt-6">

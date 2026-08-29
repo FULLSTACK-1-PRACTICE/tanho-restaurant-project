@@ -17,8 +17,6 @@ export const adminSidebarItems: SidebarItem[] = [
   { key: "rezervatsiyalar", path: "rezervatsiyalar", label: "Rezervatsiyalar", icon: CalendarCheck },
   { key: "stollar", path: "stollar", label: "Stollar", icon: Grid },
   { key: "mijozlar", path: "mijozlar", label: "Mijozlar", icon: Users },
-  { key: "yangiliklar", path: "yangiliklar", label: "Yangiliklar", icon: Newspaper },
-  { key: "maqolalar", path: "maqolalar", label: "Maqolalar", icon: FileText },
   { key: "xodimlar", path: "xodimlar", label: "Xodimlar", icon: UserSquare2 },
   { key: "hisobotlar", path: "hisobotlar", label: "Hisobotlar", icon: BarChart3 },
 ];

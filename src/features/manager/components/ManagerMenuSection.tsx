@@ -165,7 +165,7 @@ function InlineCustomSelect({
 
 export default function ManagerMenuSection({
   foods: propsFoods,
-  propsCategories = [],
+  categories: propsCategories = [], 
   selectedCategory: propsSelectedCategory,
   statusFilter: propsStatusFilter,
   searchTerm: propsSearchTerm,

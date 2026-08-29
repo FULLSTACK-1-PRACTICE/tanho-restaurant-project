@@ -3,6 +3,7 @@ import {
   BarChart3,
   CalendarCheck,
   ClipboardList,
+  Flame, // Utensils yoki Flame ikonkasi
   LayoutDashboard,
   Settings,
   ShieldCheck,
@@ -43,12 +44,12 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
       color: "text-purple-400",
     },
     {
-      label: "Jami daromad",
-      value: "0 so'm",
-      change: "0% bu hafta",
-      icon: BarChart3,
-      background: "bg-green-500/20",
-      color: "text-green-400",
+      label: "Eng mashhur taom", // G'oya o'zgartirildi
+      value: "Osh (Palov)",
+      change: "Hafta hit-taomi",
+      icon: Flame,
+      background: "bg-amber-500/20",
+      color: "text-amber-400",
     },
     {
       label: "Rezervatsiyalar",
@@ -114,12 +115,15 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
           <div className="rounded-xl bg-amber-500/15 p-3 text-amber-400">
             <LayoutDashboard size={22} />
           </div>
+
           <div>
             <h1 className="text-xl font-bold text-white sm:text-2xl">
               Xush kelibsiz, Admin!
             </h1>
+
             <p className="mt-1 text-sm text-gray-400">
-              Restoran tizimi, xodimlar va barcha faoliyatni shu yerdan boshqaring.
+              Restoran tizimi, xodimlar va barcha faoliyatni shu yerdan
+              boshqaring.
             </p>
           </div>
         </div>
@@ -140,12 +144,21 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
                 >
                   <Icon size={20} className={stat.color} />
                 </div>
+
                 <div className="min-w-0">
-                  <div className="truncate text-xs text-gray-400">{stat.label}</div>
-                  <div className="text-xl font-semibold text-white">{stat.value}</div>
+                  <div className="truncate text-xs text-gray-400">
+                    {stat.label}
+                  </div>
+
+                  <div className="text-xl font-semibold text-white">
+                    {stat.value}
+                  </div>
                 </div>
               </div>
-              <div className="mt-3 text-xs text-gray-500">{stat.change}</div>
+
+              <div className="mt-3 text-xs text-gray-500">
+                {stat.change}
+              </div>
             </article>
           );
         })}
@@ -156,6 +169,7 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
           <h2 className="text-base font-semibold text-white sm:text-lg">
             Admin boshqaruvi
           </h2>
+
           <p className="mt-1 text-xs text-gray-500 sm:text-sm">
             Kerakli bo‘limga tezda o‘tish uchun amalni tanlang.
           </p>
@@ -175,10 +189,12 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
                   <Icon size={20} />
                 </span>
+
                 <span className="min-w-0">
                   <span className="block truncate text-sm font-semibold text-gray-200">
                     {action.label}
                   </span>
+
                   <span className="mt-1 block truncate text-xs text-gray-500">
                     {action.description}
                   </span>
@@ -188,10 +204,6 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
           })}
         </div>
       </section>
-
-      <p className="text-xs text-gray-500">
-        * Statistikalar hozircha statik ko‘rsatilgan — API ulanganda real raqamlar bilan almashtiriladi.
-      </p>
     </div>
   );
 }

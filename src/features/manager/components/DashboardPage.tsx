@@ -1,6 +1,11 @@
-import { DollarSign, Utensils, CheckCircle2, Clock, ArrowRight } from "lucide-react";
+import {
+  Table2,
+  Utensils,
+  CheckCircle2,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
 import { StatCard } from "./StatCard";
-import { formatSum } from "../../../lib/utils";
 
 export interface Order {
   id: string;
@@ -16,24 +21,40 @@ export interface DashboardPageProps {
   onViewAllOrders?: () => void;
 }
 
-export default function DashboardPage({ orders = [], onViewAllOrders }: DashboardPageProps) {
-  const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+export default function DashboardPage({
+  orders = [],
+  onViewAllOrders,
+}: DashboardPageProps) {
   const totalOrders = orders.length;
-  const completedOrders = orders.filter((o) => o.status === "Yakunlandi").length;
-  const pendingOrders = orders.filter(
-    (o) => o.status === "Tayyorlanmoqda" || o.status === "Kutilmoqda"
+
+  const completedOrders = orders.filter(
+    (o) => o.status === "Yakunlandi"
   ).length;
+
+  const pendingOrders = orders.filter(
+    (o) =>
+      o.status === "Tayyorlanmoqda" ||
+      o.status === "Kutilmoqda"
+  ).length;
+
+  /**
+   * Stol statistikasi
+   * Hozircha demo qiymatlar.
+   * Keyinchalik API orqali almashtirish mumkin.
+   */
+  const totalTables = 12;
+  const activeTables = Math.min(totalOrders, totalTables);
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <StatCard
-          icon={DollarSign}
+          icon={Table2}
           iconBg="bg-amber-500/15"
           iconColor="text-amber-400"
-          label="Jami tushum"
-          value={`${formatSum ? formatSum(totalRevenue) : totalRevenue} so‘m`}
-          sub="+12.5% bu hafta"
+          label="Faol stollar"
+          value={`${activeTables} / ${totalTables} ta`}
+          sub="Band / Jami"
           subColor="text-emerald-400"
         />
 
@@ -71,15 +92,21 @@ export default function DashboardPage({ orders = [], onViewAllOrders }: Dashboar
       <div className="bg-[#111113] border border-white/5 rounded-2xl p-5">
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h3 className="font-semibold text-white text-base">So'nggi buyurtmalar</h3>
-            <p className="text-xs text-gray-400">Eng oxirgi tushgan buyurtmalar ro'yxati</p>
+            <h3 className="font-semibold text-white text-base">
+              So'nggi buyurtmalar
+            </h3>
+            <p className="text-xs text-gray-400">
+              Eng oxirgi tushgan buyurtmalar ro'yxati
+            </p>
           </div>
+
           {onViewAllOrders && (
             <button
               onClick={onViewAllOrders}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-xs font-medium transition-colors cursor-pointer"
             >
-              Barchasini ko'rish <ArrowRight size={14} />
+              Barchasini ko'rish
+              <ArrowRight size={14} />
             </button>
           )}
         </div>
@@ -91,13 +118,19 @@ export default function DashboardPage({ orders = [], onViewAllOrders }: Dashboar
               className="flex flex-wrap items-center justify-between gap-4 p-3.5 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all"
             >
               <div>
-                <h4 className="text-sm font-medium text-white">{order.customerName}</h4>
-                <p className="text-xs text-gray-400">{order.items}</p>
+                <h4 className="text-sm font-medium text-white">
+                  {order.customerName}
+                </h4>
+
+                <p className="text-xs text-gray-400">
+                  {order.items}
+                </p>
               </div>
 
               <div className="flex items-center gap-4">
                 <span className="text-xs text-gray-400 flex items-center gap-1">
-                  <Clock size={12} /> {order.time}
+                  <Clock size={12} />
+                  {order.time}
                 </span>
 
                 <span
@@ -111,16 +144,14 @@ export default function DashboardPage({ orders = [], onViewAllOrders }: Dashboar
                 >
                   {order.status}
                 </span>
-
-                <span className="text-sm font-semibold text-amber-400">
-                  {formatSum ? formatSum(order.total) : order.total} so‘m
-                </span>
               </div>
             </div>
           ))}
 
           {orders.length === 0 && (
-            <p className="text-center py-6 text-xs text-gray-500">Buyurtmalar yo'q</p>
+            <p className="text-center py-6 text-xs text-gray-500">
+              Buyurtmalar yo'q
+            </p>
           )}
         </div>
       </div>

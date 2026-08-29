@@ -15,10 +15,21 @@ import {
   ChevronDown,
   Check,
   FolderPlus,
+  Clock,
 } from "lucide-react";
-import { formatSum } from "../../../lib/utils";
 import { StatCard } from "./StatCard";
-import type { Category, Food, NewFoodForm } from "../../../data/mockData";
+import type { Category, Food } from "../../../data/mockData";
+
+type MenuFood = Omit<Food, "price"> & {
+  preparationTime: number;
+};
+
+type MenuFoodForm = {
+  name: string;
+  category: string;
+  preparationTime: string;
+  status: Food["status"];
+};
 
 const DEFAULT_CATEGORIES: Category[] = [
   { id: 1, name: "Asosiy taomlar" },
@@ -28,9 +39,21 @@ const DEFAULT_CATEGORIES: Category[] = [
   { id: 5, name: "Qo'shimchalar" },
 ];
 
-const DEFAULT_FOODS: Food[] = [
-  { id: 1, name: "Osh Palov", category: "Asosiy taomlar", price: 35000, status: "Mavjud" },
-  { id: 2, name: "Shashlik", category: "Asosiy taomlar", price: 20000, status: "Mavjud" },
+const DEFAULT_FOODS: MenuFood[] = [
+  {
+    id: 1,
+    name: "Osh Palov",
+    category: "Asosiy taomlar",
+    preparationTime: 15,
+    status: "Mavjud",
+  },
+  {
+    id: 2,
+    name: "Shashlik",
+    category: "Asosiy taomlar",
+    preparationTime: 20,
+    status: "Mavjud",
+  },
 ];
 
 type Props = {
@@ -45,6 +68,19 @@ type Props = {
   onDeleteFood?: (id: number) => void;
   onAddCategorySubmit?: (categoryName: string) => void;
 };
+
+function convertFood(food: Food | MenuFood): MenuFood {
+  const item = food as Food & { preparationTime?: number };
+
+  return {
+    id: item.id,
+    name: item.name,
+    category: item.category,
+    preparationTime:
+      typeof item.preparationTime === "number" ? item.preparationTime : 15,
+    status: item.status,
+  };
+}
 
 function InlineCustomSelect({
   options,
@@ -68,7 +104,9 @@ function InlineCustomSelect({
         setIsOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
@@ -80,6 +118,7 @@ function InlineCustomSelect({
         className="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-[#141416] border border-[#83672F]/70 hover:border-[#C99B3C] rounded-full text-sm font-medium text-white transition-all cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#C99B3C]"
       >
         <span className="truncate">{selectedOption?.label}</span>
+
         <ChevronDown
           size={16}
           className={`shrink-0 text-[#C99B3C] transition-transform duration-200 ${
@@ -92,6 +131,7 @@ function InlineCustomSelect({
         <div className="absolute left-0 right-0 mt-2 z-50 bg-[#161619] border border-[#83672F]/50 rounded-2xl shadow-2xl py-1.5 backdrop-blur-xl max-h-56 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#141416] [&::-webkit-scrollbar-thumb]:bg-[#83672F]/50 [&::-webkit-scrollbar-thumb]:rounded-full">
           {options.map((opt) => {
             const isSelected = opt.value === value;
+
             return (
               <button
                 key={opt.value}
@@ -107,7 +147,13 @@ function InlineCustomSelect({
                 }`}
               >
                 <span className="truncate">{opt.label}</span>
-                {isSelected && <Check size={14} className="text-[#C99B3C] shrink-0 ml-2" />}
+
+                {isSelected && (
+                  <Check
+                    size={14}
+                    className="text-[#C99B3C] shrink-0 ml-2"
+                  />
+                )}
               </button>
             );
           })}
@@ -119,7 +165,7 @@ function InlineCustomSelect({
 
 export default function ManagerMenuSection({
   foods: propsFoods,
-  categories: propsCategories = [],
+  propsCategories = [],
   selectedCategory: propsSelectedCategory,
   statusFilter: propsStatusFilter,
   searchTerm: propsSearchTerm,
@@ -129,16 +175,21 @@ export default function ManagerMenuSection({
   onDeleteFood,
   onAddCategorySubmit,
 }: Props) {
-  const [internalFoods, setInternalFoods] = useState<Food[]>(() => {
+  const [internalFoods, setInternalFoods] = useState<MenuFood[]>(() => {
     const saved = localStorage.getItem("menu_foods");
+
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved) as Food[];
+        return parsed.map(convertFood);
       } catch (e) {
         console.error(e);
       }
     }
-    return propsFoods && propsFoods.length > 0 ? propsFoods : DEFAULT_FOODS;
+
+    return propsFoods && propsFoods.length > 0
+      ? propsFoods.map(convertFood)
+      : DEFAULT_FOODS;
   });
 
   useEffect(() => {
@@ -149,6 +200,7 @@ export default function ManagerMenuSection({
 
   const [internalCategories, setInternalCategories] = useState<Category[]>(() => {
     const saved = localStorage.getItem("menu_categories");
+
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -156,34 +208,46 @@ export default function ManagerMenuSection({
         console.error(e);
       }
     }
+
     return propsCategories.length > 0 ? propsCategories : DEFAULT_CATEGORIES;
   });
 
   useEffect(() => {
-    localStorage.setItem("menu_categories", JSON.stringify(internalCategories));
+    localStorage.setItem(
+      "menu_categories",
+      JSON.stringify(internalCategories)
+    );
   }, [internalCategories]);
 
   const categories = internalCategories;
 
-  const [internalSelectedCategory, setInternalSelectedCategory] = useState("Barchasi");
-  const [internalStatusFilter, setInternalStatusFilter] = useState("Barchasi");
+  const [internalSelectedCategory, setInternalSelectedCategory] =
+    useState("Barchasi");
+
+  const [internalStatusFilter, setInternalStatusFilter] =
+    useState("Barchasi");
+
   const [internalSearchTerm, setInternalSearchTerm] = useState("");
-  
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [editingFood, setEditingFood] = useState<Food | null>(null);
+  const [editingFood, setEditingFood] = useState<MenuFood | null>(null);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
 
   const [importFile, setImportFile] = useState<File | null>(null);
-  const [newFood, setNewFood] = useState<NewFoodForm>({
+
+  const [newFood, setNewFood] = useState<MenuFoodForm>({
     name: "",
     category: categories[0]?.name || "Asosiy taomlar",
-    price: "",
+    preparationTime: "",
     status: "Mavjud",
   });
 
-  const selectedCategory = propsSelectedCategory ?? internalSelectedCategory;
+  const selectedCategory =
+    propsSelectedCategory ?? internalSelectedCategory;
+
   const statusFilter = propsStatusFilter ?? internalStatusFilter;
+
   const searchTerm = propsSearchTerm ?? internalSearchTerm;
 
   const handleCategoryChange = (val: string) => {
@@ -201,21 +265,25 @@ export default function ManagerMenuSection({
     onSearchChange?.(val);
   };
 
-  const handleCreateFood = (createdFood: NewFoodForm) => {
-    const item: Food = {
+  const handleCreateFood = (createdFood: MenuFoodForm) => {
+    const item: MenuFood = {
       id: Date.now(),
       name: createdFood.name,
       category: createdFood.category,
-      price: Number(createdFood.price),
+      preparationTime: Number(createdFood.preparationTime),
       status: createdFood.status,
     };
+
     setInternalFoods((prev) => [item, ...prev]);
   };
 
-  const handleUpdateFood = (updatedFood: Food) => {
+  const handleUpdateFood = (updatedFood: MenuFood) => {
     setInternalFoods((prev) =>
-      prev.map((item) => (item.id === updatedFood.id ? updatedFood : item))
+      prev.map((item) =>
+        item.id === updatedFood.id ? updatedFood : item
+      )
     );
+
     setEditingFood(null);
   };
 
@@ -229,26 +297,51 @@ export default function ManagerMenuSection({
       id: Date.now(),
       name: categoryName,
     };
+
     setInternalCategories((prev) => [...prev, newCatObj]);
     onAddCategorySubmit?.(categoryName);
   };
 
   const totalCount = foods.length;
-  const availableCount = foods.filter((food) => food.status === "Mavjud").length;
-  const unavailableCount = foods.filter((food) => food.status !== "Mavjud").length;
-  const availablePercent = totalCount ? Math.round((availableCount / totalCount) * 100) : 0;
-  const unavailablePercent = totalCount ? Math.round((unavailableCount / totalCount) * 100) : 0;
+
+  const availableCount = foods.filter(
+    (food) => food.status === "Mavjud"
+  ).length;
+
+  const unavailableCount = foods.filter(
+    (food) => food.status !== "Mavjud"
+  ).length;
+
+  const availablePercent = totalCount
+    ? Math.round((availableCount / totalCount) * 100)
+    : 0;
+
+  const unavailablePercent = totalCount
+    ? Math.round((unavailableCount / totalCount) * 100)
+    : 0;
 
   const filteredFoods = foods.filter((food) => {
-    const matchesCategory = selectedCategory === "Barchasi" || food.category === selectedCategory;
-    const matchesStatus = statusFilter === "Barchasi" || food.status === statusFilter;
-    const matchesSearch = food.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "Barchasi" ||
+      food.category === selectedCategory;
+
+    const matchesStatus =
+      statusFilter === "Barchasi" ||
+      food.status === statusFilter;
+
+    const matchesSearch = food.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
     return matchesCategory && matchesStatus && matchesSearch;
   });
 
   const categorySelectOptions = [
     { value: "Barchasi", label: "Barchasi" },
-    ...categories.map((c) => ({ value: c.name, label: c.name })),
+    ...categories.map((c) => ({
+      value: c.name,
+      label: c.name,
+    })),
   ];
 
   const statusSelectOptions = [
@@ -261,21 +354,73 @@ export default function ManagerMenuSection({
     <>
       <div className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          <StatCard icon={Utensils} iconBg="bg-[#83672F]/20" iconColor="text-[#C99B3C]" label="Jami taomlar" value={String(totalCount)} sub="+2 bu hafta" subColor="text-emerald-400" />
-          <StatCard icon={ShoppingCart} iconBg="bg-emerald-500/15" iconColor="text-emerald-400" label="Mavjud taomlar" value={String(availableCount)} sub={`${availablePercent}%`} subColor="text-emerald-400" />
-          <StatCard icon={ShoppingCart} iconBg="bg-red-500/15" iconColor="text-red-400" label="Mavjud emas" value={String(unavailableCount)} sub={`${unavailablePercent}%`} subColor="text-red-400" />
-          <StatCard icon={ListTree} iconBg="bg-sky-500/15" iconColor="text-sky-400" label="Kategoriyalar" value={String(categories.length)} sub="Barchasi faol" subColor="text-gray-400" />
+          <StatCard
+            icon={Utensils}
+            iconBg="bg-[#83672F]/20"
+            iconColor="text-[#C99B3C]"
+            label="Jami taomlar"
+            value={String(totalCount)}
+            sub="+2 bu hafta"
+            subColor="text-emerald-400"
+          />
+
+          <StatCard
+            icon={ShoppingCart}
+            iconBg="bg-emerald-500/15"
+            iconColor="text-emerald-400"
+            label="Mavjud taomlar"
+            value={String(availableCount)}
+            sub={`${availablePercent}%`}
+            subColor="text-emerald-400"
+          />
+
+          <StatCard
+            icon={ShoppingCart}
+            iconBg="bg-red-500/15"
+            iconColor="text-red-400"
+            label="Mavjud emas"
+            value={String(unavailableCount)}
+            sub={`${unavailablePercent}%`}
+            subColor="text-red-400"
+          />
+
+          <StatCard
+            icon={ListTree}
+            iconBg="bg-sky-500/15"
+            iconColor="text-sky-400"
+            label="Kategoriyalar"
+            value={String(categories.length)}
+            sub="Barchasi faol"
+            subColor="text-gray-400"
+          />
         </div>
 
         <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-end gap-3">
-          <button type="button" onClick={() => setIsAddCategoryModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-[#83672F] hover:border-[#C99B3C] text-[#C99B3C] text-sm font-semibold transition-all cursor-pointer">
-            <FolderPlus size={16} /> Kategoriya qo‘shish
+          <button
+            type="button"
+            onClick={() => setIsAddCategoryModalOpen(true)}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-[#83672F] hover:border-[#C99B3C] text-[#C99B3C] text-sm font-semibold transition-all cursor-pointer"
+          >
+            <FolderPlus size={16} />
+            Kategoriya qo‘shish
           </button>
-          <button type="button" onClick={() => setIsAddModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#C99B3C] hover:bg-[#b08732] text-black text-sm font-semibold transition-all cursor-pointer">
-            <Plus size={17} /> Taom qo‘shish
+
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#C99B3C] hover:bg-[#b08732] text-black text-sm font-semibold transition-all cursor-pointer"
+          >
+            <Plus size={17} />
+            Taom qo‘shish
           </button>
-          <button type="button" onClick={() => setIsImportModalOpen(true)} className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-[#83672F] hover:border-[#C99B3C] text-gray-200 text-sm font-semibold transition-all cursor-pointer">
-            <Upload size={16} /> Import qilish
+
+          <button
+            type="button"
+            onClick={() => setIsImportModalOpen(true)}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#141416] border border-[#83672F] hover:border-[#C99B3C] text-gray-200 text-sm font-semibold transition-all cursor-pointer"
+          >
+            <Upload size={16} />
+            Import qilish
           </button>
         </div>
 
@@ -296,10 +441,16 @@ export default function ManagerMenuSection({
             />
 
             <div className="relative flex-1">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search
+                size={16}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              />
+
               <input
                 value={searchTerm}
-                onChange={(event) => handleSearchChange(event.target.value)}
+                onChange={(event) =>
+                  handleSearchChange(event.target.value)
+                }
                 placeholder="Taom nomi bo‘yicha qidirish..."
                 className="w-full bg-[#141416] border border-[#83672F]/70 hover:border-[#C99B3C] focus:border-[#C99B3C] rounded-full pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none placeholder-gray-500 transition-all"
               />
@@ -314,42 +465,81 @@ export default function ManagerMenuSection({
                     <th className="px-4 py-3.5">#</th>
                     <th className="px-4 py-3.5">Taom nomi</th>
                     <th className="px-4 py-3.5">Kategoriya</th>
-                    <th className="px-4 py-3.5">Narxi</th>
+                    <th className="px-4 py-3.5">
+                      Tayyorlanish vaqti
+                    </th>
                     <th className="px-4 py-3.5">Holati</th>
-                    <th className="px-4 py-3.5 text-right">Amallar</th>
+                    <th className="px-4 py-3.5 text-right">
+                      Amallar
+                    </th>
                   </tr>
                 </thead>
+
                 <tbody className="divide-y divide-white/5">
                   {filteredFoods.map((food, index) => (
-                    <tr key={food.id} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="px-4 py-3 text-gray-500">{index + 1}</td>
-                      <td className="px-4 py-3 font-medium text-white">{food.name}</td>
-                      <td className="px-4 py-3 text-gray-400">{food.category}</td>
-                      <td className="px-4 py-3 text-[#C99B3C] font-semibold">{formatSum(food.price)}</td>
+                    <tr
+                      key={food.id}
+                      className="hover:bg-white/[0.02] transition-colors"
+                    >
+                      <td className="px-4 py-3 text-gray-500">
+                        {index + 1}
+                      </td>
+
+                      <td className="px-4 py-3 font-medium text-white">
+                        {food.name}
+                      </td>
+
+                      <td className="px-4 py-3 text-gray-400">
+                        {food.category}
+                      </td>
+
+                      <td className="px-4 py-3 text-[#C99B3C] font-semibold">
+                        <span className="inline-flex items-center gap-1.5">
+                          <Clock size={14} />
+                          {food.preparationTime} min
+                        </span>
+                      </td>
+
                       <td className="px-4 py-3">
-                        <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${food.status === "Mavjud" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>
+                        <span
+                          className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${
+                            food.status === "Mavjud"
+                              ? "bg-emerald-500/10 text-emerald-400"
+                              : "bg-red-500/10 text-red-400"
+                          }`}
+                        >
                           {food.status}
                         </span>
                       </td>
+
                       <td className="px-4 py-3">
                         <div className="flex justify-end gap-2">
-                          <button 
-                            type="button" 
-                            onClick={() => setEditingFood(food)} 
+                          <button
+                            type="button"
+                            onClick={() => setEditingFood(food)}
                             className="w-8 h-8 rounded-lg bg-white/5 text-gray-300 flex items-center justify-center hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
                           >
                             <Edit size={14} />
                           </button>
-                          <button type="button" onClick={() => handleDelete(food.id)} className="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center hover:bg-red-500/20 transition-colors cursor-pointer">
+
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(food.id)}
+                            className="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center hover:bg-red-500/20 transition-colors cursor-pointer"
+                          >
                             <Trash2 size={14} />
                           </button>
                         </div>
                       </td>
                     </tr>
                   ))}
+
                   {filteredFoods.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="px-4 py-10 text-center text-gray-500">
+                      <td
+                        colSpan={6}
+                        className="px-4 py-10 text-center text-gray-500"
+                      >
                         Taomlar topilmadi
                       </td>
                     </tr>
@@ -391,6 +581,7 @@ export default function ManagerMenuSection({
           }}
         />
       )}
+
       {isAddCategoryModalOpen && (
         <AddCategoryModal
           onClose={() => setIsAddCategoryModalOpen(false)}
@@ -408,25 +599,34 @@ function EditFoodModal({
   onSave,
 }: {
   categories: Category[];
-  food: Food;
+  food: MenuFood;
   onClose: () => void;
-  onSave: (food: Food) => void;
+  onSave: (food: MenuFood) => void;
 }) {
   const [form, setForm] = useState({
     name: food.name,
     category: food.category,
-    price: String(food.price),
+    preparationTime: String(food.preparationTime),
     status: food.status,
   });
 
-  const [errors, setErrors] = useState<{ name?: string; price?: string }>({});
+  const [errors, setErrors] = useState<{
+    name?: string;
+    preparationTime?: string;
+  }>({});
 
   const modalInputClass = (hasError?: boolean) =>
     `w-full bg-[#141416] border rounded-full px-4 py-2.5 text-sm text-white focus:outline-none mt-1 transition-colors ${
-      hasError ? "border-red-500 focus:border-red-500" : "border-[#83672F]/70 focus:border-[#C99B3C]"
+      hasError
+        ? "border-red-500 focus:border-red-500"
+        : "border-[#83672F]/70 focus:border-[#C99B3C]"
     }`;
 
-  const categoryOptions = categories.map((c) => ({ value: c.name, label: c.name }));
+  const categoryOptions = categories.map((c) => ({
+    value: c.name,
+    label: c.name,
+  }));
+
   const statusOptions = [
     { value: "Mavjud", label: "Mavjud" },
     { value: "Mavjud emas", label: "Mavjud emas" },
@@ -434,10 +634,24 @@ function EditFoodModal({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const newErrors: { name?: string; price?: string } = {};
 
-    if (!form.name.trim()) newErrors.name = "Taom nomini kiriting!";
-    if (!form.price || isNaN(Number(form.price))) newErrors.price = "To‘g‘ri narx kiriting!";
+    const newErrors: {
+      name?: string;
+      preparationTime?: string;
+    } = {};
+
+    if (!form.name.trim()) {
+      newErrors.name = "Taom nomini kiriting!";
+    }
+
+    if (
+      !form.preparationTime ||
+      isNaN(Number(form.preparationTime)) ||
+      Number(form.preparationTime) <= 0
+    ) {
+      newErrors.preparationTime =
+        "To‘g‘ri tayyorlanish vaqtini kiriting!";
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -448,7 +662,7 @@ function EditFoodModal({
       ...food,
       name: form.name.trim(),
       category: form.category,
-      price: Number(form.price),
+      preparationTime: Number(form.preparationTime),
       status: form.status as Food["status"],
     });
   };
@@ -458,63 +672,123 @@ function EditFoodModal({
       <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
-            <Edit className="text-[#C99B3C]" size={18} /> Taomni tahrirlash
+            <Edit className="text-[#C99B3C]" size={18} />
+            Taomni tahrirlash
           </h3>
-          <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-400 hover:text-white cursor-pointer transition-colors"
+          >
             <X size={18} />
           </button>
         </div>
-        <form onSubmit={handleSubmit} noValidate className="p-4 space-y-4">
+
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="p-4 space-y-4"
+        >
           <div>
             <label className="block text-xs text-gray-400">
               Taom nomi
+
               <input
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    name: e.target.value,
+                  })
+                }
                 className={modalInputClass(!!errors.name)}
               />
             </label>
-            {errors.name && <p className="text-xs text-red-400 mt-1 pl-2">{errors.name}</p>}
+
+            {errors.name && (
+              <p className="text-xs text-red-400 mt-1 pl-2">
+                {errors.name}
+              </p>
+            )}
           </div>
 
           <div className="block text-xs text-gray-400">
             <span className="mb-1 block">Kategoriya</span>
+
             <InlineCustomSelect
               options={categoryOptions}
               value={form.category}
-              onChange={(val) => setForm({ ...form, category: val })}
+              onChange={(val) =>
+                setForm({
+                  ...form,
+                  category: val,
+                })
+              }
               className="w-full mt-1"
             />
           </div>
 
           <div>
             <label className="block text-xs text-gray-400">
-              Narxi (so‘mda)
+              Tayyorlanish vaqti (minut)
+
               <input
                 type="text"
-                value={form.price}
-                onChange={(e) => setForm({ ...form, price: e.target.value.replace(/[^0-9]/g, "") })}
-                className={modalInputClass(!!errors.price)}
+                inputMode="numeric"
+                value={form.preparationTime}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    preparationTime: e.target.value.replace(
+                      /[^0-9]/g,
+                      ""
+                    ),
+                  })
+                }
+                className={modalInputClass(
+                  !!errors.preparationTime
+                )}
+                placeholder="15"
               />
             </label>
-            {errors.price && <p className="text-xs text-red-400 mt-1 pl-2">{errors.price}</p>}
+
+            {errors.preparationTime && (
+              <p className="text-xs text-red-400 mt-1 pl-2">
+                {errors.preparationTime}
+              </p>
+            )}
           </div>
 
           <div className="block text-xs text-gray-400">
             <span className="mb-1 block">Holati</span>
+
             <InlineCustomSelect
               options={statusOptions}
               value={form.status}
-              onChange={(val) => setForm({ ...form, status: val as Food["status"] })}
+              onChange={(val) =>
+                setForm({
+                  ...form,
+                  status: val as Food["status"],
+                })
+              }
               className="w-full mt-1"
             />
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors"
+            >
               Bekor qilish
             </button>
-            <button type="submit" className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
+
+            <button
+              type="submit"
+              className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors"
+            >
               Saqlash
             </button>
           </div>
@@ -524,16 +798,24 @@ function EditFoodModal({
   );
 }
 
-function AddCategoryModal({ onClose, onSubmit }: { onClose: () => void; onSubmit: (name: string) => void }) {
+function AddCategoryModal({
+  onClose,
+  onSubmit,
+}: {
+  onClose: () => void;
+  onSubmit: (name: string) => void;
+}) {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
     if (!name.trim()) {
       setError("Kategoriya nomini kiriting!");
       return;
     }
+
     onSubmit(name.trim());
     onClose();
   };
@@ -543,32 +825,64 @@ function AddCategoryModal({ onClose, onSubmit }: { onClose: () => void; onSubmit
       <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
-            <FolderPlus className="text-[#C99B3C]" size={18} /> Yangi kategoriya qo‘shish
+            <FolderPlus
+              className="text-[#C99B3C]"
+              size={18}
+            />
+            Yangi kategoriya qo‘shish
           </h3>
-          <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-400 hover:text-white cursor-pointer transition-colors"
+          >
             <X size={18} />
           </button>
         </div>
-        <form onSubmit={handleSubmit} noValidate className="p-4 space-y-4">
+
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="p-4 space-y-4"
+        >
           <label className="block text-xs text-gray-400">
             Kategoriya nomi
+
             <input
               autoFocus
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-                if (error) setError("");
+
+                if (error) {
+                  setError("");
+                }
               }}
               className="w-full bg-[#141416] border border-[#83672F]/70 focus:border-[#C99B3C] rounded-full px-4 py-2.5 text-sm text-white focus:outline-none mt-1 transition-colors"
               placeholder="Masalan: Milliy taomlar"
             />
           </label>
-          {error && <p className="text-xs text-red-400 font-medium pl-2">{error}</p>}
+
+          {error && (
+            <p className="text-xs text-red-400 font-medium pl-2">
+              {error}
+            </p>
+          )}
+
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors"
+            >
               Bekor qilish
             </button>
-            <button type="submit" className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
+
+            <button
+              type="submit"
+              className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors"
+            >
               Saqlash
             </button>
           </div>
@@ -586,36 +900,68 @@ function AddFoodModal({
   onAdd,
 }: {
   categories: Category[];
-  form: NewFoodForm;
-  onChange: (form: NewFoodForm) => void;
+  form: MenuFoodForm;
+  onChange: (form: MenuFoodForm) => void;
   onClose: () => void;
-  onAdd: (food: NewFoodForm) => void;
+  onAdd: (food: MenuFoodForm) => void;
 }) {
-  const [errors, setErrors] = useState<{ name?: string; price?: string }>({});
+  const [errors, setErrors] = useState<{
+    name?: string;
+    preparationTime?: string;
+  }>({});
 
   const modalInputClass = (hasError?: boolean) =>
     `w-full bg-[#141416] border rounded-full px-4 py-2.5 text-sm text-white focus:outline-none mt-1 transition-colors ${
-      hasError ? "border-red-500 focus:border-red-500" : "border-[#83672F]/70 focus:border-[#C99B3C]"
+      hasError
+        ? "border-red-500 focus:border-red-500"
+        : "border-[#83672F]/70 focus:border-[#C99B3C]"
     }`;
 
-  const categoryOptions = categories.map((c) => ({ value: c.name, label: c.name }));
+  const categoryOptions = categories.map((c) => ({
+    value: c.name,
+    label: c.name,
+  }));
+
   const statusOptions = [
     { value: "Mavjud", label: "Mavjud" },
     { value: "Mavjud emas", label: "Mavjud emas" },
   ];
 
-  const handlePriceChange = (val: string) => {
+  const handleTimeChange = (val: string) => {
     const cleanValue = val.replace(/[^0-9]/g, "");
-    onChange({ ...form, price: cleanValue });
-    if (errors.price) setErrors((prev) => ({ ...prev, price: "" }));
+
+    onChange({
+      ...form,
+      preparationTime: cleanValue,
+    });
+
+    if (errors.preparationTime) {
+      setErrors((prev) => ({
+        ...prev,
+        preparationTime: "",
+      }));
+    }
   };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newErrors: { name?: string; price?: string } = {};
 
-    if (!form.name.trim()) newErrors.name = "Taom nomini kiriting!";
-    if (!form.price) newErrors.price = "Taom narxini kiriting!";
+    const newErrors: {
+      name?: string;
+      preparationTime?: string;
+    } = {};
+
+    if (!form.name.trim()) {
+      newErrors.name = "Taom nomini kiriting!";
+    }
+
+    if (
+      !form.preparationTime ||
+      Number(form.preparationTime) <= 0
+    ) {
+      newErrors.preparationTime =
+        "Tayyorlanish vaqtini kiriting!";
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -623,12 +969,15 @@ function AddFoodModal({
     }
 
     onAdd(form);
+
     onChange({
       name: "",
       category: categories[0]?.name || "Asosiy taomlar",
-      price: "",
+      preparationTime: "",
       status: "Mavjud",
     });
+
+    onClose();
   };
 
   return (
@@ -636,70 +985,135 @@ function AddFoodModal({
       <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
-            <ChefHat className="text-[#C99B3C]" size={18} />
+            <ChefHat
+              className="text-[#C99B3C]"
+              size={18}
+            />
             Yangi taom qo‘shish
           </h3>
-          <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-400 hover:text-white cursor-pointer transition-colors"
+          >
             <X size={18} />
           </button>
         </div>
-        <form onSubmit={handleFormSubmit} noValidate className="p-4 space-y-4">
+
+        <form
+          onSubmit={handleFormSubmit}
+          noValidate
+          className="p-4 space-y-4"
+        >
           <div>
             <label className="block text-xs text-gray-400">
               Taom nomi
+
               <input
                 value={form.name}
                 onChange={(event) => {
-                  onChange({ ...form, name: event.target.value });
-                  if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                  onChange({
+                    ...form,
+                    name: event.target.value,
+                  });
+
+                  if (errors.name) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      name: "",
+                    }));
+                  }
                 }}
                 className={modalInputClass(!!errors.name)}
                 placeholder="Masalan: Osh Palov"
               />
             </label>
-            {errors.name && <p className="text-xs text-red-400 mt-1 pl-2">{errors.name}</p>}
+
+            {errors.name && (
+              <p className="text-xs text-red-400 mt-1 pl-2">
+                {errors.name}
+              </p>
+            )}
           </div>
 
           <div className="block text-xs text-gray-400">
-            <span className="mb-1 block">Kategoriya</span>
+            <span className="mb-1 block">
+              Kategoriya
+            </span>
+
             <InlineCustomSelect
               options={categoryOptions}
-              value={form.category || (categories[0]?.name ?? "")}
-              onChange={(val) => onChange({ ...form, category: val })}
+              value={
+                form.category ||
+                (categories[0]?.name ?? "")
+              }
+              onChange={(val) =>
+                onChange({
+                  ...form,
+                  category: val,
+                })
+              }
               className="w-full mt-1"
             />
           </div>
 
           <div>
             <label className="block text-xs text-gray-400">
-              Narxi (so‘mda)
+              Tayyorlanish vaqti (minut)
+
               <input
                 type="text"
                 inputMode="numeric"
-                value={form.price}
-                onChange={(event) => handlePriceChange(event.target.value)}
-                className={modalInputClass(!!errors.price)}
-                placeholder="35000"
+                value={form.preparationTime}
+                onChange={(event) =>
+                  handleTimeChange(event.target.value)
+                }
+                className={modalInputClass(
+                  !!errors.preparationTime
+                )}
+                placeholder="15"
               />
             </label>
-            {errors.price && <p className="text-xs text-red-400 mt-1 pl-2">{errors.price}</p>}
+
+            {errors.preparationTime && (
+              <p className="text-xs text-red-400 mt-1 pl-2">
+                {errors.preparationTime}
+              </p>
+            )}
           </div>
 
           <div className="block text-xs text-gray-400">
-            <span className="mb-1 block">Holati</span>
+            <span className="mb-1 block">
+              Holati
+            </span>
+
             <InlineCustomSelect
               options={statusOptions}
               value={form.status}
-              onChange={(val) => onChange({ ...form, status: val as NewFoodForm["status"] })}
+              onChange={(val) =>
+                onChange({
+                  ...form,
+                  status: val as Food["status"],
+                })
+              }
               className="w-full mt-1"
             />
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors"
+            >
               Bekor qilish
             </button>
-            <button type="submit" className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors">
+
+            <button
+              type="submit"
+              className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors"
+            >
               Saqlash
             </button>
           </div>
@@ -709,33 +1123,92 @@ function AddFoodModal({
   );
 }
 
-function ImportFoodModal({ file, onFileChange, onClose, onSubmit }: { file: File | null; onFileChange: (file: File | null) => void; onClose: () => void; onSubmit: (event: FormEvent<HTMLFormElement>) => void }) {
+function ImportFoodModal({
+  file,
+  onFileChange,
+  onClose,
+  onSubmit,
+}: {
+  file: File | null;
+  onFileChange: (file: File | null) => void;
+  onClose: () => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+}) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
       <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
-            <FileSpreadsheet className="text-[#C99B3C]" size={18} /> Taomlarni import qilish
+            <FileSpreadsheet
+              className="text-[#C99B3C]"
+              size={18}
+            />
+            Taomlarni import qilish
           </h3>
-          <button type="button" onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer transition-colors">
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-400 hover:text-white cursor-pointer transition-colors"
+          >
             <X size={18} />
           </button>
         </div>
-        <form onSubmit={onSubmit} className="p-4 space-y-4">
+
+        <form
+          onSubmit={onSubmit}
+          className="p-4 space-y-4"
+        >
           <div className="border-2 border-dashed border-[#83672F]/50 hover:border-[#C99B3C] rounded-2xl p-6 text-center transition-colors">
-            <Upload className="mx-auto text-[#C99B3C] mb-2" size={32} />
-            <p className="text-xs text-gray-300">Excel yoki CSV faylni tanlang</p>
-            <input id="manager-file-import" type="file" accept=".xlsx,.xls,.csv" onChange={(event) => onFileChange(event.target.files?.[0] || null)} className="hidden" />
-            <label htmlFor="manager-file-import" className="mt-3 inline-block px-4 py-1.5 bg-[#83672F]/20 hover:bg-[#83672F]/40 text-xs text-[#C99B3C] font-medium rounded-full cursor-pointer border border-[#83672F]/60 transition-colors">
+            <Upload
+              className="mx-auto text-[#C99B3C] mb-2"
+              size={32}
+            />
+
+            <p className="text-xs text-gray-300">
+              Excel yoki CSV faylni tanlang
+            </p>
+
+            <input
+              id="manager-file-import"
+              type="file"
+              accept=".xlsx,.xls,.csv"
+              onChange={(event) =>
+                onFileChange(
+                  event.target.files?.[0] || null
+                )
+              }
+              className="hidden"
+            />
+
+            <label
+              htmlFor="manager-file-import"
+              className="mt-3 inline-block px-4 py-1.5 bg-[#83672F]/20 hover:bg-[#83672F]/40 text-xs text-[#C99B3C] font-medium rounded-full cursor-pointer border border-[#83672F]/60 transition-colors"
+            >
               Faylni tanlash
             </label>
           </div>
-          {file && <p className="text-[#C99B3C] text-xs truncate">Tanlandi: {file.name}</p>}
+
+          {file && (
+            <p className="text-[#C99B3C] text-xs truncate">
+              Tanlandi: {file.name}
+            </p>
+          )}
+
           <div className="flex justify-end gap-3">
-            <button type="button" onClick={onClose} className="px-4 py-2 border border-white/10 rounded-full text-xs text-gray-300 hover:bg-white/5 cursor-pointer transition-colors">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border border-white/10 rounded-full text-xs text-gray-300 hover:bg-white/5 cursor-pointer transition-colors"
+            >
               Bekor qilish
             </button>
-            <button type="submit" disabled={!file} className="px-4 py-2 bg-[#C99B3C] text-black rounded-full text-xs font-semibold disabled:opacity-50 cursor-pointer hover:bg-[#b08732] transition-colors">
+
+            <button
+              type="submit"
+              disabled={!file}
+              className="px-4 py-2 bg-[#C99B3C] text-black rounded-full text-xs font-semibold disabled:opacity-50 cursor-pointer hover:bg-[#b08732] transition-colors"
+            >
               Importni boshlash
             </button>
           </div>

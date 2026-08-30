@@ -62,7 +62,7 @@ export default function BlogDetailsPage() {
             className="mb-5 inline-flex items-center gap-1.5 text-[11.5px] font-medium text-[#f6b531] transition hover:text-[#ffd778]"
           >
             <ArrowLeft size={14} />
-            Barcha maqolalar
+            Ortga Qaytish
           </Button>
 
           <div className="mb-3 flex items-center gap-3 text-[#f6b531]">

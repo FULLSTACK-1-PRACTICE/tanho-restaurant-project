@@ -31,6 +31,11 @@ function SpecialSection() {
     }
   };
 
+  // Taomning Single Page-iga o'tish
+  const handleNavigateToDish = (id: string) => {
+    navigate(`/menu/${id}`);
+  };
+
   const handleArticleClick = (item: typeof articles[0]) => {
     if (item.isMenuLink) {
       navigate("/menu", { state: { category: item.categoryName } });
@@ -41,6 +46,7 @@ function SpecialSection() {
 
   const offers = [
     {
+      id: "menu-30", // Tanho salat
       type: "dish",
       title: "Tanho maxsus",
       subtitle: "Firmaniy salat",
@@ -48,9 +54,9 @@ function SpecialSection() {
       badge: "HIT SALAT",
       button: "Tafsilotlar",
       image: tanhoMaxsusImg,
-      category: "Salatlar",
     },
     {
+      id: "menu-32", // Yangi Tanho salat
       type: "dish",
       title: "Yangi Tanho salati",
       subtitle: "Mualliflik salati",
@@ -58,9 +64,9 @@ function SpecialSection() {
       badge: "OMMABOP",
       button: "Tafsilotlar",
       image: tanhoPremiumImg,
-      category: "Salatlar",
     },
     {
+      id: "menu-35", // Manchuri
       type: "dish",
       title: "Manchuri",
       subtitle: "Osiyo oshxonasi",
@@ -68,7 +74,6 @@ function SpecialSection() {
       badge: "HIT TAOM",
       button: "Tafsilotlar",
       image: manchuriImg,
-      category: "Milliy taomlar",
     },
   ];
 
@@ -114,7 +119,7 @@ function SpecialSection() {
       date: "10 May, 2026",
       title: "Sog'lom ovqatlanish",
       description:
-        "Restoranda ham sog'lom va muvozanatli ovqatlanish mumkin. Maslahatlarimiz bilan tanishing.",
+        "Restoranimizda ham sog'lom va muvozanatli ovqatlanish mumkin. Maslahatlarimiz bilan tanishing.",
       image: HealthEating,
       isMenuLink: false,
     },
@@ -142,10 +147,10 @@ function SpecialSection() {
             </div>
 
             <div className="hidden lg:grid grid-cols-3 gap-4 h-full">
-              {offers.map((offer, index) => (
+              {offers.map((offer) => (
                 <div
-                  key={index}
-                  onClick={() => handleNavigateToMenu(offer.category)}
+                  key={offer.id}
+                  onClick={() => handleNavigateToDish(offer.id)}
                   className="group relative w-full flex flex-col justify-between overflow-hidden rounded-xl border border-[#25292b] bg-[#0a0d0f] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-[#8d6928] hover:shadow-[0_4px_16px_rgba(0,0,0,0.35)] h-full min-h-[380px] cursor-pointer"
                 >
                   <img
@@ -172,7 +177,7 @@ function SpecialSection() {
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleNavigateToMenu(offer.category);
+                          handleNavigateToDish(offer.id);
                         }}
                         className="w-full cursor-pointer rounded-lg border border-[#dcae43] bg-[#dcae43] py-2.5 text-[13px] font-medium text-[#08090a] transition-all duration-300 hover:bg-[#efc15e]"
                       >
@@ -192,10 +197,10 @@ function SpecialSection() {
                 pagination={{ clickable: true }}
                 className="special-offers-swiper"
               >
-                {offers.map((offer, index) => (
-                  <SwiperSlide key={index}>
+                {offers.map((offer) => (
+                  <SwiperSlide key={offer.id}>
                     <div
-                      onClick={() => handleNavigateToMenu(offer.category)}
+                      onClick={() => handleNavigateToDish(offer.id)}
                       className="group relative w-full flex flex-col justify-between overflow-hidden rounded-xl border border-[#25292b] bg-[#0a0d0f] p-4 h-[360px] shadow-sm cursor-pointer"
                     >
                       <img
@@ -222,7 +227,7 @@ function SpecialSection() {
                           <button 
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleNavigateToMenu(offer.category);
+                              handleNavigateToDish(offer.id);
                             }}
                             className="w-full cursor-pointer rounded-lg border border-[#dcae43] bg-[#dcae43] py-2.5 text-[14px] font-medium text-[#08090a]"
                           >

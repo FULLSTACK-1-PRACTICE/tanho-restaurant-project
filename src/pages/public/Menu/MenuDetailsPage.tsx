@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { menuItems } from "../../../data/menuData";
 import { ArrowLeft } from "lucide-react";
 import Container from "../../../components/ui/container/Container";
-import Button from "../../../components/ui/Button/Button"; 
+import Button from "../../../components/ui/Button/Button";
 
 const MenuDetailsPage = () => {
   const location = useLocation();
@@ -11,6 +11,14 @@ const MenuDetailsPage = () => {
   const id = location.pathname.split("/").filter(Boolean).pop();
 
   const food = menuItems.find((item) => String(item.id) === String(id));
+
+  const handleBack = () => {
+    if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      navigate("/menu");
+    }
+  };
 
   if (!food) {
     return (
@@ -21,11 +29,11 @@ const MenuDetailsPage = () => {
           </h1>
           <Button
             type="button"
-            onClick={() => navigate("/menu")}
+            onClick={handleBack}
             className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[#8c651d]/40 px-4 py-2.5 text-sm text-[#e5ad45] transition-all duration-300 hover:bg-[#d9a441] hover:text-black"
           >
             <ArrowLeft size={16} />
-            Menyuga qaytish
+            Ortga qaytish
           </Button>
         </Container>
       </section>
@@ -37,14 +45,14 @@ const MenuDetailsPage = () => {
       <Container>
         <Button
           type="button"
-          onClick={() => navigate("/menu")}
+          onClick={handleBack}
           className="group mb-6 inline-flex cursor-pointer items-center gap-2 border-none bg-transparent p-0 text-sm text-gray-400 transition-colors duration-300 hover:text-[#e5ad45]"
         >
           <ArrowLeft
             size={17}
             className="transition-transform duration-300 group-hover:-translate-x-1"
           />
-          Menyuga qaytish
+          Ortga qaytish
         </Button>
 
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#121619]">

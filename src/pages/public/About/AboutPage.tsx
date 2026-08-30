@@ -52,7 +52,7 @@ const AboutPage: React.FC = () => {
 
             <div className="space-y-4 text-gray-300 text-sm md:text-base font-light leading-relaxed">
               <p>
-                TANHO restorani 2018-yilda Qarshi shahrida ochilgan. Bizning
+                TANHO restorani 2020-yilda Qarshi shahrida ochilgan. Bizning
                 maqsadimiz – mehmonlarimizga unutilmas ta'm va maroqli muhit
                 taqdim etish.
               </p>

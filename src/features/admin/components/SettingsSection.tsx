@@ -10,6 +10,7 @@ import {
   Check,
   Eye,
   EyeOff,
+  ArrowLeft,
 } from "lucide-react";
 
 const INITIAL_SECURITY = {
@@ -24,7 +25,11 @@ const INITIAL_NOTIFICATIONS = {
   systemAlerts: false,
 };
 
-export function SettingsSection() {
+interface SettingsSectionProps {
+  onGoHome?: () => void;
+}
+
+export function SettingsSection({ onGoHome }: SettingsSectionProps) {
   const [activeTab, setActiveTab] = useState<
     "general" | "security" | "notifications"
   >("general");
@@ -218,6 +223,17 @@ export function SettingsSection() {
 
   return (
     <div className="w-full max-w-4xl space-y-6">
+      {onGoHome && (
+        <button
+          type="button"
+          onClick={onGoHome}
+          className="flex items-center gap-2 text-xs font-medium text-gray-400 transition hover:text-white md:hidden"
+        >
+          <ArrowLeft size={16} />
+          <span>Bosh sahifaga qaytish</span>
+        </button>
+      )}
+
       <div>
         <h1 className="text-2xl font-bold text-white">Sozlamalar</h1>
         <p className="mt-1 text-xs text-gray-400">
@@ -229,45 +245,48 @@ export function SettingsSection() {
         {/* Navigation Tab */}
         <div className="no-scrollbar flex border-b border-white/5 pb-2 gap-1 overflow-x-auto md:flex-col md:border-b-0 md:pb-0">
           <button
+            type="button"
             onClick={() => {
               setActiveTab("general");
               setSuccessMessage("");
               setErrors({});
             }}
-            className={`flex shrink-0 cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium transition-all ${
+            className={`flex shrink-0 cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium outline-none transition-all focus:outline-none focus-visible:outline-none ${
               activeTab === "general"
-                ? "border border-amber-500/20 bg-amber-500/15 text-amber-400"
-                : "text-gray-400 hover:bg-white/5 hover:text-white"
+                ? "border border-amber-500/30 bg-amber-500/15 text-amber-400"
+                : "border border-transparent text-gray-400 hover:bg-white/5 hover:text-white"
             }`}
           >
             <Store size={16} /> <span>Restoran Sozlamalari</span>
           </button>
 
           <button
+            type="button"
             onClick={() => {
               setActiveTab("security");
               setSuccessMessage("");
               setErrors({});
             }}
-            className={`flex shrink-0 cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium transition-all ${
+            className={`flex shrink-0 cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium outline-none transition-all focus:outline-none focus-visible:outline-none ${
               activeTab === "security"
-                ? "border border-amber-500/20 bg-amber-500/15 text-amber-400"
-                : "text-gray-400 hover:bg-white/5 hover:text-white"
+                ? "border border-amber-500/30 bg-amber-500/15 text-amber-400"
+                : "border border-transparent text-gray-400 hover:bg-white/5 hover:text-white"
             }`}
           >
             <Lock size={16} /> <span>Xavfsizlik</span>
           </button>
 
           <button
+            type="button"
             onClick={() => {
               setActiveTab("notifications");
               setSuccessMessage("");
               setErrors({});
             }}
-            className={`flex shrink-0 cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium transition-all ${
+            className={`flex shrink-0 cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-medium outline-none transition-all focus:outline-none focus-visible:outline-none ${
               activeTab === "notifications"
-                ? "border border-amber-500/20 bg-amber-500/15 text-amber-400"
-                : "text-gray-400 hover:bg-white/5 hover:text-white"
+                ? "border border-amber-500/30 bg-amber-500/15 text-amber-400"
+                : "border border-transparent text-gray-400 hover:bg-white/5 hover:text-white"
             }`}
           >
             <Bell size={16} /> <span>Bildirishnomalar</span>

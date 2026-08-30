@@ -9,6 +9,7 @@ import {
   Phone,
   Shield,
   ShoppingBag,
+  ArrowLeft,
 } from "lucide-react";
 
 const INITIAL_DATA = {
@@ -27,7 +28,11 @@ const fileToBase64 = (file: File): Promise<string> => {
   });
 };
 
-export function ProfileSection() {
+interface ProfileSectionProps {
+  onGoHome?: () => void;
+}
+
+export function ProfileSection({ onGoHome }: ProfileSectionProps) {
   const [initialData, setInitialData] = useState(INITIAL_DATA);
   const [name, setName] = useState(INITIAL_DATA.name);
   const [email, setEmail] = useState(INITIAL_DATA.email);
@@ -112,6 +117,17 @@ export function ProfileSection() {
 
   return (
     <div className="w-full max-w-lg space-y-4">
+      {onGoHome && (
+        <button
+          type="button"
+          onClick={onGoHome}
+          className="flex items-center gap-2 text-xs font-medium text-gray-400 transition hover:text-white md:hidden"
+        >
+          <ArrowLeft size={16} />
+          <span>Bosh sahifaga qaytish</span>
+        </button>
+      )}
+
       {successMessage && (
         <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-[#1e1e22] px-4 py-3 text-xs text-white shadow-2xl animate-in fade-in slide-in-from-top-2">
           <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-black">

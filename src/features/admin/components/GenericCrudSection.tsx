@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Edit2, Trash2, X, ChevronDown, Layers, Check } from "lucide-react";
+import { Plus, Edit2, Trash2, X, ChevronDown, Layers, Check, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 export interface FieldConfig {
@@ -14,12 +14,14 @@ interface GenericCrudSectionProps {
   collectionName?: string;
   addLabel?: string;
   fields: FieldConfig[];
+  onBack?: () => void;
 }
 
 export function GenericCrudSection({
   title,
   addLabel,
   fields,
+  onBack,
 }: GenericCrudSectionProps) {
   const [data, setData] = useState<Record<string, unknown>[]>([
     {
@@ -97,6 +99,16 @@ export function GenericCrudSection({
 
   return (
     <div className="space-y-6">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 text-xs font-medium text-gray-400 transition hover:text-white md:hidden"
+        >
+          <ArrowLeft size={16} />
+          Orqaga qaytish
+        </button>
+      )}
+
       <div 
         onClick={() => setOpenDropdownKey(null)}
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-[#121619] p-5 sm:p-6 rounded-2xl border border-white/10 shadow-xl relative overflow-hidden"

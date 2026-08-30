@@ -1,6 +1,22 @@
-export function ReportsSection() {
+import { ArrowLeft } from "lucide-react";
+
+interface ReportsSectionProps {
+  onBack?: () => void;
+}
+
+export function ReportsSection({ onBack }: ReportsSectionProps) {
   return (
     <div className="space-y-6">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 text-xs font-medium text-gray-400 transition hover:text-white md:hidden"
+        >
+          <ArrowLeft size={16} />
+          Orqaga qaytish
+        </button>
+      )}
+
       <h1 className="text-xl font-semibold">Hisobotlar</h1>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

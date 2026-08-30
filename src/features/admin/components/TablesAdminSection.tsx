@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Plus, Pencil, Trash2, X, Loader2, Table2, Receipt, CheckCircle2 } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Loader2, Table2, Receipt, CheckCircle2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useCrud } from "../hooks/useCrud";
 
@@ -34,7 +34,11 @@ const calculateBillTotals = (items: BillItem[], waiterFeePercent: number) => {
 
 type TableRow = RestaurantTable;
 
-export function TablesAdminSection() {
+interface TablesAdminSectionProps {
+  onBack?: () => void;
+}
+
+export function TablesAdminSection({ onBack }: TablesAdminSectionProps) {
   const {
     items: tables,
     loading,
@@ -85,11 +89,9 @@ export function TablesAdminSection() {
     setModalOpen(true);
   };
 
-  // Tahrirlash rejimida ma'lumot o'zgarganini tekshirish uchun:
   const isFormChanged =
     form.number !== initialForm.number || Number(form.seats) !== Number(initialForm.seats);
 
-  // Saqlash tugmasi qachon o'chiq turishi kerak:
   const isSaveDisabled = editingId
     ? !isFormChanged || !form.number.toString().trim()
     : !form.number.toString().trim();
@@ -153,6 +155,16 @@ export function TablesAdminSection() {
 
   return (
     <div className="space-y-6">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 text-xs font-medium text-gray-400 transition hover:text-white md:hidden"
+        >
+          <ArrowLeft size={16} />
+          Orqaga qaytish
+        </button>
+      )}
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold">Stollar</h1>

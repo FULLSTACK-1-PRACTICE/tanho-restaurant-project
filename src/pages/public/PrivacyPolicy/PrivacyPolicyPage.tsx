@@ -4,7 +4,6 @@ import { ShieldCheck, UserCheck, Target, Lock, Cookie, FileEdit } from "lucide-r
 const PrivacyPolicyPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#080a0b] text-[#f1eee7]">
-      {/* Banner / Header Section */}
       <div className="relative border-b border-white/10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#181a1b] via-[#080a0b] to-[#080a0b] px-4 py-16 text-center sm:px-6 lg:py-24">
         <div className="mx-auto max-w-3xl">
           <h1 className="font-serif text-3xl font-normal tracking-wide text-[#f1eee7] sm:text-4xl lg:text-5xl">
@@ -22,11 +21,9 @@ const PrivacyPolicyPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Grid Content Section */}
       <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
           
-          {/* 1. Umumiy qoidalar */}
           <div className="group rounded-xl border border-white/[0.08] bg-[#0d0f10] p-6 transition-all duration-300 hover:border-[#dcae4d]/40 hover:bg-[#111314]">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#765b28]/40 bg-[#161819] text-[#dcae4d]">
@@ -46,7 +43,6 @@ const PrivacyPolicyPage: React.FC = () => {
             </div>
           </div>
 
-          {/* 2. Ma'lumotlar qanday to'planadi */}
           <div className="group rounded-xl border border-white/[0.08] bg-[#0d0f10] p-6 transition-all duration-300 hover:border-[#dcae4d]/40 hover:bg-[#111314]">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#765b28]/40 bg-[#161819] text-[#dcae4d]">
@@ -60,15 +56,14 @@ const PrivacyPolicyPage: React.FC = () => {
                   Biz faqat siz ixtiyoriy ravishda taqdim etgan ma'lumotlarni yig'amiz. Bunga quyidagilar kiradi:
                 </p>
                 <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-[#858783] sm:text-sm">
-                  <li>Ism, telefon raqami, elektron pochta (buyurtma yoki rezervatsiya uchun)</li>
-                  <li>Taklif va mulohazalar</li>
+                  <li>Ism, telefon raqami, elektron pochta (stol rezervatsiyasi yoki bog'lanish uchun)</li>
+                  <li>Taklif, savol va mulohazalar</li>
                   <li>Saytdan foydalanish statistikasi (cookies orqali)</li>
                 </ul>
               </div>
             </div>
           </div>
 
-          {/* 3. Ma'lumotlardan foydalanish maqsadi */}
           <div className="group rounded-xl border border-white/[0.08] bg-[#0d0f10] p-6 transition-all duration-300 hover:border-[#dcae4d]/40 hover:bg-[#111314]">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#765b28]/40 bg-[#161819] text-[#dcae4d]">
@@ -82,16 +77,15 @@ const PrivacyPolicyPage: React.FC = () => {
                   Yig'ilgan ma'lumotlar quyidagi maqsadlarda ishlatiladi:
                 </p>
                 <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-[#858783] sm:text-sm">
-                  <li>Buyurtma va rezervatsiyalarni amalga oshirish</li>
-                  <li>Foydalanuvchi so'rovlariga javob berish</li>
-                  <li>Xizmat sifatini yaxshilash</li>
-                  <li>Yangiliklar va maxsus takliflar haqida ma'lumot berish (faqat roziligingiz bilan)</li>
+                  <li>Stol rezervatsiyalarini tasdiqlash va muvofiqlashtirish</li>
+                  <li>Foydalanuvchi so'rovlariga hamda murojaatlariga javob berish</li>
+                  <li>Xizmat va axborot sifatini yaxshilash</li>
+                  <li>Yangiliklar va tadbirlar haqida ma'lumot berish (faqat roziligingiz bilan)</li>
                 </ul>
               </div>
             </div>
           </div>
 
-          {/* 4. Ma'lumotlar xavfsizligi */}
           <div className="group rounded-xl border border-white/[0.08] bg-[#0d0f10] p-6 transition-all duration-300 hover:border-[#dcae4d]/40 hover:bg-[#111314]">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#765b28]/40 bg-[#161819] text-[#dcae4d]">
@@ -110,7 +104,6 @@ const PrivacyPolicyPage: React.FC = () => {
             </div>
           </div>
 
-          {/* 5. Cookies */}
           <div className="group rounded-xl border border-white/[0.08] bg-[#0d0f10] p-6 transition-all duration-300 hover:border-[#dcae4d]/40 hover:bg-[#111314]">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#765b28]/40 bg-[#161819] text-[#dcae4d]">
@@ -128,7 +121,6 @@ const PrivacyPolicyPage: React.FC = () => {
             </div>
           </div>
 
-          {/* 6. Siyosat o'zgarishlari */}
           <div className="group rounded-xl border border-white/[0.08] bg-[#0d0f10] p-6 transition-all duration-300 hover:border-[#dcae4d]/40 hover:bg-[#111314]">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#765b28]/40 bg-[#161819] text-[#dcae4d]">

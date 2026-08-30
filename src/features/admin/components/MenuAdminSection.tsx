@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
 
 interface MenuItem {
   id: string;
@@ -16,6 +17,10 @@ interface CategoryItem {
 interface ExtraItem {
   id: string;
   name: string;
+}
+
+interface MenuAdminSectionProps {
+  onBack?: () => void;
 }
 
 const initialMenuItems: MenuItem[] = [
@@ -83,7 +88,7 @@ const initialExtras: ExtraItem[] = [
   },
 ];
 
-export function MenuAdminSection() {
+export function MenuAdminSection({ onBack }: MenuAdminSectionProps) {
   const [activeTab, setActiveTab] = useState<
     "dishes" | "categories" | "extras"
   >("dishes");
@@ -106,7 +111,16 @@ export function MenuAdminSection() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 text-xs font-medium text-gray-400 transition hover:text-white md:hidden"
+        >
+          <ArrowLeft size={16} />
+          Orqaga qaytish
+        </button>
+      )}
+
       <div className="flex flex-col gap-1">
         <h1 className="text-xl font-bold text-white sm:text-2xl">
           Menyu boshqaruvi
@@ -118,7 +132,6 @@ export function MenuAdminSection() {
         </p>
       </div>
 
-      {/* Main Tabs */}
       <div className="flex gap-2 border-b border-white/10 pb-3">
         <button
           onClick={() => setActiveTab("dishes")}
@@ -154,10 +167,8 @@ export function MenuAdminSection() {
         </button>
       </div>
 
-      {/* Dishes */}
       {activeTab === "dishes" && (
         <div className="space-y-4">
-          {/* Filters */}
           <div className="flex gap-2">
             <button
               onClick={() => setFilter("all")}
@@ -195,7 +206,6 @@ export function MenuAdminSection() {
             </button>
           </div>
 
-          {/* Dishes Table */}
           <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#121619]">
             <table className="w-full text-left text-xs text-gray-300">
               <thead className="border-b border-white/10 bg-white/[0.02] uppercase text-gray-400">
@@ -243,7 +253,6 @@ export function MenuAdminSection() {
         </div>
       )}
 
-      {/* Categories */}
       {activeTab === "categories" && (
         <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#121619]">
           <table className="w-full text-left text-xs text-gray-300">
@@ -279,7 +288,6 @@ export function MenuAdminSection() {
         </div>
       )}
 
-      {/* Extras */}
       {activeTab === "extras" && (
         <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#121619]">
           <table className="w-full text-left text-xs text-gray-300">

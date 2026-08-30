@@ -36,9 +36,22 @@ const AdminLayout = () => {
     return localStorage.getItem("admin_active_tab") || "dashboard";
   });
 
+  const [previousSection, setPreviousSection] = useState<SectionKey>("dashboard");
+
   const handleSectionChange = (section: SectionKey) => {
+    if (section !== active) {
+      setPreviousSection(active);
+    }
     setActive(section);
     localStorage.setItem("admin_active_tab", section);
+  };
+
+  const handleGoBack = () => {
+    handleSectionChange(previousSection);
+  };
+
+  const handleGoHome = () => {
+    handleSectionChange("dashboard");
   };
 
   useEffect(() => {
@@ -82,12 +95,13 @@ const AdminLayout = () => {
         return <DashboardSection goTo={handleSectionChange} />;
       case "menyu":
       case "taomlar":
-        return <MenuAdminSection />;
+        return <MenuAdminSection onBack={handleGoBack} />;
       case "rezervatsiyalar":
         return (
           <GenericCrudSection
             title="Rezervatsiyalar"
             collectionName="reservations"
+            onBack={handleGoBack}
             fields={[
               { key: "customer", label: "Mijoz" },
               { key: "table", label: "Stol" },
@@ -104,13 +118,14 @@ const AdminLayout = () => {
           />
         );
       case "stollar":
-        return <TablesAdminSection />;
+        return <TablesAdminSection onBack={handleGoBack} />;
       case "mijozlar":
         return (
           <GenericCrudSection
             title="Mijozlar"
             collectionName="customers"
             addLabel="Mijoz qo'shish"
+            onBack={handleGoBack}
             fields={[
               { key: "name", label: "F.I.Sh" },
               { key: "phone", label: "Telefon" },
@@ -141,6 +156,7 @@ const AdminLayout = () => {
             title="Xodimlar"
             collectionName="staff"
             addLabel="Xodim qo'shish"
+            onBack={handleGoBack}
             fields={[
               { key: "name", label: "F.I.Sh" },
               { key: "role", label: "Lavozimi" },
@@ -150,11 +166,11 @@ const AdminLayout = () => {
         );
       case "hisobotlar":
       case "eslatmalar":
-        return <ReportsSection />;
+        return <ReportsSection onBack={handleGoBack} />;
       case "profil":
-        return <ProfileSection />;
+        return <ProfileSection onGoHome={handleGoHome} />;
       case "sozlamalar":
-        return <SettingsSection />;
+        return <SettingsSection onGoHome={handleGoHome} />;
       default:
         return null;
     }

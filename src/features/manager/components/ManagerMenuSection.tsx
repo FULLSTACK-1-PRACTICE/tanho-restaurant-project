@@ -994,145 +994,151 @@ function AddFoodModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-      <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
-        <div className="flex items-center justify-between p-4 border-b border-white/5">
-          <h3 className="text-base font-semibold text-white flex items-center gap-2">
-            <ChefHat
-              className="text-[#C99B3C]"
-              size={18}
-            />
-            Yangi taom qo‘shish
-          </h3>
+    <div
+  className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+  onClick={onClose}
+>
+  <div
+    className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
+    onClick={(event) => event.stopPropagation()}
+  >
+    <div className="flex items-center justify-between p-4 border-b border-white/5">
+      <h3 className="text-base font-semibold text-white flex items-center gap-2">
+        <ChefHat
+          className="text-[#C99B3C]"
+          size={18}
+        />
+        Yangi taom qo‘shish
+      </h3>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-gray-400 hover:text-white cursor-pointer transition-colors"
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        <form
-          onSubmit={handleFormSubmit}
-          noValidate
-          className="p-4 space-y-4"
-        >
-          <div>
-            <label className="block text-xs text-gray-400">
-              Taom nomi
-
-              <input
-                value={form.name}
-                onChange={(event) => {
-                  onChange({
-                    ...form,
-                    name: event.target.value,
-                  });
-
-                  if (errors.name) {
-                    setErrors((prev) => ({
-                      ...prev,
-                      name: "",
-                    }));
-                  }
-                }}
-                className={modalInputClass(!!errors.name)}
-                placeholder="Masalan: Osh Palov"
-              />
-            </label>
-
-            {errors.name && (
-              <p className="text-xs text-red-400 mt-1 pl-2">
-                {errors.name}
-              </p>
-            )}
-          </div>
-
-          <div className="block text-xs text-gray-400">
-            <span className="mb-1 block">
-              Kategoriya
-            </span>
-
-            <InlineCustomSelect
-              options={categoryOptions}
-              value={
-                form.category ||
-                (categories[0]?.name ?? "")
-              }
-              onChange={(val) =>
-                onChange({
-                  ...form,
-                  category: val,
-                })
-              }
-              className="w-full mt-1"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs text-gray-400">
-              Tayyorlanish vaqti (minut)
-
-              <input
-                type="text"
-                inputMode="numeric"
-                value={form.preparationTime}
-                onChange={(event) =>
-                  handleTimeChange(event.target.value)
-                }
-                className={modalInputClass(
-                  !!errors.preparationTime
-                )}
-                placeholder="15"
-              />
-            </label>
-
-            {errors.preparationTime && (
-              <p className="text-xs text-red-400 mt-1 pl-2">
-                {errors.preparationTime}
-              </p>
-            )}
-          </div>
-
-          <div className="block text-xs text-gray-400">
-            <span className="mb-1 block">
-              Holati
-            </span>
-
-            <InlineCustomSelect
-              options={statusOptions}
-              value={form.status}
-              onChange={(val) =>
-                onChange({
-                  ...form,
-                  status: val as Food["status"],
-                })
-              }
-              className="w-full mt-1"
-            />
-          </div>
-
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors"
-            >
-              Bekor qilish
-            </button>
-
-            <button
-              type="submit"
-              className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors"
-            >
-              Saqlash
-            </button>
-          </div>
-        </form>
-      </div>
+      <button
+        type="button"
+        onClick={onClose}
+        className="text-gray-400 hover:text-white cursor-pointer transition-colors"
+      >
+        <X size={18} />
+      </button>
     </div>
+
+    <form
+      onSubmit={handleFormSubmit}
+      noValidate
+      className="p-4 space-y-4"
+    >
+      <div>
+        <label className="block text-xs text-gray-400">
+          Taom nomi
+
+          <input
+            value={form.name}
+            onChange={(event) => {
+              onChange({
+                ...form,
+                name: event.target.value,
+              });
+
+              if (errors.name) {
+                setErrors((prev) => ({
+                  ...prev,
+                  name: "",
+                }));
+              }
+            }}
+            className={modalInputClass(!!errors.name)}
+            placeholder="Masalan: Osh Palov"
+          />
+        </label>
+
+        {errors.name && (
+          <p className="text-xs text-red-400 mt-1 pl-2">
+            {errors.name}
+          </p>
+        )}
+      </div>
+
+      <div className="block text-xs text-gray-400">
+        <span className="mb-1 block">
+          Kategoriya
+        </span>
+
+        <InlineCustomSelect
+          options={categoryOptions}
+          value={
+            form.category ||
+            (categories[0]?.name ?? "")
+          }
+          onChange={(val) =>
+            onChange({
+              ...form,
+              category: val,
+            })
+          }
+          className="w-full mt-1"
+        />
+      </div>
+
+      <div>
+        <label className="block text-xs text-gray-400">
+          Tayyorlanish vaqti (minut)
+
+          <input
+            type="text"
+            inputMode="numeric"
+            value={form.preparationTime}
+            onChange={(event) =>
+              handleTimeChange(event.target.value)
+            }
+            className={modalInputClass(
+              !!errors.preparationTime
+            )}
+            placeholder="15"
+          />
+        </label>
+
+        {errors.preparationTime && (
+          <p className="text-xs text-red-400 mt-1 pl-2">
+            {errors.preparationTime}
+          </p>
+        )}
+      </div>
+
+      <div className="block text-xs text-gray-400">
+        <span className="mb-1 block">
+          Holati
+        </span>
+
+        <InlineCustomSelect
+          options={statusOptions}
+          value={form.status}
+          onChange={(val) =>
+            onChange({
+              ...form,
+              status: val as Food["status"],
+            })
+          }
+          className="w-full mt-1"
+        />
+      </div>
+
+      <div className="flex justify-end gap-3 pt-2">
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-4 py-2 border border-white/10 rounded-full text-xs font-medium hover:bg-white/5 text-gray-300 cursor-pointer transition-colors"
+        >
+          Bekor qilish
+        </button>
+
+        <button
+          type="submit"
+          className="px-4 py-2 bg-[#C99B3C] hover:bg-[#b08732] text-black rounded-full text-xs font-semibold cursor-pointer transition-colors"
+        >
+          Saqlash
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
   );
 }
 

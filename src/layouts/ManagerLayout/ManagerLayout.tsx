@@ -1,36 +1,55 @@
-import { useEffect, useState } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Sidebar } from "../../components/common/SideBar";
 import { Navbar } from "../../components/common/DashboardNavbar";
 import { managerSections } from "../../data/sidebarData";
 
+const LAST_MANAGER_PATH_KEY = "manager_last_path";
+
 export default function ManagerLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const currentPath = `${location.pathname}${location.search}${location.hash}`;
+  const initialLastPath = sessionStorage.getItem(LAST_MANAGER_PATH_KEY);
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(true);
   const [headerSearch, setHeaderSearch] = useState("");
+  const [lastManagerPath, setLastManagerPath] = useState(
+    initialLastPath && initialLastPath !== currentPath
+      ? initialLastPath
+      : "/manager/bosh-sahifa"
+  );
+
+  const currentManagerPath = useRef(currentPath);
 
   const pathSegments = location.pathname.split("/").filter(Boolean);
   const activePage = pathSegments[1] || "bosh-sahifa";
 
   useEffect(() => {
-    window.history.pushState(null, "", window.location.href);
+    const previousPath = currentManagerPath.current;
 
-    const handlePopState = () => {
-      window.history.pushState(null, "", window.location.href);
-    };
+    if (previousPath !== currentPath) {
+      setLastManagerPath(previousPath);
+      sessionStorage.setItem(LAST_MANAGER_PATH_KEY, previousPath);
+      currentManagerPath.current = currentPath;
+    }
+  }, [currentPath]);
 
-    window.addEventListener("popstate", handlePopState);
+  const handleBack = () => {
+    const targetPath = lastManagerPath || "/manager/bosh-sahifa";
 
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
+    if (targetPath === currentPath) {
+      navigate("/manager/bosh-sahifa");
+      return;
+    }
+
+    navigate(targetPath);
+  };
 
   const handleToggleSidebar = () => {
     if (window.innerWidth < 1024) {
@@ -62,6 +81,7 @@ export default function ManagerLayout() {
 
     localStorage.removeItem("token");
     localStorage.clear();
+    sessionStorage.removeItem(LAST_MANAGER_PATH_KEY);
 
     setTimeout(() => {
       navigate("/", { replace: true });
@@ -137,9 +157,16 @@ export default function ManagerLayout() {
         />
 
         <main className="min-h-0 flex-1 overflow-y-auto bg-[#0a0a0b] p-3 sm:p-4 md:p-6">
-          <Outlet context={{ headerSearch }} />
+          <Outlet
+            context={{
+              headerSearch,
+              onBack: handleBack,
+              lastManagerPath,
+            }}
+          />
         </main>
       </div>
     </div>
   );
 }
+

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Plus, Trash2, Edit, Search, Newspaper, AlertCircle } from "lucide-react";
+import { useOutletContext } from "react-router-dom";
+import { Plus, ArrowLeft, Trash2, Edit, Search, Newspaper, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import Button from "../../../components/ui/Button";
 
@@ -22,6 +23,7 @@ const initialNews: NewsItem[] = [
 ];
 
 export default function ManagerNewsSection() {
+  const { onBack } = useOutletContext<{ onBack: () => void }>();
   const [news, setNews] = useState<NewsItem[]>(initialNews);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,6 +93,10 @@ export default function ManagerNewsSection() {
 
   return (
     <div className="space-y-6">
+      <button type="button" onClick={onBack} className="inline-flex md:hidden w-fit items-center gap-1.5 text-xs font-normal text-gray-400 hover:text-white transition-colors cursor-pointer">
+        <ArrowLeft size={16} strokeWidth={1.8} />
+        <span>Orqaga qaytish</span>
+      </button>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">

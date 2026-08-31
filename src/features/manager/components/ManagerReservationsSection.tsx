@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Calendar, Search, CheckCircle2, XCircle, Clock, Phone, User, Users, AlertCircle } from "lucide-react";
+import { useOutletContext } from "react-router-dom";
+import { Calendar, ArrowLeft, Search, CheckCircle2, XCircle, Clock, Phone, User, Users, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import Button from "../../../components/ui/Button";
 
@@ -38,6 +39,7 @@ const initialReservations: Reservation[] = [
 ];
 
 export default function ManagerReservationsSection() {
+  const { onBack } = useOutletContext<{ onBack: () => void }>();
   const [reservations, setReservations] = useState<Reservation[]>(initialReservations);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("Barchasi");
@@ -77,6 +79,10 @@ export default function ManagerReservationsSection() {
 
   return (
     <div className="space-y-6">
+      <button type="button" onClick={onBack} className="inline-flex md:hidden w-fit items-center gap-1.5 text-xs font-normal text-gray-400 hover:text-white transition-colors cursor-pointer">
+        <ArrowLeft size={16} strokeWidth={1.8} />
+        <span>Orqaga qaytish</span>
+      </button>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">

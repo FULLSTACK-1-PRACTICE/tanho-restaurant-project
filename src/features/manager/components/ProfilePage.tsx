@@ -1,26 +1,50 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
+  ArrowLeft,
   Camera,
   Save,
   User,
   Mail,
   Phone,
-  Building2,
+  Shield,
   Activity,
   Clock,
-  ShoppingBag,
+  CalendarCheck,
 } from "lucide-react";
 
 const INITIAL_DATA = {
   name: "Menejer Boshqaruvchi",
   email: "manager@tanhorestaurant.uz",
   phone: "+998 90 123 45 67",
-  branch: "Bosh Filial (Chilonzor)",
+  role: "Restoran Menejeri (Cheklangan huquq)",
   avatar: null as string | null,
 };
 
+
+const ALLOWED_DOMAINS = [
+    "com",
+
+    "uz",
+
+    "ru",
+
+    "co",
+
+    "io",
+
+    "me",
+
+    "biz"
+
+];
+
+const PHONE_REGEX = /^\+998\s?\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,10})$/;
+
 export default function ProfilePage() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(INITIAL_DATA);
   const [initialData, setInitialData] = useState(INITIAL_DATA);
 
@@ -28,8 +52,34 @@ export default function ProfilePage() {
     formData.name !== initialData.name ||
     formData.email !== initialData.email ||
     formData.phone !== initialData.phone ||
-    formData.branch !== initialData.branch ||
     formData.avatar !== initialData.avatar;
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let inputVal = e.target.value;
+
+    if (!inputVal.startsWith("+998")) {
+      inputVal = "+998";
+    }
+
+    const digitsAfterPrefix = inputVal.slice(4).replace(/\D/g, "");
+    const limitedDigits = digitsAfterPrefix.slice(0, 9);
+
+    let formattedPhone = "+998";
+    if (limitedDigits.length > 0) {
+      formattedPhone += " " + limitedDigits.slice(0, 2);
+    }
+    if (limitedDigits.length > 2) {
+      formattedPhone += " " + limitedDigits.slice(2, 5);
+    }
+    if (limitedDigits.length > 5) {
+      formattedPhone += " " + limitedDigits.slice(5, 7);
+    }
+    if (limitedDigits.length > 7) {
+      formattedPhone += " " + limitedDigits.slice(7, 9);
+    }
+
+    setFormData((prev) => ({ ...prev, phone: formattedPhone }));
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,9 +90,30 @@ export default function ProfilePage() {
     }
   };
 
+  const validateEmail = (email: string) => {
+    const match = email.trim().match(EMAIL_REGEX);
+    if (!match) return false;
+
+    const domainExtension = match[1].toLowerCase();
+    return ALLOWED_DOMAINS.includes(domainExtension);
+  };
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isChanged) return;
+
+    if (!validateEmail(formData.email)) {
+      toast.error(
+        "Noto'g'ri email domeni kiritildi! Faqat haqiqiy email domenlariga ruxsat berilgan (.com, .uz, .ru va h.k.)"
+      );
+      return;
+    }
+
+    const digitsOnly = formData.phone.replace(/\D/g, "");
+    if (digitsOnly.length !== 12 || !PHONE_REGEX.test(formData.phone.trim())) {
+      toast.error("Telefon raqami to'liq 9 ta raqamdan iborat bo'lishi kerak!");
+      return;
+    }
 
     setInitialData(formData);
     toast.success("Profil ma'lumotlari saqlandi!");
@@ -51,8 +122,15 @@ export default function ProfilePage() {
   const inputClass =
     "w-full px-3.5 py-2.5 bg-[#1a1a1e] border border-white/10 rounded-xl text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 transition-colors";
 
+  const disabledInputClass =
+    "w-full px-3.5 py-2.5 bg-[#1a1a1e]/50 border border-white/10 rounded-xl text-sm text-amber-500/90 font-medium cursor-not-allowed opacity-80 select-none truncate";
+
   return (
     <div className="max-w-4xl space-y-6">
+      <button type="button" onClick={() => navigate("/manager/bosh-sahifa")} className="inline-flex md:hidden w-fit items-center gap-1.5 text-xs font-normal text-gray-400 hover:text-white transition-colors cursor-pointer">
+        <ArrowLeft size={16} strokeWidth={1.8} />
+        <span>Bosh sahifaga qaytish</span>
+      </button>
       <div>
         <h1 className="text-2xl font-bold text-white">Profil</h1>
         <p className="mt-1 text-xs text-gray-400">
@@ -70,7 +148,6 @@ export default function ProfilePage() {
         <div className="relative px-6 pt-0 pb-6">
           <div className="-mt-12 mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
             <div className="flex items-end gap-4">
-              {/* Profil avatari (Hover effektsiz) */}
               <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl border-2 border-[#111113] bg-[#1a1a1e] shadow-2xl ring-1 ring-white/10">
                 {formData.avatar ? (
                   <img
@@ -130,9 +207,7 @@ export default function ProfilePage() {
                 <input
                   type="text"
                   value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
+                  onChange={handlePhoneChange}
                   required
                   className={inputClass}
                 />
@@ -155,15 +230,14 @@ export default function ProfilePage() {
 
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-gray-400">
-                  <Building2 size={12} className="mr-1 inline" /> Biriktirilgan Filial
+                  <Shield size={12} className="mr-1 inline" /> Tizimdagi Rol va Ruxsatlar
                 </label>
                 <input
                   type="text"
-                  value={formData.branch}
-                  onChange={(e) =>
-                    setFormData({ ...formData, branch: e.target.value })
-                  }
-                  className={inputClass}
+                  value="Restoran Menejeri (Cheklangan huquq)"
+                  disabled
+                  readOnly
+                  className={disabledInputClass}
                 />
               </div>
             </div>
@@ -185,10 +259,10 @@ export default function ProfilePage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-[#111113] p-4">
           <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-3 text-amber-400">
-            <ShoppingBag size={18} />
+            <CalendarCheck size={18} />
           </div>
           <div>
-            <p className="text-[11px] text-gray-400">Bugungi Buyurtmalar</p>
+            <p className="text-[11px] text-gray-400">Bugungi Rezervatsiyalar</p>
             <p className="text-base font-bold text-white">48 ta</p>
           </div>
         </div>

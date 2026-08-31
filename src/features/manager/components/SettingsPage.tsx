@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
+  ArrowLeft,
   Lock,
   Bell,
   Save,
@@ -23,6 +25,7 @@ const INITIAL_NOTIFICATIONS = {
 };
 
 export default function SettingsPage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"security" | "notifications">("security");
   const [saved, setSaved] = useState(false);
 
@@ -35,7 +38,6 @@ export default function SettingsPage() {
   const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
   const [initialNotifications, setInitialNotifications] = useState(INITIAL_NOTIFICATIONS);
 
-  // Taqqoslash operatorlari `&&` bilan tuzatildi
   const isSecurityChanged =
     security.currentPassword !== initialSecurity.currentPassword ||
     security.newPassword !== initialSecurity.newPassword ||
@@ -69,6 +71,10 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <button type="button" onClick={() => navigate("/manager/bosh-sahifa")} className="inline-flex md:hidden w-fit items-center gap-1.5 text-xs font-normal text-gray-400 hover:text-white transition-colors cursor-pointer">
+        <ArrowLeft size={16} strokeWidth={1.8} />
+        <span>Bosh sahifaga qaytish</span>
+      </button>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-white/5 pb-4">
         <div>
           <h2 className="text-xl font-semibold text-white">Sozlamalar</h2>
@@ -114,6 +120,15 @@ export default function SettingsPage() {
         <div className="bg-[#111113] border border-white/5 rounded-2xl p-5 md:p-6 space-y-6">
           {activeTab === "security" && (
             <form onSubmit={handleSecuritySave} className="space-y-6">
+              {/* Yashirin username inputi - brauzer ogohlantirishini yo'qotish uchun */}
+              <input
+                type="text"
+                name="username"
+                autoComplete="username"
+                className="hidden"
+                aria-hidden="true"
+              />
+
               <div className="space-y-4">
                 <h3 className="text-sm font-semibold text-white flex items-center gap-2">
                   <ShieldCheck size={16} className="text-amber-400" /> Parolni O'zgartirish
@@ -127,6 +142,7 @@ export default function SettingsPage() {
                     <div className="relative">
                       <input
                         type={showCurrentPassword ? "text" : "password"}
+                        autoComplete="current-password"
                         placeholder="••••••••"
                         value={security.currentPassword}
                         onChange={(e) =>
@@ -151,6 +167,7 @@ export default function SettingsPage() {
                     <div className="relative">
                       <input
                         type={showNewPassword ? "text" : "password"}
+                        autoComplete="new-password"
                         placeholder="••••••••"
                         value={security.newPassword}
                         onChange={(e) =>
@@ -174,6 +191,7 @@ export default function SettingsPage() {
                     </label>
                     <input
                       type="password"
+                      autoComplete="new-password"
                       placeholder="••••••••"
                       value={security.confirmPassword}
                       onChange={(e) =>

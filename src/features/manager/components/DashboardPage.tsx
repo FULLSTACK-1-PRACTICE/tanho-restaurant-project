@@ -1,53 +1,44 @@
 import {
   Table2,
-  Utensils,
   CheckCircle2,
   Clock,
   ArrowRight,
+  Users,
 } from "lucide-react";
 import { StatCard } from "./StatCard";
 
-export interface Order {
+export interface Reservation {
   id: string;
   customerName: string;
-  items: string;
-  total: number;
-  status: "Yakunlandi" | "Tayyorlanmoqda" | "Kutilmoqda";
+  guestsCount: number;
+  tableNumber: number;
+  status: "Tasdiqlandi" | "Kutilmoqda" | "Bekor qilindi";
   time: string;
 }
 
 export interface DashboardPageProps {
-  orders?: Order[];
-  onViewAllOrders?: () => void;
+  reservations?: Reservation[];
+  onViewAllReservations?: () => void;
 }
 
 export default function DashboardPage({
-  orders = [],
-  onViewAllOrders,
+  reservations = [],
+  onViewAllReservations,
 }: DashboardPageProps) {
-  const totalOrders = orders.length;
-
-  const completedOrders = orders.filter(
-    (o) => o.status === "Yakunlandi"
+  const confirmedReservations = reservations.filter(
+    (r) => r.status === "Tasdiqlandi"
   ).length;
 
-  const pendingOrders = orders.filter(
-    (o) =>
-      o.status === "Tayyorlanmoqda" ||
-      o.status === "Kutilmoqda"
+  const pendingReservations = reservations.filter(
+    (r) => r.status === "Kutilmoqda"
   ).length;
 
-  /**
-   * Stol statistikasi
-   * Hozircha demo qiymatlar.
-   * Keyinchalik API orqali almashtirish mumkin.
-   */
   const totalTables = 12;
-  const activeTables = Math.min(totalOrders, totalTables);
+  const activeTables = Math.min(confirmedReservations, totalTables);
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         <StatCard
           icon={Table2}
           iconBg="bg-amber-500/15"
@@ -59,22 +50,12 @@ export default function DashboardPage({
         />
 
         <StatCard
-          icon={Utensils}
-          iconBg="bg-sky-500/15"
-          iconColor="text-sky-400"
-          label="Jami buyurtmalar"
-          value={`${totalOrders} ta`}
-          sub="Bugungi ko'rsatkich"
-          subColor="text-gray-400"
-        />
-
-        <StatCard
           icon={CheckCircle2}
           iconBg="bg-emerald-500/15"
           iconColor="text-emerald-400"
-          label="Yakunlangan"
-          value={`${completedOrders} ta`}
-          sub="Muvaffaqiyatli"
+          label="Tasdiqlangan"
+          value={`${confirmedReservations} ta`}
+          sub="Rezervatsiya mavjud"
           subColor="text-emerald-400"
         />
 
@@ -82,9 +63,9 @@ export default function DashboardPage({
           icon={Clock}
           iconBg="bg-purple-500/15"
           iconColor="text-purple-400"
-          label="Jarayonda"
-          value={`${pendingOrders} ta`}
-          sub="Kutilmoqda / Tayyorlanmoqda"
+          label="Kutilmoqda"
+          value={`${pendingReservations} ta`}
+          sub="Tasdiqlash kutilmoqda"
           subColor="text-amber-400"
         />
       </div>
@@ -93,16 +74,16 @@ export default function DashboardPage({
         <div className="flex items-center justify-between mb-5">
           <div>
             <h3 className="font-semibold text-white text-base">
-              So'nggi buyurtmalar
+              So'nggi rezervatsiyalar
             </h3>
             <p className="text-xs text-gray-400">
-              Eng oxirgi tushgan buyurtmalar ro'yxati
+              Eng oxirgi tushgan stol band qilish so'rovlari
             </p>
           </div>
 
-          {onViewAllOrders && (
+          {onViewAllReservations && (
             <button
-              onClick={onViewAllOrders}
+              onClick={onViewAllReservations}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-xs font-medium transition-colors cursor-pointer"
             >
               Barchasini ko'rish
@@ -112,45 +93,50 @@ export default function DashboardPage({
         </div>
 
         <div className="space-y-3">
-          {orders.slice(0, 5).map((order) => (
+          {reservations.slice(0, 5).map((reservation) => (
             <div
-              key={order.id}
+              key={reservation.id}
               className="flex flex-wrap items-center justify-between gap-4 p-3.5 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all"
             >
               <div>
                 <h4 className="text-sm font-medium text-white">
-                  {order.customerName}
+                  {reservation.customerName}
                 </h4>
 
-                <p className="text-xs text-gray-400">
-                  {order.items}
+                <p className="text-xs text-gray-400 flex items-center gap-2 mt-0.5">
+                  <span className="flex items-center gap-1">
+                    <Users size={12} className="text-amber-400" />
+                    {reservation.guestsCount} kishi
+                  </span>
+                  <span>•</span>
+                  <span>Stol №{reservation.tableNumber}</span>
                 </p>
               </div>
 
               <div className="flex items-center gap-4">
                 <span className="text-xs text-gray-400 flex items-center gap-1">
                   <Clock size={12} />
-                  {order.time}
+                  {reservation.time}
                 </span>
 
                 <span
                   className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                    order.status === "Yakunlandi"
+                    reservation.status === "Tasdiqlandi"
                       ? "bg-emerald-500/10 text-emerald-400"
-                      : order.status === "Tayyorlanmoqda"
-                      ? "bg-sky-500/10 text-sky-400"
-                      : "bg-amber-500/10 text-amber-400"
+                      : reservation.status === "Kutilmoqda"
+                      ? "bg-amber-500/10 text-amber-400"
+                      : "bg-rose-500/10 text-rose-400"
                   }`}
                 >
-                  {order.status}
+                  {reservation.status}
                 </span>
               </div>
             </div>
           ))}
 
-          {orders.length === 0 && (
+          {reservations.length === 0 && (
             <p className="text-center py-6 text-xs text-gray-500">
-              Buyurtmalar yo'q
+              Rezervatsiyalar yo'q
             </p>
           )}
         </div>

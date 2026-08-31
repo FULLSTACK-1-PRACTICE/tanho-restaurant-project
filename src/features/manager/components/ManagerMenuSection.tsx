@@ -1,6 +1,8 @@
 import type { FormEvent } from "react";
 import { useState, useRef, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import {
+  ArrowLeft,
   ChefHat,
   Edit,
   FileSpreadsheet,
@@ -56,6 +58,11 @@ const DEFAULT_FOODS: MenuFood[] = [
     status: "Mavjud",
   },
 ];
+
+type ManagerOutletContext = {
+  headerSearch: string;
+  onBack: () => void;
+};
 
 type Props = {
   foods?: Food[];
@@ -176,6 +183,8 @@ export default function ManagerMenuSection({
   onDeleteFood,
   onAddCategorySubmit,
 }: Props) {
+  const { onBack } = useOutletContext<ManagerOutletContext>();
+
   const [internalFoods, setInternalFoods] = useState<MenuFood[]>(() => {
     const saved = localStorage.getItem("menu_foods");
 
@@ -358,6 +367,15 @@ export default function ManagerMenuSection({
   return (
     <>
       <div className="space-y-5">
+        <button
+          type="button"
+          onClick={onBack}
+          className="inline-flex sm:hidden items-center gap-2 text-xs font-medium text-gray-400 hover:text-white transition-colors cursor-pointer"
+        >
+          <ArrowLeft size={17} />
+          <span>Orqaga qaytish</span>
+        </button>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <StatCard
             icon={Utensils}
@@ -680,8 +698,14 @@ function EditFoodModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-      <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
             <Edit className="text-[#C99B3C]" size={18} />
@@ -834,8 +858,14 @@ function AddCategoryModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-      <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
             <FolderPlus
@@ -1154,8 +1184,14 @@ function ImportFoodModal({
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-      <div className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#111113] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="flex items-center justify-between p-4 border-b border-white/5">
           <h3 className="text-base font-semibold text-white flex items-center gap-2">
             <FileSpreadsheet

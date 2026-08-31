@@ -1,5 +1,6 @@
 import { useState, useEffect, type FormEvent } from "react";
-import { Plus, Trash2, Edit, X, Users, LayoutGrid, AlertCircle, Check, ChevronDown } from "lucide-react";
+import { useOutletContext } from "react-router-dom";
+import { Plus, Trash2, Edit, X, Users, LayoutGrid, AlertCircle, Check, ChevronDown, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 export type TableItem = {
@@ -14,10 +15,11 @@ const DEFAULT_TABLES: TableItem[] = [
   { id: 1, number: "1-Stol", capacity: 4, zone: "Zal", status: "Bo'sh" },
   { id: 2, number: "2-Stol", capacity: 2, zone: "Zal", status: "Band" },
   { id: 3, number: "3-Stol", capacity: 6, zone: "Kabina", status: "Bron qilingan" },
-  { id: 4, number: "4-Stol", capacity: 4, zone: "Terassa", status: "Bo'sh" },
+  { id: 4, number: "4-Stol", capacity: 4, zone: "Burchakdan", status: "Bo'sh" },
 ];
 
 export default function ManagerTablesSection() {
+  const { onBack } = useOutletContext<{ onBack: () => void }>();
   const [tables, setTables] = useState<TableItem[]>(() => {
     const saved = localStorage.getItem("restaurant_tables");
     if (saved) {
@@ -106,7 +108,7 @@ export default function ManagerTablesSection() {
     return table.status === filterStatus;
   });
 
-  const zonesList = ["Zal", "Kabina", "Terassa"];
+  const zonesList = ["Zal", "Kabina", "Burchakdan"];
   const statusesList: TableItem["status"][] = ["Bo'sh", "Band", "Bron qilingan"];
 
   const canSaveNewTable = newTable.number.trim().length > 0;
@@ -122,8 +124,12 @@ export default function ManagerTablesSection() {
         editingTable.status !== originalEditingTable.status)
   );
 
-  return (
+    return (
     <div className="space-y-6" onClick={() => setActiveDropdown(null)}>
+      <button type="button" onClick={onBack} className="inline-flex md:hidden w-fit items-center gap-1.5 text-xs font-normal text-gray-400 hover:text-white transition-colors cursor-pointer">
+        <ArrowLeft size={16} strokeWidth={1.8} />
+        <span>Orqaga qaytish</span>
+      </button>
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-white font-bold text-xl">
@@ -236,7 +242,13 @@ export default function ManagerTablesSection() {
       </div>
 
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+          onClick={() => {
+            setActiveDropdown(null);
+            setIsAddModalOpen(false);
+          }}
+        >
           <div 
             className="bg-[#141416] border border-white/10 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
@@ -312,7 +324,6 @@ export default function ManagerTablesSection() {
                 </div>
               </div>
 
-              {/* Custom Dropdown: Zal / Hudud */}
               <div className="relative">
                 <label className="block text-xs font-medium text-gray-400 mb-1.5">Zal / Hudud</label>
                 <div
@@ -350,7 +361,6 @@ export default function ManagerTablesSection() {
                 )}
               </div>
 
-              {/* Custom Dropdown: Holati */}
               <div className="relative">
                 <label className="block text-xs font-medium text-gray-400 mb-1.5">Holati</label>
                 <div
@@ -410,7 +420,13 @@ export default function ManagerTablesSection() {
       )}
 
       {editingTable && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+          onClick={() => {
+            setActiveDropdown(null);
+            setEditingTable(null);
+          }}
+        >
           <div 
             className="bg-[#141416] border border-white/10 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
@@ -485,7 +501,6 @@ export default function ManagerTablesSection() {
                 </div>
               </div>
 
-              {/* Custom Dropdown Edit: Zal / Hudud */}
               <div className="relative">
                 <label className="block text-xs font-medium text-gray-400 mb-1.5">Zal / Hudud</label>
                 <div
@@ -523,7 +538,6 @@ export default function ManagerTablesSection() {
                 )}
               </div>
 
-              {/* Custom Dropdown Edit: Holati */}
               <div className="relative">
                 <label className="block text-xs font-medium text-gray-400 mb-1.5">Holati</label>
                 <div

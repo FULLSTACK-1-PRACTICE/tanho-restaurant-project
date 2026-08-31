@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { menuItems, type MenuItem } from "../../../data/menuData";
 import Initial from "../../../assets/images/Menu/Additional-Images/Initial.webp";
@@ -45,39 +45,182 @@ function CategoryTabs({
   activeCategory,
   onChange,
 }: CategoryTabsProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const [isCompact, setIsCompact] = useState(true);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [trackWidth, setTrackWidth] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const dragState = useRef({
+    isDragging: false,
+    startX: 0,
+    startOffset: 0,
+    moved: false,
+  });
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsCompact(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    const containerEl = containerRef.current;
+    const trackEl = trackRef.current;
+    if (!containerEl || !trackEl) return;
+
+    const measure = () => {
+      setContainerWidth(containerEl.clientWidth);
+      setTrackWidth(trackEl.scrollWidth);
+    };
+
+    measure();
+
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(containerEl);
+    resizeObserver.observe(trackEl);
+    window.addEventListener("resize", measure);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  const maxOffset = Math.max(0, trackWidth - containerWidth);
+  const clampedOffset = Math.min(Math.max(offset, 0), maxOffset);
+
+  const clamp = (value: number) => Math.min(Math.max(value, 0), maxOffset);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isCompact) return;
+    dragState.current = {
+      isDragging: true,
+      startX: e.clientX,
+      startOffset: clampedOffset,
+      moved: false,
+    };
+    setIsDragging(true);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isCompact || !dragState.current.isDragging) return;
+    const delta = dragState.current.startX - e.clientX;
+    if (Math.abs(delta) > 3) dragState.current.moved = true;
+    setOffset(clamp(dragState.current.startOffset + delta));
+  };
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (dragState.current.isDragging) {
+      try {
+        (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // frezzing error
+      }
+    }
+    dragState.current.isDragging = false;
+    setIsDragging(false);
+  };
+
+  const isScrollable = isCompact && maxOffset > 0;
+  const thumbWidthPct = containerWidth
+    ? Math.max(20, (containerWidth / Math.max(trackWidth, containerWidth)) * 100)
+    : 100;
+  const thumbLeftPct = maxOffset > 0 ? (clampedOffset / maxOffset) * (100 - thumbWidthPct) : 0;
+
   return (
-    <div className="w-full rounded-[20px] border border-white/10 bg-[#161a1d]/90 p-2.5 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-      <div className="flex w-full items-center justify-between gap-2 overflow-x-auto no-scrollbar scroll-smooth">
-        {categories.map((category) => {
-          const Icon = category.icon;
-          const isActive = activeCategory === category.name;
+    <div className="relative w-full rounded-[20px] border border-white/10 bg-[#161a1d]/90 p-3 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+      <div
+        ref={containerRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endDrag}
+        onPointerLeave={endDrag}
+        onPointerCancel={endDrag}
+        className="cursor-grab overflow-hidden active:cursor-grabbing [touch-action:pan-y] sm:cursor-auto sm:overflow-visible"
+      >
+        <div
+          ref={trackRef}
+          className="flex w-max items-center gap-2 sm:w-full sm:justify-between"
+          style={{
+            transform: isCompact ? `translateX(-${clampedOffset}px)` : "none",
+            transition: isDragging ? "none" : "transform 200ms ease-out",
+          }}
+        >
+          {categories.map((category) => {
+            const Icon = category.icon;
+            const isActive = activeCategory === category.name;
 
-          return (
-            <button
-              key={category.name}
-              type="button"
-              onClick={() => onChange(category.name)}
-              className={`group flex flex-1 min-w-fit shrink-0 cursor-pointer select-none items-center justify-center gap-2.5 rounded-xl px-4 py-3 text-xs font-medium transition-colors duration-300 focus:outline-none focus-visible:outline-none focus:ring-0 active:outline-none ${
-                isActive
-                  ? "bg-gradient-to-r from-[#e5ad45] to-[#c89228] text-black font-semibold"
-                  : "text-gray-300 hover:bg-white/5 hover:text-[#e5ad45]"
-              }`}
-            >
-              <Icon
-                size={18}
-                strokeWidth={1.8}
-                className={`shrink-0 transition-transform duration-300 group-hover:scale-110 ${
-                  isActive ? "text-black" : "text-[#d9a441]"
+            return (
+              <button
+                key={category.name}
+                type="button"
+                onClick={() => {
+                  if (dragState.current.moved) {
+                    dragState.current.moved = false;
+                    return;
+                  }
+                  onChange(category.name);
+                }}
+                className={`group flex flex-1 min-w-fit shrink-0 cursor-pointer select-none items-center justify-center gap-2.5 rounded-xl px-4 py-3 text-xs font-medium transition-colors duration-300 focus:outline-none focus-visible:outline-none focus:ring-0 active:outline-none ${
+                  isActive
+                    ? "bg-gradient-to-r from-[#e5ad45] to-[#c89228] text-black font-semibold"
+                    : "text-gray-300 hover:bg-white/5 hover:text-[#e5ad45]"
                 }`}
-              />
+              >
+                <Icon
+                  size={18}
+                  strokeWidth={1.8}
+                  className={`shrink-0 transition-transform duration-300 group-hover:scale-110 ${
+                    isActive ? "text-black" : "text-[#d9a441]"
+                  }`}
+                />
 
-              <span className="whitespace-nowrap">
-                {category.name}
-              </span>
-            </button>
-          );
-        })}
+                <span className="whitespace-nowrap">
+                  {category.name}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
+
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[#161a1d] via-[#161a1d]/80 to-transparent transition-opacity duration-200 sm:hidden ${
+          clampedOffset > 4 ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-[#161a1d] via-[#161a1d]/80 to-transparent transition-opacity duration-200 sm:hidden ${
+          clampedOffset < maxOffset - 4 ? "opacity-100" : "opacity-0"
+        }`}
+      />
+
+      {isScrollable && (
+        <div className="mt-2.5 flex items-center justify-between px-2 sm:hidden">
+          <ChevronLeft size={11} className="shrink-0 text-[#545b62]" />
+
+          <div className="relative mx-2.5 h-[4px] w-full rounded-full bg-[#1b1c1e]/40 backdrop-blur-sm">
+            <div
+              className="absolute inset-y-0 rounded-full bg-[#525960] transition-[left,width] duration-75 hover:bg-[#6c747d]"
+              style={{
+                width: `${thumbWidthPct}%`,
+                left: `${thumbLeftPct}%`,
+              }}
+            />
+          </div>
+
+          <ChevronRight size={11} className="shrink-0 text-[#545b62]" />
+        </div>
+      )}
     </div>
   );
 }
@@ -254,7 +397,6 @@ const MenuPage = () => {
     toggleFavorite(item);
   };
 
-  // Ekranda ko'rinadigan barcha mahsulotlar
   const visibleItems = items
     .filter((it) => it.status === "Mavjud")
     .filter(
@@ -263,7 +405,6 @@ const MenuPage = () => {
         it.category === activeCategory,
     );
 
-  // Faqat Asosiy taomlar (Osh, Milliy taomlar, Grill) soni
   const foodOnlyCount = items.filter(
     (it) =>
       it.status === "Mavjud" &&

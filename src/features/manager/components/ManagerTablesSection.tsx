@@ -124,12 +124,14 @@ export default function ManagerTablesSection() {
         editingTable.status !== originalEditingTable.status)
   );
 
-    return (
+  return (
     <div className="space-y-6" onClick={() => setActiveDropdown(null)}>
       <button type="button" onClick={onBack} className="inline-flex md:hidden w-fit items-center gap-1.5 text-xs font-normal text-gray-400 hover:text-white transition-colors cursor-pointer">
         <ArrowLeft size={16} strokeWidth={1.8} />
         <span>Orqaga qaytish</span>
       </button>
+      
+      {/* Header va Amallar section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-white font-bold text-xl">
@@ -139,16 +141,17 @@ export default function ManagerTablesSection() {
           <p className="text-xs text-gray-400 mt-1">Menejer / Stollar ro'yxati</p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex bg-[#141416] p-1 rounded-full border border-white/5">
+        {/* Filter va Tugma section - bir xil tekislik va balandlikda (items-center) */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+          <div className="flex items-center bg-[#141416] p-1 rounded-full border border-white/5 w-full sm:w-auto h-11">
             {["Barchasi", "Bo'sh", "Band", "Bron qilingan"].map((status) => (
               <button
                 key={status}
                 type="button"
                 onClick={() => setFilterStatus(status)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                className={`px-3.5 h-full rounded-full text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer flex-1 sm:flex-none flex items-center justify-center text-center ${
                   filterStatus === status
-                    ? "bg-[#DCAE4D] text-black shadow-lg"
+                    ? "bg-[#DCAE4D] text-black shadow-md"
                     : "text-gray-400 hover:text-white"
                 }`}
               >
@@ -164,7 +167,7 @@ export default function ManagerTablesSection() {
               setErrorMsg("");
               setIsAddModalOpen(true);
             }}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#DCAE4D] hover:bg-[#c99b3c] text-black text-xs font-bold transition-all cursor-pointer shadow-md"
+            className="inline-flex items-center justify-center gap-2 px-5 h-11 rounded-full bg-[#DCAE4D] hover:bg-[#c99b3c] text-black text-xs font-bold transition-all cursor-pointer shadow-md w-full sm:w-auto shrink-0 whitespace-nowrap"
           >
             <Plus size={16} /> Stol qo'shish
           </button>

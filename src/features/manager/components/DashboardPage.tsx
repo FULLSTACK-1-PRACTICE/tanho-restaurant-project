@@ -1,9 +1,11 @@
+import { useState, useEffect } from "react";
 import {
   Table2,
   CheckCircle2,
   Clock,
   ArrowRight,
   Users,
+  LayoutDashboard,
 } from "lucide-react";
 import { StatCard } from "./StatCard";
 
@@ -25,6 +27,23 @@ export default function DashboardPage({
   reservations = [],
   onViewAllReservations,
 }: DashboardPageProps) {
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+
+  useEffect(() => {
+    // 3 soniyadan so'ng tepaga sirpanib yo'qolish animatsiyasini boshlash
+    const timer = setTimeout(() => {
+      setIsAnimating(true);
+
+      // Animatsiya tugagach DOM dan to'liq olib tashlash (500ms duration ga mos)
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 500);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const confirmedReservations = reservations.filter(
     (r) => r.status === "Tasdiqlandi"
   ).length;
@@ -38,6 +57,34 @@ export default function DashboardPage({
 
   return (
     <div className="space-y-6">
+      {/* Admin dashboard bilan bir xil tuzilishdagi va animatsiyali Menejer Xush kelibsiz banneri */}
+      {isVisible && (
+        <section
+          className={`relative rounded-2xl border border-white/10 bg-[#121619] p-5 sm:p-6 transition-all duration-500 ease-in-out ${
+            isAnimating
+              ? "opacity-0 -translate-y-6 scale-95 max-h-0 p-0 overflow-hidden border-0 mb-0"
+              : "opacity-100 translate-y-0 scale-100 max-h-40"
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            <div className="rounded-xl bg-amber-500/15 p-3 text-amber-400">
+              <LayoutDashboard size={22} />
+            </div>
+
+            <div>
+              <h1 className="text-xl font-bold text-white sm:text-2xl">
+                Xush kelibsiz, Menejer!
+              </h1>
+
+              <p className="mt-1 text-sm text-gray-400">
+                Restoran rezervatsiyalari va stollar holatini shu yerdan boshqaring.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Statistik kartalar */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         <StatCard
           icon={Table2}
@@ -70,6 +117,7 @@ export default function DashboardPage({
         />
       </div>
 
+      {/* So'nggi rezervatsiyalar */}
       <div className="bg-[#111113] border border-white/5 rounded-2xl p-5">
         <div className="flex items-center justify-between mb-5">
           <div>

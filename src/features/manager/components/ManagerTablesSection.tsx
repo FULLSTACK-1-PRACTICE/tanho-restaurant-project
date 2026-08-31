@@ -1,34 +1,78 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { useOutletContext } from "react-router-dom";
-import { Plus, Trash2, Edit, X, Users, LayoutGrid, AlertCircle, Check, ChevronDown, ArrowLeft } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Edit,
+  X,
+  Users,
+  LayoutGrid,
+  AlertCircle,
+  Check,
+  ChevronDown,
+  ArrowLeft,
+} from "lucide-react";
 import { toast } from "sonner";
 
 export type TableItem = {
   id: number;
   number: string | number;
   capacity: number;
-  zone: string;
+  zone:
+    | "Asosiy zal"
+    | "Kabinalar"
+    | "Banket zali (2-chi qavat)"
+    | "Bayram zali (Podval)";
   status: "Bo'sh" | "Band" | "Bron qilingan";
 };
 
 const DEFAULT_TABLES: TableItem[] = [
-  { id: 1, number: "1-Stol", capacity: 4, zone: "Zal", status: "Bo'sh" },
-  { id: 2, number: "2-Stol", capacity: 2, zone: "Zal", status: "Band" },
-  { id: 3, number: "3-Stol", capacity: 6, zone: "Kabina", status: "Bron qilingan" },
-  { id: 4, number: "4-Stol", capacity: 4, zone: "Burchakdan", status: "Bo'sh" },
+  {
+    id: 1,
+    number: "1-Stol",
+    capacity: 4,
+    zone: "Asosiy zal",
+    status: "Bo'sh",
+  },
+  {
+    id: 2,
+    number: "2-Stol",
+    capacity: 2,
+    zone: "Asosiy zal",
+    status: "Band",
+  },
+  {
+    id: 3,
+    number: "3-Kabina",
+    capacity: 6,
+    zone: "Kabinalar",
+    status: "Bron qilingan",
+  },
+  {
+    id: 4,
+    number: "4-Stol",
+    capacity: 10,
+    zone: "Banket zali (2-chi qavat)",
+    status: "Bo'sh",
+  },
 ];
 
 export default function ManagerTablesSection() {
   const { onBack } = useOutletContext<{ onBack: () => void }>();
+
   const [tables, setTables] = useState<TableItem[]>(() => {
     const saved = localStorage.getItem("restaurant_tables");
+
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+
+        return parsed;
       } catch (e) {
         console.error(e);
       }
     }
+
     return DEFAULT_TABLES;
   });
 
@@ -43,13 +87,12 @@ export default function ManagerTablesSection() {
   const [newTable, setNewTable] = useState({
     number: "",
     capacity: "4",
-    zone: "Zal",
+    zone: "Asosiy zal" as TableItem["zone"],
     status: "Bo'sh" as TableItem["status"],
   });
 
   const [errorMsg, setErrorMsg] = useState("");
   const [editErrorMsg, setEditErrorMsg] = useState("");
-
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const handleAddTable = (e: FormEvent) => {
@@ -75,12 +118,20 @@ export default function ManagerTablesSection() {
     setTables((prev) => [item, ...prev]);
     toast.success("Stol qo‘shildi!");
     setIsAddModalOpen(false);
-    setNewTable({ number: "", capacity: "4", zone: "Zal", status: "Bo'sh" });
+
+    setNewTable({
+      number: "",
+      capacity: "4",
+      zone: "Asosiy zal",
+      status: "Bo'sh",
+    });
   };
 
   const handleUpdateTable = (e: FormEvent) => {
     e.preventDefault();
+
     if (!editingTable) return;
+
     setEditErrorMsg("");
 
     const trimmedNumber = String(editingTable.number).trim();
@@ -92,8 +143,13 @@ export default function ManagerTablesSection() {
     }
 
     setTables((prev) =>
-      prev.map((t) => (t.id === editingTable.id ? { ...editingTable, number: trimmedNumber } : t))
+      prev.map((t) =>
+        t.id === editingTable.id
+          ? { ...editingTable, number: trimmedNumber }
+          : t
+      )
     );
+
     toast.success("Stol tahrirlandi!");
     setEditingTable(null);
   };
@@ -108,13 +164,25 @@ export default function ManagerTablesSection() {
     return table.status === filterStatus;
   });
 
-  const zonesList = ["Zal", "Kabina", "Burchakdan"];
-  const statusesList: TableItem["status"][] = ["Bo'sh", "Band", "Bron qilingan"];
+  const zonesList: TableItem["zone"][] = [
+    "Asosiy zal",
+    "Kabinalar",
+    "Banket zali (2-chi qavat)",
+    "Bayram zali (Podval)",
+  ];
+
+  const statusesList: TableItem["status"][] = [
+    "Bo'sh",
+    "Band",
+    "Bron qilingan",
+  ];
 
   const canSaveNewTable = newTable.number.trim().length > 0;
+
   const originalEditingTable = editingTable
     ? tables.find((table) => table.id === editingTable.id)
     : null;
+
   const hasEditChanges = Boolean(
     editingTable &&
       originalEditingTable &&
@@ -125,39 +193,52 @@ export default function ManagerTablesSection() {
   );
 
   return (
-    <div className="space-y-6" onClick={() => setActiveDropdown(null)}>
-      <button type="button" onClick={onBack} className="inline-flex md:hidden w-fit items-center gap-1.5 text-xs font-normal text-gray-400 hover:text-white transition-colors cursor-pointer">
+    <div
+      className="space-y-6"
+      onClick={() => setActiveDropdown(null)}
+    >
+      <button
+        type="button"
+        onClick={onBack}
+        className="inline-flex md:hidden w-fit items-center gap-1.5 text-xs font-normal text-gray-400 hover:text-white transition-colors cursor-pointer"
+      >
         <ArrowLeft size={16} strokeWidth={1.8} />
         <span>Orqaga qaytish</span>
       </button>
-      
-      {/* Header va Amallar section */}
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-white font-bold text-xl">
-            <LayoutGrid className="text-[#DCAE4D]" size={24} />
+            <LayoutGrid
+              className="text-[#DCAE4D]"
+              size={24}
+            />
             Stollar Boshqaruvi
           </div>
-          <p className="text-xs text-gray-400 mt-1">Menejer / Stollar ro'yxati</p>
+
+          <p className="text-xs text-gray-400 mt-1">
+            Menejer / Stollar ro'yxati
+          </p>
         </div>
 
-        {/* Filter va Tugma section - bir xil tekislik va balandlikda (items-center) */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
           <div className="flex items-center bg-[#141416] p-1 rounded-full border border-white/5 w-full sm:w-auto h-11">
-            {["Barchasi", "Bo'sh", "Band", "Bron qilingan"].map((status) => (
-              <button
-                key={status}
-                type="button"
-                onClick={() => setFilterStatus(status)}
-                className={`px-3.5 h-full rounded-full text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer flex-1 sm:flex-none flex items-center justify-center text-center ${
-                  filterStatus === status
-                    ? "bg-[#DCAE4D] text-black shadow-md"
-                    : "text-gray-400 hover:text-white"
-                }`}
-              >
-                {status}
-              </button>
-            ))}
+            {["Barchasi", "Bo'sh", "Band", "Bron qilingan"].map(
+              (status) => (
+                <button
+                  key={status}
+                  type="button"
+                  onClick={() => setFilterStatus(status)}
+                  className={`px-3.5 h-full rounded-full text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer flex-1 sm:flex-none flex items-center justify-center text-center ${
+                    filterStatus === status
+                      ? "bg-[#DCAE4D] text-black shadow-md"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  {status}
+                </button>
+              )
+            )}
           </div>
 
           <button
@@ -169,18 +250,22 @@ export default function ManagerTablesSection() {
             }}
             className="inline-flex items-center justify-center gap-2 px-5 h-11 rounded-full bg-[#DCAE4D] hover:bg-[#c99b3c] text-black text-xs font-bold transition-all cursor-pointer shadow-md w-full sm:w-auto shrink-0 whitespace-nowrap"
           >
-            <Plus size={16} /> Stol qo'shish
+            <Plus size={16} />
+            Stol qo'shish
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {filteredTables.map((table) => {
-          let statusBg = "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+          let statusBg =
+            "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+
           if (table.status === "Band") {
             statusBg = "bg-red-500/10 text-red-400 border-red-500/20";
           } else if (table.status === "Bron qilingan") {
-            statusBg = "bg-amber-500/10 text-amber-400 border-amber-500/20";
+            statusBg =
+              "bg-amber-500/10 text-amber-400 border-amber-500/20";
           }
 
           return (
@@ -189,11 +274,14 @@ export default function ManagerTablesSection() {
               className="bg-[#141416] border border-white/5 rounded-2xl p-5 relative group hover:border-[#DCAE4D]/40 transition-all shadow-xl flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-4 gap-2">
                   <span className="px-3 py-1 rounded-lg bg-white/5 text-gray-300 text-xs font-medium border border-white/5">
                     {table.zone}
                   </span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${statusBg}`}>
+
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold border ${statusBg}`}
+                  >
                     {table.status}
                   </span>
                 </div>
@@ -202,15 +290,22 @@ export default function ManagerTablesSection() {
                   <h3 className="text-2xl font-black text-white tracking-wide">
                     {table.number}
                   </h3>
+
                   <div className="flex items-center justify-center gap-1.5 text-gray-400 text-xs mt-2 font-medium">
-                    <Users size={14} className="text-[#DCAE4D]" />
+                    <Users
+                      size={14}
+                      className="text-[#DCAE4D]"
+                    />
                     <span>{table.capacity} kishilik</span>
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-2">
-                <span className="text-[11px] text-gray-500 font-mono">ID: #{table.id.toString().slice(-4)}</span>
+                <span className="text-[11px] text-gray-500 font-mono">
+                  ID: #{table.id.toString().slice(-4)}
+                </span>
+
                 <div className="flex items-center gap-1.5">
                   <button
                     type="button"
@@ -223,6 +318,7 @@ export default function ManagerTablesSection() {
                   >
                     <Edit size={14} />
                   </button>
+
                   <button
                     type="button"
                     onClick={() => handleDelete(table.id)}
@@ -252,7 +348,7 @@ export default function ManagerTablesSection() {
             setIsAddModalOpen(false);
           }}
         >
-          <div 
+          <div
             className="bg-[#141416] border border-white/10 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
@@ -263,6 +359,7 @@ export default function ManagerTablesSection() {
                 </div>
                 Yangi stol qo'shish
               </h3>
+
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(false)}
@@ -272,21 +369,35 @@ export default function ManagerTablesSection() {
               </button>
             </div>
 
-            <form onSubmit={handleAddTable} noValidate className="p-6 space-y-4">
+            <form
+              onSubmit={handleAddTable}
+              noValidate
+              className="p-6 space-y-4"
+            >
               {errorMsg && (
                 <div className="flex items-center gap-2.5 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
-                  <AlertCircle size={16} className="shrink-0" />
+                  <AlertCircle
+                    size={16}
+                    className="shrink-0"
+                  />
                   <span>{errorMsg}</span>
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Stol raqami / Nomi</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                  Stol raqami / Nomi
+                </label>
+
                 <input
                   type="text"
                   value={newTable.number}
                   onChange={(e) => {
-                    setNewTable({ ...newTable, number: e.target.value });
+                    setNewTable({
+                      ...newTable,
+                      number: e.target.value,
+                    });
+
                     if (errorMsg) setErrorMsg("");
                   }}
                   placeholder="Masalan: 5-Stol"
@@ -295,32 +406,86 @@ export default function ManagerTablesSection() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Kishilar soni (Sig'imi)</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                  Kishilar soni (Sig'imi)
+                </label>
+
                 <div className="relative">
                   <input
                     type="number"
                     min="1"
                     value={newTable.capacity}
-                    onChange={(e) => setNewTable({ ...newTable, capacity: e.target.value })}
+                    onChange={(e) =>
+                      setNewTable({
+                        ...newTable,
+                        capacity: e.target.value,
+                      })
+                    }
                     className="w-full bg-[#1b1b1f] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#DCAE4D] transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pr-10"
                   />
+
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 select-none">
                     <button
                       type="button"
-                      onClick={() => setNewTable(prev => ({ ...prev, capacity: String(Math.max(1, Number(prev.capacity || 0) + 1)) }))}
+                      onClick={() =>
+                        setNewTable((prev) => ({
+                          ...prev,
+                          capacity: String(
+                            Math.max(
+                              1,
+                              Number(prev.capacity || 0) + 1
+                            )
+                          ),
+                        }))
+                      }
                       className="text-gray-400 hover:text-[#DCAE4D] transition-colors p-0.5 cursor-pointer"
                     >
-                      <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 5L5 1L9 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M1 5L5 1L9 5"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
+
                     <button
                       type="button"
-                      onClick={() => setNewTable(prev => ({ ...prev, capacity: String(Math.max(1, Number(prev.capacity || 0) - 1)) }))}
+                      onClick={() =>
+                        setNewTable((prev) => ({
+                          ...prev,
+                          capacity: String(
+                            Math.max(
+                              1,
+                              Number(prev.capacity || 0) - 1
+                            )
+                          ),
+                        }))
+                      }
                       className="text-gray-400 hover:text-[#DCAE4D] transition-colors p-0.5 cursor-pointer"
                     >
-                      <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M1 1L5 5L9 1"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -328,18 +493,35 @@ export default function ManagerTablesSection() {
               </div>
 
               <div className="relative">
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Zal / Hudud</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                  Zal / Hudud
+                </label>
+
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
-                    setActiveDropdown(activeDropdown === "add-zone" ? null : "add-zone");
+                    setActiveDropdown(
+                      activeDropdown === "add-zone"
+                        ? null
+                        : "add-zone"
+                    );
                   }}
                   className={`w-full bg-[#1b1b1f] border rounded-xl px-4 py-3 text-sm text-white flex items-center justify-between cursor-pointer transition-all ${
-                    activeDropdown === "add-zone" ? "border-[#DCAE4D] ring-1 ring-[#DCAE4D]" : "border-white/10 hover:border-[#DCAE4D]/50"
+                    activeDropdown === "add-zone"
+                      ? "border-[#DCAE4D] ring-1 ring-[#DCAE4D]"
+                      : "border-white/10 hover:border-[#DCAE4D]/50"
                   }`}
                 >
                   <span>{newTable.zone}</span>
-                  <ChevronDown size={16} className={`text-gray-400 transition-transform duration-200 ${activeDropdown === "add-zone" ? "rotate-180 text-[#DCAE4D]" : ""}`} />
+
+                  <ChevronDown
+                    size={16}
+                    className={`text-gray-400 transition-transform duration-200 ${
+                      activeDropdown === "add-zone"
+                        ? "rotate-180 text-[#DCAE4D]"
+                        : ""
+                    }`}
+                  />
                 </div>
 
                 {activeDropdown === "add-zone" && (
@@ -349,15 +531,26 @@ export default function ManagerTablesSection() {
                         key={z}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setNewTable({ ...newTable, zone: z });
+                          setNewTable({
+                            ...newTable,
+                            zone: z,
+                          });
                           setActiveDropdown(null);
                         }}
                         className={`px-4 py-2.5 text-sm flex items-center justify-between cursor-pointer transition-colors ${
-                          newTable.zone === z ? "bg-[#DCAE4D]/10 text-[#DCAE4D] font-medium" : "text-gray-300 hover:bg-white/5 hover:text-white"
+                          newTable.zone === z
+                            ? "bg-[#DCAE4D]/10 text-[#DCAE4D] font-medium"
+                            : "text-gray-300 hover:bg-white/5 hover:text-white"
                         }`}
                       >
                         <span>{z}</span>
-                        {newTable.zone === z && <Check size={16} className="text-[#DCAE4D]" />}
+
+                        {newTable.zone === z && (
+                          <Check
+                            size={16}
+                            className="text-[#DCAE4D]"
+                          />
+                        )}
                       </div>
                     ))}
                   </div>
@@ -365,18 +558,35 @@ export default function ManagerTablesSection() {
               </div>
 
               <div className="relative">
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Holati</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                  Holati
+                </label>
+
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
-                    setActiveDropdown(activeDropdown === "add-status" ? null : "add-status");
+                    setActiveDropdown(
+                      activeDropdown === "add-status"
+                        ? null
+                        : "add-status"
+                    );
                   }}
                   className={`w-full bg-[#1b1b1f] border rounded-xl px-4 py-3 text-sm text-white flex items-center justify-between cursor-pointer transition-all ${
-                    activeDropdown === "add-status" ? "border-[#DCAE4D] ring-1 ring-[#DCAE4D]" : "border-white/10 hover:border-[#DCAE4D]/50"
+                    activeDropdown === "add-status"
+                      ? "border-[#DCAE4D] ring-1 ring-[#DCAE4D]"
+                      : "border-white/10 hover:border-[#DCAE4D]/50"
                   }`}
                 >
                   <span>{newTable.status}</span>
-                  <ChevronDown size={16} className={`text-gray-400 transition-transform duration-200 ${activeDropdown === "add-status" ? "rotate-180 text-[#DCAE4D]" : ""}`} />
+
+                  <ChevronDown
+                    size={16}
+                    className={`text-gray-400 transition-transform duration-200 ${
+                      activeDropdown === "add-status"
+                        ? "rotate-180 text-[#DCAE4D]"
+                        : ""
+                    }`}
+                  />
                 </div>
 
                 {activeDropdown === "add-status" && (
@@ -386,15 +596,26 @@ export default function ManagerTablesSection() {
                         key={st}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setNewTable({ ...newTable, status: st });
+                          setNewTable({
+                            ...newTable,
+                            status: st,
+                          });
                           setActiveDropdown(null);
                         }}
                         className={`px-4 py-2.5 text-sm flex items-center justify-between cursor-pointer transition-colors ${
-                          newTable.status === st ? "bg-[#DCAE4D]/10 text-[#DCAE4D] font-medium" : "text-gray-300 hover:bg-white/5 hover:text-white"
+                          newTable.status === st
+                            ? "bg-[#DCAE4D]/10 text-[#DCAE4D] font-medium"
+                            : "text-gray-300 hover:bg-white/5 hover:text-white"
                         }`}
                       >
                         <span>{st}</span>
-                        {newTable.status === st && <Check size={16} className="text-[#DCAE4D]" />}
+
+                        {newTable.status === st && (
+                          <Check
+                            size={16}
+                            className="text-[#DCAE4D]"
+                          />
+                        )}
                       </div>
                     ))}
                   </div>
@@ -409,6 +630,7 @@ export default function ManagerTablesSection() {
                 >
                   Bekor qilish
                 </button>
+
                 <button
                   type="submit"
                   disabled={!canSaveNewTable}
@@ -430,7 +652,7 @@ export default function ManagerTablesSection() {
             setEditingTable(null);
           }}
         >
-          <div 
+          <div
             className="bg-[#141416] border border-white/10 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
@@ -441,6 +663,7 @@ export default function ManagerTablesSection() {
                 </div>
                 Stolni tahrirlash
               </h3>
+
               <button
                 type="button"
                 onClick={() => setEditingTable(null)}
@@ -450,21 +673,35 @@ export default function ManagerTablesSection() {
               </button>
             </div>
 
-            <form onSubmit={handleUpdateTable} noValidate className="p-6 space-y-4">
+            <form
+              onSubmit={handleUpdateTable}
+              noValidate
+              className="p-6 space-y-4"
+            >
               {editErrorMsg && (
                 <div className="flex items-center gap-2.5 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
-                  <AlertCircle size={16} className="shrink-0" />
+                  <AlertCircle
+                    size={16}
+                    className="shrink-0"
+                  />
                   <span>{editErrorMsg}</span>
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Stol raqami / Nomi</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                  Stol raqami / Nomi
+                </label>
+
                 <input
                   type="text"
                   value={editingTable.number}
                   onChange={(e) => {
-                    setEditingTable({ ...editingTable, number: e.target.value });
+                    setEditingTable({
+                      ...editingTable,
+                      number: e.target.value,
+                    });
+
                     if (editErrorMsg) setEditErrorMsg("");
                   }}
                   className="w-full bg-[#1b1b1f] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#DCAE4D] transition-colors"
@@ -472,32 +709,90 @@ export default function ManagerTablesSection() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Kishilar soni (Sig'imi)</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                  Kishilar soni (Sig'imi)
+                </label>
+
                 <div className="relative">
                   <input
                     type="number"
                     min="1"
                     value={editingTable.capacity}
-                    onChange={(e) => setEditingTable({ ...editingTable, capacity: Number(e.target.value) })}
+                    onChange={(e) =>
+                      setEditingTable({
+                        ...editingTable,
+                        capacity: Number(e.target.value),
+                      })
+                    }
                     className="w-full bg-[#1b1b1f] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#DCAE4D] transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pr-10"
                   />
+
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-0.5 select-none">
                     <button
                       type="button"
-                      onClick={() => setEditingTable(prev => prev ? ({ ...prev, capacity: Math.max(1, Number(prev.capacity || 0) + 1) }) : null)}
+                      onClick={() =>
+                        setEditingTable((prev) =>
+                          prev
+                            ? {
+                                ...prev,
+                                capacity: Math.max(
+                                  1,
+                                  Number(prev.capacity || 0) + 1
+                                ),
+                              }
+                            : null
+                        )
+                      }
                       className="text-gray-400 hover:text-[#DCAE4D] transition-colors p-0.5 cursor-pointer"
                     >
-                      <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 5L5 1L9 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M1 5L5 1L9 5"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
+
                     <button
                       type="button"
-                      onClick={() => setEditingTable(prev => prev ? ({ ...prev, capacity: Math.max(1, Number(prev.capacity || 0) - 1) }) : null)}
+                      onClick={() =>
+                        setEditingTable((prev) =>
+                          prev
+                            ? {
+                                ...prev,
+                                capacity: Math.max(
+                                  1,
+                                  Number(prev.capacity || 0) - 1
+                                ),
+                              }
+                            : null
+                        )
+                      }
                       className="text-gray-400 hover:text-[#DCAE4D] transition-colors p-0.5 cursor-pointer"
                     >
-                      <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M1 1L5 5L9 1"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -505,18 +800,35 @@ export default function ManagerTablesSection() {
               </div>
 
               <div className="relative">
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Zal / Hudud</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                  Zal / Hudud
+                </label>
+
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
-                    setActiveDropdown(activeDropdown === "edit-zone" ? null : "edit-zone");
+                    setActiveDropdown(
+                      activeDropdown === "edit-zone"
+                        ? null
+                        : "edit-zone"
+                    );
                   }}
                   className={`w-full bg-[#1b1b1f] border rounded-xl px-4 py-3 text-sm text-white flex items-center justify-between cursor-pointer transition-all ${
-                    activeDropdown === "edit-zone" ? "border-[#DCAE4D] ring-1 ring-[#DCAE4D]" : "border-white/10 hover:border-[#DCAE4D]/50"
+                    activeDropdown === "edit-zone"
+                      ? "border-[#DCAE4D] ring-1 ring-[#DCAE4D]"
+                      : "border-white/10 hover:border-[#DCAE4D]/50"
                   }`}
                 >
                   <span>{editingTable.zone}</span>
-                  <ChevronDown size={16} className={`text-gray-400 transition-transform duration-200 ${activeDropdown === "edit-zone" ? "rotate-180 text-[#DCAE4D]" : ""}`} />
+
+                  <ChevronDown
+                    size={16}
+                    className={`text-gray-400 transition-transform duration-200 ${
+                      activeDropdown === "edit-zone"
+                        ? "rotate-180 text-[#DCAE4D]"
+                        : ""
+                    }`}
+                  />
                 </div>
 
                 {activeDropdown === "edit-zone" && (
@@ -526,15 +838,26 @@ export default function ManagerTablesSection() {
                         key={z}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setEditingTable({ ...editingTable, zone: z });
+                          setEditingTable({
+                            ...editingTable,
+                            zone: z,
+                          });
                           setActiveDropdown(null);
                         }}
                         className={`px-4 py-2.5 text-sm flex items-center justify-between cursor-pointer transition-colors ${
-                          editingTable.zone === z ? "bg-[#DCAE4D]/10 text-[#DCAE4D] font-medium" : "text-gray-300 hover:bg-white/5 hover:text-white"
+                          editingTable.zone === z
+                            ? "bg-[#DCAE4D]/10 text-[#DCAE4D] font-medium"
+                            : "text-gray-300 hover:bg-white/5 hover:text-white"
                         }`}
                       >
                         <span>{z}</span>
-                        {editingTable.zone === z && <Check size={16} className="text-[#DCAE4D]" />}
+
+                        {editingTable.zone === z && (
+                          <Check
+                            size={16}
+                            className="text-[#DCAE4D]"
+                          />
+                        )}
                       </div>
                     ))}
                   </div>
@@ -542,18 +865,35 @@ export default function ManagerTablesSection() {
               </div>
 
               <div className="relative">
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Holati</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                  Holati
+                </label>
+
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
-                    setActiveDropdown(activeDropdown === "edit-status" ? null : "edit-status");
+                    setActiveDropdown(
+                      activeDropdown === "edit-status"
+                        ? null
+                        : "edit-status"
+                    );
                   }}
                   className={`w-full bg-[#1b1b1f] border rounded-xl px-4 py-3 text-sm text-white flex items-center justify-between cursor-pointer transition-all ${
-                    activeDropdown === "edit-status" ? "border-[#DCAE4D] ring-1 ring-[#DCAE4D]" : "border-white/10 hover:border-[#DCAE4D]/50"
+                    activeDropdown === "edit-status"
+                      ? "border-[#DCAE4D] ring-1 ring-[#DCAE4D]"
+                      : "border-white/10 hover:border-[#DCAE4D]/50"
                   }`}
                 >
                   <span>{editingTable.status}</span>
-                  <ChevronDown size={16} className={`text-gray-400 transition-transform duration-200 ${activeDropdown === "edit-status" ? "rotate-180 text-[#DCAE4D]" : ""}`} />
+
+                  <ChevronDown
+                    size={16}
+                    className={`text-gray-400 transition-transform duration-200 ${
+                      activeDropdown === "edit-status"
+                        ? "rotate-180 text-[#DCAE4D]"
+                        : ""
+                    }`}
+                  />
                 </div>
 
                 {activeDropdown === "edit-status" && (
@@ -563,15 +903,26 @@ export default function ManagerTablesSection() {
                         key={st}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setEditingTable({ ...editingTable, status: st });
+                          setEditingTable({
+                            ...editingTable,
+                            status: st,
+                          });
                           setActiveDropdown(null);
                         }}
                         className={`px-4 py-2.5 text-sm flex items-center justify-between cursor-pointer transition-colors ${
-                          editingTable.status === st ? "bg-[#DCAE4D]/10 text-[#DCAE4D] font-medium" : "text-gray-300 hover:bg-white/5 hover:text-white"
+                          editingTable.status === st
+                            ? "bg-[#DCAE4D]/10 text-[#DCAE4D] font-medium"
+                            : "text-gray-300 hover:bg-white/5 hover:text-white"
                         }`}
                       >
                         <span>{st}</span>
-                        {editingTable.status === st && <Check size={16} className="text-[#DCAE4D]" />}
+
+                        {editingTable.status === st && (
+                          <Check
+                            size={16}
+                            className="text-[#DCAE4D]"
+                          />
+                        )}
                       </div>
                     ))}
                   </div>
@@ -586,6 +937,7 @@ export default function ManagerTablesSection() {
                 >
                   Bekor qilish
                 </button>
+
                 <button
                   type="submit"
                   disabled={!hasEditChanges}

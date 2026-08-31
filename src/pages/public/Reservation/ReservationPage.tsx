@@ -43,10 +43,10 @@ const ReservationPage: React.FC = () => {
 
   const guestOptions = ["1 kishi", "2 kishi", "3 kishi", "4 kishi", "5+ kishi"];
   const tableTypeOptions = [
-    "Istalgan stol turi",
-    "Kabina",
     "Zal",
-    "Devor Oldidan",
+    "Kabina",
+    "Bayram Zali(Tug'ilgan Kunlar uchun Podval)",
+    "Banket Zali(Ba'zimlar uchun 2-chi qavat)",
   ];
 
   const phoneRegex = /^\+?998\d{9}$/;

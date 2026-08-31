@@ -254,6 +254,7 @@ const MenuPage = () => {
     toggleFavorite(item);
   };
 
+  // Ekranda ko'rinadigan barcha mahsulotlar
   const visibleItems = items
     .filter((it) => it.status === "Mavjud")
     .filter(
@@ -261,6 +262,13 @@ const MenuPage = () => {
         activeCategory === "Barchasi" ||
         it.category === activeCategory,
     );
+
+  // Faqat Asosiy taomlar (Osh, Milliy taomlar, Grill) soni
+  const foodOnlyCount = items.filter(
+    (it) =>
+      it.status === "Mavjud" &&
+      ["Osh", "Milliy taomlar", "Grill"].includes(it.category)
+  ).length;
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(
@@ -337,7 +345,15 @@ const MenuPage = () => {
 
           {visibleItems.length > 0 && (
             <span className="hidden text-xs text-gray-500 sm:block">
-              {visibleItems.length} ta taom
+              {activeCategory === "Barchasi"
+                ? `${foodOnlyCount} ta taom`
+                : activeCategory === "Salatlar"
+                ? `${visibleItems.length} ta salat`
+                : activeCategory === "Ichimliklar"
+                ? `${visibleItems.length} ta ichimlik`
+                : activeCategory === "Desertlar"
+                ? `${visibleItems.length} ta desert`
+                : `${visibleItems.length} ta taom`}
             </span>
           )}
         </div>

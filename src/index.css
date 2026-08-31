@@ -151,9 +151,7 @@
   scrollbar-width: thin;
   scrollbar-color: #2a3036 #121619;
 }
-
-/* --- Sonner Toast Responsive Sozlamasi --- */
-/* Mobil qurilmalar uchun (tepada markazda turadi) */
+/* Sonner Toast Customization */
 [data-sonner-toaster] {
   position: fixed !important;
   top: 16px !important;
@@ -176,7 +174,6 @@
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5) !important;
 }
 
-/* Desktop ekranlar uchun (Asl holatiga qaytarildi - o'ng tomonda chiqadi) */
 @media (min-width: 768px) {
   [data-sonner-toaster] {
     left: auto !important;

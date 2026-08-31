@@ -174,12 +174,12 @@ export default function TanhoFooter() {
   ]
 
   const categoryLinks = [
-    { label: 'Salatlar', path: '/menu?category=salatlar' },
-    { label: 'Issiq taomlar', path: '/menu?category=issiq-taomlar' },
-    { label: 'Milliy taomlar', path: '/menu?category=milliy-taomlar' },
-    { label: 'Shashliklar', path: '/menu?category=shashliklar' },
-    { label: 'Ichimliklar', path: '/menu?category=ichimliklar' },
-    { label: 'Desertlar', path: '/menu?category=desertlar' },
+    { label: 'Salatlar', path: '/menu?category=Salatlar' },
+    { label: 'Osh', path: '/menu?category=Osh' },
+    { label: 'Milliy taomlar', path: '/menu?category=Milliy%20taomlar' },
+    { label: 'Grill', path: '/menu?category=Grill' },
+    { label: 'Ichimliklar', path: '/menu?category=Ichimliklar' },
+    { label: 'Desertlar', path: '/menu?category=Desertlar' },
   ]
 
   const usefulLinks = [
@@ -187,7 +187,7 @@ export default function TanhoFooter() {
     { label: 'Maxsus takliflar', path: '/contact' },
     { label: 'Korporativ xizmat', path: '/contact' },
     { label: 'Fikr Mulohaza', path: '/#user-comments' },
-    { label: 'Maxfiylik siyosati', path: '/privacy-policy' }, // TOG'RILANDI
+    { label: 'Maxfiylik siyosati', path: '/privacy-policy' },
   ]
 
   const colDivider =

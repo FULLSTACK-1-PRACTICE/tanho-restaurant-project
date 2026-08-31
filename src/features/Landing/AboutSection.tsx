@@ -119,7 +119,7 @@ const AboutPage: React.FC = () => {
 
               <div className="flex flex-col">
                 <span className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 tracking-tight leading-tight">
-                  50+
+                  15+
                 </span>
 
                 <span className="text-xs text-gray-400 font-medium tracking-wide">

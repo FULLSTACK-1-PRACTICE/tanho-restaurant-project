@@ -38,11 +38,9 @@ export function DashboardSection({ goTo }: DashboardSectionProps) {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   useEffect(() => {
-    // 4 soniyadan so'ng yo'qolish animatsiyasini boshlash
     const timer = setTimeout(() => {
       setIsAnimating(true);
       
-      // Animatsiya tugagach DOM dan to'liq olib tashlash (500ms duration ga mos)
       setTimeout(() => {
         setIsVisible(false);
       }, 500);

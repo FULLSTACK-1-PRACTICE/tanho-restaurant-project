@@ -8,7 +8,9 @@ import {
   Mail,
   Phone,
   Shield,
-  ShoppingBag,
+  Calendar,
+  Activity,
+  Clock,
   ArrowLeft,
 } from "lucide-react";
 
@@ -116,7 +118,7 @@ export function ProfileSection({ onGoHome }: ProfileSectionProps) {
   };
 
   return (
-    <div className="w-full max-w-lg space-y-4">
+    <div className="w-full space-y-6">
       {onGoHome && (
         <button
           type="button"
@@ -128,9 +130,16 @@ export function ProfileSection({ onGoHome }: ProfileSectionProps) {
         </button>
       )}
 
+      <div>
+        <h1 className="text-2xl font-bold text-white">Profil</h1>
+        <p className="mt-1 text-xs text-gray-400">
+          Shaxsiya ma'lumotlaringiz va profil sozlamalarini boshqaring.
+        </p>
+      </div>
+
       {successMessage && (
-        <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-[#1e1e22] px-4 py-3 text-xs text-white shadow-2xl animate-in fade-in slide-in-from-top-2">
-          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-black">
+        <div className="flex items-center gap-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-xs text-emerald-400">
+          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-black">
             <Check size={12} strokeWidth={3} />
           </div>
           <span className="font-medium">{successMessage}</span>
@@ -143,150 +152,182 @@ export function ProfileSection({ onGoHome }: ProfileSectionProps) {
         </div>
       )}
 
-      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#16171a] p-6 shadow-2xl">
-        <div className="pointer-events-none absolute top-0 right-0 left-0 h-28 bg-gradient-to-b from-amber-500/20 via-amber-500/5 to-transparent" />
+      <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#141416] shadow-2xl">
+        <div className="relative h-36 w-full bg-[#271e16]/60 p-4">
+          <div className="flex justify-end">
+            <span className="rounded-full border border-amber-500/20 bg-[#2b2219] px-3 py-1 text-xs font-medium text-amber-500">
+              Bosh Administrator
+            </span>
+          </div>
+        </div>
 
-        <div className="relative z-10 mb-6 flex items-center gap-5">
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-[#1c1d22] text-2xl font-bold text-amber-500 shadow-xl">
-            {photo ? (
-              <img
-                loading="lazy"
-                src={photo}
-                alt="Profil"
-                className="h-full w-full object-cover"
+        <div className="px-6 pb-6">
+          <div className="relative -mt-16 mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+              <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-[#141416] bg-[#1c1d22] text-3xl font-bold text-amber-500 shadow-2xl">
+                {photo ? (
+                  <img
+                    loading="lazy"
+                    src={photo}
+                    alt="Profil"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  name.charAt(0).toUpperCase()
+                )}
+              </div>
+
+              <div className="mb-1 space-y-0.5">
+                <h2 className="text-xl font-bold text-white">{name}</h2>
+                <p className="text-xs text-gray-400">{email}</p>
+              </div>
+            </div>
+
+            <div className="shrink-0">
+              <label
+                htmlFor="admin-photo-upload"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-[#1e1f23] px-3.5 py-2 text-xs font-medium text-gray-300 transition-colors hover:bg-white/10 active:scale-95"
+              >
+                <Camera size={14} className="text-amber-500" />
+                <span>Rasmni almashtirish</span>
+              </label>
+              <input
+                id="admin-photo-upload"
+                type="file"
+                accept="image/*"
+                onChange={handlePhoto}
+                className="hidden"
               />
-            ) : (
-              name.charAt(0).toUpperCase()
-            )}
+              {errors.photo && (
+                <p className="mt-1.5 text-[11px] text-red-400">{errors.photo}</p>
+              )}
+            </div>
           </div>
 
-          <div className="space-y-1">
-            <h2 className="text-xl font-bold tracking-wide text-white">{name}</h2>
-            <p className="text-xs text-gray-400">{email}</p>
-          </div>
-        </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <label className="mb-1.5 flex items-center gap-2 text-xs font-medium text-gray-400">
+                <User size={14} className="text-gray-400" />
+                <span>F.I.Sh (Ism va Familiya)</span>
+              </label>
+              <input
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (errors.name) setErrors((p) => ({ ...p, name: undefined }));
+                }}
+                className={`w-full rounded-xl border bg-[#1a1b1e] px-3.5 py-2.5 text-sm font-medium text-white outline-none transition-colors ${
+                  errors.name
+                    ? "border-red-500/60 focus:border-red-500"
+                    : "border-white/5 focus:border-amber-500/40"
+                }`}
+              />
+              {errors.name && (
+                <p className="mt-1 text-[11px] text-red-400">{errors.name}</p>
+              )}
+            </div>
 
-        <div className="mb-6">
-          <label
-            htmlFor="admin-photo-upload"
-            className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-[#222328] px-4 py-2 text-xs font-medium text-gray-200 transition-colors hover:bg-white/10 active:scale-95"
-          >
-            <Camera size={14} className="text-amber-500" />
-            <span>Rasmni almashtirish</span>
-          </label>
-          <input
-            id="admin-photo-upload"
-            type="file"
-            accept="image/*"
-            onChange={handlePhoto}
-            className="hidden"
-          />
-          {errors.photo && (
-            <p className="mt-1.5 text-[11px] text-red-400">{errors.photo}</p>
-          )}
-        </div>
+            <div>
+              <label className="mb-1.5 flex items-center gap-2 text-xs font-medium text-gray-400">
+                <Phone size={14} className="text-gray-400" />
+                <span>Telefon raqami</span>
+              </label>
+              <input
+                value={phone}
+                placeholder="+998 90 123 45 67"
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  if (errors.phone) setErrors((p) => ({ ...p, phone: undefined }));
+                }}
+                className={`w-full rounded-xl border bg-[#1a1b1e] px-3.5 py-2.5 text-sm font-medium text-white outline-none transition-colors ${
+                  errors.phone
+                    ? "border-red-500/60 focus:border-red-500"
+                    : "border-white/5 focus:border-amber-500/40"
+                }`}
+              />
+              {errors.phone && (
+                <p className="mt-1 text-[11px] text-red-400">{errors.phone}</p>
+              )}
+            </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="mb-1.5 flex items-center gap-2 text-xs font-medium text-gray-400">
-              <User size={14} className="text-gray-400" />
-              <span>F.I.Sh (Ism va Familiya)</span>
-            </label>
-            <input
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                if (errors.name) setErrors((p) => ({ ...p, name: undefined }));
-              }}
-              className={`w-full rounded-xl border bg-[#1c1d22] px-3.5 py-2.5 text-sm font-medium text-white outline-none transition-colors ${
-                errors.name
-                  ? "border-red-500/60 focus:border-red-500"
-                  : "border-white/10 focus:border-amber-500/50"
-              }`}
-            />
-            {errors.name && (
-              <p className="mt-1 text-[11px] text-red-400">{errors.name}</p>
-            )}
-          </div>
+            <div>
+              <label className="mb-1.5 flex items-center gap-2 text-xs font-medium text-gray-400">
+                <Mail size={14} className="text-gray-400" />
+                <span>Email manzili</span>
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-xl border border-white/5 bg-[#1a1b1e] px-3.5 py-2.5 text-sm font-medium text-white outline-none transition-colors focus:border-amber-500/40"
+              />
+            </div>
 
-          <div>
-            <label className="mb-1.5 flex items-center gap-2 text-xs font-medium text-gray-400">
-              <Phone size={14} className="text-gray-400" />
-              <span>Telefon raqami</span>
-            </label>
-            <input
-              value={phone}
-              placeholder="+998 90 123 45 67"
-              onChange={(e) => {
-                setPhone(e.target.value);
-                if (errors.phone) setErrors((p) => ({ ...p, phone: undefined }));
-              }}
-              className={`w-full rounded-xl border bg-[#1c1d22] px-3.5 py-2.5 text-sm font-medium text-white outline-none transition-colors ${
-                errors.phone
-                  ? "border-red-500/60 focus:border-red-500"
-                  : "border-white/10 focus:border-amber-500/50"
-              }`}
-            />
-            {errors.phone && (
-              <p className="mt-1 text-[11px] text-red-400">{errors.phone}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="mb-1.5 flex items-center gap-2 text-xs font-medium text-gray-400">
-              <Mail size={14} className="text-gray-400" />
-              <span>Email manzili</span>
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-[#1c1d22] px-3.5 py-2.5 text-sm font-medium text-white outline-none transition-colors focus:border-amber-500/50"
-            />
+            <div>
+              <label className="mb-1.5 flex items-center gap-2 text-xs font-medium text-gray-400">
+                <Shield size={14} className="text-gray-400" />
+                <span>Tizimdagi Rol va Ruxsatlar</span>
+              </label>
+              <input
+                value="Bosh Administrator (To'liq huquqli)"
+                disabled
+                readOnly
+                className="w-full cursor-not-allowed select-none rounded-xl border border-white/5 bg-[#1a1b1e] px-3.5 py-2.5 text-sm font-medium text-amber-500/90 outline-none"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="mb-1.5 flex items-center gap-2 text-xs font-medium text-gray-400">
-              <Shield size={14} className="text-gray-400" />
-              <span>Tizimdagi Rol va Ruxsatlar</span>
-            </label>
-            <input
-              value="Bosh Administrator (To'liq huquqli)"
-              disabled
-              readOnly
-              className="w-full cursor-not-allowed select-none rounded-xl border border-white/10 bg-[#1c1d22]/50 px-3.5 py-2.5 text-sm font-medium text-amber-400/90 outline-none"
-            />
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={handleSave}
+              disabled={saving || !isChanged}
+              className="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#c2862b] px-5 py-2.5 text-xs font-bold text-black shadow-lg transition-all hover:bg-[#d49432] active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-[#c2862b]"
+            >
+              {saving ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin text-black" />
+                  <span>Saqlanmoqda...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4 text-black" />
+                  <span>O'zgarishlarni Saqlash</span>
+                </>
+              )}
+            </button>
           </div>
-        </div>
-
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={handleSave}
-            disabled={saving || !isChanged}
-            className="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-2.5 text-xs font-bold text-black shadow-lg transition-all hover:bg-amber-400 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-amber-500"
-          >
-            {saving ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin text-black" />
-                <span>Saqlanmoqda...</span>
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4 text-black" />
-                <span>O'zgarishlarni Saqlash</span>
-              </>
-            )}
-          </button>
         </div>
       </div>
 
-      <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#16171a] p-4 shadow-xl">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-500">
-          <ShoppingBag size={20} />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <div className="flex items-center gap-4 rounded-2xl border border-white/5 bg-[#141416] p-4 shadow-xl">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-500">
+            <Calendar size={20} />
+          </div>
+          <div>
+            <p className="text-xs font-medium text-gray-400">Bugungi Rezervatsiyalar</p>
+            <p className="text-lg font-bold text-white">2 ta</p>
+          </div>
         </div>
-        <div>
-          <p className="text-xs font-medium text-gray-400">Bugungi Rezervatsiyalar</p>
-          <p className="text-lg font-bold text-white">5 ta</p>
+
+        <div className="flex items-center gap-4 rounded-2xl border border-white/5 bg-[#141416] p-4 shadow-xl">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-500">
+            <Activity size={20} />
+          </div>
+          <div>
+            <p className="text-xs font-medium text-gray-400">Tizim holati</p>
+            <p className="text-lg font-bold text-emerald-500">Faol</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 rounded-2xl border border-white/5 bg-[#141416] p-4 shadow-xl">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-blue-500/20 bg-blue-500/10 text-blue-500">
+            <Clock size={20} />
+          </div>
+          <div>
+            <p className="text-xs font-medium text-gray-400">Oxirgi kirish</p>
+            <p className="text-lg font-bold text-white">Bugun, 09:15</p>
+          </div>
         </div>
       </div>
     </div>

@@ -263,7 +263,7 @@ export default function ProfilePage() {
           </div>
           <div>
             <p className="text-[11px] text-gray-400">Bugungi Rezervatsiyalar</p>
-            <p className="text-base font-bold text-white">48 ta</p>
+            <p className="text-base font-bold text-white">2 ta</p>
           </div>
         </div>
 

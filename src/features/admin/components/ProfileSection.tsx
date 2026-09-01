@@ -285,8 +285,8 @@ export function ProfileSection({ onGoHome }: ProfileSectionProps) {
           <ShoppingBag size={20} />
         </div>
         <div>
-          <p className="text-xs font-medium text-gray-400">Bugungi Buyurtmalar</p>
-          <p className="text-lg font-bold text-white">48 ta</p>
+          <p className="text-xs font-medium text-gray-400">Bugungi Rezervatsiyalar</p>
+          <p className="text-lg font-bold text-white">5 ta</p>
         </div>
       </div>
     </div>
